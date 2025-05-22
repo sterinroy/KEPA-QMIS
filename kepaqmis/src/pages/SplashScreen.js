@@ -19,7 +19,7 @@ const SplashScreen = () => {
 
     const redirectTimer = setTimeout(() => {
       navigate("/login");
-    }, 9000); // final redirect
+    }, 7000); // final redirect
 
     return () => {
       clearTimeout(explodeTimer);
