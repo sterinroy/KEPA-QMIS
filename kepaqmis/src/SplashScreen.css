@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.container {
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Initial black circle */
+.black-circle {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Bounce animation */
+.bounce {
+  animation: bounce 4s ease-in-out;
+}
+
+@keyframes bounce  {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Explosion grow: ball fills the screen */
+.explode-grow {
+  animation: growToFullScreen 2.5s ease-in-out forwards;
+}
+
+@keyframes growToFullScreen {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(100); /* fills screen */
+  }
+}
+
+/* Logo fade-in after explosion */
+.splash-logo {
+  width: 500px;
+  position: absolute;
+  z-index: 2;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
