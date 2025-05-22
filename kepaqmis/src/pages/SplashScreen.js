@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SplashScreen.css";
-import logo from "./assets/wtkq.svg";
+import logo from "../assets/wtkq.svg";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
