@@ -53,6 +53,17 @@ const Login = () => {
        </RouterLink>
         </Box>
       </Box>
+      <footer style={{
+        marginTop: '2rem',
+        textAlign: 'center',
+        color: 'white',
+        fontSize: '0.9rem',
+        position: 'absolute',
+        bottom: '10px',
+        width: '100%'
+      }}>
+        © {new Date().getFullYear()} All rights reserved to Albert the Keng
+      </footer>
     </div>
   );
 };
