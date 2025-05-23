@@ -14,7 +14,9 @@ import {
   IconButton,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import './Register.css'; // for background/logo styling
+import './Register.css';
+import logo from '../assets/logo.svg'; // update this path
+
 
 const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -26,47 +28,91 @@ const Register = () => {
 
   return (
     <Box className="register-container">
-      <img src="/path-to-your-logo.png" alt="logo" className="register-logo" />
+      <img src={logo} alt="logo" className="register-logo" />
 
-      <Container maxWidth="sm" sx={{ backgroundColor: 'transparent', zIndex: 2 }}>
+      <Container 
+        maxWidth="sm" 
+        sx={{ 
+          backgroundColor: 'transparent', 
+          zIndex: 2,
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(255,255,255,0.4)',
+            borderRadius: '3px',
+          },
+          py: 2
+        }}
+      >
         <Typography variant="h5" fontWeight="bold" color="white" gutterBottom>
           Create your account with us below
         </Typography>
 
         <Typography color="white" variant="body2" mb={2}>
           Already have an account?{' '}
-          <Link href="/" underline="hover" sx={{ color: 'white', fontWeight: 'bold' }}>
+          <Link href="/Login" underline="hover" sx={{ color: 'white', fontWeight: 'bold' }}>
             Login
           </Link>
         </Typography>
 
-        <FormControl component="fieldset" sx={{ mb: 3 }}>
+        <FormControl component="fieldset" sx={{ mb: 3, width: '100%' }}>
           <Typography color="white" variant="subtitle1" mb={1}>
-            You’re creating an account as?
+            You're creating an account as?
           </Typography>
           <RadioGroup
-            row
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            sx={{ gap: 2 }}
+            sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}
           >
-            <FormControlLabel
-              value="QuarterMaster"
-              control={<Radio sx={{ color: 'white' }} />}
-              label="QuarterMaster"
-              sx={{ color: 'white', border: '1px solid white', px: 2, borderRadius: 2 }}
-            />
-            <FormControlLabel
-              value="User"
-              control={<Radio sx={{ color: 'white' }} />}
-              label="User"
-              sx={{ color: 'white', border: '1px solid white', px: 2, borderRadius: 2 }}
-            />
+            <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
+              <FormControlLabel
+                value="QuarterMaster"
+                control={<Radio sx={{ color: 'white' }} />}
+                label={
+                  <Typography color="white">QuarterMaster</Typography>
+                }
+                sx={{ 
+                  flex: 1,
+                  border: '1px solid white', 
+                  px: 2, 
+                  py: 1,
+                  borderRadius: 2,
+                  m: 0
+                }}
+              />
+              <FormControlLabel
+                value="User"
+                control={<Radio sx={{ color: 'white' }} />}
+                label={
+                  <Typography color="white">User</Typography>
+                }
+                sx={{ 
+                  flex: 1,
+                  border: '1px solid white', 
+                  px: 2, 
+                  py: 1,
+                  borderRadius: 2,
+                  m: 0
+                }}
+              />
+            </Box>
             <FormControlLabel
               value="Admin"
               control={<Radio sx={{ color: 'white' }} />}
-              label="Admin"
-              sx={{ color: 'white', border: '1px solid white', px: 2, borderRadius: 2, mt: 2 }}
+              label={
+                <Typography color="white">Admin</Typography>
+              }
+              sx={{ 
+                border: '1px solid white', 
+                px: 2, 
+                py: 1,
+                borderRadius: 2,
+                m: 0,
+                width: '42.5%'
+              }}
             />
           </RadioGroup>
         </FormControl>
@@ -161,6 +207,7 @@ const Register = () => {
           }}
           sx={textFieldStyle}
         />
+
 
         <Button
           variant="contained"
