@@ -21,7 +21,37 @@ import logo from '../assets/logo.svg'; // update this path
 const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
-  const [role, setRole] = React.useState('QuarterMaster');
+  const [role, setRole] = React.useState('User');
+  const [pen, setPen] = React.useState('');
+const [name, setName] = React.useState('');
+const [phone, setPhone] = React.useState('');
+const [password, setPassword] = React.useState('');
+const [confirmPassword, setConfirmPassword] = React.useState('');
+
+// Submit handler
+const handleSubmit = async () => {
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pen, name, phone, password, role })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.msg || "Registration failed");
+
+    alert("Registration successful");
+    // Optionally: navigate to login page
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
   const handleToggleConfirm = () => setShowConfirm(!showConfirm);
@@ -69,10 +99,10 @@ const Register = () => {
           >
             <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
               <FormControlLabel
-                value="QuarterMaster"
+                value="User"
                 control={<Radio sx={{ color: 'white' }} />}
                 label={
-                  <Typography color="white">QuarterMaster</Typography>
+                  <Typography color="white">User</Typography>
                 }
                 sx={{ 
                   flex: 1,
@@ -84,10 +114,10 @@ const Register = () => {
                 }}
               />
               <FormControlLabel
-                value="User"
+                value="QuarterMaster"
                 control={<Radio sx={{ color: 'white' }} />}
                 label={
-                  <Typography color="white">User</Typography>
+                  <Typography color="white">QuarterMaster</Typography>
                 }
                 sx={{ 
                   flex: 1,
@@ -130,6 +160,8 @@ const Register = () => {
             },
           }}
           sx={textFieldStyle}
+          value={pen}
+          onChange={(e) => setPen(e.target.value)}
         />
 
         <TextField
@@ -145,6 +177,8 @@ const Register = () => {
             },
           }}
           sx={textFieldStyle}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
         <TextField
@@ -160,6 +194,8 @@ const Register = () => {
             },
           }}
           sx={textFieldStyle}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
         />
 
         <TextField
@@ -183,6 +219,8 @@ const Register = () => {
             },
           }}
           sx={textFieldStyle}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <TextField
@@ -206,6 +244,8 @@ const Register = () => {
             },
           }}
           sx={textFieldStyle}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
 
@@ -214,9 +254,11 @@ const Register = () => {
           color="primary"
           fullWidth
           sx={{ mt: 3, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
+          onClick={handleSubmit}
         >
           Create Account
         </Button>
+
       </Container>
     </Box>
   );
