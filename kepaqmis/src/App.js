@@ -6,6 +6,8 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMaster from "./pages/QuarterMaster";
 import UserDashboard from "./pages/UserDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 
 function App() {
   return (
@@ -14,9 +16,27 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
-        <Route path="/QuarterMaster" element={<QuarterMaster />} />
-        <Route path="/UserDashboard" element={<UserDashboard />} />
+        <Route path="/AdminDashboard" element={
+          <ProtectedRoute allowedRoles={['Admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
+        <Route path="/QuarterMaster" element={
+          <ProtectedRoute allowedRoles={['QuarterMaster']}>
+            <QuarterMaster />
+          </ProtectedRoute>
+        } />
+       <Route path="/UserDashboard" element={
+         <ProtectedRoute allowedRoles={['User']}>
+           <UserDashboard />
+         </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminDashboard" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>
   );

@@ -40,6 +40,9 @@ const Login = () => {
       case "User":
         window.location.href = "/UserDashboard";
         break;
+      case "SuperAdmin":
+        window.location.href = "/SuperAdminDashboard";
+        break;
       default:
         alert("Unknown role.");
     }
