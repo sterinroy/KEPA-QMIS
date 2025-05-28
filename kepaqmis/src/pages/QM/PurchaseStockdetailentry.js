@@ -9,6 +9,16 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
+import {
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Button,
+  Grid,
+  Box,
+} from '@mui/material';
 
 const PurchaseStockDetailEntry = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -165,67 +175,161 @@ const PurchaseStockDetailEntry = () => {
           </div>
         </nav>
 
-        <div className="purchase-form">
-          <h3>Purchase Details</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="row g-3">
-              <div className="col-md-6">
-                <label className="form-label">Supply Order No</label>
-                <input type="text" className="form-control" name="supplyOrderNo" value={formData.supplyOrderNo} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Invoice Date</label>
-                <input type="date" className="form-control" name="invoiceDate" value={formData.invoiceDate} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">From Whom</label>
-                <input type="text" className="form-control" name="fromWhom" value={formData.fromWhom} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">To Whom</label>
-                <input type="text" className="form-control" name="toWhom" value={formData.toWhom} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Date of Verification</label>
-                <input type="date" className="form-control" name="dateOfVerification" value={formData.dateOfVerification} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Bill/Invoice No</label>
-                <input type="text" className="form-control" name="billInvoiceNo" value={formData.billInvoiceNo} onChange={handleInputChange} />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Amount</label>
-                <input type="number" className="form-control" name="amount" value={formData.amount} onChange={handleInputChange} required />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Item</label>
-                <select className="form-select" name="item" value={formData.item} onChange={handleCategoryChange} required>
-                  <option value="" disabled>Select Item</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Stationery">Stationery</option>
-                  <option value="Weapons">Weapons</option>
-                </select>
-              </div>
-              <div className="col-md-5">
-                <label className="form-label">Sub-Category</label>
-                <select className="form-select" name="subCategory" value={formData.subCategory} onChange={handleInputChange} required>
-                  <option value="" disabled>Select Sub-Category</option>
-                  {subCategories[formData.item]?.map((subCat, index) => (
-                    <option key={index} value={subCat}>{subCat}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-1 d-flex align-items-end">
-                <button type="button" className="btn btn-outline-primary" onClick={handleAddSubCategory}>+</button>
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Quantity</label>
-                <input type="number" className="form-control" name="qty" value={formData.qty} onChange={handleInputChange} min="1" required />
-              </div>
-            </div>
-            <button type="submit" className="btn btn-success mt-3">Submit</button>
-          </form>
-        </div>
+        <Box className="purchase-form" sx={{ backgroundColor: '#fff', p: 4, borderRadius: 2, boxShadow: 2 }}>
+  <h3>Purchase Details</h3>
+  <form onSubmit={handleSubmit}>
+    <Grid container spacing={2}>
+      {/* Row 1 */}
+      <Grid item xs={12} md={6}>
+    <TextField
+      label="Supply Order No"
+      name="supplyOrderNo"
+      fullWidth
+      required
+      value={formData.supplyOrderNo}
+      onChange={handleInputChange}
+      sx={{ width:500}}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <TextField
+      label="Invoice Date"
+      type="date"
+      name="invoiceDate"
+      fullWidth
+      required
+      InputLabelProps={{ shrink: true }}
+      value={formData.invoiceDate}
+      onChange={handleInputChange}
+      sx={{width:500}}
+    />
+  </Grid>
+
+      {/* Row 2 */}
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="From Whom"
+          name="fromWhom"
+          fullWidth
+          required
+          value={formData.fromWhom}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="To Whom"
+          name="toWhom"
+          fullWidth
+          required
+          value={formData.toWhom}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+
+      {/* Row 3 */}
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Date of Verification"
+          type="date"
+          name="dateOfVerification"
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+          value={formData.dateOfVerification}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Bill/Invoice No"
+          name="billInvoiceNo"
+          fullWidth
+          value={formData.billInvoiceNo}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+
+      {/* Row 4 */}
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Amount"
+          type="number"
+          name="amount"
+          fullWidth
+          required
+          value={formData.amount}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth required>
+          <InputLabel>Item</InputLabel>
+          <Select
+            name="item"
+            value={formData.item}
+            onChange={handleCategoryChange}
+            label="Item"
+            sx={{width:500}}
+          >
+            <MenuItem value="Electronics">Electronics</MenuItem>
+            <MenuItem value="Stationery">Stationery</MenuItem>
+            <MenuItem value="Weapons">Weapons</MenuItem>
+          </Select>
+        </FormControl>
+        
+      </Grid>
+
+      {/* Row 5 - Sub-Category and + button */}
+      <Grid item xs={10} md={5}>
+        <FormControl fullWidth required>
+          <InputLabel>Sub-Category</InputLabel>
+          <Select
+            name="subCategory"
+            value={formData.subCategory}
+            onChange={handleInputChange}
+            label="Sub-Category"
+            sx={{width:425}}
+          >
+            {subCategories[formData.item]?.map((subCat, idx) => (
+              <MenuItem key={idx} value={subCat}>{subCat}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={2} md={1}>
+        <Button variant="outlined" fullWidth onClick={handleAddSubCategory}>
+          +
+        </Button>
+      </Grid>
+
+      {/* Row 6 */}
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Quantity"
+          type="number"
+          name="qty"
+          fullWidth
+          required
+          inputProps={{ min: 1 }}
+          value={formData.qty}
+          onChange={handleInputChange}
+          sx={{width:500}}
+        />
+      </Grid>
+    </Grid>
+
+    <Button type="submit" variant="contained" color="success" sx={{ mt: 4 }}>
+      Transfer
+    </Button>
+  </form>
+</Box>
+
       </main>
     </div>
   );
