@@ -1,29 +1,31 @@
 version: '3.9'
 
 services:
-  mongo:
+  mongodb:
     image: mongo
     container_name: kepaqmis-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    environment:
+      WAIT_HOSTS: mongodb:27017
 
   backend:
     build: ./kepaqmis-backend
     container_name: kepaqmis-backend
     ports:
-      - "3000:3000"
+      - "5000:3000"
     depends_on:
-      - mongo
+      - mongodb
     environment:
-      - MONGO_URI=mongodb://mongo:27017/qmisdb
+      - MONGO_URI=mongodb://mongodb:27017/qmisdb
 
   frontend:
     build: ./kepaqmis
     container_name: kepaqmis-frontend
     ports:
-      - "3001:3001"
+      - "3000:3000"
     depends_on:
       - backend
 

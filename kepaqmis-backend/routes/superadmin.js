@@ -1,0 +1,66 @@
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+
+// Middleware to verify super admin role - dummy check for now
+const verifySuperAdmin = (req, res, next) => {
+  // TODO: Replace with real auth & role check
+  // Example: if (req.user.role !== 'SuperAdmin') return res.status(403).json({ msg: 'Forbidden' });
+  next();
+};
+
+// Get all pending registrations
+router.get('/pending-registrations', verifySuperAdmin, async (req, res) => {
+  try {
+    const pendingUsers = await User.find({ approved: false });
+    res.json(pendingUsers);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Approve a user
+router.patch('/approve/:id', verifySuperAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    user.approved = true;
+    await user.save();
+
+    res.json({ msg: 'User approved' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Reject (delete) a user
+router.delete('/reject/:id', verifySuperAdmin, async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    res.json({ msg: 'User rejected and deleted' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Get all users for management page
+router.get('/all-users', verifySuperAdmin, async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+
+router.delete('/delete-user/:id', async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.json({ msg: "User deleted" });
+});
+
+
+module.exports = router;

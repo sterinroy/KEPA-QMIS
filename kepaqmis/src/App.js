@@ -7,7 +7,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMaster from "./pages/QuarterMaster";
 import UserDashboard from "./pages/UserDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
+import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
+import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 
 function App() {
   return (
@@ -37,6 +39,16 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
+        <Route path="/SuperAdminApprovals" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminApprovals />
+          </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminUsers" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminUsers />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );
