@@ -9,6 +9,9 @@ import UserDashboard from "./pages/UserDashboard";
 import PurchaseDashboard from "./pages/QM/Purchase"
 import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
 import PurchaseStockDetailEntry from "./pages/QM/PurchaseStockdetailentry";
+import Temp from "./pages/Temp/Temp";
+import Tempstockdetailentry from "./pages/Temp/Tempstockdetailentry";
+import Temptransfer from "./pages/Temp/Temptransfer";
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
         <Route path="/purchase" element={<PurchaseDashboard />} />
         <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
         <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
+        <Route path="/temp" element={<Temp />} />
+        <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
+         <Route path="/temptransfer" element={<Temptransfer />} />
 
 
       </Routes>

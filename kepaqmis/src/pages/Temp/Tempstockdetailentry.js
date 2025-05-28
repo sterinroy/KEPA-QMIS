@@ -2,7 +2,7 @@
 // export default PurchaseStockDetailEntry;
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './PurchaseStockdetailentry.css';
+import './Tempstockdetailentry.css';
 import logoac from '../../assets/police_academy2.png';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -11,37 +11,28 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
 import {
   TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
+  
   Button,
   Grid,
   Box,
 } from '@mui/material';
 
-const PurchaseStockDetailEntry = () => {
+const Tempstockdetailentry = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeNav, setActiveNav] = useState('stock');
   const [formData, setFormData] = useState({
-    supplyOrderNo: '',
-    invoiceDate: '',
-    fromWhom: '',
-    toWhom: '',
-    dateOfVerification: '',
-    billInvoiceNo: '',
-    amount: '',
-    item: '',
-    subCategory: '',
-    qty: 1,
+     slNo: '',
+          PENNo: '',
+          toWhom: '',
+          dateOfissue: '',
+          name: '',
+          mobile: '',
+          itemDescription: '',
+          purpose: '',
+          qty: 1,
   });
 
-  const [subCategories, setSubCategories] = useState({
-    Electronics: ['Mobile', 'Laptop', 'Tablet'],
-    Stationery: ['Pen', 'Notebook', 'Stapler'],
-    Weapons: ['Pistol', 'Rifle', 'Ammunition'],
-  });
-
+  
   const navigate = useNavigate();
 
   const handleDropdownToggle = () => setShowDropdown(!showDropdown);
@@ -54,51 +45,21 @@ const PurchaseStockDetailEntry = () => {
     }));
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedItem = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      item: selectedItem,
-      subCategory: '',
-    }));
-  };
-
-  const handleAddSubCategory = () => {
-    const category = formData.item;
-    if (!category) {
-      alert('Please select an Item first.');
-      return;
-    }
-    const newSubCategory = prompt(`Add new Sub-Category under "${category}":`);
-    if (newSubCategory) {
-      if (!subCategories[category].includes(newSubCategory)) {
-        setSubCategories((prev) => ({
-          ...prev,
-          [category]: [...prev[category], newSubCategory],
-        }));
-        setFormData((prev) => ({
-          ...prev,
-          subCategory: newSubCategory,
-        }));
-      } else {
-        alert('This Sub-Category already exists.');
-      }
-    }
-  };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const payload = {
-      supply_order_no: formData.supplyOrderNo,
-      invoice_date: formData.invoiceDate,
-      from_whom: formData.fromWhom,
+      slNo: formData.slNo,
+      PENNo: formData.PENNo,
       to_whom: formData.toWhom,
-      date_of_verification: formData.dateOfVerification,
-      bill_invoice_no: formData.billInvoiceNo,
+      name:formData.name,
+      mobile:formData.mobile,
+      date_of_issue: formData.dateOfissue,
       amount: parseFloat(formData.amount),
-      item: formData.item,
-      sub_category: formData.subCategory,
+      item_description: formData.itemDescription,
+      purpose: formData.purpose,
       quantity: parseInt(formData.qty, 10),
     };
 
@@ -111,15 +72,14 @@ const PurchaseStockDetailEntry = () => {
       .then((resData) => {
         alert(resData.message);
         setFormData({
-          supplyOrderNo: '',
-          invoiceDate: '',
-          fromWhom: '',
+          slNo: '',
+          PENNo: '',
           toWhom: '',
-          dateOfVerification: '',
-          billInvoiceNo: '',
-          amount: '',
-          item: '',
-          subCategory: '',
+          dateOfissue: '',
+          name: '',
+          mobile: '',
+          itemDescription: '',
+          purpose: '',
           qty: 1,
         });
       })
@@ -128,9 +88,9 @@ const PurchaseStockDetailEntry = () => {
 
   const handleNavigation = (page) => {
     setActiveNav(page);
-    if (page === 'dashboard') navigate('/purchase');
-    else if (page === 'stock') navigate('/purchasestockdetailentry');
-    else if (page === 'transfer') navigate('/purchasetransfer');
+    if (page === 'dashboard') navigate('/temp');
+    else if (page === 'stock') navigate('/tempstockdetailentry');
+    else if (page === 'transfer') navigate('/temptransfer');
   };
 
   return (
@@ -154,13 +114,13 @@ const PurchaseStockDetailEntry = () => {
 
       <main className="main">
         <nav className="top-navbar">
-          <h1>Welcome QuarterMaster<br /><span>(Purchase Wing)</span></h1>
+          <h1>Welcome QuarterMaster<br /><span>(Temporary Allocation Wing)</span></h1>
           <div className="header-right">
             <input type="text" className="search" placeholder="Search" />
             <NotificationsNoneIcon className="icon-bell" />
             <div className="profile" onClick={handleDropdownToggle}>
               <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">qmpurchase</span>
+              <span className="profile-name">qmtemp</span>
               {showDropdown && (
                 <div className="dropdown-menu">
                   <img src={logoac} alt="User" className="dropdown-pic" />
@@ -182,24 +142,23 @@ const PurchaseStockDetailEntry = () => {
       {/* Row 1 */}
       <Grid item xs={12} md={6}>
     <TextField
-      label="Supply Order No"
-      name="supplyOrderNo"
+      label="SlNo"
+      name="SlNo"
       fullWidth
       required
-      value={formData.supplyOrderNo}
+      value={formData.slNo}
       onChange={handleInputChange}
       sx={{ width:500}}
     />
   </Grid>
   <Grid item xs={12} md={6}>
     <TextField
-      label="Invoice Date"
-      type="date"
-      name="invoiceDate"
+      label="PEN No"
+      name="PEN No"
       fullWidth
       required
       InputLabelProps={{ shrink: true }}
-      value={formData.invoiceDate}
+      value={formData.PENNo}
       onChange={handleInputChange}
       sx={{width:500}}
     />
@@ -207,12 +166,14 @@ const PurchaseStockDetailEntry = () => {
 
       {/* Row 2 */}
       <Grid item xs={12} md={6}>
-        <TextField
-          label="From Whom"
-          name="fromWhom"
+       <TextField
+          label="Date of Issue"
+          type="date"
+          name="dateOfissue"
           fullWidth
           required
-          value={formData.fromWhom}
+          InputLabelProps={{ shrink: true }}
+          value={formData.dateOfissue}
           onChange={handleInputChange}
           sx={{width:500}}
         />
@@ -232,23 +193,22 @@ const PurchaseStockDetailEntry = () => {
       {/* Row 3 */}
       <Grid item xs={12} md={6}>
         <TextField
-          label="Date of Verification"
-          type="date"
-          name="dateOfVerification"
+          label="Name"
+          name="name"
           fullWidth
           required
           InputLabelProps={{ shrink: true }}
-          value={formData.dateOfVerification}
+          value={formData.name}
           onChange={handleInputChange}
           sx={{width:500}}
         />
       </Grid>
       <Grid item xs={12} md={6}>
         <TextField
-          label="Bill/Invoice No"
-          name="billInvoiceNo"
+          label="Mobile"
+          name="mobile"
           fullWidth
-          value={formData.billInvoiceNo}
+          value={formData.mobile}
           onChange={handleInputChange}
           sx={{width:500}}
         />
@@ -267,46 +227,34 @@ const PurchaseStockDetailEntry = () => {
           sx={{width:500}}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth required>
-          <InputLabel>Item</InputLabel>
-          <Select
-            name="item"
-            value={formData.item}
-            onChange={handleCategoryChange}
-            label="Item"
-            sx={{width:500}}
-          >
-            <MenuItem value="Electronics">Electronics</MenuItem>
-            <MenuItem value="Stationery">Stationery</MenuItem>
-            <MenuItem value="Weapons">Weapons</MenuItem>
-          </Select>
-        </FormControl>
-        
-      </Grid>
-
-      {/* Row 5 - Sub-Category and + button */}
-      <Grid item xs={10} md={5}>
-        <FormControl fullWidth required>
-          <InputLabel>Sub-Category</InputLabel>
-          <Select
-            name="subCategory"
-            value={formData.subCategory}
-            onChange={handleInputChange}
-            label="Sub-Category"
-            sx={{width:425}}
-          >
-            {subCategories[formData.item]?.map((subCat, idx) => (
-              <MenuItem key={idx} value={subCat}>{subCat}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={2} md={1}>
-        <Button variant="outlined" fullWidth onClick={handleAddSubCategory}>
-          +
-        </Button>
-      </Grid>
+      
+      
+<Grid item xs={12} md={6}>
+  <TextField
+    label="Item Description"
+    name="itemDescription"
+    fullWidth
+    required
+    multiline
+    rows={3}
+    value={formData.itemDescription}
+    onChange={handleInputChange}
+    sx={{ width: 500 }}
+  />
+</Grid>
+<Grid item xs={12} md={6}>
+  <TextField
+    label="Purpose"
+    name="purpose"
+    fullWidth
+    required
+    multiline
+    rows={3}
+    value={formData.purpose}
+    onChange={handleInputChange}
+    sx={{ width: 500 }}
+  />
+</Grid>
 
       {/* Row 6 */}
       <Grid item xs={12} md={6}>
@@ -325,7 +273,7 @@ const PurchaseStockDetailEntry = () => {
     </Grid>
 
     <Button type="submit" variant="contained" color="success" sx={{ mt: 4 }}>
-      Transfer
+      GeneratePDF
     </Button>
   </form>
 </Box>
@@ -335,4 +283,4 @@ const PurchaseStockDetailEntry = () => {
   );
 };
 
-export default PurchaseStockDetailEntry;
+export default Tempstockdetailentry;
