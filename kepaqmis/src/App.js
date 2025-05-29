@@ -6,7 +6,8 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMaster from "./pages/QuarterMaster";
 import UserDashboard from "./pages/UserDashboard";
-import PurchaseDashboard from "./pages/QM/Purchase"
+// import PurchaseDashboard from "./pages/QM/Purchase"
+import PurchaseDashboard from "./pages/QM/Purchase";
 import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
 import PurchaseStockDetailEntry from "./pages/QM/PurchaseStockdetailentry";
 

@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import './Login.css';
 import logo from '../assets/logo.svg';
-// import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 // import axios from 'axios';
 
 const Login = () => {
   const [pen, setPen] = useState('');
   const [password, setPassword] = useState('');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const handlePurchase=()=>{
+     navigate("/purchase");
+  }
 
   const handleLogin = async () => {
   try {
@@ -98,6 +101,16 @@ const Login = () => {
         >
           Login
         </Button>
+        {/* removelater */}
+          <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
+          onClick={handlePurchase}
+        >
+          Purchase
+        </Button>
+        
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink to="/register" style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
             Register

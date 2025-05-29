@@ -7,8 +7,22 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Chip,
+} from '@mui/material';
+
 
 const PurchaseTransfer = () => {
+  const [penNumber, setPen] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate(); // ✅ Create navigate instance
@@ -44,6 +58,34 @@ const PurchaseTransfer = () => {
     const handlePurchseTransfer=()=>{
       navigate('/purchasetransfer')
     }
+    const transfer = [
+    {
+      id: 'TR-2023-045',
+      date: '15 Oct 2023',
+      type: 'Transfer',
+      items: 12,
+      status: 'Pending',
+    },
+    {
+      id: 'ST-2023-128',
+      date: '14 Oct 2023',
+      type: 'Stock In',
+      items: 50,
+      status: 'Completed',
+    },
+    {
+      id: 'TR-2023-044',
+      date: '12 Oct 2023',
+      type: 'Transfer',
+      items: 8,
+      status: 'Completed',
+    },
+  ];
+    const getStatusChip = (status) => {
+    const color =
+      status === 'Pending' ? 'warning' : status === 'Completed' ? 'success' : 'default';
+    return <Chip label={status} color={color} size="small" />;
+  };
   return (
     <div className="container">
       <aside className="sidebar">
@@ -65,13 +107,13 @@ const PurchaseTransfer = () => {
             <NotificationsNoneIcon className="icon-bell" />
             <div className="profile" ref={profileRef} onClick={toggleDropdown}>
               <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">qmpurchase</span>
+              <span className="profile-name">{penNumber}</span>
               {showDropdown && (
                 <div className="dropdown-menu">
                   <img src={logoac} alt="User" className="dropdown-pic" />
                   <div className="dropdown-details">
-                    <div className="name">Quarter Master</div>
-                    <div className="email">qmpurchase@domain.com</div>
+                    <div className="name">QuarterMaster</div>
+                    <div className="pen">PEN: {penNumber}</div>
                   </div>
                   <button className="logout-btn" onClick={handleLogout}>Logout</button>
                 </div>
@@ -79,6 +121,40 @@ const PurchaseTransfer = () => {
             </div>
           </div>
         </nav>
+         <Box sx={{ mt: 8 }}>
+      <Paper elevation={3} sx={{ borderRadius: 2 }}>
+        <Box sx={{ px: 3, py: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Typography variant="h6" fontWeight="medium">
+            Recent Transfers
+          </Typography>
+        </Box>
+
+        <TableContainer sx={{ maxHeight: 400 }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Items</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {transfer.map((tx, idx) => (
+                <TableRow key={idx}>
+                  <TableCell>{tx.id}</TableCell>
+                  <TableCell>{tx.date}</TableCell>
+                  <TableCell>{tx.type}</TableCell>
+                  <TableCell>{tx.items}</TableCell>
+                  <TableCell>{getStatusChip(tx.status)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </Box>
       </main>
     </div>
   );
