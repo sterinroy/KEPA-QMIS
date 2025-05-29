@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
+import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 
 function App() {
   return (
@@ -47,6 +48,11 @@ function App() {
         <Route path="/SuperAdminUsers" element={
           <ProtectedRoute allowedRoles={['SuperAdmin']}>
             <SuperAdminUsers />
+          </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminLogs" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminLogs />
           </ProtectedRoute>
         } />
       </Routes>

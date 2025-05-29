@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SuperAdminDashboard.css';
+import './SuperAdmin.css';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -25,18 +25,35 @@ const SuperAdminDashboard = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setShowDropdown(false);
-    navigate('/login');
-  };
+  const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3000/api/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    alert("Logout logged successfully");
+
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
+
+  localStorage.clear();
+  setShowDropdown(false);
+  navigate('/login');
+};
+
 
   return (
     <div className="container">
       <aside className="sidebar">
         <div className="logo">Super Admin</div>
         <nav className="nav-menu">
-          <div className="nav-item" onClick={() => navigate('/admin/overview')}>
+          <div className="nav-item" onClick={() => navigate('/SuperAdminDashboard')}>
             <DashboardIcon className="icon" /> Dashboard
           </div>
           <div className="nav-item" onClick={() => navigate('/SuperAdminApprovals')}>
@@ -44,6 +61,9 @@ const SuperAdminDashboard = () => {
           </div>
           <div className="nav-item" onClick={() => navigate('/SuperAdminUsers')}>
             <BookmarkIcon className="icon" /> Manage Users
+          </div>
+          <div className="nav-item" onClick={() => navigate('/SuperAdminlogs')}>
+            <BookmarkIcon className="icon" /> Logs
           </div>
         </nav>
       </aside>

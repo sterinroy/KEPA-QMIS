@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Log = require('../models/Log');
 
 // Middleware to verify super admin role - dummy check for now
 const verifySuperAdmin = (req, res, next) => {
@@ -60,6 +61,15 @@ router.get('/all-users', verifySuperAdmin, async (req, res) => {
 router.delete('/delete-user/:id', async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.json({ msg: "User deleted" });
+});
+
+router.get("/logs", async (req, res) => {
+  try {
+    const logs = await Log.find().sort({ timestamp: -1 });
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ msg: "Error fetching logs" });
+  }
 });
 
 

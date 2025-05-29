@@ -2,10 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
 const router = express.Router();
-
-
+const Log = require("../models/Log");
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -54,7 +53,33 @@ router.post('/login', async (req, res) => {
 
   const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+  await Log.create({
+      pen: user.pen,
+      name: user.name,
+      role: user.role,
+      action: "login",
+    });
+
   res.json({ token, role: user.role });
+});
+
+router.post('/logout', authMiddleware, async (req, res) => {
+  try {
+    console.log("Logout request from:", req.user);
+    const { pen, name, role } = req.user;
+
+    await Log.create({
+      pen,
+      name,
+      role,
+      action: 'logout',
+    });
+
+    res.status(200).json({ msg: 'Logout logged successfully' });
+  } catch (error) {
+    console.error('Logout logging error:', error);
+    res.status(500).json({ msg: 'Failed to log logout' });
+  }
 });
 
 
