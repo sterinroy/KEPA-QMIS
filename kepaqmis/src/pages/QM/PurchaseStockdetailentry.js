@@ -374,6 +374,7 @@ const PurchaseStockDetailEntry = (
   const [subCategories, setSubCategories] = useState(initialCategories);
 
   const [formData, setFormData] = useState({
+    orderNo: '',
     supplyOrderNo: '',
     invoiceDate: '',
     fromWhom: '',
@@ -422,6 +423,8 @@ const PurchaseStockDetailEntry = (
     e.preventDefault();
 
     const payload = {
+      order_no: formData.orderNo,
+      // order_no: formData.orderNo,
       supply_order_no: formData.supplyOrderNo,
       invoice_date: formData.invoiceDate,
       from_whom: formData.fromWhom,
@@ -443,6 +446,7 @@ const PurchaseStockDetailEntry = (
       const resData = await res.json();
       alert(resData.message || 'Submitted successfully');
       setFormData({
+        orderNo:'',
         supplyOrderNo: '',
         invoiceDate: '',
         fromWhom: '',
@@ -523,6 +527,7 @@ const PurchaseStockDetailEntry = (
             <Grid container spacing={2}>
               {/* Grid rows simplified */}
               {[
+                { label: 'Order No', name: 'orderNo' },
                 { label: 'Supply Order No', name: 'supplyOrderNo' },
                 { label: 'Invoice Date', name: 'invoiceDate', type: 'date' },
                 { label: 'From Whom', name: 'fromWhom' },
