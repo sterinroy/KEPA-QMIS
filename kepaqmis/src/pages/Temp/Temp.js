@@ -51,14 +51,14 @@ const Temp = () => {
         </div>
         <nav className="nav-menu">
           <div className="nav-item active" onClick={handlePurchseDashboard}><DashboardIcon className="icon" /> Dashboard</div>
-          <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" /> Stock Details Entry</div>
+          <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" />Temporary Stock Issue Details</div>
           <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Transfer Stock</div>
         </nav>
       </aside>
 
       <main className="main">
         <nav className="top-navbar">
-          <h1>Welcome QuarterMaster<br /><span>(Temporary Allocation Wing)</span></h1>
+          <h1>Welcome QuarterMaster<br /><span>(Issue Wing)</span></h1>
           <div className="header-right">
             <input type="text" className="search" placeholder="Search" />
             <NotificationsNoneIcon className="icon-bell" />

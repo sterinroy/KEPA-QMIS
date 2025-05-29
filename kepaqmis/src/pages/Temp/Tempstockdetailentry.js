@@ -1,5 +1,5 @@
 
-// export default PurchaseStockDetailEntry;
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Tempstockdetailentry.css';
@@ -9,6 +9,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
+import { jsPDF } from "jspdf";
+
 import {
   TextField,
   
@@ -45,7 +47,34 @@ const Tempstockdetailentry = () => {
     }));
   };
 
-  
+  const handleGeneratePDF = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(14);
+  doc.text("Temporary Stock Issue Details", 20, 20);
+
+  const fields = [
+    { label: "Sl No", value: formData.slNo },
+    { label: "PEN No", value: formData.PENNo },
+    { label: "To Whom", value: formData.toWhom },
+    { label: "Name", value: formData.name },
+    { label: "Mobile", value: formData.mobile },
+    { label: "Date of Issue", value: formData.dateOfissue },
+    { label: "Amount", value: formData.amount },
+    { label: "Item Description", value: formData.itemDescription },
+    { label: "Purpose", value: formData.purpose },
+    { label: "Quantity", value: formData.qty },
+  ];
+
+  let y = 30;
+  fields.forEach(field => {
+    doc.text(`${field.label}: ${field.value}`, 20, y);
+    y += 10;
+  });
+
+  doc.save("Stock_Issue_Details.pdf");
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -104,7 +133,7 @@ const Tempstockdetailentry = () => {
             <DashboardIcon className="icon" /> Dashboard
           </div>
           <div className={`nav-item ${activeNav === 'stock' ? 'active' : ''}`} onClick={() => handleNavigation('stock')}>
-            <DescriptionIcon className="icon" /> Stock Details Entry
+            <DescriptionIcon className="icon" /> Temporary Stock Issue Details
           </div>
           <div className={`nav-item ${activeNav === 'transfer' ? 'active' : ''}`} onClick={() => handleNavigation('transfer')}>
             <BookmarkIcon className="icon" /> Transfer Stock
@@ -136,14 +165,14 @@ const Tempstockdetailentry = () => {
         </nav>
 
         <Box className="purchase-form" sx={{ backgroundColor: '#fff', p: 4, borderRadius: 2, boxShadow: 2 }}>
-  <h3>Purchase Details</h3>
+  <h3>Temporary Stock Issue Details</h3>
   <form onSubmit={handleSubmit}>
     <Grid container spacing={2}>
       {/* Row 1 */}
       <Grid item xs={12} md={6}>
     <TextField
-      label="SlNo"
-      name="SlNo"
+      label="slNo"
+      name="slNo"
       fullWidth
       required
       value={formData.slNo}
@@ -153,8 +182,8 @@ const Tempstockdetailentry = () => {
   </Grid>
   <Grid item xs={12} md={6}>
     <TextField
-      label="PEN No"
-      name="PEN No"
+      label="PENNo"
+      name="PENNo"
       fullWidth
       required
       InputLabelProps={{ shrink: true }}
@@ -272,9 +301,10 @@ const Tempstockdetailentry = () => {
       </Grid>
     </Grid>
 
-    <Button type="submit" variant="contained" color="success" sx={{ mt: 4 }}>
-      GeneratePDF
-    </Button>
+    <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleGeneratePDF}>
+  Generate PDF
+</Button>
+
   </form>
 </Box>
 
