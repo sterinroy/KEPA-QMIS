@@ -193,15 +193,6 @@ const PurchaseDashboard = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeNav, setActiveNav] = useState('stock');
   const toggleDropdown = () => setShowDropdown(!showDropdown);
-
-
-
-
-
- 
-
-  
-
   const handleNavigation = (page) => {
     setActiveNav(page);
     navigate(
