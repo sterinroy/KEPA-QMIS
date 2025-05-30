@@ -6,7 +6,11 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMaster from "./pages/QuarterMaster";
 import UserDashboard from "./pages/UserDashboard";
-// import PurchaseDashboard from "./pages/QM/Purchase"
+import ProtectedRoute from "./components/ProtectedRoute";
+import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
+import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
+import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
+import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import PurchaseDashboard from "./pages/QM/Purchase";
 import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
 import PurchaseStockDetailEntry from "./pages/QM/PurchaseStockdetailentry";
@@ -18,14 +22,45 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
-        <Route path="/QuarterMaster" element={<QuarterMaster />} />
-        <Route path="/UserDashboard" element={<UserDashboard />} />
         <Route path="/purchase" element={<PurchaseDashboard />} />
         <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
         <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
-
-
+        <Route path="/AdminDashboard" element={
+          <ProtectedRoute allowedRoles={['Admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
+        <Route path="/QuarterMaster" element={
+          <ProtectedRoute allowedRoles={['QuarterMaster']}>
+            <QuarterMaster />
+          </ProtectedRoute>
+        } />
+       <Route path="/UserDashboard" element={
+         <ProtectedRoute allowedRoles={['User']}>
+           <UserDashboard />
+         </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminDashboard" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
+        <Route path="/SuperAdminApprovals" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminApprovals />
+          </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminUsers" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminUsers />
+          </ProtectedRoute>
+        } />
+        <Route path="/SuperAdminLogs" element={
+          <ProtectedRoute allowedRoles={['SuperAdmin']}>
+            <SuperAdminLogs />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

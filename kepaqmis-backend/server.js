@@ -14,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/superadmin', require('./routes/superadmin'));
 
 const purchaseRoutes = require('./routes/purchaseRoutes');
 app.use('/api/purchasestockdetailentry', purchaseRoutes);

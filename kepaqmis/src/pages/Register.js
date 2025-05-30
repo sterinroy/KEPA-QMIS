@@ -16,6 +16,9 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './Register.css';
 import logo from '../assets/logo.svg'; // update this path
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 
 const Register = () => {
@@ -31,30 +34,47 @@ const [confirmPassword, setConfirmPassword] = React.useState('');
 // Submit handler
 const handleSubmit = async () => {
   if (password !== confirmPassword) {
-    alert("Passwords do not match");
+    setSnackbarMessage("❌ Passwords do not match");
+    setSnackbarOpen(true);
     return;
   }
 
   try {
-    const res = await fetch('http://localhost:3000/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pen, name, phone, password, role })
+    const response = await fetch("http://localhost:3000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pen, name, phone, password, role }),
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.msg || "Registration failed");
+    const data = await response.json();
 
-    alert("Registration successful");
-    // Optionally: navigate to login page
+    if (!response.ok) {
+      setSnackbarMessage(`❌ ${data.msg || "Registration failed"}`);
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage("✅ Registration successful! Pending approval by Admin.");
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 4000); // wait 2 seconds before redirecting
+    }
   } catch (err) {
-    alert(err.message);
+    console.error(err);
+    setSnackbarMessage("❌ An error occurred.");
+    setSnackbarOpen(true);
   }
 };
 
 
+  const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
   const handleTogglePassword = () => setShowPassword(!showPassword);
   const handleToggleConfirm = () => setShowConfirm(!showConfirm);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+const [snackbarMessage, setSnackbarMessage] = React.useState('');
+
 
   return (
     <Box className="register-container">
@@ -260,6 +280,17 @@ const handleSubmit = async () => {
         </Button>
 
       </Container>
+      <Snackbar
+      open={snackbarOpen}
+     autoHideDuration={6000}
+     onClose={() => setSnackbarOpen(false)}
+     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  >
+  <Alert onClose={() => setSnackbarOpen(false)} severity="info" sx={{ width: '100%' }}>
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
+
     </Box>
   );
 };

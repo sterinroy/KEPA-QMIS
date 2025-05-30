@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ['QuarterMaster', 'User', 'Admin'],
     required: true
-  }
-});
+  },
+  approved: { type: Boolean, default: false},
+},{ timestamps: true });
 
 module.exports = mongoose.model("User", UserSchema);

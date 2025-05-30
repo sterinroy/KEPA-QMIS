@@ -24,6 +24,8 @@ const Login = () => {
 
     const data = await response.json();
 
+    
+
     if (!response.ok) {
       alert(data.msg || "Login failed");
       return;
@@ -43,6 +45,9 @@ const Login = () => {
         break;
       case "User":
         window.location.href = "/UserDashboard";
+        break;
+      case "SuperAdmin":
+        window.location.href = "/SuperAdminDashboard";
         break;
       default:
         alert("Unknown role.");
