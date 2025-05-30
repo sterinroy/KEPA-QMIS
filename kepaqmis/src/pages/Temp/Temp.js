@@ -7,7 +7,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
-const Temp = () => {
+const Temp = ({children}) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate(); // ✅ Create navigate instance
@@ -41,7 +41,7 @@ const Temp = () => {
       navigate('/temp');
     }
     const handlePurchseTransfer=()=>{
-      navigate('/purchasetransfer')
+      navigate('/tempissued')
     }
   return (
     <div className="container">
@@ -52,7 +52,7 @@ const Temp = () => {
         <nav className="nav-menu">
           <div className="nav-item active" onClick={handlePurchseDashboard}><DashboardIcon className="icon" /> Dashboard</div>
           <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" />Temporary Stock Issue Details</div>
-          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Transfer Stock</div>
+          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Temporary Stock Issued</div>
         </nav>
       </aside>
 
@@ -78,6 +78,7 @@ const Temp = () => {
             </div>
           </div>
         </nav>
+        {children}
       </main>
     </div>
   );

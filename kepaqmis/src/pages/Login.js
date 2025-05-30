@@ -98,6 +98,15 @@ const Login = () => {
         >
           Login
         </Button>
+        <Button
+  fullWidth
+  variant="outlined"
+  sx={{ mt: 1, color: 'white', borderColor: 'white', fontWeight: 'bold' }}
+  component={RouterLink}
+  to="/temp"
+>
+  Go to Temp Page
+</Button>
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink to="/register" style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
             Register

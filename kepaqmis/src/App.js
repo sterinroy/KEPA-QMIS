@@ -11,7 +11,8 @@ import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
 import PurchaseStockDetailEntry from "./pages/QM/PurchaseStockdetailentry";
 import Temp from "./pages/Temp/Temp";
 import Tempstockdetailentry from "./pages/Temp/Tempstockdetailentry";
-
+import Review from "./pages/Temp/Review";
+import Tempissued from "./pages/Temp/Tempissued";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
         <Route path="/temp" element={<Temp/>}/>
         <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
+        <Route path="/review" element={<Review/>}/>
+        <Route path="/tempissued" element={<Tempissued/>}/>
         
 
       </Routes>

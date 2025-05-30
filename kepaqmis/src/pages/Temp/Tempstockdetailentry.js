@@ -9,7 +9,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
-import { jsPDF } from "jspdf";
+
 
 import {
   TextField,
@@ -47,79 +47,51 @@ const Tempstockdetailentry = () => {
     }));
   };
 
-  const handleGeneratePDF = () => {
-  const doc = new jsPDF();
-
-  doc.setFontSize(14);
-  doc.text("Temporary Stock Issue Details", 20, 20);
-
-  const fields = [
-    { label: "Sl No", value: formData.slNo },
-    { label: "PEN No", value: formData.PENNo },
-    { label: "To Whom", value: formData.toWhom },
-    { label: "Name", value: formData.name },
-    { label: "Mobile", value: formData.mobile },
-    { label: "Date of Issue", value: formData.dateOfissue },
-    { label: "Amount", value: formData.amount },
-    { label: "Item Description", value: formData.itemDescription },
-    { label: "Purpose", value: formData.purpose },
-    { label: "Quantity", value: formData.qty },
-  ];
-
-  let y = 30;
-  fields.forEach(field => {
-    doc.text(`${field.label}: ${field.value}`, 20, y);
-    y += 10;
-  });
-
-  doc.save("Stock_Issue_Details.pdf");
-};
+  
 
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const payload = {
-      slNo: formData.slNo,
-      PENNo: formData.PENNo,
-      to_whom: formData.toWhom,
-      name:formData.name,
-      mobile:formData.mobile,
-      date_of_issue: formData.dateOfissue,
-      amount: parseFloat(formData.amount),
-      item_description: formData.itemDescription,
-      purpose: formData.purpose,
-      quantity: parseInt(formData.qty, 10),
-    };
-
-    fetch('http://localhost:5000/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-      .then((res) => res.json())
-      .then((resData) => {
-        alert(resData.message);
-        setFormData({
-          slNo: '',
-          PENNo: '',
-          toWhom: '',
-          dateOfissue: '',
-          name: '',
-          mobile: '',
-          itemDescription: '',
-          purpose: '',
-          qty: 1,
-        });
-      })
-      .catch((err) => alert('Error: ' + err.message));
+  const payload = {
+    slNo: formData.slNo,
+    PENNo: formData.PENNo,
+    toWhom: formData.toWhom,
+    name: formData.name,
+    mobile: formData.mobile,
+    dateOfissue: formData.dateOfissue,
+    amount: parseFloat(formData.amount),
+    itemDescription: formData.itemDescription,
+    purpose: formData.purpose,
+    qty: parseInt(formData.qty, 10),
   };
+// console.log("🔥 Fetching to:",'http://localhost:3000/api/tempstock' );
+
+  fetch('http://localhost:3000/api/tempstock', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then((res) => {
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Expected JSON, got something else');
+    } return res.json()})
+    .then((resData) => {
+      alert(resData.message);
+    })
+    .catch((err) => alert('Error: ' + err.message))
+    .finally(() => {
+      navigate('/review', { state: { formData } });
+    });
+};
+
 
   const handleNavigation = (page) => {
     setActiveNav(page);
     if (page === 'dashboard') navigate('/temp');
     else if (page === 'stock') navigate('/tempstockdetailentry');
-    else if (page === 'transfer') navigate('/temptransfer');
+    else if (page === 'transfer') navigate('/tempissued');
   };
 
   return (
@@ -136,7 +108,7 @@ const Tempstockdetailentry = () => {
             <DescriptionIcon className="icon" /> Temporary Stock Issue Details
           </div>
           <div className={`nav-item ${activeNav === 'transfer' ? 'active' : ''}`} onClick={() => handleNavigation('transfer')}>
-            <BookmarkIcon className="icon" /> Transfer Stock
+            <BookmarkIcon className="icon" />  Temporary Stock Issued
           </div>
         </nav>
       </aside>
@@ -237,6 +209,7 @@ const Tempstockdetailentry = () => {
           label="Mobile"
           name="mobile"
           fullWidth
+          required
           value={formData.mobile}
           onChange={handleInputChange}
           sx={{width:500}}
@@ -301,8 +274,8 @@ const Tempstockdetailentry = () => {
       </Grid>
     </Grid>
 
-    <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleGeneratePDF}>
-  Generate PDF
+    <Button variant="contained" color="primary" sx={{ mt: 2 }} type="submit">
+  Submit
 </Button>
 
   </form>
