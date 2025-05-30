@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import './SuperAdmin.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers, deleteUser } from "../../redux/actions/superAdminActions";
+import "./SuperAdmin.css";
 
 const SuperAdminUsers = () => {
-  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch();
+  const { users, loading, error } = useSelector((state) => state.superAdmin);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/superadmin/all-users")
-      .then(res => res.json())
-      .then(data => setUsers(data))
-      .catch(err => console.error(err));
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`http://localhost:3000/api/superadmin/delete-user/${id}`, {
-        method: 'DELETE',
-      });
-      setUsers(users.filter(user => user._id !== id));
-    } catch (err) {
-      console.error(err);
-    }
+  const handleDelete = (id) => {
+    dispatch(deleteUser(id));
   };
 
   return (
     <div className="container">
       <h2>Manage Users</h2>
-      {users.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : users.length === 0 ? (
         <p>No users available.</p>
       ) : (
         <table>
@@ -40,7 +37,7 @@ const SuperAdminUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users.map((user) => (
               <tr key={user._id}>
                 <td>{user.pen}</td>
                 <td>{user.name}</td>

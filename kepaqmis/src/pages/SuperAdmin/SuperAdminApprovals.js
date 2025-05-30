@@ -1,30 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import './SuperAdmin.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPendingUsers,
+  approveUser,
+  rejectUser,
+} from "../../redux/actions/superAdminActions";
+import "./SuperAdmin.css";
 
 const SuperAdminApprovals = () => {
-  const [pendingUsers, setPendingUsers] = useState([]);
+  const dispatch = useDispatch();
+  const { pendingUsers, loading, error } = useSelector(
+    (state) => state.superAdmin 
+  );
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/superadmin/pending-registrations")
-      .then(res => res.json())
-      .then(data => setPendingUsers(data))
-      .catch(err => console.error(err));
-  }, []);
+    dispatch(fetchPendingUsers());
+  }, [dispatch]);
 
-  const handleAction = async (id, action) => {
-    try {
-      const method = action === 'approve' ? 'PATCH' : 'DELETE';
-      await fetch(`http://localhost:3000/api/superadmin/${action}/${id}`, { method });
-      setPendingUsers(pendingUsers.filter(user => user._id !== id));
-    } catch (err) {
-      console.error(err);
+  const handleAction = (id, action) => {
+    if (action === "approve") {
+      dispatch(approveUser(id));
+    } else if (action === "reject") {
+      dispatch(rejectUser(id));
     }
   };
 
   return (
     <div className="container">
       <h2>Pending Approvals</h2>
-      {pendingUsers.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : pendingUsers.length === 0 ? (
         <p>No pending users.</p>
       ) : (
         <table>
@@ -38,15 +46,19 @@ const SuperAdminApprovals = () => {
             </tr>
           </thead>
           <tbody>
-            {pendingUsers.map(user => (
+            {pendingUsers.map((user) => (
               <tr key={user._id}>
                 <td>{user.pen}</td>
                 <td>{user.name}</td>
                 <td>{user.phone}</td>
                 <td>{user.role}</td>
                 <td>
-                  <button onClick={() => handleAction(user._id, "approve")}>Approve</button>
-                  <button onClick={() => handleAction(user._id, "reject")}>Reject</button>
+                  <button onClick={() => handleAction(user._id, "approve")}>
+                    Approve
+                  </button>
+                  <button onClick={() => handleAction(user._id, "reject")}>
+                    Reject
+                  </button>
                 </td>
               </tr>
             ))}

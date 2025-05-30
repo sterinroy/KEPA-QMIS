@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import './SuperAdmin.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLogs } from "../../redux/actions/superAdminActions";
+import "./SuperAdmin.css";
 
 const SuperAdminLogs = () => {
-  const [logs, setLogs] = useState([]);
+  const dispatch = useDispatch();
+  const { logs, loading, error } = useSelector((state) => state.superAdmin);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/superadmin/logs")
-      .then(res => res.json())
-      .then(data => setLogs(data))
-      .catch(err => console.error(err));
-  }, []);
+    dispatch(fetchLogs());
+  }, [dispatch]);
 
   return (
     <div className="container">
       <h2>Login/Logout Logs</h2>
-      {logs.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : logs.length === 0 ? (
         <p>No logs available.</p>
       ) : (
         <table>
