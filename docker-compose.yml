@@ -1,31 +1,34 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  mongodb:
+  mongo:
     image: mongo
-    container_name: kepaqmis-mongo
+    container_name: qmis-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    environment:
-      WAIT_HOSTS: mongodb:27017
 
   backend:
     build: ./kepaqmis-backend
-    container_name: kepaqmis-backend
+    container_name: qmis-backend
     ports:
-      - "5000:3000"
-    depends_on:
-      - mongodb
+      - "3000:3000"
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/qmisdb
+      - MONGO_URI=mongodb://mongo:27017/qmisdb
+      - JWT_SECRET=your_jwt_secret
+    depends_on:
+      - mongo
 
   frontend:
     build: ./kepaqmis
-    container_name: kepaqmis-frontend
+    container_name: qmis-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"  # CRA runs on 3000 inside container
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
     depends_on:
       - backend
 

@@ -4,7 +4,7 @@ import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
 import Register from "./pages/Register"; 
 import AdminDashboard from "./pages/AdminDashboard";
-import QuarterMaster from "./pages/QuarterMaster";
+import QuarterMaster from "./pages/QuarterMasterPurchase";
 import UserDashboard from "./pages/UserDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
@@ -24,7 +24,7 @@ function App() {
               <AdminDashboard />
             </ProtectedRoute>
           } />
-        <Route path="/QuarterMaster" element={
+        <Route path="/QuarterMasterPurchase" element={
           <ProtectedRoute allowedRoles={['QuarterMaster']}>
             <QuarterMaster />
           </ProtectedRoute>

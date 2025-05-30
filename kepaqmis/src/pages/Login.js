@@ -4,6 +4,7 @@ import './Login.css';
 import logo from '../assets/logo.svg';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import backgroundVideo from '../assets/bg1.mp4';
 
 const Login = () => {
   const [pen, setPen] = useState('');
@@ -12,7 +13,7 @@ const Login = () => {
 
   const handleLogin = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pen, password }),
@@ -36,8 +37,14 @@ const Login = () => {
       case "Admin":
         window.location.href = "/AdminDashboard";
         break;
-      case "QuarterMaster":
-        window.location.href = "/QuarterMaster";
+      case "QuarterMasterACQM":
+        window.location.href = "/QuarterMasterACQM";
+        break;
+      case "QuarterMasterPurchase":
+        window.location.href = "/QuarterMasterPurchase";
+        break;
+      case "QuarterMasterIssue":
+        window.location.href = "/QuarterMasterIssue";
         break;
       case "User":
         window.location.href = "/UserDashboard";
@@ -58,11 +65,26 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <img src={logo} alt="Logo" className="background-logo" />
+      {/* <img src={logo} alt="Logo" className="background-logo" /> */}
+      <video
+  className="background-video"
+  autoPlay
+  loop
+  muted
+  playsInline
+>
+  <source src={backgroundVideo} type="video/mp4" />
+</video>
+
       <Box className="login-box" sx={{ zIndex: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, color: 'white', textAlign: 'center' }}>
+        <img src={logo} alt="Logo" className="login-logo" style={{ width: "80px", height: "auto", marginBottom: "24px",marginLeft:"160px",marginTop:"20px",borderRadius:"8px",opacity:1,backgroundColor: "rgba(255, 255, 255, 0.1)",boxShadow: "0 0 12px rgba(255, 255, 255, 0.1)" }} />
+        <Box display="flex" justifyContent="center" mb={3}  >
+          
+        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1, color: 'white', textAlign: 'center' }}>
           QMIS - KEPA
         </Typography>
+        </Box>
+        
         <TextField
           fullWidth
           label="Enter the PEN Number"
