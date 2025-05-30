@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const purchaseTransferRoutes = require('./routes/purchasesTransfer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use('/api/auth', authRoutes);
 
 const purchaseRoutes = require('./routes/purchaseRoutes');
 app.use('/api/purchasestockdetailentry', purchaseRoutes);
+app.use('/api/purchasestransfer', purchaseTransferRoutes);
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
