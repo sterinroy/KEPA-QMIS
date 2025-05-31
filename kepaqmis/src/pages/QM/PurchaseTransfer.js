@@ -331,6 +331,7 @@ const PurchaseTransfer = () => {
                     <TableCell>Item</TableCell>
                     <TableCell>Sub-Category</TableCell>
                     <TableCell>Quantity</TableCell>
+                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -359,6 +360,7 @@ const PurchaseTransfer = () => {
                         <TableCell>{purchase.item}</TableCell>
                         <TableCell>{purchase.sub_category}</TableCell>
                         <TableCell>{purchase.quantity}</TableCell>
+                        <TableCell>statu</TableCell>
                       </TableRow>
                     ))
                   )}
