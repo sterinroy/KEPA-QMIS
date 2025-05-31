@@ -52,7 +52,7 @@ const Temp = ({children}) => {
         <nav className="nav-menu">
           <div className="nav-item active" onClick={handlePurchseDashboard}><DashboardIcon className="icon" /> Dashboard</div>
           <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" />Temporary Stock Issue Details</div>
-          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Temporary Stock Issued</div>
+          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Temporary Stock <br></br> Issued</div>
         </nav>
       </aside>
 

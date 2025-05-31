@@ -9,7 +9,9 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
-import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitTempStock } from '../../redux/actions/tempActions';
+
 
 
 
@@ -24,8 +26,8 @@ import {
 const Tempstockdetailentry = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeNav, setActiveNav] = useState('stock');
-  const location = useLocation();
-  const [formData, setFormData] = useState(location.state?.formData ||{
+  
+  const [formData, setFormData] = useState({
      slNo: '',
           PENNo: '',
           toWhom: '',
@@ -40,7 +42,9 @@ const Tempstockdetailentry = () => {
 
   
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+const { loading, error, successMessage } = useSelector((state) => state.temp);
+
 
 
   const handleDropdownToggle = () => setShowDropdown(!showDropdown);
@@ -56,40 +60,15 @@ const Tempstockdetailentry = () => {
   
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
   e.preventDefault();
-
-  const payload = {
-    slNo: formData.slNo,
-    PENNo: formData.PENNo,
-    toWhom: formData.toWhom,
-    name: formData.name,
-    mobile: formData.mobile,
-    dateOfissue: formData.dateOfissue,
-    amount: parseFloat(formData.amount),
-    itemDescription: formData.itemDescription,
-    purpose: formData.purpose,
-    qty: parseInt(formData.qty, 10),
-  };
-// console.log("🔥 Fetching to:",'http://localhost:3000/api/tempstock' );
-
-  fetch('http://localhost:3000/api/tempstock', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  })
-    .then((res) => {
-    const contentType = res.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Expected JSON, got something else');
-    } return res.json()})
-    .then((resData) => {
-      alert(resData.message);
-    })
-    .catch((err) => alert('Error: ' + err.message))
-    .finally(() => {
-      navigate('/review', { state: { formData } });
-    });
+  try {
+    const message = await dispatch(submitTempStock(formData)); // dispatch Redux action
+    alert(message); // optional: show success message
+    navigate('/review', { state: { formData } }); // navigate after success
+  } catch (err) {
+    alert('Error: ' + err.message); // show error
+  }
 };
 
 

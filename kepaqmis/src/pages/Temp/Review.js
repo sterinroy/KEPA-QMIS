@@ -1,32 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button } from '@mui/material';
 import { jsPDF } from 'jspdf';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLatestTempIssued } from '../../redux/actions/tempActions';
 import Temp from './Temp';
-import { useLocation } from 'react-router-dom';
 
 const Review = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-const [latestData, setLatestData] = useState(location.state?.formData || null);
+  const dispatch = useDispatch();
 
+  const { issuedList, loading } = useSelector((state) => state.temp);
+  const latestData = issuedList[0]; // We store latest as [latestEntry]
 
   useEffect(() => {
-    const fetchLatest = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/tempstock');
-        const allData = response.data;
-        if (Array.isArray(allData) && allData.length > 0) {
-          setLatestData(allData[allData.length - 1]); // Get the most recent one
-        }
-      } catch (err) {
-        console.error('Error fetching latest record:', err);
-      }
-    };
-
-    fetchLatest();
-  }, [latestData]);
+    dispatch(fetchLatestTempIssued());
+  }, [dispatch]);
 
   const handleGeneratePDF = () => {
     if (!latestData) return;
@@ -64,7 +53,9 @@ const [latestData, setLatestData] = useState(location.state?.formData || null);
           Review Latest Submitted Entry
         </Typography>
 
-        {latestData ? (
+        {loading || !latestData ? (
+          <Typography>Loading or no data available.</Typography>
+        ) : (
           <Paper elevation={3} sx={{ p: 3, mb: 2 }}>
             <Typography variant="body1"><strong>Sl No:</strong> {latestData.slNo}</Typography>
             <Typography variant="body1"><strong>PEN No:</strong> {latestData.PENNo}</Typography>
@@ -77,12 +68,13 @@ const [latestData, setLatestData] = useState(location.state?.formData || null);
             <Typography variant="body1"><strong>Purpose:</strong> {latestData.purpose}</Typography>
             <Typography variant="body1"><strong>Quantity:</strong> {latestData.qty}</Typography>
           </Paper>
-        ) : (
-          <Typography>Loading or no data available.</Typography>
         )}
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button onClick={() => navigate('/tempstockdetailentry',{ state: { formData: latestData } })} variant="outlined">
+          <Button
+            onClick={() => navigate('/tempstockdetailentry', { state: { formData: latestData } })}
+            variant="outlined"
+          >
             ← Back
           </Button>
           <Button onClick={handleGeneratePDF} variant="contained" color="primary">

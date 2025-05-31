@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTempIssued } from '../../redux/actions/tempActions';
 import {
   Box,
   Paper,
@@ -14,41 +16,25 @@ import {
   Button
 } from '@mui/material';
 import { jsPDF } from 'jspdf';
-import axios from 'axios';
-import Temp from './Temp'; // Make sure the path is correct
+import Temp from './Temp';
 
 const Tempissued = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { issuedList, loading, error } = useSelector((state) => state.temp);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/tempstock');
-        setFormData(response.data);
-        setError(null);
-      } catch (err) {
-        setError('Failed to fetch data');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+    dispatch(fetchTempIssued());
+  }, [dispatch]);
 
   const handleGeneratePDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(14);
     doc.text('Temporary Stock Issue Details', 20, 20);
 
-    if (Array.isArray(formData)) {
+    if (Array.isArray(issuedList)) {
       let y = 30;
-      formData.forEach((entry, index) => {
+      issuedList.forEach((entry, index) => {
         doc.text(`Record ${index + 1}`, 20, y);
         y += 10;
 
@@ -116,14 +102,14 @@ const Tempissued = () => {
                       {error}
                     </TableCell>
                   </TableRow>
-                ) : formData.length === 0 ? (
+                ) : issuedList.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={10} align="center">
                       No data found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  formData.map((entry, index) => (
+                  issuedList.map((entry, index) => (
                     <TableRow key={index}>
                       <TableCell>{entry.slNo}</TableCell>
                       <TableCell>{entry.PENNo}</TableCell>
