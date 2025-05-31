@@ -4,10 +4,13 @@ import { Box, Typography, Paper, Button } from '@mui/material';
 import { jsPDF } from 'jspdf';
 import axios from 'axios';
 import Temp from './Temp';
+import { useLocation } from 'react-router-dom';
 
 const Review = () => {
   const navigate = useNavigate();
-  const [latestData, setLatestData] = useState(null);
+  const location = useLocation();
+const [latestData, setLatestData] = useState(location.state?.formData || null);
+
 
   useEffect(() => {
     const fetchLatest = async () => {
@@ -23,7 +26,7 @@ const Review = () => {
     };
 
     fetchLatest();
-  }, []);
+  }, [latestData]);
 
   const handleGeneratePDF = () => {
     if (!latestData) return;
@@ -79,7 +82,7 @@ const Review = () => {
         )}
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button onClick={() => navigate('/tempstockdetailentry')} variant="outlined">
+          <Button onClick={() => navigate('/tempstockdetailentry',{ state: { formData: latestData } })} variant="outlined">
             ← Back
           </Button>
           <Button onClick={handleGeneratePDF} variant="contained" color="primary">

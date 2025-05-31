@@ -9,6 +9,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../assets/user.jpg'
+import { useLocation } from 'react-router-dom';
+
 
 
 import {
@@ -22,20 +24,24 @@ import {
 const Tempstockdetailentry = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeNav, setActiveNav] = useState('stock');
-  const [formData, setFormData] = useState({
+  const location = useLocation();
+  const [formData, setFormData] = useState(location.state?.formData ||{
      slNo: '',
           PENNo: '',
           toWhom: '',
-          dateOfissue: '',
+          dateOfissue: new Date().toISOString().split('T')[0],
           name: '',
           mobile: '',
           itemDescription: '',
           purpose: '',
           qty: 1,
+          amount: '',
   });
 
   
   const navigate = useNavigate();
+  
+
 
   const handleDropdownToggle = () => setShowDropdown(!showDropdown);
 
