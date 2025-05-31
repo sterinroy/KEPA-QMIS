@@ -1,62 +1,56 @@
-import React, { useState } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
-import './Login.css';
-import logo from '../assets/logo.svg';
-// import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
-// import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Box, Typography } from "@mui/material";
+import "./Login.css";
+import logo from "../assets/logo.svg";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/authActions";
 
 const Login = () => {
-  const [pen, setPen] = useState('');
-  const [password, setPassword] = useState('');
-  // const navigate = useNavigate();
+  const [pen, setPen] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
 
-  const handleLogin = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pen, password }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.msg || "Login failed");
-      return;
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      switch (auth.role) {
+        case "Admin":
+          navigate("/AdminDashboard");
+          break;
+        case "QuarterMaster":
+          navigate("/QuarterMaster");
+          break;
+        case "User":
+          navigate("/UserDashboard");
+          break;
+        case "SuperAdmin":
+          navigate("/SuperAdminDashboard");
+          break;
+        default:
+          alert("Unknown role.");
+      }
     }
+  }, [auth, navigate]);
 
-    // Save token and role
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.role);
-
-    // Redirect based on role
-    switch (data.role) {
-      case "Admin":
-        window.location.href = "/AdminDashboard";
-        break;
-      case "QuarterMaster":
-        window.location.href = "/QuarterMaster";
-        break;
-      case "User":
-        window.location.href = "/UserDashboard";
-        break;
-      default:
-        alert("Unknown role.");
-    }
-
-  } catch (error) {
-    console.error(error);
-    alert("An error occurred during login.");
-  }
-};
-  
+  const handleLogin = () => {
+    dispatch(login(pen, password));
+  };
 
   return (
     <div className="login-container">
       <img src={logo} alt="Logo" className="background-logo" />
       <Box className="login-box" sx={{ zIndex: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, color: 'white', textAlign: 'center' }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            mb: 3,
+            color: "white",
+            textAlign: "center",
+          }}
+        >
           QMIS - KEPA
         </Typography>
         <TextField
@@ -66,11 +60,11 @@ const Login = () => {
           onChange={(e) => setPen(e.target.value)}
           variant="outlined"
           margin="normal"
-          InputLabelProps={{ style: { color: '#ccc' } }}
+          InputLabelProps={{ style: { color: "#ccc" } }}
           InputProps={{
             style: {
-              color: 'white',
-              backgroundColor: 'rgba(255,255,255,0.1)',
+              color: "white",
+              backgroundColor: "rgba(255,255,255,0.1)",
             },
           }}
         />
@@ -82,18 +76,23 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           variant="outlined"
           margin="normal"
-          InputLabelProps={{ style: { color: '#ccc' } }}
+          InputLabelProps={{ style: { color: "#ccc" } }}
           InputProps={{
             style: {
-              color: 'white',
-              backgroundColor: 'rgba(255,255,255,0.1)',
+              color: "white",
+              backgroundColor: "rgba(255,255,255,0.1)",
             },
           }}
         />
         <Button
           fullWidth
           variant="contained"
-          sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
+          sx={{
+            mt: 2,
+            backgroundColor: "white",
+            color: "black",
+            fontWeight: "bold",
+          }}
           onClick={handleLogin}
         >
           Login
@@ -108,20 +107,29 @@ const Login = () => {
   Go to Temp Page
 </Button>
         <Box mt={2} display="flex" justifyContent="flex-end">
-          <RouterLink to="/register" style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
+          <RouterLink
+            to="/register"
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              textDecoration: "none",
+            }}
+          >
             Register
           </RouterLink>
         </Box>
       </Box>
-      <footer style={{
-        marginTop: '2rem',
-        textAlign: 'center',
-        color: 'white',
-        fontSize: '0.9rem',
-        position: 'absolute',
-        bottom: '10px',
-        width: '100%'
-      }}>
+      <footer
+        style={{
+          marginTop: "2rem",
+          textAlign: "center",
+          color: "white",
+          fontSize: "0.9rem",
+          position: "absolute",
+          bottom: "10px",
+          width: "100%",
+        }}
+      >
         © {new Date().getFullYear()} All rights reserved to "Albert the Keng"
       </footer>
     </div>

@@ -14,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/superadmin', require('./routes/superadmin'));
 app.use('/api/tempstock', tempStockRoutes); 
 
 // Catch-all for unmatched routes
