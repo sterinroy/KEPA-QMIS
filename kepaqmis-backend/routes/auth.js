@@ -65,7 +65,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', authMiddleware, async (req, res) => {
   try {
-    console.log("Logout request from:", req.user);
+    // console.log("Logout request from:", req.user);
     const { pen, name, role } = req.user;
 
     await Log.create({
