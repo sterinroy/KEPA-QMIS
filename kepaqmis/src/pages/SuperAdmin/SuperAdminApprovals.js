@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPendingUsers,
@@ -10,19 +10,33 @@ import "./SuperAdmin.css";
 const SuperAdminApprovals = () => {
   const dispatch = useDispatch();
   const { pendingUsers, loading, error } = useSelector(
-    (state) => state.superAdmin 
+    (state) => state.superAdmin
   );
+
+  const [selectedRoles, setSelectedRoles] = useState({});
 
   useEffect(() => {
     dispatch(fetchPendingUsers());
   }, [dispatch]);
 
-  const handleAction = (id, action) => {
-    if (action === "approve") {
-      dispatch(approveUser(id));
-    } else if (action === "reject") {
-      dispatch(rejectUser(id));
+  const handleApprove = (id, role) => {
+    if (role === "QuarterMaster") {
+      if (!selectedRoles[id]) {
+        alert("Please select a specific QuarterMaster role");
+        return;
+      }
+      dispatch(approveUser(id, selectedRoles[id]));
+    } else {
+      dispatch(approveUser(id, role));
     }
+  };
+
+  const handleReject = (id) => {
+    dispatch(rejectUser(id));
+  };
+
+  const handleRoleChange = (id, newRole) => {
+    setSelectedRoles({ ...selectedRoles, [id]: newRole });
   };
 
   return (
@@ -42,6 +56,7 @@ const SuperAdminApprovals = () => {
               <th>Name</th>
               <th>Phone</th>
               <th>Role</th>
+              <th>Assign Role</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -53,10 +68,27 @@ const SuperAdminApprovals = () => {
                 <td>{user.phone}</td>
                 <td>{user.role}</td>
                 <td>
-                  <button onClick={() => handleAction(user._id, "approve")}>
+                  {user.role === "QuarterMaster" ? (
+                    <select
+                      onChange={(e) =>
+                        handleRoleChange(user._id, e.target.value)
+                      }
+                      defaultValue=""
+                    >
+                      <option value="" disabled>Select role</option>
+                      <option value="QuarterMasterPurchase">QuarterMaster (Purchase)</option>
+                      <option value="QuarterMasterIssue">QuarterMaster (Issue)</option>
+                      <option value="QuarterMasterACQM">ACQM</option>
+                    </select>
+                  ) : (
+                    "N/A"
+                  )}
+                </td>
+                <td>
+                  <button onClick={() => handleApprove(user._id, user.role)}>
                     Approve
                   </button>
-                  <button onClick={() => handleAction(user._id, "reject")}>
+                  <button onClick={() => handleReject(user._id)}>
                     Reject
                   </button>
                 </td>

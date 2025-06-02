@@ -19,8 +19,14 @@ const Login = () => {
         case "Admin":
           navigate("/AdminDashboard");
           break;
-        case "QuarterMaster":
-          navigate("/QuarterMaster");
+        case "QuarterMasterPurchase":
+          navigate("/QuarterMasterPurchase");
+          break;
+        case "QuarterMasterIssue":
+          navigate("/QuarterMasterIssue");
+          break;
+        case "QuarterMasterACQM":
+          navigate("/QuarterMasterACQM");
           break;
         case "User":
           navigate("/UserDashboard");
