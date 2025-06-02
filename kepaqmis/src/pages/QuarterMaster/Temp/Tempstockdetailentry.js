@@ -1,23 +1,20 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Tempstockdetailentry.css';
-import logoac from '../../assets/police_academy2.png';
+import logoac from '../../../assets/police_academy2.png';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import userimg from '../../assets/user.jpg'
-import { useDispatch, useSelector } from 'react-redux';
-import { submitTempStock } from '../../redux/actions/tempActions';
+import userimg from '../../../assets/user.jpg'
+import { useDispatch } from 'react-redux';
+import { submitTempStock } from '../../../redux/actions/tempActions';
 
 
 
 
 import {
   TextField,
-  
   Button,
   Grid,
   Box,
@@ -43,7 +40,7 @@ const Tempstockdetailentry = () => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
-const { loading, error, successMessage } = useSelector((state) => state.temp);
+// const { loading, error, successMessage } = useSelector((state) => state.temp);
 
 
 

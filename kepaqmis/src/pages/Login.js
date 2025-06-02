@@ -103,7 +103,7 @@ const Login = () => {
         >
           Login
         </Button>
-        <Button
+        {/* <Button
   fullWidth
   variant="outlined"
   sx={{ mt: 1, color: 'white', borderColor: 'white', fontWeight: 'bold' }}
@@ -111,7 +111,7 @@ const Login = () => {
   to="/temp"
 >
   Go to Temp Page
-</Button>
+</Button> */}
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink
             to="/register"

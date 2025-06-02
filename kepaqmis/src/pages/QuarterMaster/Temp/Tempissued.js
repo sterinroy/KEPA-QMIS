@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTempIssued } from '../../redux/actions/tempActions';
+import { fetchTempIssued } from '../../../redux/actions/tempActions';
 import {
   Box,
   Paper,
@@ -15,7 +15,7 @@ import {
   Skeleton,
   Button
 } from '@mui/material';
-import { jsPDF } from 'jspdf';
+// import { jsPDF } from 'jspdf';
 import Temp from './Temp';
 
 const Tempissued = () => {
@@ -27,41 +27,41 @@ const Tempissued = () => {
     dispatch(fetchTempIssued());
   }, [dispatch]);
 
-  const handleGeneratePDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(14);
-    doc.text('Temporary Stock Issue Details', 20, 20);
+  // const handleGeneratePDF = () => {
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(14);
+  //   doc.text('Temporary Stock Issue Details', 20, 20);
 
-    if (Array.isArray(issuedList)) {
-      let y = 30;
-      issuedList.forEach((entry, index) => {
-        doc.text(`Record ${index + 1}`, 20, y);
-        y += 10;
+  //   if (Array.isArray(issuedList)) {
+  //     let y = 30;
+  //     issuedList.forEach((entry, index) => {
+  //       doc.text(`Record ${index + 1}`, 20, y);
+  //       y += 10;
 
-        const fields = [
-          { label: 'Sl No', value: entry.slNo },
-          { label: 'PEN No', value: entry.PENNo },
-          { label: 'To Whom', value: entry.toWhom },
-          { label: 'Name', value: entry.name },
-          { label: 'Mobile', value: entry.mobile },
-          { label: 'Date of Issue', value: entry.dateOfissue },
-          { label: 'Amount', value: entry.amount },
-          { label: 'Item Description', value: entry.itemDescription },
-          { label: 'Purpose', value: entry.purpose },
-          { label: 'Quantity', value: entry.qty }
-        ];
+  //       const fields = [
+  //         { label: 'Sl No', value: entry.slNo },
+  //         { label: 'PEN No', value: entry.PENNo },
+  //         { label: 'To Whom', value: entry.toWhom },
+  //         { label: 'Name', value: entry.name },
+  //         { label: 'Mobile', value: entry.mobile },
+  //         { label: 'Date of Issue', value: entry.dateOfissue },
+  //         { label: 'Amount', value: entry.amount },
+  //         { label: 'Item Description', value: entry.itemDescription },
+  //         { label: 'Purpose', value: entry.purpose },
+  //         { label: 'Quantity', value: entry.qty }
+  //       ];
 
-        fields.forEach(field => {
-          doc.text(`${field.label}: ${field.value}`, 20, y);
-          y += 10;
-        });
+  //       fields.forEach(field => {
+  //         doc.text(`${field.label}: ${field.value}`, 20, y);
+  //         y += 10;
+  //       });
 
-        y += 10;
-      });
+  //       y += 10;
+  //     });
 
-      doc.save('Stock_Issue_Details.pdf');
-    }
-  };
+  //     doc.save('Stock_Issue_Details.pdf');
+  //   }
+  // };
 
   return (
     <Temp>
@@ -134,9 +134,9 @@ const Tempissued = () => {
             ← Back
           </Button>
 
-          <Button variant="contained" color="primary" onClick={handleGeneratePDF}>
+          {/* <Button variant="contained" color="primary" onClick={handleGeneratePDF}>
             Generate PDF
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Temp>

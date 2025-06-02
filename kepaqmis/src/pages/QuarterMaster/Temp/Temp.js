@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ Import for navigation
-import './Purchase.css';
-import logoac from '../../assets/police_academy2.png';
+import './Temp.css';
+import logoac from '../../../assets/police_academy2.png';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import userimg from '../../assets/user.jpg'
-const PurchaseDashboard = () => {
+import userimg from '../../../assets/user.jpg'
+const Temp = ({children}) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate(); // ✅ Create navigate instance
@@ -31,17 +31,17 @@ const PurchaseDashboard = () => {
     navigate('/login'); // ✅ Redirect to login route
   };
     const handleStockNavigation = () => {
-    navigate('/purchasestockdetailentry'); // Redirect to Stock page when clicked
+    navigate('/tempstockdetailentry'); // Redirect to Stock page when clicked
   };
   // const handleStock=()=>{
 
   // }
   
     const handlePurchseDashboard=()=>{
-      navigate('/purchase');
+      navigate('/temp');
     }
     const handlePurchseTransfer=()=>{
-      navigate('/purchasetransfer')
+      navigate('/tempissued')
     }
   return (
     <div className="container">
@@ -51,20 +51,20 @@ const PurchaseDashboard = () => {
         </div>
         <nav className="nav-menu">
           <div className="nav-item active" onClick={handlePurchseDashboard}><DashboardIcon className="icon" /> Dashboard</div>
-          <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" /> Stock Details Entry</div>
-          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Transfer Stock</div>
+          <div className="nav-item " onClick={handleStockNavigation}><DescriptionIcon className="icon" />Temporary Stock Issue Details</div>
+          <div className="nav-item" onClick={handlePurchseTransfer}><BookmarkIcon className="icon" /> Temporary Stock <br></br> Issued</div>
         </nav>
       </aside>
 
       <main className="main">
         <nav className="top-navbar">
-          <h1>Welcome QuarterMaster<br /><span>(Purchase Wing)</span></h1>
+          <h1>Welcome QuarterMaster<br /><span>(Issue Wing)</span></h1>
           <div className="header-right">
             <input type="text" className="search" placeholder="Search" />
             <NotificationsNoneIcon className="icon-bell" />
             <div className="profile" ref={profileRef} onClick={toggleDropdown}>
               <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">qmpurchase</span>
+              <span className="profile-name">qmtemp</span>
               {showDropdown && (
                 <div className="dropdown-menu">
                   <img src={logoac} alt="User" className="dropdown-pic" />
@@ -78,9 +78,10 @@ const PurchaseDashboard = () => {
             </div>
           </div>
         </nav>
+        {children}
       </main>
     </div>
   );
 };
 
-export default PurchaseDashboard;
+export default Temp;

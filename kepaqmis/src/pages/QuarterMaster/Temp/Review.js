@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button } from '@mui/material';
-import { jsPDF } from 'jspdf';
+// import { jsPDF } from 'jspdf';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLatestTempIssued } from '../../redux/actions/tempActions';
+import { fetchLatestTempIssued } from '../../../redux/actions/tempActions';
 import Temp from './Temp';
 
 const Review = () => {
@@ -17,34 +17,34 @@ const Review = () => {
     dispatch(fetchLatestTempIssued());
   }, [dispatch]);
 
-  const handleGeneratePDF = () => {
-    if (!latestData) return;
+  // const handleGeneratePDF = () => {
+  //   if (!latestData) return;
 
-    const doc = new jsPDF();
-    doc.setFontSize(14);
-    doc.text('Temporary Stock Issue - Latest Entry', 20, 20);
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(14);
+  //   doc.text('Temporary Stock Issue - Latest Entry', 20, 20);
 
-    const fields = [
-      { label: 'Sl No', value: latestData.slNo },
-      { label: 'PEN No', value: latestData.PENNo },
-      { label: 'To Whom', value: latestData.toWhom },
-      { label: 'Name', value: latestData.name },
-      { label: 'Mobile', value: latestData.mobile },
-      { label: 'Date of Issue', value: latestData.dateOfissue },
-      { label: 'Amount', value: latestData.amount },
-      { label: 'Item Description', value: latestData.itemDescription },
-      { label: 'Purpose', value: latestData.purpose },
-      { label: 'Quantity', value: latestData.qty },
-    ];
+  //   const fields = [
+  //     { label: 'Sl No', value: latestData.slNo },
+  //     { label: 'PEN No', value: latestData.PENNo },
+  //     { label: 'To Whom', value: latestData.toWhom },
+  //     { label: 'Name', value: latestData.name },
+  //     { label: 'Mobile', value: latestData.mobile },
+  //     { label: 'Date of Issue', value: latestData.dateOfissue },
+  //     { label: 'Amount', value: latestData.amount },
+  //     { label: 'Item Description', value: latestData.itemDescription },
+  //     { label: 'Purpose', value: latestData.purpose },
+  //     { label: 'Quantity', value: latestData.qty },
+  //   ];
 
-    let y = 30;
-    fields.forEach(field => {
-      doc.text(`${field.label}: ${field.value}`, 20, y);
-      y += 10;
-    });
+  //   let y = 30;
+  //   fields.forEach(field => {
+  //     doc.text(`${field.label}: ${field.value}`, 20, y);
+  //     y += 10;
+  //   });
 
-    doc.save('Latest_Stock_Issue.pdf');
-  };
+  //   doc.save('Latest_Stock_Issue.pdf');
+  // };
 
   return (
     <Temp>
@@ -77,9 +77,9 @@ const Review = () => {
           >
             ← Back
           </Button>
-          <Button onClick={handleGeneratePDF} variant="contained" color="primary">
+          {/* <Button onClick={handleGeneratePDF} variant="contained" color="primary">
             Generate PDF
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Temp>
