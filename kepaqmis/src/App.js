@@ -1,17 +1,19 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; // Ensure this is imported
+// import Register from "./pages/Register"; // Ensure this is imported
 import AdminDashboard from "./pages/AdminDashboard";
-import QuarterMaster from "./pages/QuarterMaster";
+// import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
+// import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
+// import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Register from "./pages/Register"; 
 import PurchaseDashboard from "./pages/QM/Purchase";
 import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
 import PurchaseStockDetailEntry from "./pages/QM/PurchaseStockdetailentry";
@@ -26,20 +28,38 @@ function App() {
         <Route path="/purchase" element={<PurchaseDashboard />} />
         <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
         <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
-        <Route path="/AdminDashboard" element={
-          <ProtectedRoute allowedRoles={['Admin']}>
+        <Route
+          path="/AdminDashboard"
+          element={
+            <ProtectedRoute allowedRoles={["Admin"]}>
               <AdminDashboard />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/QuarterMaster"
+        {/* <Route
+          path="/QuarterMasterPurchase"
           element={
-            <ProtectedRoute allowedRoles={["QuarterMaster"]}>
-              <QuarterMaster />
+            <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
+              <QuarterMasterPurchase />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/QuarterMasterIssue"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
+              <QuarterMasterIssue />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/QuarterMasterACQM"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterACQM"]}>
+              <QuarterMasterACQM />
+            </ProtectedRoute>
+          }
+        /> */}
         <Route
           path="/UserDashboard"
           element={
