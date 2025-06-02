@@ -360,7 +360,7 @@ const PurchaseTransfer = () => {
                         <TableCell>{purchase.item}</TableCell>
                         <TableCell>{purchase.sub_category}</TableCell>
                         <TableCell>{purchase.quantity}</TableCell>
-                        <TableCell>statu</TableCell>
+                        <TableCell>status</TableCell>
                       </TableRow>
                     ))
                   )}
