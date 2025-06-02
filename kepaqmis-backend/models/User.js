@@ -5,11 +5,7 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: ['QuarterMaster', 'User', 'Admin'],
-    required: true
-  },
+  role: { type: String, required: true },
   approved: { type: Boolean, default: false},
 },{ timestamps: true });
 

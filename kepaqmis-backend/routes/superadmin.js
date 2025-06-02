@@ -23,8 +23,16 @@ router.get('/pending-registrations', verifySuperAdmin, async (req, res) => {
 // Approve a user
 router.patch('/approve/:id', verifySuperAdmin, async (req, res) => {
   try {
+    const { role } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    if (user.role === 'QuarterMaster') {
+      if (!role || !['QuarterMasterPurchase', 'QuarterMasterIssue', 'QuarterMasterACQM'].includes(role)) {
+        return res.status(400).json({ msg: 'Valid QuarterMaster role required' });
+      }
+      user.role = role; // overwrite QuarterMaster with specific role
+    }
 
     user.approved = true;
     await user.save();
@@ -34,6 +42,7 @@ router.patch('/approve/:id', verifySuperAdmin, async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
+
 
 // Reject (delete) a user
 router.delete('/reject/:id', verifySuperAdmin, async (req, res) => {

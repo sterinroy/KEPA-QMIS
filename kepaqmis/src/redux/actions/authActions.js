@@ -12,7 +12,7 @@ export const login = (pen, password) => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pen, password }),
@@ -46,7 +46,7 @@ export const register = (pen, name, phone, password, role) => {
   return async (dispatch) => {
     dispatch({ type: REGISTER_REQUEST });
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pen, name, phone, password, role }),
