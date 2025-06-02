@@ -1,24 +1,29 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; // Ensure this is imported
+import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
+
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentry";
-import Temp from "./pages/QuarterMaster/Temp/Temp";
-import Review from "./pages/QuarterMaster/Temp/Review";
-import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Sidebar from "./pages/QuarterMaster/Issue/Sidebar";
+import Topbar from "./pages/QuarterMaster/Issue/Topbar";
+
+import Tempstockdetailentry from "./pages/QuarterMaster/Issue/Tempstockdetailentry";
+import Review from "./pages/QuarterMaster/Issue/Review";
+import Tempissued from "./pages/QuarterMaster/Issue/Tempissued";
 
 function App() {
   return (
@@ -27,11 +32,11 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/temp" element={<Temp />} />
+
         <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
         <Route path="/review" element={<Review />} />
-        <Route path="/tempissued" element={<Tempissued/>}/>
-        
+        <Route path="/tempissued" element={<Tempissued />} />
+
         <Route
           path="/AdminDashboard"
           element={
@@ -40,6 +45,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/QuarterMasterPurchase"
           element={
@@ -48,6 +54,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/QuarterMasterIssue"
           element={
@@ -56,6 +63,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/QuarterMasterACQM"
           element={
@@ -64,6 +72,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/UserDashboard"
           element={
@@ -72,6 +81,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/SuperAdminDashboard"
           element={
@@ -80,6 +90,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/SuperAdminApprovals"
           element={
@@ -88,6 +99,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/SuperAdminUsers"
           element={
@@ -96,6 +108,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/SuperAdminLogs"
           element={
@@ -104,6 +117,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>
