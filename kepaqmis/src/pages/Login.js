@@ -5,6 +5,8 @@ import logo from "../assets/logo.svg";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/authActions";
+import { Snackbar, Alert } from "@mui/material";
+
 
 const Login = () => {
   const [pen, setPen] = useState("");
@@ -15,6 +17,7 @@ const Login = () => {
   //    navigate("/purchase");
   // }
   const auth = useSelector((state) => state.auth);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -46,6 +49,16 @@ const Login = () => {
   const handleLogin = () => {
     dispatch(login(pen, password));
   };
+
+  useEffect(() => {
+  if (auth.error) {
+    setOpenSnackbar(true);
+  }
+}, [auth.error]);
+
+const handleSnackbarClose = () => {
+  setOpenSnackbar(false);
+};
 
   return (
     <div className="login-container">
@@ -93,6 +106,7 @@ const Login = () => {
             },
           }}
         />
+        
         <Button
           fullWidth
           variant="contained"
@@ -106,16 +120,15 @@ const Login = () => {
         >
           Login
         </Button>
-        {/* removelater */}
-          {/* <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
-          onClick={handlePurchase}
-        >
-          Purchase
-        </Button> */}
-        
+        {/* <Button
+  fullWidth
+  variant="outlined"
+  sx={{ mt: 1, color: 'white', borderColor: 'white', fontWeight: 'bold' }}
+  component={RouterLink}
+  to="/temp"
+>
+  Go to Temp Page
+</Button> */}
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink
             to="/register"
@@ -142,6 +155,16 @@ const Login = () => {
       >
         © {new Date().getFullYear()} All rights reserved to "Albert the Keng"
       </footer>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {auth.error}
+        </Alert>
+    </Snackbar>
     </div>
   );
 };

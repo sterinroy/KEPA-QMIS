@@ -13,6 +13,11 @@ import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentry";
+import Temp from "./pages/QuarterMaster/Temp/Temp";
+import Review from "./pages/QuarterMaster/Temp/Review";
+import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
+
 import Register from "./pages/Register"; 
 import PurchaseDashboard from "./pages/QM/Purchase";
 import PurchaseTransfer from "./pages/QM/PurchaseTransfer"
@@ -28,6 +33,10 @@ function App() {
         <Route path="/purchase" element={<PurchaseDashboard />} />
         <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
         <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
+                <Route path="/temp" element={<Temp />} />
+        <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/tempissued" element={<Tempissued/>}/>
         <Route
           path="/AdminDashboard"
           element={
