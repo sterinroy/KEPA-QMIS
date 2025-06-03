@@ -58,7 +58,7 @@ const Topbar = () => {
       }}
     >
       <Toolbar sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-        <Box>
+        <Box ml={2}>
           <Typography variant="h5" fontWeight="bold">
             Welcome Quarter Master
           </Typography>
@@ -70,7 +70,7 @@ const Topbar = () => {
         <Box
           sx={{
             position: 'relative',
-            borderRadius: 1,
+            borderRadius: 1.5,
             backgroundColor: alpha('#000', 0.05),
             '&:hover': { backgroundColor: alpha('#000', 0.1) },
             width: { xs: '100%', sm: 300 },

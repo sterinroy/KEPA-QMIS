@@ -1,96 +1,32 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { submitTempStock } from "../../../redux/actions/tempActions";
-import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
-
-import { TextField, Button, Typography, Box } from "@mui/material";
-
-const SIDEBAR_WIDTH = 240;
-
-const Tempstockdetailentry = () => {
-  const [formData, setFormData] = useState({
-    slNo: "",
-    PENNo: "",
-    toWhom: "",
-    dateOfissue: new Date().toISOString().split("T")[0],
-    name: "",
-    mobile: "",
-    itemDescription: "",
-    purpose: "",
-    qty: 1,
-  });
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const message = await dispatch(submitTempStock(formData));
-      alert(message);
-      navigate("/review", { state: { formData } });
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  };
-
-  return (
-    <div style={{ display: "flex", height: "100vh" }}>
+return (
+    <div style={{ display: 'flex' }}>
       <Sidebar activeItem="tempissue" />
-      <div
-        style={{
-          marginLeft: SIDEBAR_WIDTH,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-        }}
-      >
+      <div style={{ marginLeft: SIDEBAR_WIDTH, flex: 1 }}>
         <Topbar />
         <div
           className="temp-issue-root"
           style={{
-            backgroundColor: "#f9f9f9",
-            maxHeight: "660px",
-            height: "calc(100vh - 64px)",
-            overflow: "auto",
-            padding: "2rem",
-            paddingTop: "8rem",
+            backgroundColor: '#f9f9f9',
+            minHeight: '100vh',
+            padding: '2rem',
           }}
         >
-          <Box
-            className="temp-issue-box"
-            sx={{
-              width: "100%",
-              maxWidth: "1200px",
-              backgroundColor: "#fff",
-              padding: "2rem",
-              borderRadius: "12px",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-              margin: "0 auto",
-              mt: 4,
-            }}
-          >
-            <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center">
+          <Box className="temp-issue-box">
+            <Typography
+              variant="h5"
+              mb={3}
+              fontWeight="bold"
+              textAlign="center"
+            >
               Temporary Issue Form
             </Typography>
-
             <form onSubmit={handleSubmit} className="mui-form">
               <TextField
                 label="Sl No"
                 name="slNo"
                 value={formData.slNo}
                 onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
               />
@@ -99,6 +35,7 @@ const Tempstockdetailentry = () => {
                 name="PENNo"
                 value={formData.PENNo}
                 onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
               />
@@ -137,6 +74,24 @@ const Tempstockdetailentry = () => {
                 fullWidth
               />
               <TextField
+                label="Amount"
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <TextField
+                label="Amount"
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <TextField
                 label="Quantity"
                 type="number"
                 name="qty"
@@ -147,39 +102,26 @@ const Tempstockdetailentry = () => {
                 fullWidth
               />
               <TextField
-                className="hello"
                 label="Item Description"
                 name="itemDescription"
                 value={formData.itemDescription}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 fullWidth
                 required
                 multiline
-                rows={4}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: "auto",
-                    padding: "1px",
-                  },
-                }}
+                rows={3}
               />
               <TextField
                 label="Purpose"
                 name="purpose"
                 value={formData.purpose}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 fullWidth
                 required
                 multiline
-                rows={4}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: "auto",
-                    padding: "1px",
-                  },
-                }}
+                rows={3}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-75}>
+              <Box display="flex" justifyContent="flex-end" mt={2} mr={-79}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -188,7 +130,7 @@ const Tempstockdetailentry = () => {
                     borderRadius: 2,
                     px: 5,
                     py: 0,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                   }}
                 >
                   Submit
@@ -201,5 +143,3 @@ const Tempstockdetailentry = () => {
     </div>
   );
 };
-
-export default Tempstockdetailentry;
