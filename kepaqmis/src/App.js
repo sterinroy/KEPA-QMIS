@@ -1,9 +1,9 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; // Ensure this is imported
+import Register from "./pages/Register";
+import SendRequest from "./pages/SendRequest";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
@@ -59,6 +59,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/SendRequest"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <SendRequest />
             </ProtectedRoute>
           }
         />
