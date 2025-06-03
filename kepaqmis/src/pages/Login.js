@@ -11,9 +11,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-   const handlePurchase=()=>{
-     navigate("/purchase");
-  }
+  //  const handlePurchase=()=>{
+  //    navigate("/purchase");
+  // }
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -107,14 +107,14 @@ const Login = () => {
           Login
         </Button>
         {/* removelater */}
-          <Button
+          {/* <Button
           fullWidth
           variant="contained"
           sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
           onClick={handlePurchase}
         >
           Purchase
-        </Button>
+        </Button> */}
         
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink
