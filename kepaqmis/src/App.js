@@ -18,15 +18,22 @@ import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentr
 import Temp from "./pages/QuarterMaster/Temp/Temp";
 import Review from "./pages/QuarterMaster/Temp/Review";
 import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
+import PurchaseDashboard from "./pages/QuarterMaster/Purchase/Purchase";
+import PurchaseTransfer from "./pages/QuarterMaster/Purchase/PurchaseTransfer"
+import PurchaseStockDetailEntry from "./pages/QuarterMaster/Purchase/PurchaseStockdetailentry";
 
 
 function App() {
   return (
     <Router>
       <Routes>
+
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/purchase" element={<PurchaseDashboard />} />
+        <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
+        <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
         <Route path="/temp" element={<Temp />} />
         <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
         <Route path="/review" element={<Review />} />

@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const purchaseTransferRoutes = require('./routes/purchasesTransfer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,11 @@ const tempStockRoutes = require('./routes/tempstock.js');
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+
+const purchaseRoutes = require('./routes/purchaseRoutes');
+app.use('/api/purchasestockdetailentry', purchaseRoutes);
+app.use('/api/purchasestransfer', purchaseTransferRoutes);
 
 // Routes
 app.use('/api/auth', authRoutes);

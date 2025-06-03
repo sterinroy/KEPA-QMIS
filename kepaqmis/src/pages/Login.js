@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/authActions";
 import { Snackbar, Alert } from "@mui/material";
 
-
+ 
 const Login = () => {
   const [pen, setPen] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +42,9 @@ const Login = () => {
       }
     }
   }, [auth, navigate]);
+    const handlePurchase=()=>{
+     navigate("/purchase");
+  }
 
   const handleLogin = () => {
     dispatch(login(pen, password));
@@ -116,6 +119,15 @@ const handleSnackbarClose = () => {
           onClick={handleLogin}
         >
           Login
+        </Button>
+         {/* removelater */}
+          <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
+          onClick={handlePurchase}
+        >
+          Purchase
         </Button>
         {/* <Button
   fullWidth
