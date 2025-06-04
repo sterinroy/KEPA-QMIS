@@ -12,7 +12,7 @@ body, html, .container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
+  width: 260px;
   height: 100vh;
   background-color: #060118; /* solid background, no gradient */
   padding: 1rem;
@@ -144,26 +144,12 @@ body, html, .container {
   box-sizing: border-box;
 }
 
-/* Hover effect: scale up slightly and add shadow */
-.nav-item:hover {
-  background-color: white;
-  color: black;
-  transform: scale(1.05);  /* slightly bigger */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
 
 .nav-item .icon {
   font-size: 1.3rem;
   color: white;
 }
 
-
-.nav-item:hover,
-.nav-item.active {
-  background-color: white;
-  color: black;
-}
 
 .nav-item:hover .icon,
 .nav-item.active .icon {
@@ -208,11 +194,6 @@ body, html, .container {
   min-height: 550px;
 }
 
-.temp-issue-box.mui-form.hello{
-    min-width: 450 px;
-    color: #1e90ff;
-}
-
 .if-issue-root {
   min-height: 100vh;
   background-color: #0C1227;
@@ -221,6 +202,32 @@ body, html, .container {
   align-items: center;
   padding: 40px 15px;
 }
+
+/* .form-container,
+.direct-issue-box {
+  background-color: #111C44 !important;
+  color: black;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+}
+
+.direct-issue-box {
+  padding: 40px 40px 50px 40px;
+  min-height: 550px;
+}
+
+.direct-issue-root {
+  min-height: 100vh;
+  background-color: #0C1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 15px;
+} */
 
 .temp-issue-box {
   background-color: #0C1227;
@@ -231,9 +238,6 @@ body, html, .container {
   width: 100%;
   max-width: 1300px;
   box-sizing: border-box;
-}
-
-.temp-issue-box {
   padding: 40px 40px 50px 40px;
   min-height: 550px;
 }
