@@ -7,7 +7,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../../assets/user.jpg'
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { submitTempStock } from '../../../redux/actions/tempActions';
 
 
@@ -25,7 +25,7 @@ const Tempstockdetailentry = () => {
   const [activeNav, setActiveNav] = useState('stock');
   
   const [formData, setFormData] = useState({
-     slNo: '',
+          slNo: '',
           PENNo: '',
           toWhom: '',
           dateOfissue: new Date().toISOString().split('T')[0],
@@ -39,6 +39,8 @@ const Tempstockdetailentry = () => {
 
   
   const navigate = useNavigate();
+  const pen = useSelector((state) => state.auth.pen);
+
   const dispatch = useDispatch();
 // const { loading, error, successMessage } = useSelector((state) => state.temp);
 
@@ -99,17 +101,18 @@ const Tempstockdetailentry = () => {
         <nav className="top-navbar">
           <h1>Welcome QuarterMaster<br /><span>(Temporary Allocation Wing)</span></h1>
           <div className="header-right">
-            <input type="text" className="search" placeholder="Search" />
+          
             <NotificationsNoneIcon className="icon-bell" />
             <div className="profile" onClick={handleDropdownToggle}>
               <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">qmtemp</span>
+              <span className="profile-name"></span>
               {showDropdown && (
                 <div className="dropdown-menu">
-                  <img src={logoac} alt="User" className="dropdown-pic" />
+                  {/*<img src={logoac} alt="User" className="dropdown-pic" />*/}
                   <div className="dropdown-details">
-                    <div className="name">Quarter Master</div>
-                    <div className="email">qmpurchase@domain.com</div>
+                    <div className="pen-display"><strong>PEN No:</strong> {pen || 'N/A'}</div>
+
+
                   </div>
                   <button className="logout-btn" onClick={() => navigate('/login')}>Logout</button>
                 </div>

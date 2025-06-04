@@ -3,37 +3,31 @@
   display: flex;
   height: 100vh;
   font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
- .sidebar {
-  position: fixed;
+.sidebar {
+ position: fixed;
+  width: 240px;
+  height: 100vh;
   top: 0;
   left: 0;
-  width: 250px;
-  height: 100vh;
-  background-color: #000000;
-  padding: 20px 10px;
-  z-index: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  z-index: 1000;
 }
-
 
 .logo img {
   width: 80px;
   height: auto;
-  margin-right: 20px;
   margin-bottom: 20px;
 }
 
 .nav-menu {
   width: 100%;
 }
+
 .nav-item {
   display: flex;
   align-items: center;
-  margin-right: 20px;
   gap: 10px;
   color: white;
   padding: 10px 15px;
@@ -42,10 +36,8 @@
   cursor: pointer;
 }
 
-
 .nav-item:hover,
 .nav-item.active {
-  /* background-color: #1a1a1a; */
   background-color: white;
   color: #000000;
 }
@@ -54,7 +46,7 @@
 .top-navbar {
   position: fixed;
   top: 0;
-  left: 200px;
+  left: 250px; /* Match sidebar width */
   right: 0;
   height: 70px;
   background-color: white;
@@ -63,13 +55,9 @@
   justify-content: space-between;
   padding: 0 30px;
   border-top-left-radius: 25px;
-  /* border-bottom-left-radius: 2px; */
-  z-index: 2;
+  z-index: 999;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-left: 20px;
 }
-
-
 
 .top-navbar h1 {
   font-size: 20px;
@@ -96,32 +84,12 @@
   font-size: 20px;
 }
 
-.profile {
-  font-weight: bold;
-}
-
-/* Main content starts below navbar */
-.main {
-  position: relative;
-  margin-left: 220px;
-  margin-top: 70px;
-  padding: 20px;
-  background-color: white;
-  /* border-top-left-radius: 30px; */
-  border-bottom-left-radius: 50px;
-  z-index: 1;
-  flex-grow: 1;
-  background-color: #f9f9f9;
-  min-height: calc(100vh - 70px);
-  box-shadow: 0 0 0 2px #f0f0ff inset;
-  
-}
-
-/*profile pic and name*/
+/* Profile */
 .profile {
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 
 .profile-pic {
@@ -135,6 +103,16 @@
 .profile-name {
   font-weight: 500;
   color: #333;
+}
+
+/* Main Content Area */
+.main {
+  margin-left: 250px; /* Match sidebar width */
+  padding-top: 90px; /* Space for top navbar */
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  box-shadow: 0 0 0 2px #f0f0ff inset;
 }
 
 /* Cards and Layout */
@@ -167,7 +145,8 @@
   border-radius: 10px;
   border: 1px solid #eee;
 }
-/* === Dropdown Menu === */
+
+/* Dropdown Menu */
 .dropdown-menu {
   position: absolute;
   top: 48px;
@@ -177,7 +156,7 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   width: 220px;
   padding: 1rem;
-  z-index: 10;
+  z-index: 1001;
 }
 
 .dropdown-pic {

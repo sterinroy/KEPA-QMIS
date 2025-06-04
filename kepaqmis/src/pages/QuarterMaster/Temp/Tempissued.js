@@ -1,145 +1,213 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTempIssued } from '../../../redux/actions/tempActions';
+
+import logoac from '../../../assets/police_academy2.png';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DescriptionIcon from '@mui/icons-material/Description';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import userimg from '../../../assets/user.jpg';
+
 import {
   Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
   Skeleton,
+  Paper,
   Button
 } from '@mui/material';
-// import { jsPDF } from 'jspdf';
-import Temp from './Temp';
+import { DataGrid } from '@mui/x-data-grid';
+
+import './Tempissued.css';
 
 const Tempissued = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const profileRef = useRef(null);
+
+  const [penNumber, setPenNumber] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const { issuedList, loading, error } = useSelector((state) => state.temp);
 
   useEffect(() => {
     dispatch(fetchTempIssued());
+    const storedPen = localStorage.getItem('pen') || 'NA';
+    setPenNumber(storedPen);
   }, [dispatch]);
 
-  // const handleGeneratePDF = () => {
-  //   const doc = new jsPDF();
-  //   doc.setFontSize(14);
-  //   doc.text('Temporary Stock Issue Details', 20, 20);
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+  };
 
-  //   if (Array.isArray(issuedList)) {
-  //     let y = 30;
-  //     issuedList.forEach((entry, index) => {
-  //       doc.text(`Record ${index + 1}`, 20, y);
-  //       y += 10;
+  const handleLogout = () => {
+    localStorage.clear();
+    setShowDropdown(false);
+    navigate('/login');
+  };
 
-  //       const fields = [
-  //         { label: 'Sl No', value: entry.slNo },
-  //         { label: 'PEN No', value: entry.PENNo },
-  //         { label: 'To Whom', value: entry.toWhom },
-  //         { label: 'Name', value: entry.name },
-  //         { label: 'Mobile', value: entry.mobile },
-  //         { label: 'Date of Issue', value: entry.dateOfissue },
-  //         { label: 'Amount', value: entry.amount },
-  //         { label: 'Item Description', value: entry.itemDescription },
-  //         { label: 'Purpose', value: entry.purpose },
-  //         { label: 'Quantity', value: entry.qty }
-  //       ];
+  const handleDashboard = () => {
+    navigate('/tempdashboard');
+  };
 
-  //       fields.forEach(field => {
-  //         doc.text(`${field.label}: ${field.value}`, 20, y);
-  //         y += 10;
-  //       });
+  const handleStockEntry = () => {
+    navigate('/tempstockdetailentry');
+  };
 
-  //       y += 10;
-  //     });
+  const handleTempIssued = () => {
+    navigate('/tempissued');
+  };
 
-  //     doc.save('Stock_Issue_Details.pdf');
-  //   }
-  // };
+  const columns = [
+    { field: 'slNo', headerName: 'Sl No', width: 90 },
+    { field: 'PENNo', headerName: 'PEN No', width: 120 },
+    { field: 'toWhom', headerName: 'To Whom', width: 130 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'mobile', headerName: 'Mobile', width: 130 },
+    {
+      field: 'dateOfissue',
+      headerName: 'Date of Issue',
+      width: 150,
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return isNaN(date.getTime()) ? 'N/A' : date.toLocaleString();
+      },
+    },
+    { field: 'amount', headerName: 'Amount', width: 100 },
+    { field: 'itemDescription', headerName: 'Item Description', width: 180 },
+    { field: 'purpose', headerName: 'Purpose', width: 130 },
+    { field: 'qty', headerName: 'Quantity', width: 100 },
+    {
+      field: 'returnStatus',
+      headerName: 'Return',
+      width: 120,
+      renderCell: (params) => (
+        <select
+          defaultValue={params.value || 'No'}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            console.log(`Row ${params.id} return changed to: ${newValue}`);
+          }}
+          style={{ width: '100%', padding: 4, borderRadius: 4 }}
+        >
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      )
+    }
+  ];
+
+  const allRows = issuedList.map((row, index) => ({
+    id: index,
+    returnStatus: row.returnStatus || 'No',
+    ...row
+  }));
+
+  const yesRows = allRows.filter(row => row.returnStatus === 'Yes');
+  const noRows = allRows.filter(row => row.returnStatus === 'No');
 
   return (
-    <Temp>
-      <Box sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          Review All Submitted Details
-        </Typography>
+    <div className="container">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="logo">
+          <img src={logoac} alt="logo" />
+        </div>
+        <nav className="nav-menu">
+          <div className="nav-item" onClick={handleDashboard}>
+            <DashboardIcon className="icon" /> Dashboard
+          </div>
+          <div className="nav-item" onClick={handleStockEntry}>
+            <DescriptionIcon className="icon" /> Temp Stock Entry
+          </div>
+          <div className="nav-item active" onClick={handleTempIssued}>
+            <BookmarkIcon className="icon" /> Temp Stock Issued
+          </div>
+        </nav>
+      </aside>
 
-        <Paper elevation={3} sx={{ borderRadius: 2 }}>
-          <TableContainer sx={{ maxHeight: 500 }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Sl No</TableCell>
-                  <TableCell>PEN No</TableCell>
-                  <TableCell>To Whom</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Mobile</TableCell>
-                  <TableCell>Date of Issue</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Item Description</TableCell>
-                  <TableCell>Purpose</TableCell>
-                  <TableCell>Quantity</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading ? (
-                  [...Array(5)].map((_, i) => (
-                    <TableRow key={i}>
-                      {[...Array(10)].map((__, j) => (
-                        <TableCell key={j}><Skeleton /></TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : error ? (
-                  <TableRow>
-                    <TableCell colSpan={10} align="center" sx={{ color: 'error.main' }}>
-                      {error}
-                    </TableCell>
-                  </TableRow>
-                ) : issuedList.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={10} align="center">
-                      No data found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  issuedList.map((entry, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{entry.slNo}</TableCell>
-                      <TableCell>{entry.PENNo}</TableCell>
-                      <TableCell>{entry.toWhom}</TableCell>
-                      <TableCell>{entry.name}</TableCell>
-                      <TableCell>{entry.mobile}</TableCell>
-                      <TableCell>{new Date(entry.dateOfissue).toLocaleDateString()}</TableCell>
-                      <TableCell>{entry.amount}</TableCell>
-                      <TableCell>{entry.itemDescription}</TableCell>
-                      <TableCell>{entry.purpose}</TableCell>
-                      <TableCell>{entry.qty}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+      {/* Main Content */}
+      <main className="main">
+        {/* Top Navbar */}
+        <nav className="top-navbar">
+          <h1>
+            Welcome QuarterMaster
+            <br />
+            <span>(Temporary Issue Wing)</span>
+          </h1>
+          <div className="header-right">
+            <input type="text" className="search" placeholder="Search" />
+            <NotificationsNoneIcon className="icon-bell" />
+            <div className="profile" ref={profileRef} onClick={toggleDropdown}>
+              <img src={userimg} alt="User" className="profile-pic" />
+              <span className="profile-name">{penNumber}</span>
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <img src={logoac} alt="User" className="dropdown-pic" />
+                  <div className="dropdown-details">
+                    <div className="name">QuarterMaster</div>
+                    <div className="pen">PEN: {penNumber}</div>
+                  </div>
+                  <button className="logout-btn" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
 
-        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="outlined" color="secondary" onClick={() => navigate('/tempstockdetailentry')}>
-            ← Back
-          </Button>
+        {/* Data Tables */}
+        <Box sx={{ mt: 8, px: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Returned Items (Yes)
+          </Typography>
+          <Paper sx={{ height: 400, mb: 4, borderRadius: 2 }}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={400} />
+            ) : error ? (
+              <Typography color="error" sx={{ p: 2 }}>
+                {error}
+              </Typography>
+            ) : (
+              <DataGrid
+                rows={yesRows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+              />
+            )}
+          </Paper>
 
-          {/* <Button variant="contained" color="primary" onClick={handleGeneratePDF}>
-            Generate PDF
-          </Button> */}
+          <Typography variant="h6" gutterBottom>
+            Not Returned Items (No)
+          </Typography>
+          <Paper sx={{ height: 400, borderRadius: 2 }}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={400} />
+            ) : error ? (
+              <Typography color="error" sx={{ p: 2 }}>
+                {error}
+              </Typography>
+            ) : (
+              <DataGrid
+                rows={noRows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+              />
+            )}
+          </Paper>
+
+          <Box sx={{ mt: 3 }}>
+            <Button variant="outlined" color="secondary" onClick={handleStockEntry}>
+              ← Back to Stock Entry
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Temp>
+      </main>
+    </div>
   );
 };
 
