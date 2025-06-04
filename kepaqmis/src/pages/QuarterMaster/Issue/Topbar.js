@@ -4,37 +4,29 @@ import {
   Toolbar,
   Typography,
   Box,
-  InputBase,
   Avatar,
   Menu,
   MenuItem,
   Divider,
   IconButton,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { alpha } from '@mui/material/styles';
 
 const Topbar = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  // Dummy user data
   const user = {
     name: 'Quarter Master (Issue Wing)',
     email: 'qm@example.com',
-    avatarUrl: 'https://i.pravatar.cc/300', // Placeholder avatar image
+    avatarUrl: 'https://i.pravatar.cc/300',
   };
 
   return (
@@ -42,15 +34,12 @@ const Topbar = () => {
       position="fixed"
       elevation={0}
       sx={{
-        backgroundColor: '#f7f7f7',
-        color: '#000',
+        backgroundColor: '#0C1227',
+        color: '#fff',
         boxShadow: 'none',
         borderTopLeftRadius: 16,
-        borderBottomLeftRadius: 0,
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
         height: 90,
-        ml: '250px', // Shift right to avoid sidebar (assuming sidebar width 250px)
+        ml: '250px',
         width: 'calc(100% - 250px)',
         display: 'flex',
         justifyContent: 'center',
@@ -59,60 +48,23 @@ const Topbar = () => {
     >
       <Toolbar sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
         <Box ml={2}>
-          <Typography variant="h5" fontWeight="bold">
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            sx={{ fontFamily: 'DM Sans, sans-serif', color: '#fff' }}
+          >
             Welcome Quarter Master
           </Typography>
-          <Typography variant="h6" color="textSecondary" fontWeight="bold">
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            sx={{ fontFamily: 'DM Sans, sans-serif', color: '#ccc' }}
+          >
             (Issue Wing)
           </Typography>
         </Box>
 
-        <Box
-          sx={{
-            position: 'relative',
-            borderRadius: 1.5,
-            backgroundColor: alpha('#000', 0.05),
-            '&:hover': { backgroundColor: alpha('#000', 0.1) },
-            width: { xs: '100%', sm: 300 },
-            mr: 3,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Box
-            sx={{
-              pl: 2,
-              position: 'absolute',
-              pointerEvents: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#999',
-              height: '100%',
-            }}
-          >
-            <SearchIcon />
-          </Box>
-          <InputBase
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            sx={{
-              color: 'inherit',
-              width: '100%',
-              pl: 5,
-              pr: 2,
-              py: 0.5,
-              '&::placeholder': {
-                color: '#333', // Dark grey placeholder
-                opacity: 1,
-              },
-            }}
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
           <Avatar
             alt={user.name}
             src={user.avatarUrl}
@@ -124,6 +76,7 @@ const Topbar = () => {
             aria-controls={anchorEl ? 'profile-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={anchorEl ? 'true' : undefined}
+            sx={{ color: '#fff' }}
           >
             <ArrowDropDownIcon />
           </IconButton>
@@ -132,27 +85,26 @@ const Topbar = () => {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             PaperProps={{
-              sx: { mt: 1, minWidth: 200 },
+              sx: {
+                mt: 1,
+                minWidth: 200,
+                backgroundColor: '#1c1f2b',
+                color: '#fff',
+              },
             }}
           >
             <Box sx={{ px: 2, py: 1 }}>
               <Typography variant="subtitle1" fontWeight="bold">
                 {user.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#ccc' }}>
                 {user.email}
               </Typography>
             </Box>
-            <Divider />
+            <Divider sx={{ borderColor: '#333' }} />
             <MenuItem
               onClick={() => {
                 alert('Logged out!');

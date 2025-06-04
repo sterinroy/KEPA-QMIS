@@ -50,14 +50,14 @@ const Qouta = () => {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', backgroundColor: '#0C1227', minHeight: '100vh' }}>
       <Sidebar activeItem="qouta" />
       <div style={{ marginLeft: SIDEBAR_WIDTH, flex: 1 }}>
         <Topbar />
         <div
           className="if-issue-root"
           style={{
-            backgroundColor: '#f9f9f9',
+            backgroundColor: '#0C1227',
             minHeight: '100vh',
             padding: '2rem',
           }}
@@ -68,6 +68,7 @@ const Qouta = () => {
               mb={3}
               fontWeight="bold"
               textAlign="center"
+              color="white"
             >
               Qouta Entry Form
             </Typography>
@@ -81,6 +82,7 @@ const Qouta = () => {
                 InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
               <TextField
                 label="Date of Purchased"
@@ -91,6 +93,7 @@ const Qouta = () => {
                 InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
               <TextField
                 label="Item Name"
@@ -99,6 +102,7 @@ const Qouta = () => {
                 onChange={handleChange}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
               <TextField
                 label="Sub Category"
@@ -107,6 +111,7 @@ const Qouta = () => {
                 onChange={handleChange}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
               <TextField
                 label="Quantity"
@@ -116,13 +121,15 @@ const Qouta = () => {
                 onChange={handleChange}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
-              <FormControl fullWidth required>
-                <InputLabel>Unit</InputLabel>
+              <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+                <InputLabel sx={{ color: 'white' }}>Unit</InputLabel>
                 <Select
                   name="unit"
                   value={formData.unit}
                   onChange={handleChange}
+                  sx={{ color: 'white' }}
                 >
                   <MenuItem value="kg">Kilogram</MenuItem>
                   <MenuItem value="litre">Litre</MenuItem>
@@ -130,12 +137,13 @@ const Qouta = () => {
                   <MenuItem value="meter">Meter</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl fullWidth required>
-                <InputLabel>Issued From</InputLabel>
+              <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+                <InputLabel sx={{ color: 'white' }}>Issued From</InputLabel>
                 <Select
                   name="fromChiefDistrictOrOther"
                   value={formData.fromChiefDistrictOrOther}
                   onChange={handleChange}
+                  sx={{ color: 'white' }}
                 >
                   <MenuItem value="Chief">Chief</MenuItem>
                   <MenuItem value="District">District</MenuItem>
@@ -149,8 +157,9 @@ const Qouta = () => {
                 onChange={handleChange}
                 required
                 fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-79}>
+              <Box display="flex" justifyContent="flex-end" mt={2} mr={-75}>
                 <Button
                   variant="contained"
                   color="primary"

@@ -6,8 +6,8 @@ import {
   TEMP_STOCK_SUBMIT_FAILURE,
   TEMP_STOCK_FETCH_REQUEST,
   TEMP_STOCK_FETCH_SUCCESS,
-  TEMP_STOCK_FETCH_FAILURE
-} from './actionTypes';
+  TEMP_STOCK_FETCH_FAILURE,
+} from "./actionTypes";
 
 export const submitTempStock = (formData) => {
   return async (dispatch) => {
@@ -27,16 +27,22 @@ export const submitTempStock = (formData) => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/api/tempstock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+
+      const data = JSON.parse(text);
 
       if (!response.ok) {
-        throw new Error(data.message || 'Submission failed');
+        throw new Error(data.message || "Submission failed");
       }
 
       dispatch({ type: TEMP_STOCK_SUBMIT_SUCCESS, payload: data.message });
@@ -51,11 +57,17 @@ export const fetchTempIssued = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock');
-      const data = await response.json();
+      const response = await fetch("http://localhost:3000/api/tempstock");
+      const text = await response.text();
+
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+
+      const data = JSON.parse(text);
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch issued temp stock');
+        throw new Error(data.message || "Failed to fetch issued temp stock");
       }
 
       dispatch({ type: TEMP_STOCK_FETCH_SUCCESS, payload: data });
@@ -68,10 +80,16 @@ export const fetchLatestTempIssued = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock');
-      const data = await response.json();
+      const response = await fetch("http://localhost:3000/api/tempstock");
+      const text = await response.text();
 
-      if (!Array.isArray(data)) throw new Error('Invalid response');
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+
+      const data = JSON.parse(text);
+
+      if (!Array.isArray(data)) throw new Error("Invalid response");
 
       const latest = data[data.length - 1];
       dispatch({ type: TEMP_STOCK_FETCH_SUCCESS, payload: [latest] }); // store as array

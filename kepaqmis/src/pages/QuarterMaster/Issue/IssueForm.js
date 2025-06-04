@@ -69,17 +69,17 @@ const IssueForm = () => {
     maxWidth: 1200,
     maxHeight: 520,
     overflowY: 'auto',       // Increased width
-    margin: '40px auto',  // Add top & bottom margin
+    margin: '100px auto',  // Add top & bottom margin
     p: 5,                 // Slightly more padding
     borderRadius: 3,
     overflow: 'hidden',
-    backgroundColor: 'white',
+    backgroundColor: '#111C44',
     flexDirection: 'column',
   }}
 >
 
     
-      <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center">
+      <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color='white'>
         Direct Issue Form
       </Typography>
 
