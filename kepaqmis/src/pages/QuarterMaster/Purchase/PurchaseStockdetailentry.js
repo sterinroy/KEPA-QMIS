@@ -547,18 +547,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './PurchaseStockdetailentry.css';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import DescriptionIcon from '@mui/icons-material/Description';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+// import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import userimg from '../../../assets/user.jpg';
-import logoac from '../../../assets/police_academy2.png';
+import logoac from '../../../assets/logopolice.png';
 import { fetchPurchases } from '../../../redux/actions/purchaseActions';
+import Sidebar from '../../../components/Sidebar'
+import Topbar from '../../../components/Topbar';
 
 import {
   TextField, Select, MenuItem, InputLabel,
   FormControl, Button, Grid, Box, Typography,
   Dialog, DialogTitle, DialogContent, DialogActions,
+  colors,
 } from '@mui/material';
 import { submitPurchaseStock } from '../../../redux/actions/purchaseActions';
 // import { submitPurchaseStock } from '../../redux/actions/purchaseActions';
@@ -579,7 +579,7 @@ const PurchaseStockDetailEntry = () => {
     }, [dispatch]);
 
   const [showDropdown, setShowDropdown] = useState(false);
-  const [activeNav, setActiveNav] = useState('stock');
+  // const [activeNav, setActiveNav] = useState('stock');
   const [subCategories, setSubCategories] = useState({
     // Electronics: ['Mobile', 'Laptop', 'Tablet'],
     // Stationery: ['Pen', 'Notebook', 'Stapler'],
@@ -691,65 +691,28 @@ const PurchaseStockDetailEntry = () => {
     handleDialogState(loading, success, error);
   };
 
-  const handleNavigation = (page) => {
-    setActiveNav(page);
-    navigate(
-      page === 'dashboard' ? '/purchase' :
-      page === 'stock' ? '/purchasestockdetailentry' :
-      '/purchasetransfer'
-    );
-  };
-
-  const navItems = [
-    { key: 'dashboard', icon: <DashboardIcon />, label: 'Dashboard' },
-    { key: 'stock', icon: <DescriptionIcon />, label: 'Stock Details Entry' },
-    { key: 'transfer', icon: <BookmarkIcon />, label: 'Transfer Stock' },
-  ];
 
   return (
     <div className="container">
       {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="logo"><img src={logoac} alt="logo" /></div>
-        <nav className="nav-menu">
-          {navItems.map((item) => (
-            <div
-              key={item.key}
-              className={`nav-item ${activeNav === item.key ? 'active' : ''}`}
-              onClick={() => handleNavigation(item.key)}
-            >
-              {item.icon} {item.label}
-            </div>
-          ))}
-        </nav>
-      </aside>
-
+     <Sidebar />
       {/* Main Content */}
-      <main className="main">
-        <nav className="top-navbar">
-          <h1>Welcome {role}<br /><span>(Purchase Wing)</span></h1>
-          <div className="header-right">
-            <input type="text" className="search" placeholder="Search" />
-            <NotificationsNoneIcon className="icon-bell" />
-            <div className="profile" onClick={toggleDropdown}>
-              <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">{penNumber}</span>
-              {showDropdown && (
-                <div className="dropdown-menu">
-                  <img src={logoac} alt="User" className="dropdown-pic" />
-                  <div className="dropdown-details">
-                    <div className="name">{role}</div>
-                    <div className="pen">PEN: {penNumber}</div>
-                  </div>
-                  <button className="logout-btn" onClick={() => navigate('/login')}>Logout</button>
-                </div>
-              )}
-            </div>
-          </div>
-        </nav>
+      <main className="purchase-entry-main">
+      <Topbar penNumber={penNumber} role={role} />
 
         {/* Form */}
-        <Box className="purchase-form" sx={{ backgroundColor: '#fff', p: 4, borderRadius: 2, boxShadow: 2 }}>
+        <Box className="purchase-form" 
+        // sx={{ backgroundColor: '#111C44', p: 4, borderRadius: 2, boxShadow: 2 
+          
+        // }}
+         sx={{
+            backgroundColor: '#111C44',
+            color: 'white', // ✨ Add this
+            p: 4,
+            borderRadius: 2,
+            boxShadow: 2
+          }}
+        >
           <h3>Purchase Details</h3>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -763,31 +726,74 @@ const PurchaseStockDetailEntry = () => {
                 { label: 'Bill/Invoice No', name: 'billInvoiceNo' },
                 { label: 'Amount', name: 'amount', type: 'number' },
               ].map((field, idx) => (
-                <Grid key={idx} item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    required
-                    label={field.label}
-                    name={field.name}
-                    type={field.type || 'text'}
-                    InputLabelProps={field.type === 'date' ? { shrink: true } : {}}
-                    value={formData[field.name]}
-                    onChange={handleInputChange}
-                    sx={{ width: 500 }}
-                  />
-                </Grid>
+               <Grid key={idx} item xs={12} md={6}>
+  <TextField
+  fullWidth
+  required
+  label={field.label}
+  name={field.name}
+  type={field.type || 'text'}
+  value={formData[field.name]}
+  onChange={handleInputChange}
+  InputLabelProps={{
+    shrink: true,
+    style: { color: 'white' },
+  }}
+  InputProps={{
+    style: { color: 'white' },
+    sx: {
+      svg: {
+        color: 'white', // ✅ This ensures calendar icon is visible
+      },
+    },
+  }}
+  sx={{
+    width: 500,
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'white',
+      },
+      '&:hover fieldset': {
+        borderColor: '#ccc',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+      },
+    },
+  }}
+/>
+
+</Grid>
+
               ))}
 
               {/* Item select */}
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth required>
-                  <InputLabel>Item</InputLabel>
+                <FormControl fullWidth required
+                sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: 'white',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#ccc',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'white',
+                        },
+                      }
+                    }}
+                >
+                  <InputLabel sx={{ color: 'white' }}>Item</InputLabel>
                   <Select
                     name="item"
                     value={formData.item}
                     onChange={handleCategoryChange}
                     label="Item"
-                    sx={{ width: 500 }}
+                    sx={{ width: 500,
+                      color: 'white',
+                      '.MuiSvgIcon-root': { color: 'white' },
+                    }}
                   >
                     {Object.keys(subCategories).map((cat) => (
                       <MenuItem key={cat} value={cat}>{cat}</MenuItem>
@@ -798,14 +804,31 @@ const PurchaseStockDetailEntry = () => {
 
               {/* Subcategory and + button */}
               <Grid item xs={10} md={5}>
-                <FormControl fullWidth required>
-                  <InputLabel>Sub-Category</InputLabel>
+                <FormControl fullWidth required 
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': {
+                        borderColor: 'white',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#ccc',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'white',
+                      },
+                    }
+                  }}
+                >
+                  <InputLabel sx={{ color: 'white' }}>Sub-Category</InputLabel>
                   <Select
                     name="subCategory"
                     value={formData.subCategory}
                     onChange={handleInputChange}
                     label="Sub-Category"
-                    sx={{ width: 425 }}
+                    sx={{ width: 425 ,
+                      color: 'white',
+                      '.MuiSvgIcon-root': { color: 'white' },
+                    }}
                   >
                     {(subCategories[formData.item] || []).map((sub, i) => (
                       <MenuItem key={i} value={sub}>{sub}</MenuItem>
@@ -823,17 +846,41 @@ const PurchaseStockDetailEntry = () => {
                   label="Quantity"
                   type="number"
                   name="qty"
-                  inputProps={{ min: 1 }}
+                  // inputProps={{ min: 1 }}
+                   InputLabelProps={{
+                    style: { color: 'white' }, // ✨ Label color
+                  }}
+                  InputProps={{
+                    min: 1,
+                    style: { color: 'white' }, // ✨ Input text color
+                  }}
                   fullWidth
                   required
                   value={formData.qty}
                   onChange={handleInputChange}
-                  sx={{ width: 500 }}
+                  sx={{ width: 500,
+                    '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'white', // 👈 Border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#ccc', // Optional: hover color
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'white', // Focused border
+                    },
+                  },
+                  }}
                 />
               </Grid>
             </Grid>
 
-            <Button type="submit" variant="contained" color="success" sx={{ mt: 4 }}>
+            <Button type="submit" variant="contained"  sx={{ mt: 4 ,backgroundColor: '#2E00D5 !important',
+                color: 'white',
+                
+                '&:hover': {
+                  backgroundColor: '#f0f0f0',
+    }}}>
               Transfer
             </Button>
           </form>
