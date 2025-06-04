@@ -37,9 +37,9 @@ const Sidebar = ({ activeItem }) => {
       <nav className="nav-menu">
         <div
           className={`nav-item ${activeItem === "dashboard" ? "active" : ""}`}
-          onClick={() => handleNavigate("/temp")}
+          onClick={() => handleNavigate("/dashboard")}
           tabIndex={0}
-          onKeyDown={(e) => handleKeyDown(e, "/temp")}
+          onKeyDown={(e) => handleKeyDown(e, "/dashboard")}
         >
           <DashboardIcon className="icon" /> Dashboard
         </div>
@@ -70,7 +70,7 @@ const Sidebar = ({ activeItem }) => {
           <Inventory2Icon className="icon" /> Stock Details
         </div>
         <div
-          className={`nav-item ${activeItem === "stock" ? "active" : ""}`}
+          className={`nav-item ${activeItem === "tempissue" ? "active" : ""}`}
           onClick={() => handleNavigate("/tempstockdetailentry")}
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, "/tempstockdetailentry")}
@@ -81,7 +81,7 @@ const Sidebar = ({ activeItem }) => {
         {/* New Temporary Issue History */}
         <div
           className={`nav-item ${
-            activeItem === "temp-issue-history" ? "active" : ""
+            activeItem === "temphistory" ? "active" : ""
           }`}
           onClick={() => handleNavigate("/tempissued")}
           tabIndex={0}

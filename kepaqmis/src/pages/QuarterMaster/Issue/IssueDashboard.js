@@ -8,7 +8,7 @@ const SIDEBAR_WIDTH = 240;
 const IssueDashboard = () => {
   return (
     <div style={{ display: 'flex' }}>
-      <Sidebar activeItem="issue" onNavigate={() => {}} />
+      <Sidebar activeItem="dashboard" onNavigate={() => {}} />
       <div style={{ flexGrow: 1, marginLeft: SIDEBAR_WIDTH }}>
         <Topbar />
         <main style={{ padding: '80px 20px 20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>

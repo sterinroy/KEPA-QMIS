@@ -181,6 +181,8 @@ body, html, .container {
 .if-issue-box {
   background-color: #111C44 !important;
   color: black;
+  margin-left: 30px;
+  margin-top: 15px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -190,7 +192,7 @@ body, html, .container {
 }
 
 .if-issue-box {
-  padding: 40px 40px 50px 40px;
+  padding: 40px 40px 5px 40px;
   min-height: 550px;
 }
 
@@ -203,10 +205,12 @@ body, html, .container {
   padding: 40px 15px;
 }
 
-/* .form-container,
+.form-container,
 .direct-issue-box {
   background-color: #111C44 !important;
   color: black;
+  margin-left: 240px;
+  margin-top: 15px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -216,7 +220,7 @@ body, html, .container {
 }
 
 .direct-issue-box {
-  padding: 40px 40px 50px 40px;
+  padding: 30px 40px 20px 40px;
   min-height: 550px;
 }
 
@@ -226,7 +230,7 @@ body, html, .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 15px;
+  padding: 30px 15px;
 } */
 
 .temp-issue-box {
@@ -236,9 +240,9 @@ body, html, .container {
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 1300px;
+  max-width: 1100px;
   box-sizing: border-box;
-  padding: 40px 40px 50px 40px;
+  padding: 30px 40px 50px 40px;
   min-height: 550px;
 }
 
@@ -248,7 +252,7 @@ body, html, .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 15px;
+  padding: 60px 15px;
 }
 /* Title */
 .form-title {
@@ -304,23 +308,6 @@ body, html, .container {
   border-radius: 6px;
 }
 
-/* Submit Button */
-.submit-btn {
-  grid-column: 1 / -1;
-  justify-self: start;
-  background-color: #1e90ff !important;
-  color: white !important;
-  font-weight: 700;
-  padding: 8px 48px;
-  border-radius: 12px;
-  transition: background-color 0.3s ease;
-  width: fit-content;
-  margin-top: 32px;
-}
-
-.submit-btn:hover {
-  background-color: #006fd6 !important;
-}
 
 /* Input field spacing */
 .mui-form .MuiTextField-root,
@@ -341,4 +328,11 @@ body, html, .container {
 /* Or reduce top margin above Item Description */
 .mui-form .MuiTextField-root[name="itemDescription"] {
   margin-top: -8px;
+}
+
+/*Request*/
+.return-request-container h2,
+.return-request-container p {
+  color: white;
+  margin-left: 18px;
 }

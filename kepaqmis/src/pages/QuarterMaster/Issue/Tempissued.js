@@ -66,7 +66,7 @@ const Tempissued = () => {
 
   return (
     <>
-      <Sidebar activeItem="transfer" />
+      <Sidebar activeItem="temphistory" />
       <Topbar />
       <Box
         component="main"
@@ -75,10 +75,10 @@ const Tempissued = () => {
           marginTop: '64px', // assuming topbar height
           padding: 4,
           minHeight: 'calc(100vh - 64px)',
-          backgroundColor: '#f9f9f9',
+          backgroundColor: '#0C1227',
         }}
       >
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
+        <Typography variant="h6" fontWeight="bold" gutterBottom color='white'>
           Review All Submitted Details
         </Typography>
 

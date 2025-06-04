@@ -123,11 +123,11 @@ const Qouta = () => {
                 fullWidth
                 sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
-              <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+              <FormControl sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
                 <InputLabel sx={{ color: 'white' }}>Unit</InputLabel>
                 <Select
                   name="unit"
-                  value={formData.unit}
+                  value={formData.quantityUnit}
                   onChange={handleChange}
                   sx={{ color: 'white' }}
                 >
@@ -159,14 +159,14 @@ const Qouta = () => {
                 fullWidth
                 sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-75}>
+              <Box display="flex" justifyContent="flex-end" mt={2} ml={140}>
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
                   sx={{
                     borderRadius: 2,
-                    px: 5,
+                    px: 8.3,
                     py: 0,
                     fontWeight: 'bold',
                   }}

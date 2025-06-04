@@ -75,18 +75,18 @@ const IssueForm = () => {
         minHeight: "100vh",
       }}
     >
-      <Sidebar activeItem="quota" />
+      <Sidebar activeItem="issue" />
       <div style={{ marginLeft: SIDEBAR_WIDTH, flex: 1 }}>
         <Topbar />
         <div
-          className="if-issue-root"
+          className="direct-issue-root"
           style={{
             backgroundColor: "#0C1227",
             minHeight: "100vh",
             padding: "2rem",
           }}
         >
-          <Box className="if-issue-box">
+          <Box className="direct-issue-box">
             <Typography
               variant="h5"
               mb={3}
@@ -256,7 +256,17 @@ const IssueForm = () => {
                   fieldset: { borderColor: "white" },
                 }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-75}>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                sx={{ mt: 0, mb: 0, p: 0 }}
+                style={{
+                  marginTop: 0,
+                  marginBottom: '15px',
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }}
+              >
                 <Button
                   variant="contained"
                   color="primary"

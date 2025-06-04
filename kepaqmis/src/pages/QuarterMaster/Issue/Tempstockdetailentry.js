@@ -60,11 +60,10 @@ const Tempstockdetailentry = () => {
         <div
           className="temp-issue-root"
           style={{
-            backgroundColor: "#f9f9f9",
+            backgroundColor: "#0C1227",
             maxHeight: "660px",
             height: "calc(100vh - 64px)",
-            overflow: "auto",
-            padding: "2rem",
+            overflow: "hidden",
             paddingTop: "8rem",
           }}
         >
@@ -73,15 +72,16 @@ const Tempstockdetailentry = () => {
             sx={{
               width: "100%",
               maxWidth: "1200px",
-              backgroundColor: "#fff",
+              backgroundColor: "#111C44",
               padding: "2rem",
               borderRadius: "12px",
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
               margin: "0 auto",
-              mt: 4,
+              mt: "20px",
+              ml:"30px",
             }}
           >
-            <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center">
+            <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
               Temporary Issue Form
             </Typography>
 
@@ -180,7 +180,7 @@ const Tempstockdetailentry = () => {
                   },
                 }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-.05}>
+              <Box display="flex" justifyContent="flex-end" mt={.7} mr={-.05}>
                 <Button
                   variant="contained"
                   color="primary"
