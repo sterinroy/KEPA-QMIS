@@ -246,3 +246,13 @@ body, html, .container {
 .mui-form .MuiSelect-select {
   font-weight: normal !important;
 }
+
+/* Reduce space specifically below Quantity field */
+.mui-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.mui-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}

@@ -78,7 +78,7 @@ const Tempissued = () => {
           backgroundColor: '#f9f9f9',
         }}
       >
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
           Review All Submitted Details
         </Typography>
 

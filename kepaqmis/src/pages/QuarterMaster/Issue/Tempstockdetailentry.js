@@ -173,13 +173,14 @@ const Tempstockdetailentry = () => {
                 multiline
                 rows={4}
                 sx={{
+                  mt: -4,
                   "& .MuiInputBase-root": {
                     height: "auto",
                     padding: "1px",
                   },
                 }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} mr={-75}>
+              <Box display="flex" justifyContent="flex-end" mt={2} mr={-.05}>
                 <Button
                   variant="contained"
                   color="primary"
