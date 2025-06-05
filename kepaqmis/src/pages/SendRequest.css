@@ -1,7 +1,9 @@
 /* Container Layout */
-.container {
-  display: flex;
-  height: 100vh;
+body, html, .container {
+  background-color: #0C1227 !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: Arial, sans-serif;
 }
 
@@ -9,14 +11,18 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 260px;
   height: 100vh;
-  background-color: #000000;
-  padding: 20px 10px;
-  z-index: 2;
+  background-color: #060118; /* solid background, no gradient */
+  padding: 1rem;
+  box-sizing: border-box;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+  color: white;
+ 
 }
 
 
@@ -33,7 +39,6 @@
 .nav-item {
   display: flex;
   align-items: center;
-  /*margin-right: 20px;*/
   margin-bottom: 10px;
   gap: 12px;
   color: white;
@@ -42,6 +47,8 @@
   margin: 10px;
   cursor: pointer;
   border-radius: 16px;
+  transition: all 0.3s ease;
+
 }
 
 
@@ -51,6 +58,8 @@
     font-weight: 600;
     border-radius: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+
 }
 .nav-item.active {
   /* background-color: #1a1a1a; */
@@ -58,31 +67,30 @@
   color: #000000;
   border-radius: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
-.nav-item.hover .icon,
+.nav-item:hover .icon,
 .nav-item.active .icon {
   color: #000000;
 }
 
 /* Top Navbar */
-.top-navbar {
-  position: sticky;
+nav.top-navbar {
+  position: fixed;
   top: 0;
-  left: 200px;
+  margin-left: 80%;
+
   right: 0;
   height: 70px;
-  background-color: white;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  border-top-left-radius: 25px;
+  padding: 0px 30px;
   z-index: 5;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-left: 220px;
+  
 }
-
-
 
 .top-navbar h1 {
   font-size: 20px;
@@ -121,21 +129,9 @@
     min-height: 100vh;       
     background-color: #f4f4f4;
     padding: 40px;
-  /*position: relative;
-  margin-left: 220px;
-  margin-top: 70px;
-  padding: 20px;
-  background-color: white;
-  border-bottom-left-radius: 50px;
-  z-index: 1;
-  flex-grow: 1;
-  background-color: #f9f9f9;
-  min-height: calc(100vh - 70px);
-  box-shadow: 0 0 0 2px #f0f0ff inset;*/
   
 }
 
-/*profile pic and name*/
 .profile {
   display: flex;
   align-items: center;
@@ -190,7 +186,6 @@
     align-items: center;
     padding: 40px 20px;
 }
-/* === Dropdown Menu === */
 .dropdown-menu {
   position: absolute;
   top: 48px;
@@ -201,6 +196,8 @@
   width: 220px;
   padding: 1rem;
   z-index: 10;
+  transition: all 0.3s ease;
+
 }
 
 .dropdown-pic {
@@ -241,3 +238,4 @@
 .logout-btn:hover {
   background-color: #c0392b;
 }
+

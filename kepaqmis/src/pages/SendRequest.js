@@ -1,10 +1,9 @@
-
-// export default PurchaseStockDetailEntry;
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SendRequest.css';
 import userimg from '../../src/assets/user.jpg';
 import logoac from '../../src/assets/police_academy2.png';
+import Sidebar from "./Sidebar";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -91,19 +90,14 @@ const SendRequest = () => {
     e.preventDefault();
 
     const payload = {
-      supply_order_no: formData.supplyOrderNo,
-      invoice_date: formData.invoiceDate,
-      from_whom: formData.fromWhom,
-      to_whom: formData.toWhom,
-      date_of_verification: formData.dateOfVerification,
-      bill_invoice_no: formData.billInvoiceNo,
-      amount: parseFloat(formData.amount),
+      Pen_no: formData.penNo,
+      date: formData.date,
       item: formData.item,
       sub_category: formData.subCategory,
       quantity: parseInt(formData.qty, 10),
     };
 
-    fetch('http://localhost:5000/orders', {
+    fetch('http://localhost:3001/User', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -113,15 +107,17 @@ const SendRequest = () => {
         alert(resData.message);
         setFormData({
           supplyOrderNo: '',
-          invoiceDate: '',
-          fromWhom: '',
-          toWhom: '',
-          dateOfVerification: '',
-          billInvoiceNo: '',
-          amount: '',
+          date: '',
           item: '',
           subCategory: '',
           qty: 1,
+          // invoiceDate: '',
+          // fromWhom: '',
+          // toWhom: '',
+          
+          // billInvoiceNo: '',
+          // amount: '',
+          
         });
       })
       .catch((err) => alert('Error: ' + err.message));
@@ -132,6 +128,7 @@ const handleNavigation = (page) => {
   if (page === 'dashboard') navigate('/Userdashboard');
   else if (page === 'sendrequest') navigate('/sendrequest');
   else if (page === 'managerequest') navigate('/managerequest');
+  else if (page === 'temp') navigate('/temp');
   else if (page === 'return') navigate('/return');
 };
 
@@ -149,12 +146,16 @@ const handleNavigation = (page) => {
             <div className={`nav-item ${activeNav === 'sendrequest' ? 'active' : ''}`} onClick={() => handleNavigation('sendrequest')}>
                 <DescriptionIcon className="icon" /> Send Request
             </div>
+            <div className={`nav-item ${activeNav === 'temp' ? 'active' : ''}`} onClick={() => handleNavigation('temp')}>
+                <DescriptionIcon className="icon" /> Temporary Issue
+            </div>
             <div className={`nav-item ${activeNav === 'managerequest' ? 'active' : ''}`} onClick={() => handleNavigation('managerequest')}>
                 <BookmarkIcon className="icon" /> Manage Request
             </div>
             <div className={`nav-item ${activeNav === 'return' ? 'active' : ''}`} onClick={() => handleNavigation('return')}>
                 <AssignmentReturnIcon className="icon" /> Return
             </div>
+            
         </nav>
       </aside>
 
@@ -187,30 +188,30 @@ const handleNavigation = (page) => {
       {/* Row 1 */}
       <Grid item xs={12} md={6}>
     <TextField
-      label="Supply Order No"
-      name="supplyOrderNo"
+      label="Pen No"
+      name="penNo"
       fullWidth
       required
-      value={formData.supplyOrderNo}
+      value={formData.penNo}
       onChange={handleInputChange}
       sx={{ width:500}}
     />
   </Grid>
   <Grid item xs={12} md={6}>
     <TextField
-      label="Invoice Date"
+      label="Date"
       type="date"
-      name="invoiceDate"
+      name="date"
       fullWidth
       required
       InputLabelProps={{ shrink: true }}
-      value={formData.invoiceDate}
+      value={formData.date}
       onChange={handleInputChange}
       sx={{width:500}}
     />
   </Grid>
 
-      {/* Row 2 */}
+      {/* Row 2
       <Grid item xs={12} md={6}>
         <TextField
           label="From Whom"
@@ -221,7 +222,7 @@ const handleNavigation = (page) => {
           onChange={handleInputChange}
           sx={{width:500}}
         />
-      </Grid>
+      </Grid> 
       <Grid item xs={12} md={6}>
         <TextField
           label="To Whom"
@@ -235,7 +236,7 @@ const handleNavigation = (page) => {
       </Grid>
 
       {/* Row 3 */}
-      <Grid item xs={12} md={6}>
+      {/* <Grid item xs={12} md={6}>
         <TextField
           label="Date of Verification"
           type="date"
@@ -260,7 +261,7 @@ const handleNavigation = (page) => {
       </Grid>
 
       {/* Row 4 */}
-      <Grid item xs={12} md={6}>
+      {/* <Grid item xs={12} md={6}>
         <TextField
           label="Amount"
           type="number"
@@ -271,7 +272,7 @@ const handleNavigation = (page) => {
           onChange={handleInputChange}
           sx={{width:500}}
         />
-      </Grid>
+      </Grid> */}
       <Grid item xs={12} md={6}>
         <FormControl fullWidth required>
           <InputLabel>Item</InputLabel>
@@ -329,8 +330,8 @@ const handleNavigation = (page) => {
       </Grid>
     </Grid>
 
-    <Button type="submit" variant="contained" color="success" sx={{ mt: 4 }}>
-      Transfer
+    <Button className="sub-but" type="submit" variant="contained" color="success"sx={{ mt: 4 }}>
+      Submit
     </Button>
   </form>
 </Box>

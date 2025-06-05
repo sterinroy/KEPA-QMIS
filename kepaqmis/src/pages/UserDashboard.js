@@ -6,7 +6,7 @@ import logoac from '../../src/assets/police_academy2.png';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 const UserDashboard = () => {
@@ -45,6 +45,10 @@ const UserDashboard = () => {
     navigate('/managerequest');
   };
 
+  const Temp = () => {
+    navigate('/temp');
+  };
+
   const Return = () => {
     navigate('/return');
   };
@@ -63,11 +67,15 @@ const UserDashboard = () => {
           <div className="nav-item" onClick={SendRequest}>
             <DescriptionIcon className="icon" /> Send Request
           </div>
+          <div className="nav-item" onClick={Temp}>
+            <DescriptionIcon className="icon" /> Temporary Issue
+          </div>
           <div className="nav-item" onClick={ManageRequest}>
             <BookmarkIcon className="icon" /> Manage Request
           </div>
+          
           <div className="nav-item" onClick={Return}>
-            <KeyboardReturnIcon className="icon" /> Return
+            <AssignmentReturnIcon className="icon" /> Return
           </div>
         </nav>
       </aside>

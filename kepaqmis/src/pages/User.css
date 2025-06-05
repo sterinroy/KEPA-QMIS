@@ -1,0 +1,338 @@
+/* Root container and page background */
+body, html, .container {
+  background-color: #0C1227 !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: #060118; /* solid background, no gradient */
+  padding: 1rem;
+  box-sizing: border-box;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.sidebar-title {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 1.6rem;
+  color: white;
+  text-align: center;
+  user-select: none;
+  font-family: Poppins, sans-serif;
+}
+
+.sidebar-title .kepa {
+  font-weight: 700; /* bolder */
+}
+
+.sidebar-title .qmis {
+  font-weight: 400; /* normal */
+  margin-left: 4px;
+}
+
+
+.nav-item {
+  padding: 0.6rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white !important;
+  background-color: transparent !important;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  user-select: none;
+  outline: none;
+  height: 48px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* The vertical gradient strip on the left on hover and active */
+.nav-item:hover::before,
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  border-radius: 5px 0 0 5px;
+  background: linear-gradient(90deg, #111C44 5%, #7551FF 85%);
+}
+
+
+
+/* Hover and active background gradient */
+.nav-item:hover,
+.nav-item.active {
+  background: linear-gradient(90deg, #7551FF);
+  color: white !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(117, 81, 255, 0.5);
+}
+
+.nav-item .icon {
+  font-size: 1.3rem;
+  color: white !important;
+}
+
+.nav-item:hover .icon,
+.nav-item.active .icon {
+  color: white; /* keep icon white on hover and active */
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid #7551FF;
+  outline-offset: 2px;
+}
+
+
+
+.logo,
+.logo img {
+  width: 120px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Navigation */
+.nav-menu {
+  display: flex;
+  flex-direction: column; /* smaller gap between items */
+}
+
+.nav-item {
+  padding: 0.6rem 1rem;   /* fixed padding for consistent height */
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  background-color: transparent;
+  transition: 
+    background-color 0.3s ease, 
+    color 0.3s ease, 
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  user-select: none;
+  outline: none;
+  height: 48px; /* fixed height */
+  box-sizing: border-box;
+}
+
+
+.nav-item .icon {
+  font-size: 1.3rem;
+  color: white;
+}
+
+
+.nav-item:hover .icon,
+.nav-item.active .icon {
+  color: black;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Main content */
+.main {
+  position: relative;
+  margin-left: 250px;
+  margin-top: 90px;
+  padding: 20px;
+  background-color: #0C1227;
+  min-height: calc(100vh - 90px);
+  box-shadow: inset 0 0 0 2px #f0f0ff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form container */
+.form-container,
+.if-issue-box {
+  background-color: #111C44 !important;
+  color: black;
+  margin-left: 30px;
+  margin-top: 15px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+}
+
+.if-issue-box {
+  padding: 40px 40px 5px 40px;
+  min-height: 550px;
+}
+
+.if-issue-root {
+  min-height: 100vh;
+  background-color: #0C1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 15px;
+}
+
+.form-container,
+.direct-issue-box {
+  background-color: #111C44 !important;
+  color: black;
+  margin-left: 240px;
+  margin-top: 15px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+}
+
+.direct-issue-box {
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
+}
+
+.direct-issue-root {
+  min-height: 100vh;
+  background-color: #0C1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 15px;
+} */
+
+.temp-issue-box {
+  background-color: #0C1227;
+  color: black;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+  padding: 30px 40px 50px 40px;
+  min-height: 550px;
+}
+
+.temp-issue-root {
+  max-height: 670px;
+  background-color: #0C1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 15px;
+}
+/* Title */
+.form-title {
+  color: #000000;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Grid layout for form */
+.mui-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px 48px;
+}
+
+.mui-form > * {
+  min-height: 60px;
+}
+
+/* Inputs */
+.mui-form .MuiInputBase-root {
+  height: 50px;
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.mui-form .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.mui-form .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.mui-form .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.mui-form .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+
+.mui-form .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+
+/* Input field spacing */
+.mui-form .MuiTextField-root,
+.mui-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.mui-form .MuiInputBase-input,
+.mui-form .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.mui-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.mui-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
+/*Request*/
+.return-request-container h2,
+.return-request-container p {
+  color: white;
+  margin-left: 18px;
+}

@@ -4,6 +4,8 @@ import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SendRequest from "./pages/SendRequest";
+import ManageRequest from "./pages/ManageRequest";
+import Temp from "./pages/Temp";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
@@ -67,6 +69,23 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <SendRequest />
+            </ProtectedRoute>
+          }
+  
+        />
+        <Route
+          path="/ManageRequest"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <ManageRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Temp"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Temp />
             </ProtectedRoute>
           }
         />
