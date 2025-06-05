@@ -5,9 +5,11 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import Login from "../Login"; // Adjust the import path as necessary
 
 const SuperAdminDashboard = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const[isLoggedout, setIsLogout] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
 
@@ -42,8 +44,12 @@ const SuperAdminDashboard = () => {
 
     localStorage.clear();
     setShowDropdown(false);
+    setIsLogout(true);
     navigate("/login");
   };
+  if (isLoggedout) {
+    return <Login />; // Redirect to Login component if logged out
+  }
 
   return (
     <div className="container">

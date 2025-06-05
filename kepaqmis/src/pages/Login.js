@@ -17,6 +17,7 @@ const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
+    // console.log('mounted');
     if (auth.isAuthenticated) {
       switch (auth.role) {
         case "Admin":

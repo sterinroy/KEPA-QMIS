@@ -37,7 +37,9 @@ export const login = (pen, password) => {
 export const logout = () => {
   return (dispatch) => {
     localStorage.removeItem("token");
+    // sessionStorage.removeItem("token");
     localStorage.removeItem("role");
+    // sessionStorage.removeItem("role");
     dispatch({ type: LOGOUT });
   };
 };
