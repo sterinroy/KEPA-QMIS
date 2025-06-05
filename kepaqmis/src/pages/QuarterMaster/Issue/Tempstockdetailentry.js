@@ -74,11 +74,13 @@ const Tempstockdetailentry = () => {
               width: "100%",
               maxWidth: "1200px",
               backgroundColor: "#fff",
+              
               padding: "2rem",
               borderRadius: "12px",
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
               margin: "0 auto",
               mt: 4,
+              
             }}
           >
             <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center">

@@ -1,37 +1,29 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTempIssued } from '../../../redux/actions/tempActions';
-import { useNavigate } from 'react-router-dom';
 import {
   Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
-  Skeleton,
+  Button,
+  Paper,
+  CircularProgress,
   MenuItem,
   Select,
-  FormControl,
-  InputLabel,
-  Button
 } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
+const categories = ['Useable', 'Repairable', 'Damaged']; 
+const techReportOptions = ['Yes', 'No'];
 
-
-
-const SIDEBAR_WIDTH = 240;
 const ReturnRequest = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { issuedList, loading, error } = useSelector((state) => state.temp);
 
-  
+  // State for editable fields keyed by row id
   const [techReportSelections, setTechReportSelections] = useState({});
   const [categorySelections, setCategorySelections] = useState({});
 
@@ -39,127 +31,198 @@ const ReturnRequest = () => {
     dispatch(fetchTempIssued());
   }, [dispatch]);
 
-  const handleTechReportChange = (index, value) => {
-    setTechReportSelections((prev) => ({ ...prev, [index]: value }));
+  // Handle tech report dropdown change
+  const handleTechReportChange = (id, value) => {
+    setTechReportSelections((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
 
-    if (value === "Yes") {
-      navigate("/returnform", { state: { techReportRequired: "Yes" } });
+    // Clear category if tech report changed to Yes
+    if (value === 'Yes') {
+      
+  navigate('/returnform', { state: { entry: techReportSelections, techReportRequired: value } });
+
+
     }
-    
   };
 
-  const handleCategoryChange = (index, value) => {
-    setCategorySelections((prev) => ({ ...prev, [index]: value }));
+  // Handle category dropdown change
+  const handleCategoryChange = (id, value) => {
+    setCategorySelections((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
+
+  // On row click, navigate only if techReportRequired is Yes
+  const handleRowClick = (params) => {
+    const techReport = techReportSelections[params.id] ?? params.row.techReportRequired;
+    if (techReport === 'Yes') {
+      navigate('/returnform', { state: { recordId: params.id } });
+    }
+  };
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'slNo', headerName: 'Sl No', width: 90 },
+    { field: 'PENNo', headerName: 'PEN No', width: 110 },
+    { field: 'toWhom', headerName: 'To Whom', width: 150 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'mobile', headerName: 'Mobile', width: 130 },
+    {
+      field: 'dateOfissue',
+      headerName: 'Date of Issue',
+      width: 130,
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return date.toString() === 'Invalid Date'
+          ? 'N/A'
+          : date.toLocaleString();
+      },
+    },
+    { field: 'itemDescription', headerName: 'Item Description', width: 200 },
+    { field: 'purpose', headerName: 'Purpose', width: 150 },
+    { field: 'qty', headerName: 'Quantity', width: 100 },
+
+    // Tech Report Required column as editable dropdown
+    {
+      field: 'techReportRequired',
+      headerName: 'Tech Report Required',
+      width: 180,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        const currentValue = techReportSelections[params.id] ?? params.value ?? '';
+        return (
+          <Select
+            value={currentValue}
+            onChange={(e) => handleTechReportChange(params.id, e.target.value)}
+            displayEmpty
+            size="small"
+            sx={{ width: '100%' }}
+          >
+            <MenuItem value="">
+              <em>Select</em>
+            </MenuItem>
+            {techReportOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        );
+      },
+    },
+
+    // Select Category column - show only if techReportRequired is 'No'
+    {
+      field: 'selectCategory',
+      headerName: 'Select Category',
+      width: 180,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        const techReport = techReportSelections[params.id] ?? params.row.techReportRequired;
+
+        if (techReport === 'No') {
+          return (
+            <Select
+              value={categorySelections[params.id] || ''}
+              onChange={(e) => handleCategoryChange(params.id, e.target.value)}
+              displayEmpty
+              size="small"
+              sx={{ width: '100%' }}
+            >
+              <MenuItem value="">
+                <em>Select category</em>
+              </MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
+              ))}
+            </Select>
+          );
+        }
+        return <Typography>N/A</Typography>;
+      },
+    },
+  ];
+
+  // Map rows, no forced default for techReportRequired here
+  const rows = Array.isArray(issuedList)
+    ? issuedList.map((entry, index) => ({
+        id: index + 1,
+        ...entry,
+        // techReportRequired: entry.techReportRequired, // no default forced here
+      }))
+    : [];
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar activeItem="return" />
-      <div style={{ flexGrow: 1, marginLeft: SIDEBAR_WIDTH }}>
-        <Topbar />
-        <main style={{ padding: '80px 20px 50px', backgroundColor: '#f5f5f5', minHeight: '150vh', marginTop: '40px' }}>
-          <Typography variant="h5" fontWeight="bold" gutterBottom>
-            Return Request List
-          </Typography>
+    <>
+      <Sidebar activeItem="transfer" />
+      <Topbar />
+      <Box
+        component="main"
+        sx={{
+          marginLeft: '240px',
+          marginTop: '64px',
+          padding: 4,
+          minHeight: 'calc(100vh - 64px)',
+          backgroundColor: '#f9f9f9',
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          Review All Submitted Details
+        </Typography>
 
-          <Paper elevation={3} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 520 }}>
-              <Table stickyHeader>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Details</TableCell>
-                    <TableCell>Description & Purpose</TableCell>
-                    <TableCell>Tech Report Required?</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loading ? (
-                    Array.from({ length: 5 }).map((_, i) => (
-                      <TableRow key={i}>
-                        <TableCell colSpan={3}>
-                          <Skeleton variant="rectangular" height={100} />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : error ? (
-                    <TableRow>
-                      <TableCell colSpan={3} align="center" sx={{ color: 'error.main' }}>
-                        {error}
-                      </TableCell>
-                    </TableRow>
-                  ) : issuedList.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={3} align="center">
-                        No return requests found.
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    issuedList.map((entry, index) => (
-                      <TableRow key={index}>
-                        <TableCell sx={{ verticalAlign: 'top', pr: 4 }}>
-                          <Box display="grid" gridTemplateColumns="1fr 1fr" gap={1}>
-                            <Typography><b>Sl No:</b> {entry.slNo}</Typography>
-                            <Typography><b>PEN No:</b> {entry.PENNo}</Typography>
-                            <Typography><b>To Whom:</b> {entry.toWhom}</Typography>
-                            <Typography><b>Name:</b> {entry.name}</Typography>
-                            <Typography><b>Mobile:</b> {entry.mobile}</Typography>
-                            <Typography><b>Date of Issue:</b> {new Date(entry.dateOfissue).toLocaleDateString()}</Typography>
-                            <Typography><b>Quantity:</b> {entry.qty}</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell sx={{ verticalAlign: 'top', pl: 4 }}>
-                          <Box display="flex" gap={2}>
-                            <Box flex={2}>
-                              <Typography><b>Item Description:</b></Typography>
-                              <Typography>{entry.itemDescription}</Typography>
-                            </Box>
-                            <Box flex={1}>
-                              <Typography><b>Purpose:</b></Typography>
-                              <Typography>{entry.purpose}</Typography>
-                            </Box>
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          <FormControl fullWidth size="small" sx={{ mb: 1 }}>
-                            <InputLabel id={`tech-report-label-${index}`}>Required?</InputLabel>
-                            <Select
-                              labelId={`tech-report-label-${index}`}
-                              value={techReportSelections[index] || ""}
-                              label="Required?"
-                              onChange={(e) => handleTechReportChange(index, e.target.value)}
-                            >
-                              <MenuItem value="Yes">Yes</MenuItem>
-                              <MenuItem value="No">No</MenuItem>
-                            </Select>
-                          </FormControl>
+        <Paper elevation={3} sx={{ height: 500, width: '100%', borderRadius: 3 }}>
+          {loading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100%"
+            >
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Box p={3} color="error.main">
+              {error}
+            </Box>
+          ) : (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              disableRowSelectionOnClick
+              sx={{ borderRadius: 3 }}
+              onRowClick={handleRowClick}
+            />
+          )}
+        </Paper>
 
-                          {/* Show category dropdown only if "No" is selected */}
-                          {techReportSelections[index] === "No" && (
-                            <FormControl fullWidth size="small">
-                              <InputLabel id={`category-label-${index}`}>Category</InputLabel>
-                              <Select
-                                labelId={`category-label-${index}`}
-                                value={categorySelections[index] || ""}
-                                label="Category"
-                                onChange={(e) => handleCategoryChange(index, e.target.value)}
-                              >
-                                <MenuItem value="Useable">Useable</MenuItem>
-                                <MenuItem value="Repairable">Repairable</MenuItem>
-                                <MenuItem value="Damaged">Damaged</MenuItem>
-                              </Select>
-                            </FormControl>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </main>
-      </div>
-    </div>
+        <Box
+          sx={{
+            mt: 3,
+            display: 'flex',
+            justifyContent: 'flex-start',
+            maxWidth: 400,
+            mx: 'auto',
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => navigate('/tempstockdetailentry')}
+          >
+            ← Back
+          </Button>
+        </Box>
+      </Box>
+    </>
   );
 };
 

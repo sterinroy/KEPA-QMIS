@@ -4,17 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchTempIssued } from '../../../redux/actions/tempActions';
 import {
   Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
-  Skeleton,
   Button,
+  Paper,
+  CircularProgress,
 } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import { jsPDF } from 'jspdf';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
@@ -46,7 +41,7 @@ const Tempissued = () => {
           { label: 'Name', value: entry.name },
           { label: 'Mobile', value: entry.mobile },
           { label: 'Date of Issue', value: entry.dateOfissue },
-          { label: 'Amount', value: entry.amount },
+          // { label: 'Amount', value: entry.amount },
           { label: 'Item Description', value: entry.itemDescription },
           { label: 'Purpose', value: entry.purpose },
           { label: 'Quantity', value: entry.qty },
@@ -64,6 +59,40 @@ const Tempissued = () => {
     }
   };
 
+  // Define columns for DataGrid
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'slNo', headerName: 'Sl No', width: 90 },
+    { field: 'PENNo', headerName: 'PEN No', width: 110 },
+    { field: 'toWhom', headerName: 'To Whom', width: 150 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'mobile', headerName: 'Mobile', width: 130 },
+    {
+      field: 'dateOfissue',
+      headerName: 'Date of Issue',
+      width: 130,
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return date.toString() === "Invalid Date"
+          ? "N/A"
+          : date.toLocaleString();
+      },
+        
+    },
+    // { field: 'amount', headerName: 'Amount', width: 100 },
+    { field: 'itemDescription', headerName: 'Item Description', width: 200 },
+    { field: 'purpose', headerName: 'Purpose', width: 150 },
+    { field: 'qty', headerName: 'Quantity', width: 100 },
+  ];
+
+  // Safely map rows and ensure each has an ID
+  const rows = Array.isArray(issuedList)
+    ? issuedList.map((entry, index) => ({
+        id: index + 1,
+        ...entry,
+      }))
+    : [];
+
   return (
     <>
       <Sidebar activeItem="transfer" />
@@ -71,8 +100,8 @@ const Tempissued = () => {
       <Box
         component="main"
         sx={{
-          marginLeft: '240px', // assuming sidebar width
-          marginTop: '64px', // assuming topbar height
+          marginLeft: '240px',
+          marginTop: '64px',
           padding: 4,
           minHeight: 'calc(100vh - 64px)',
           backgroundColor: '#f9f9f9',
@@ -82,70 +111,25 @@ const Tempissued = () => {
           Review All Submitted Details
         </Typography>
 
-        <Paper elevation={3} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: 520 }}>
-            <Table stickyHeader aria-label="issued stock details table">
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ width: '50%' }}>Details</TableCell>
-                  <TableCell sx={{ width: '50%' }}>Description & Purpose</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell colSpan={2}>
-                        <Skeleton variant="rectangular" height={100} />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : error ? (
-                  <TableRow>
-                    <TableCell colSpan={2} align="center" sx={{ color: 'error.main' }}>
-                      {error}
-                    </TableCell>
-                  </TableRow>
-                ) : issuedList.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={2} align="center">
-                      No data found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  issuedList.map((entry, index) => (
-                    <TableRow key={index} hover>
-                      <TableCell sx={{ verticalAlign: 'top', pr: 4 }}>
-                        <Box display="grid" gridTemplateColumns="1fr 1fr" gap={1}>
-                          <Typography><b>Sl No:</b> {entry.slNo}</Typography>
-                          <Typography><b>PEN No:</b> {entry.PENNo}</Typography>
-                          <Typography><b>To Whom:</b> {entry.toWhom}</Typography>
-                          <Typography><b>Name:</b> {entry.name}</Typography>
-                          <Typography><b>Mobile:</b> {entry.mobile}</Typography>
-                          <Typography><b>Date of Issue:</b> {new Date(entry.dateOfissue).toLocaleDateString()}</Typography>
-                          <Typography><b>Amount:</b> {entry.amount}</Typography>
-                          <Typography><b>Quantity:</b> {entry.qty}</Typography>
-                        </Box>
-                      </TableCell>
-
-                      <TableCell sx={{ verticalAlign: 'top', pl: 4 }}>
-                        <Box display="flex" gap={2}>
-                          <Box flex={2}>
-                            <Typography><b>Item Description:</b></Typography>
-                            <Typography>{entry.itemDescription}</Typography>
-                          </Box>
-                          <Box flex={1}>
-                            <Typography><b>Purpose:</b></Typography>
-                            <Typography>{entry.purpose}</Typography>
-                          </Box>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <Paper elevation={3} sx={{ height: 500, width: '100%', borderRadius: 3 }}>
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Box p={3} color="error.main">
+              {error}
+            </Box>
+          ) : (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              disableRowSelectionOnClick
+              sx={{ borderRadius: 3 }}
+            />
+          )}
         </Paper>
 
         <Box
