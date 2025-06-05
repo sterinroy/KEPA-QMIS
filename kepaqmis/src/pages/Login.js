@@ -23,7 +23,10 @@ const Login = () => {
           navigate("/AdminDashboard");
           break;
         case "QuarterMasterPurchase":
-          navigate("/QuarterMasterPurchase");
+          // navigate("/QuarterMasterPurchase");
+            navigate("/purchase", {
+          state: { pen, role: auth.role }
+        });
           break;
         case "QuarterMasterIssue":
           navigate("/QuarterMasterIssue");
@@ -42,9 +45,6 @@ const Login = () => {
       }
     }
   }, [auth, navigate]);
-    const handlePurchase=()=>{
-     navigate("/purchase");
-  }
 
   const handleLogin = () => {
     dispatch(login(pen, password));
@@ -120,15 +120,7 @@ const handleSnackbarClose = () => {
         >
           Login
         </Button>
-         {/* removelater */}
-          <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
-          onClick={handlePurchase}
-        >
-          Purchase
-        </Button>
+    
         {/* <Button
   fullWidth
   variant="outlined"

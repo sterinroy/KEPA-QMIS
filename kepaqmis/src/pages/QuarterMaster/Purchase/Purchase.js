@@ -1,28 +1,45 @@
 
-// import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Purchase.css';
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../../../components/Sidebar'
+import { useLocation } from 'react-router-dom';
+import './Purchase.css';
+import Sidebar from '../../../components/Sidebar';
 import Topbar from '../../../components/Topbar';
 import { fetchPurchases } from '../../../redux/actions/purchaseActions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const PurchaseDashboard = () => {
-  // const [penNumber, setPenNumber] = useState(false);
-    const dispatch = useDispatch();
-    const [penNumber, setPenNumber] = useState('');
-     useEffect(() => {
-        dispatch(fetchPurchases());
-        const storedPen = localStorage.getItem('pen') || 'NA';
-        setPenNumber(storedPen);
-      }, [dispatch]);
-  
-  const [role, setRole] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  // const navigate = useNavigate();
 
-  const navigate = useNavigate();
-  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const [pen, setPen] = useState('');
+  const [role, setRole] = useState('');
+  // const [showDropdown, setShowDropdown] = useState(false);
+
+  // const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  useEffect(() => {
+    dispatch(fetchPurchases());
+
+    const passedPen = location.state?.pen;
+    const passedRole = location.state?.role;
+
+    if (passedPen) {
+      setPen(passedPen);
+      localStorage.setItem('pen', passedPen); // optional
+    } else {
+      const storedPen = localStorage.getItem('pen') || 'NA';
+      setPen(storedPen);
+    }
+
+    if (passedRole) {
+      setRole(passedRole);
+      localStorage.setItem('role', passedRole); // optional
+    } else {
+      const storedRole = localStorage.getItem('role') || 'NA';
+      setRole(storedRole);
+    }
+  }, [dispatch, location.state]);
 
   return (
     <div className="container">
@@ -31,10 +48,11 @@ const PurchaseDashboard = () => {
 
       {/* Main Content */}
       <main className="main">
-        <Topbar penNumber={penNumber} role={role} />
+        <Topbar pen={pen} role={role} />
       </main>
     </div>
   );
 };
 
 export default PurchaseDashboard;
+

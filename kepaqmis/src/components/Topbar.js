@@ -5,7 +5,7 @@ import './Topbar.css';
 import userimg from '../assets/user.jpg'; // Adjust as needed
 import logoac from '../assets/logopolice.png'; ; // Adjust as needed
 
-const Topbar = ({ penNumber, role }) => {
+const Topbar = ({ pen, role }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
@@ -17,13 +17,13 @@ const Topbar = ({ penNumber, role }) => {
       <div className="header-right">
         <div className="profile" onClick={toggleDropdown}>
           <img src={userimg} alt="User" className="profile-pic" />
-          <span className="profile-name">{penNumber}</span>
+          <span className="profile-name">{pen}</span>
           {showDropdown && (
             <div className="dropdown-menu">
               <img src={logoac} alt="User" className="dropdown-pic" />
               <div className="dropdown-details">
                 <div className="name">{role}</div>
-                <div className="pen">PEN: {penNumber}</div>
+                <div className="pen">PEN: {pen}</div>
               </div>
               <button className="logout-btn" onClick={() => navigate('/login')}>Logout</button>
             </div>
