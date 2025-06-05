@@ -100,17 +100,7 @@ useEffect(() => {
               />
             );
           },
-      // field: 'status',
-      // headerName: 'Status',
-      // width: 120,
-      // renderCell: (params) => {
-      //   const status = params.value;
-      //   let color;
-      //   if (status === 'Pending') color = 'warning';
-      //   else if (status === 'Completed') color = 'success';
-      //   else color = 'default';
-      //   return <Chip label={status} color={color} size="small" />;
-      // },
+
     },
   {
     field: 'PDF',
@@ -140,7 +130,6 @@ useEffect(() => {
         doc.text(`Item: ${data.item}`, 10, 90);
         doc.text(`Sub-Category: ${data.sub_category}`, 10, 100);
         doc.text(`Quantity: ${data.quantity}`, 10, 110);
-        // doc.text(`Status: ${data.status}`, 10, 120);
 
         // Save the PDF
         doc.save(`purchase_${data.order_no}.pdf`);

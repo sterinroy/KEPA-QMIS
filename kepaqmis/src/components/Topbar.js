@@ -2,14 +2,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Topbar.css';
+import { useDispatch } from 'react-redux';
 import userimg from '../assets/userlogo.png'; // Adjust as needed
-import logoac from '../assets/logopolice.png'; ; // Adjust as needed
+import logoac from '../assets/logopolice.png';  // Adjust as needed
+import Login from '../pages/Login';
 
 const Topbar = ({ pen, role }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const [isLoggedout,setIsLogout] = useState(false);
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Logout logged successfully");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+
+    localStorage.clear();
+    setShowDropdown(false);
+    setIsLogout(true);
+    navigate("/login");
+  };
+  if (isLoggedout) {
+    return <Login />; // Redirect to Login component if logged out
+  }
 
   return (
     <nav className="top-navbar">
@@ -25,7 +52,7 @@ const Topbar = ({ pen, role }) => {
                 <div className="name">{role}</div>
                 <div className="pen">PEN: {pen}</div>
               </div>
-              <button className="logout-btn" onClick={() => navigate('/login')}>Logout</button>
+              <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>
