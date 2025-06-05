@@ -7,7 +7,7 @@ import './Issue.css';
 
 const SIDEBAR_WIDTH = 240;
 
-const Qouta = () => {
+const DirectIssueForm = () => {
   const getTodayDateISO = () => {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -20,7 +20,12 @@ const Qouta = () => {
     dateOfIssue: '',
     dateOfPurchased: '',
     item: '',
+    category:'',
     subCategory: '',
+    make:'',
+    model:'',
+    modelNo:'',
+    productNo:'',
     qty: '',
     unit: '',
     fromChiefDistrictOrOther: '',
@@ -51,18 +56,18 @@ const Qouta = () => {
 
   return (
     <div style={{ display: 'flex', backgroundColor: '#0C1227', minHeight: '100vh' }}>
-      <Sidebar activeItem="qouta" />
+      <Sidebar activeItem="issue" />
       <div style={{ marginLeft: SIDEBAR_WIDTH, flex: 1 }}>
         <Topbar />
         <div
-          className="if-issue-root"
+          className="direct-issue-root"
           style={{
             backgroundColor: '#0C1227',
             minHeight: '100vh',
             padding: '2rem',
           }}
         >
-          <Box className="if-issue-box">
+          <Box className="direct-issue-box">
             <Typography
               variant="h5"
               mb={3}
@@ -70,7 +75,7 @@ const Qouta = () => {
               textAlign="center"
               color="white"
             >
-              Qouta Entry Form
+              Direct Issue Form
             </Typography>
             <form onSubmit={handleSubmit} className="mui-form">
               <TextField
@@ -95,8 +100,21 @@ const Qouta = () => {
                 fullWidth
                 sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
+                            <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+                <InputLabel sx={{ color: 'white' }}>Issued From</InputLabel>
+                <Select
+                  name="fromChiefDistrictOrOther"
+                  value={formData.fromChiefDistrictOrOther}
+                  onChange={handleChange}
+                  sx={{ color: 'white' }}
+                >
+                  <MenuItem value="Chief">Chief</MenuItem>
+                  <MenuItem value="District">District</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
-                label="Item Name"
+                label="Item"
                 name="item"
                 value={formData.item}
                 onChange={handleChange}
@@ -105,8 +123,53 @@ const Qouta = () => {
                 sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
               <TextField
+                label="Category"
+                name="category"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+              />
+              <TextField
                 label="Sub Category"
                 name="subCategory"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+              />
+              <TextField
+                label="Make/ Brand"
+                name="make"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+              />
+              <TextField
+                label="Model"
+                name="model"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+              />
+              <TextField
+                label="Model No"
+                name="modelNo"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+              />
+              <TextField
+                label="Product No/ Seriel No"
+                name="productNo"
                 value={formData.subCategory}
                 onChange={handleChange}
                 required
@@ -137,19 +200,6 @@ const Qouta = () => {
                   <MenuItem value="meter">Meter</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
-                <InputLabel sx={{ color: 'white' }}>Issued From</InputLabel>
-                <Select
-                  name="fromChiefDistrictOrOther"
-                  value={formData.fromChiefDistrictOrOther}
-                  onChange={handleChange}
-                  sx={{ color: 'white' }}
-                >
-                  <MenuItem value="Chief">Chief</MenuItem>
-                  <MenuItem value="District">District</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl>
               <TextField
                 label="Indent No"
                 name="indentNo"
@@ -159,7 +209,7 @@ const Qouta = () => {
                 fullWidth
                 sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={2} ml={140}>
+              <Box display="flex" justifyContent="flex-end" mt={2} ml={60}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -182,4 +232,4 @@ const Qouta = () => {
   );
 };
 
-export default Qouta;
+export default DirectIssueForm;

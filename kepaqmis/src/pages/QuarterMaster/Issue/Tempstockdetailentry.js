@@ -5,7 +5,16 @@ import { submitTempStock } from "../../../redux/actions/tempActions";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
-import { TextField, Button, Typography, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -24,13 +33,10 @@ const Tempstockdetailentry = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectedOffice, setSelectedOffice] = React.useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -78,10 +84,16 @@ const Tempstockdetailentry = () => {
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
               margin: "0 auto",
               mt: "20px",
-              ml:"30px",
+              ml: "30px",
             }}
           >
-            <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+            <Typography
+              variant="h5"
+              mb={3}
+              fontWeight="bold"
+              textAlign="center"
+              color="white"
+            >
               Temporary Issue Form
             </Typography>
 
@@ -112,21 +124,32 @@ const Tempstockdetailentry = () => {
                 fullWidth
               />
               <TextField
-                label="To Whom"
-                name="toWhom"
+                label="Name"
+                name="name"
                 value={formData.toWhom}
                 onChange={handleChange}
                 required
                 fullWidth
               />
-              <TextField
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                fullWidth
-              />
+              <FormControl fullWidth required>
+                <InputLabel id="office-label">Office / Company</InputLabel>
+                <Select
+                  labelId="office-label"
+                  id="office"
+                  name="toWhom"
+                  value={formData.toWhom}
+                  onChange={handleChange}
+                  label="Office / Company"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Office A">Office A</MenuItem>
+                  <MenuItem value="Office B">Office B</MenuItem>
+                  <MenuItem value="Company X">Company X</MenuItem>
+                  <MenuItem value="Company Y">Company Y</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 label="Mobile"
                 name="mobile"
@@ -180,7 +203,7 @@ const Tempstockdetailentry = () => {
                   },
                 }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={.7} mr={-.05}>
+              <Box display="flex" justifyContent="flex-end" mt={0.7} mr={-0.05}>
                 <Button
                   variant="contained"
                   color="primary"

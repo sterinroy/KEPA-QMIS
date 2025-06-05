@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Switch, FormControlLabel } from "@mui/material";
 import {
   Box,
   TextField,
@@ -10,6 +11,8 @@ import {
   InputLabel,
   Typography,
   Paper,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -24,25 +27,31 @@ const unitOptions = [
   { value: "meter", label: "Meter" },
 ];
 
-const IssueForm = () => {
+const RequestedIssueForm = () => {
   const [formData, setFormData] = useState({
     qmSiNo: "",
     dateOfPurchase: "",
     item: "",
+    category: "",
     subCategory: "",
+    make: "",
+    modelNo: "",
+    productNo: "",
     quantity: "",
     quantityUnit: "",
-    model: "",
+    modelNo: "",
     purchaseOrderNo: "",
     reqNo: "",
     typeOfFund: "",
     amount: "",
   });
 
+  const [perishableType, setPerishableType] = useState("non-perishable");
+
   // Set dateOfPurchase default to today's date in yyyy-mm-dd
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    setFormData((prev) => ({ ...prev, dateOfPurchase: today }));
+    setFormData((prev) => ({ ...prev, dateOfPurchased: today }));
   }, []);
 
   const handleChange = (e) => {
@@ -52,6 +61,7 @@ const IssueForm = () => {
       [name]: value,
     }));
   };
+  const [isPerishable, setIsPerishable] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,14 +89,15 @@ const IssueForm = () => {
       <div style={{ marginLeft: SIDEBAR_WIDTH, flex: 1 }}>
         <Topbar />
         <div
-          className="direct-issue-root"
+          className="request-issue-root"
           style={{
             backgroundColor: "#0C1227",
-            minHeight: "100vh",
+            height: "calc(100vh - 64px)",
             padding: "2rem",
+            overflowY: "auto",
           }}
         >
-          <Box className="direct-issue-box">
+          <Box className="request-issue-box">
             <Typography
               variant="h5"
               mb={3}
@@ -94,7 +105,7 @@ const IssueForm = () => {
               textAlign="center"
               color="white"
             >
-              Direct Issue Form
+              Requested Issue Form
             </Typography>
             <form onSubmit={handleSubmit} className="mui-form">
               <TextField
@@ -126,7 +137,7 @@ const IssueForm = () => {
                 }}
               />
               <TextField
-                label="Item Name"
+                label="Item"
                 name="item"
                 value={formData.item}
                 onChange={handleChange}
@@ -139,8 +150,73 @@ const IssueForm = () => {
                 }}
               />
               <TextField
+                label="Category"
+                name="category"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <TextField
                 label="Sub Category"
                 name="subCategory"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <TextField
+                label="Make/ Brand"
+                name="make"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <TextField
+                label="Model"
+                name="modelNo"
+                value={formData.model}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <TextField
+                label="Model No"
+                name="modelNo"
+                value={formData.subCategory}
+                onChange={handleChange}
+                required
+                fullWidth
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <TextField
+                label="Product No/ Serial No"
+                name="productNo"
                 value={formData.subCategory}
                 onChange={handleChange}
                 required
@@ -176,7 +252,6 @@ const IssueForm = () => {
               >
                 <InputLabel sx={{ color: "white" }}>Unit</InputLabel>
                 <Select
-                  //   labelId="quantityUnit-label"
                   label="Unit"
                   name="quantityUnit"
                   value={formData.quantityUnit}
@@ -189,19 +264,6 @@ const IssueForm = () => {
                   <MenuItem value="meter">Meter</MenuItem>
                 </Select>
               </FormControl>
-              <TextField
-                label="Model"
-                name="model"
-                value={formData.model}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
               <TextField
                 label="Purchase Order No"
                 name="purchaseOrderNo"
@@ -256,13 +318,53 @@ const IssueForm = () => {
                   fieldset: { borderColor: "white" },
                 }}
               />
+              <ToggleButtonGroup
+                value={perishableType}
+                exclusive
+                onChange={(e, newValue) => {
+                  if (newValue !== null) setPerishableType(newValue);
+                }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mb: 2,
+                }}
+              >
+                <ToggleButton
+                  value="perishable"
+                  sx={{
+                    color: "white",
+                    borderColor: "white",
+                    "&.Mui-selected": {
+                      backgroundColor: "#1976d2",
+                      color: "white",
+                    },
+                  }}
+                >
+                  Perishable
+                </ToggleButton>
+                <ToggleButton
+                  value="non-perishable"
+                  sx={{
+                    color: "white",
+                    borderColor: "white",
+                    "&.Mui-selected": {
+                      backgroundColor: "#1976d2",
+                      color: "white",
+                    },
+                  }}
+                >
+                  Non-Perishable
+                </ToggleButton>
+              </ToggleButtonGroup>
+
               <Box
                 display="flex"
                 justifyContent="flex-end"
                 sx={{ mt: 0, mb: 0, p: 0 }}
                 style={{
                   marginTop: 0,
-                  marginBottom: '15px',
+                  marginBottom: "5px",
                   paddingTop: 0,
                   paddingBottom: 0,
                 }}
@@ -289,4 +391,4 @@ const IssueForm = () => {
   );
 };
 
-export default IssueForm;
+export default RequestedIssueForm;
