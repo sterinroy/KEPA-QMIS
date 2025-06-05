@@ -7,7 +7,7 @@ const tempStockSchema = new mongoose.Schema({
   name: { type: String, required: true },
   mobile: { type: String,required: true  },
   dateOfissue: { type: String, required: true },
-  amount: { type: Number, required: true },
+  // amount: { type: Number, required: true },
   itemDescription: { type: String, required: true },
   purpose: { type: String, required: true },
   qty: { type: Number, required: true }

@@ -4,6 +4,8 @@ const TempStock = require('../models/temp');
 
 
 router.post('/', async (req, res) => {
+   
+
   console.log('Payload:', req.body);
 
   try {

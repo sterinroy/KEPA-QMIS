@@ -20,7 +20,7 @@ export const submitTempStock = (formData) => {
       name: formData.name,
       mobile: formData.mobile,
       dateOfissue: formData.dateOfissue,
-      amount: parseFloat(formData.amount),
+      // amount: parseFloat(formData.amount),
       itemDescription: formData.itemDescription,
       purpose: formData.purpose,
       qty: parseInt(formData.qty, 10),

@@ -29,6 +29,7 @@ import IssueDashboard from './pages/QuarterMaster/Issue/IssueDashboard';
 import StockDetails from './pages/QuarterMaster/Issue/StockDetails';
 import ReturnRequest from './pages/QuarterMaster/Issue/ReturnRequest';
 import Qouta from './pages/QuarterMaster/Issue/Qouta';
+import Returnform from "./pages/QuarterMaster/Issue/Returnform";
 
 
 function App() {
@@ -47,6 +48,8 @@ function App() {
         <Route path="/stock" element={<StockDetails />} />
         <Route path="/return-request" element={<ReturnRequest />} />
         <Route path="/qouta" element={<Qouta />} />
+        <Route path="/returnform" element={<Returnform />} />
+
 
         <Route
           path="/AdminDashboard"
