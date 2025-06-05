@@ -7,6 +7,7 @@ import Topbar from '../../../components/Topbar';
 import './PurchaseTransfer.css';
 import { Box, Paper, Typography, Chip } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { jsPDF } from "jspdf";
 
 
 const PurchaseTransfer = () => {
@@ -111,6 +112,47 @@ useEffect(() => {
       //   return <Chip label={status} color={color} size="small" />;
       // },
     },
+  {
+    field: 'PDF',
+    headerName: 'PDF',
+    width: 140,
+    sortable: false,
+    filterable: false,
+    renderCell: (params) => {
+      const handleDownloadPdf = () => {
+        const doc = new jsPDF();
+
+        // Access purchase row data
+        const data = params.row;
+
+        // Customize PDF content
+        doc.setFontSize(16);
+        doc.text("Purchase Details", 10, 10);
+
+        doc.setFontSize(12);
+        doc.text(`Order No: ${data.order_no}`, 10, 20);
+        doc.text(`Supply Order No: ${data.supply_order_no}`, 10, 30);
+        doc.text(`Invoice Date: ${data.invoice_date ? new Date(data.invoice_date).toLocaleDateString() : 'N/A'}`, 10, 40);
+        doc.text(`From Whom: ${data.from_whom}`, 10, 50);
+        doc.text(`To Whom: ${data.to_whom}`, 10, 60);
+        doc.text(`Bill/Invoice No: ${data.bill_invoice_no}`, 10, 70);
+        doc.text(`Amount: ${data.amount}`, 10, 80);
+        doc.text(`Item: ${data.item}`, 10, 90);
+        doc.text(`Sub-Category: ${data.sub_category}`, 10, 100);
+        doc.text(`Quantity: ${data.quantity}`, 10, 110);
+        // doc.text(`Status: ${data.status}`, 10, 120);
+
+        // Save the PDF
+        doc.save(`purchase_${data.order_no}.pdf`);
+      };
+
+      return (
+        <button onClick={handleDownloadPdf} style={{ cursor: 'pointer' }}>
+          Generate PDF
+        </button>
+      );
+    }
+  }
   ];
 
   const rows = purchases.map((purchase, index) => ({
