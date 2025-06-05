@@ -79,9 +79,8 @@ nav.top-navbar {
   position: fixed;
   top: 0;
   margin-left: 80%;
-
-  right: 0;
-  height: 70px;
+  left: 200px;
+  height: 50px;
   background-color: transparent;
   display: flex;
   align-items: center;
@@ -126,10 +125,10 @@ nav.top-navbar {
     display: flex;
     justify-content: center;
     align-items: center;     
-    min-height: 100vh;       
+    top: 18px;       
     background-color: #f4f4f4;
     padding: 40px;
-  
+    left: 120px;
 }
 
 .profile {
