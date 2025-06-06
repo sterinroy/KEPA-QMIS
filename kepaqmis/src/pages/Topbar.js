@@ -24,7 +24,7 @@ const Topbar = () => {
   };
 
   const user = {
-    name: 'Quarter Master (Issue Wing)',
+    name: 'User (User)',
     email: 'qm@example.com',
     avatarUrl: 'https://i.pravatar.cc/300',
   };
@@ -53,14 +53,14 @@ const Topbar = () => {
             fontWeight="bold"
             sx={{ fontFamily: 'DM Sans, sans-serif', color: '#fff' }}
           >
-            Welcome Quarter Master
+            Welcome ABCD
           </Typography>
           <Typography
             variant="h6"
             fontWeight="bold"
             sx={{ fontFamily: 'DM Sans, sans-serif', color: '#ccc' }}
           >
-            (Issue Wing)
+            (User)
           </Typography>
         </Box>
 
