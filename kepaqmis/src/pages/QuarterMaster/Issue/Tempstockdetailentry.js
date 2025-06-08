@@ -33,7 +33,6 @@ const Tempstockdetailentry = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [selectedOffice, setSelectedOffice] = React.useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,6 +48,19 @@ const Tempstockdetailentry = () => {
       alert("Error: " + err.message);
     }
   };
+
+  const officeOptions = [
+  "A block", "AC I Wing", "AC II Wing", "AD Admin", "AD MT", "AD Outdoor", "AD PS", "AD Training",
+  "Armour Wing", "B Block", "Computer Lab", "CPC", "Cyber Forensics Lab",
+  "Direct Bunglow", "Director Office", "DKMS", "Drinking Water Treatment Plant (DWTP)",
+  "Driving School", "Dry Canteen", "Duty Office", "DySP Admin", "DySP Indoor", "DySP PS1",
+  "DySP PS2", "DySP TTNS", "Guest House", "HoD Behavioral Science", "HoD Computer Application", "HoD Forensics Medicine",
+  "HoD Forensics Science", "HoD Law", "IGP/ DIG Training", "Indoor",
+  "Inspector Admin Office", "Inspector Indoor OFFICE", "Laundry", "Model PS",
+  "MT Office", "PRC", "R & P Wing", "SDTS", "SO Mess", "Super Market", "Swimming Pool",
+  "Telecommunication Wing", "TT 01", "TT 02", "TT 03", "TT 04", "TT 05", "TT 06", "TT 07", "TT 08",
+  "TT 09", "TT 10", "Unit Hospital", "Vishranthi", "Wet Canteen"
+  ];
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -126,12 +138,12 @@ const Tempstockdetailentry = () => {
               <TextField
                 label="Name"
                 name="name"
-                value={formData.toWhom}
+                value={formData.name}
                 onChange={handleChange}
                 required
                 fullWidth
               />
-              <FormControl fullWidth required>
+              <FormControl fullWidth required >
                 <InputLabel id="office-label">Office / Company</InputLabel>
                 <Select
                   labelId="office-label"
@@ -141,13 +153,11 @@ const Tempstockdetailentry = () => {
                   onChange={handleChange}
                   label="Office / Company"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Office A">Office A</MenuItem>
-                  <MenuItem value="Office B">Office B</MenuItem>
-                  <MenuItem value="Company X">Company X</MenuItem>
-                  <MenuItem value="Company Y">Company Y</MenuItem>
+                  {officeOptions.map((label) => (
+                    <MenuItem key={label} value={label}>
+                      {label}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <TextField
@@ -170,7 +180,6 @@ const Tempstockdetailentry = () => {
                 fullWidth
               />
               <TextField
-                className="hello"
                 label="Item Description"
                 name="itemDescription"
                 value={formData.itemDescription}

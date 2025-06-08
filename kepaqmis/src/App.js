@@ -23,7 +23,7 @@ import Topbar from "./pages/QuarterMaster/Issue/Topbar";
 
 import Tempstockdetailentry from "./pages/QuarterMaster/Issue/Tempstockdetailentry";
 import Review from "./pages/QuarterMaster/Issue/Review";
-import Tempissued from "./pages/QuarterMaster/Issue/Tempissued";
+import Temphistory from "./pages/QuarterMaster/Issue/Temphistory";
 import IssueDashboard from "./pages/QuarterMaster/Issue/IssueDashboard";
 import StockDetails from "./pages/QuarterMaster/Issue/StockDetails";
 import ReturnRequest from "./pages/QuarterMaster/Issue/ReturnRequest";
@@ -40,7 +40,7 @@ function App() {
 
         <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />}/>
         <Route path="/review" element={<Review />} />
-        <Route path="/tempissued" element={<Tempissued />} />
+        <Route path="/temphistory" element={<Temphistory />} />
         <Route path="/dashboard" element={<IssueDashboard />} />
         <Route path="/issue-request" element={<RequestedIssueForm />} />
         <Route path="/stock" element={<StockDetails />} />

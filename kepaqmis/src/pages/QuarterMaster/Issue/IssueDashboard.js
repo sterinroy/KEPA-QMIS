@@ -1,14 +1,19 @@
+// IssueDashboard.js
 import React from "react";
-import Sidebar from "./Sidebar"; // Or a shared Sidebar
+import { useLocation } from "react-router-dom"; // ✅ import this
+import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import IssueForm from "./RequestedIssueForm";
 
 const SIDEBAR_WIDTH = 240;
 
 const IssueDashboard = () => {
+  const location = useLocation(); // ✅ get current path
+  const currentPath = location.pathname;
+
   return (
     <div style={{ display: "flex" }}>
-      <Sidebar activeItem="dashboard" onNavigate={() => {}} />
+      <Sidebar activeItem={currentPath} /> {/* ✅ pass the path */}
       <div style={{ flexGrow: 1, marginLeft: SIDEBAR_WIDTH }}>
         <Topbar />
         <main

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -16,8 +16,9 @@ import {
 import "./Issue.css";
 import logoac from "../../../assets/police_academy2.png";
 
-const Sidebar = ({ activeItem }) => {
+const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [openModal, setOpenModal] = useState(false);
 
   const handleNavigate = (path) => {
@@ -31,6 +32,8 @@ const Sidebar = ({ activeItem }) => {
     }
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <>
       <aside className="sidebar">
@@ -42,7 +45,7 @@ const Sidebar = ({ activeItem }) => {
         </div>
         <nav className="nav-menu">
           <div
-            className={`nav-item ${activeItem === "dashboard" ? "active" : ""}`}
+            className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}
             onClick={() => handleNavigate("/dashboard")}
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/dashboard"))}
@@ -51,7 +54,7 @@ const Sidebar = ({ activeItem }) => {
           </div>
 
           <div
-            className={`nav-item ${activeItem === "issue" ? "active" : ""}`}
+            className={`nav-item ${isActive("/directissueform") || isActive("/issue-request") ? "active" : ""}`}
             onClick={() => setOpenModal(true)}
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, () => setOpenModal(true))}
@@ -60,7 +63,7 @@ const Sidebar = ({ activeItem }) => {
           </div>
 
           <div
-            className={`nav-item ${activeItem === "stock" ? "active" : ""}`}
+            className={`nav-item ${isActive("/stock") ? "active" : ""}`}
             onClick={() => handleNavigate("/stock")}
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/stock"))}
@@ -69,7 +72,7 @@ const Sidebar = ({ activeItem }) => {
           </div>
 
           <div
-            className={`nav-item ${activeItem === "tempissue" ? "active" : ""}`}
+            className={`nav-item ${isActive("/tempstockdetailentry") ? "active" : ""}`}
             onClick={() => handleNavigate("/tempstockdetailentry")}
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/tempstockdetailentry"))}
@@ -78,16 +81,16 @@ const Sidebar = ({ activeItem }) => {
           </div>
 
           <div
-            className={`nav-item ${activeItem === "temphistory" ? "active" : ""}`}
-            onClick={() => handleNavigate("/tempissued")}
+            className={`nav-item ${isActive("/temphistory") ? "active" : ""}`}
+            onClick={() => handleNavigate("/temphistory")}
             tabIndex={0}
-            onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/tempissued"))}
+            onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/temphistory"))}
           >
             <HistoryIcon className="icon" /> Temporary Issue History
           </div>
 
           <div
-            className={`nav-item ${activeItem === "return" ? "active" : ""}`}
+            className={`nav-item ${isActive("/return-request") ? "active" : ""}`}
             onClick={() => handleNavigate("/return-request")}
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/return-request"))}
