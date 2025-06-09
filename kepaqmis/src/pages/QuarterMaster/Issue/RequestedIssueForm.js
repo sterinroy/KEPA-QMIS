@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Switch, FormControlLabel } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updateField,
+  submitRequestedIssue,
+  resetForm,
+} from "../../../redux/slices/requestedIssueSlice";
+
 import {
   Box,
   TextField,
   Select,
   MenuItem,
   Button,
-  Grid,
   FormControl,
   InputLabel,
   Typography,
-  Paper,
   ToggleButtonGroup,
   ToggleButton,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
+
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import "./Issue.css";
@@ -28,53 +39,98 @@ const unitOptions = [
 ];
 
 const RequestedIssueForm = () => {
-  const [formData, setFormData] = useState({
-    qmSiNo: "",
-    dateOfPurchase: "",
-    item: "",
-    category: "",
-    subCategory: "",
-    make: "",
-    modelNo: "",
-    productNo: "",
-    quantity: "",
-    quantityUnit: "",
-    modelNo: "",
-    purchaseOrderNo: "",
-    reqNo: "",
-    typeOfFund: "",
-    amount: "",
-  });
+  const dispatch = useDispatch();
+  const { formData, status, error, successMessage } = useSelector(
+    (state) => state.requestedIssue
+  );
 
-  const [perishableType, setPerishableType] = useState("non-perishable");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Set dateOfPurchase default to today's date in yyyy-mm-dd
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    setFormData((prev) => ({ ...prev, dateOfPurchased: today }));
-  }, []);
+    dispatch(updateField({ name: "dateOfPurchased", value: today }));
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(updateField({ name, value }));
   };
-  const [isPerishable, setIsPerishable] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simple validation example: check all fields filled
-    for (const key in formData) {
-      if (!formData[key]) {
-        alert(`Please fill in the "${key}" field.`);
-        return;
+  const handlePerishableChange = (event, newValue) => {
+    if (newValue !== null) {
+      dispatch(updateField({ name: "perishableType", value: newValue }));
+    }
+  };
+
+  // Validation helper
+  const validateForm = () => {
+    const requiredFields = [
+      "qmSiNo",
+      "dateOfPurchased",
+      "item",
+      "category",
+      "subCategory",
+      "make",
+      "model",
+      "modelNo",
+      "productNo",
+      "qty",
+      "quantityUnit",
+      "purchaseOrderNo",
+      "reqNo",
+      "typeOfFund",
+      "amount",
+      "perishableType",
+    ];
+
+    for (const field of requiredFields) {
+      const value = formData[field];
+      if (
+        value === undefined ||
+        value === null ||
+        (typeof value === "string" && value.trim() === "")
+      ) {
+        alert(`Please fill in the "${field}" field.`);
+        return false;
       }
     }
-    alert("Transfer Successful!");
-    console.log("Form Data:", formData);
-    // Add your submit logic here
+    return true;
+  };
+
+  // Actual submit function
+  const submitData = async () => {
+    await dispatch(submitRequestedIssue(formData));
+  };
+
+  // On initial submit button click, open dialog after validation
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    // Open the dialog asking user if more items under same QM/Sl No
+    setDialogOpen(true);
+  };
+
+  // Handle user choice from dialog
+  const handleDialogClose = async (addMore) => {
+    setDialogOpen(false);
+
+    // Submit current item first
+    await submitData();
+
+    if (addMore) {
+      // Reset all fields except qmSiNo
+      const qmNo = formData.qmSiNo;
+      dispatch(resetForm());
+      dispatch(updateField({ name: "qmSiNo", value: qmNo }));
+
+      // Also reset dateOfPurchased to today (optional)
+      const today = new Date().toISOString().split("T")[0];
+      dispatch(updateField({ name: "dateOfPurchased", value: today }));
+    } else {
+      // Reset entire form including qmSiNo
+      dispatch(resetForm());
+    }
   };
 
   return (
@@ -107,140 +163,58 @@ const RequestedIssueForm = () => {
             >
               Requested Issue Form
             </Typography>
+
+            {status === "loading" && (
+              <Box display="flex" justifyContent="center" mb={2}>
+                <CircularProgress sx={{ color: "white" }} />
+              </Box>
+            )}
+
+            {status === "succeeded" && (
+              <Alert severity="success" sx={{ mb: 2 }}>
+                {successMessage}
+              </Alert>
+            )}
+
+            {status === "failed" && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error || "Submission failed. Please try again."}
+              </Alert>
+            )}
+
             <form onSubmit={handleSubmit} className="mui-form">
-              <TextField
-                label="QM/SL. NO"
-                name="qmSiNo"
-                value={formData.qmSiNo}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Date of Purchased"
-                type="date"
-                name="dateOfPurchased"
-                value={formData.dateOfPurchased}
-                onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Item"
-                name="item"
-                value={formData.item}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Category"
-                name="category"
-                value={formData.subCategory}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Sub Category"
-                name="subCategory"
-                value={formData.subCategory}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Make/ Brand"
-                name="make"
-                value={formData.subCategory}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Model"
-                name="modelNo"
-                value={formData.model}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Model No"
-                name="modelNo"
-                value={formData.subCategory}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Product No/ Serial No"
-                name="productNo"
-                value={formData.subCategory}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Quantity"
-                type="number"
-                name="qty"
-                value={formData.qty}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
+              {[
+                ["qmSiNo", "QM/SL. NO"],
+                ["dateOfPurchased", "Date of Purchased", "date"],
+                ["item", "Item"],
+                ["category", "Category"],
+                ["subCategory", "Sub Category"],
+                ["make", "Make/ Brand"],
+                ["model", "Model"],
+                ["modelNo", "Model No"],
+                ["productNo", "Product No/ Serial No"],
+                ["qty", "Quantity", "number"],
+              ].map(([name, label, type = "text"]) => (
+                <TextField
+                  key={name}
+                  label={label}
+                  name={name}
+                  type={type}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  InputLabelProps={type === "date" ? { shrink: true } : {}}
+                  sx={{
+                    input: { color: "white" },
+                    label: { color: "white" },
+                    fieldset: { borderColor: "white" },
+                    mb: 0.3,
+                  }}
+                  disabled={name === "qmSiNo" && status === "loading"}
+                />
+              ))}
+
               <FormControl
                 fullWidth
                 required
@@ -248,6 +222,7 @@ const RequestedIssueForm = () => {
                   label: { color: "white" },
                   svg: { color: "white" },
                   fieldset: { borderColor: "white" },
+                  mb: 2,
                 }}
               >
                 <InputLabel sx={{ color: "white" }}>Unit</InputLabel>
@@ -258,77 +233,43 @@ const RequestedIssueForm = () => {
                   onChange={handleChange}
                   sx={{ color: "white" }}
                 >
-                  <MenuItem value="kg">Kilogram</MenuItem>
-                  <MenuItem value="litre">Litre</MenuItem>
-                  <MenuItem value="nos">Nos</MenuItem>
-                  <MenuItem value="meter">Meter</MenuItem>
+                  {unitOptions.map((unit) => (
+                    <MenuItem key={unit.value} value={unit.value}>
+                      {unit.label}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-              <TextField
-                label="Purchase Order No"
-                name="purchaseOrderNo"
-                value={formData.purchaseOrderNo}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Request No"
-                name="reqNo"
-                value={formData.reqNo}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Type of Fund"
-                name="typeOfFund"
-                value={formData.typeOfFund}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <TextField
-                label="Amount"
-                name="amount"
-                type="number"
-                inputProps={{ min: 0 }}
-                value={formData.amount}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
+
+              {[
+                ["purchaseOrderNo", "Purchase Order No"],
+                ["reqNo", "Request No"],
+                ["typeOfFund", "Type of Fund"],
+                ["amount", "Amount", "number"],
+              ].map(([name, label, type = "text"]) => (
+                <TextField
+                  key={name}
+                  label={label}
+                  name={name}
+                  type={type}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{
+                    input: { color: "white" },
+                    label: { color: "white" },
+                    fieldset: { borderColor: "white" },
+                    mb: 0.5,
+                  }}
+                />
+              ))}
+
               <ToggleButtonGroup
-                value={perishableType}
+                value={formData.perishableType}
                 exclusive
-                onChange={(e, newValue) => {
-                  if (newValue !== null) setPerishableType(newValue);
-                }}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  mb: 2,
-                }}
+                onChange={handlePerishableChange}
+                sx={{ display: "flex", justifyContent: "center", mb: 3 }}
               >
                 <ToggleButton
                   value="perishable"
@@ -358,32 +299,34 @@ const RequestedIssueForm = () => {
                 </ToggleButton>
               </ToggleButtonGroup>
 
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                sx={{ mt: 0, mb: 0, p: 0 }}
-                style={{
-                  marginTop: 0,
-                  marginBottom: "5px",
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
-              >
+              <Box display="flex" justifyContent="flex-end" sx={{ mb: 1, mr: "-580px" }}>
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
-                  sx={{
-                    borderRadius: 2,
-                    px: 5,
-                    py: 0,
-                    fontWeight: "bold",
-                  }}
+                  sx={{ borderRadius: 2, px: 7, fontWeight: "bold" }}
+                  disabled={status === "loading"}
                 >
                   Submit
                 </Button>
               </Box>
             </form>
+
+            {/* Confirmation Dialog */}
+            <Dialog open={dialogOpen} onClose={() => handleDialogClose(false)}>
+              <DialogTitle>More items?</DialogTitle>
+              <DialogContent>
+                Do you have more items to add under the same QM/Sl No?
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => handleDialogClose(false)} color="primary">
+                  No
+                </Button>
+                <Button onClick={() => handleDialogClose(true)} color="primary" autoFocus>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
         </div>
       </div>

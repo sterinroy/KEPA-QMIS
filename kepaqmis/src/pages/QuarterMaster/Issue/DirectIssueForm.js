@@ -1,58 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import React, { useEffect } from 'react';
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Alert,
+} from '@mui/material';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import './Issue.css';
 
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  updateField,
+  resetForm,
+  setInitialDates,
+  submitDirectIssue,
+} from '../../../redux/slices/directIssueSlice';
+
 const SIDEBAR_WIDTH = 240;
 
 const DirectIssueForm = () => {
-  const getTodayDateISO = () => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  };
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    dateOfIssue: '',
-    dateOfPurchased: '',
-    item: '',
-    category: '',
-    subCategory: '',
-    make: '',
-    model: '',
-    modelNo: '',
-    productNo: '',
-    qty: '',
-    unit: '',
-    fromChiefDistrictOrOther: '',
-    indentNo: '',
-  });
+  // Grab formData and status from redux store
+  const formData = useSelector((state) => state.directIssue);
+  const { status, error, successMessage } = formData;
 
   useEffect(() => {
-    const todayISO = getTodayDateISO();
-    setFormData((prev) => ({
-      ...prev,
-      dateOfIssue: todayISO,
-      dateOfPurchased: todayISO,
-    }));
-  }, []);
+    dispatch(setInitialDates());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(updateField(name, value));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', formData);
+    dispatch(submitDirectIssue(formData));
   };
 
   return (
@@ -73,13 +64,26 @@ const DirectIssueForm = () => {
             <Box className="direct-issue-box">
               <Typography
                 variant="h5"
-                mb={3}
+                mb={2}
                 fontWeight="bold"
                 textAlign="center"
                 color="white"
               >
                 Direct Issue Form
               </Typography>
+
+              {/* Show success or error alerts */}
+              {status === 'failed' && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
+              {status === 'succeeded' && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                  {successMessage}
+                </Alert>
+              )}
+
               <form onSubmit={handleSubmit} className="mui-form">
                 <TextField
                   label="Date of Issue"
@@ -103,7 +107,11 @@ const DirectIssueForm = () => {
                   fullWidth
                   sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
                 />
-                <FormControl fullWidth required sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+                <FormControl
+                  fullWidth
+                  required
+                  sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                >
                   <InputLabel sx={{ color: 'white' }}>Issued From</InputLabel>
                   <Select
                     name="fromChiefDistrictOrOther"
@@ -116,27 +124,115 @@ const DirectIssueForm = () => {
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField label="Item" name="item" value={formData.item} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Category" name="category" value={formData.category} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Sub Category" name="subCategory" value={formData.subCategory} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Make/ Brand" name="make" value={formData.make} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Model" name="model" value={formData.model} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Model No" name="modelNo" value={formData.modelNo} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Product No/ Serial No" name="productNo" value={formData.productNo} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <TextField label="Quantity" type="number" name="qty" value={formData.qty} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
-                <FormControl fullWidth sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}>
+                <TextField
+                  label="Item"
+                  name="item"
+                  value={formData.item}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Sub Category"
+                  name="subCategory"
+                  value={formData.subCategory}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Make/ Brand"
+                  name="make"
+                  value={formData.make}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Model"
+                  name="model"
+                  value={formData.model}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Model No"
+                  name="modelNo"
+                  value={formData.modelNo}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Product No/ Serial No"
+                  name="productNo"
+                  value={formData.productNo}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <TextField
+                  label="Quantity"
+                  type="number"
+                  name="qty"
+                  value={formData.qty}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+                <FormControl
+                  fullWidth
+                  sx={{ label: { color: 'white' }, svg: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                >
                   <InputLabel sx={{ color: 'white' }}>Unit</InputLabel>
-                  <Select name="unit" value={formData.unit} onChange={handleChange} sx={{ color: 'white' }}>
+                  <Select
+                    name="unit"
+                    value={formData.unit}
+                    onChange={handleChange}
+                    sx={{ color: 'white' }}
+                  >
                     <MenuItem value="kg">Kilogram</MenuItem>
                     <MenuItem value="litre">Litre</MenuItem>
                     <MenuItem value="nos">Nos</MenuItem>
                     <MenuItem value="meter">Meter</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField label="Indent No" name="indentNo" value={formData.indentNo} onChange={handleChange} required fullWidth sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }} />
+                <TextField
+                  label="Indent No"
+                  name="indentNo"
+                  value={formData.indentNo}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{ input: { color: 'white' }, label: { color: 'white' }, fieldset: { borderColor: 'white' } }}
+                />
+
                 <Box display="flex" justifyContent="flex-end" mt={2} ml={60}>
-                  <Button variant="contained" color="primary" type="submit" sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: 'bold' }}>
-                    Submit
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: 'bold' }}
+                    disabled={status === 'loading'}
+                  >
+                    {status === 'loading' ? 'Submitting...' : 'Submit'}
                   </Button>
                 </Box>
               </form>
