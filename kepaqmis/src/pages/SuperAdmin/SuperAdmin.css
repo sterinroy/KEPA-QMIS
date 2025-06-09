@@ -257,3 +257,73 @@ button:nth-child(2) {
 .logout-btn:hover {
   background-color: #c0392b;
 }
+
+/* DataGrid Styles */
+.approval-grid {
+  background-color: #111C44 !important;
+  color: #fff !important;
+  border: none !important;  /* Remove border */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important; /* Add shadow */
+  border-radius: 12px !important; /* Optional: rounded corners */
+}
+
+/* Remove internal borders */
+.approval-grid .MuiDataGrid-root {
+  border: none !important;
+}
+
+.approval-grid .MuiDataGrid-columnHeaders {
+  background-color: #111C44 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.approval-grid .MuiDataGrid-columnHeader {
+  color: #fff !important;
+}
+
+.approval-grid .super-app-theme--header {
+  background-color: #111C44 !important;
+  color: #fff !important;
+}
+
+/* Row styles and hover */
+.approval-grid .MuiDataGrid-row {
+  background-color: #111C44 !important;
+  color: #fff !important;
+}
+
+.approval-grid .MuiDataGrid-row:hover {
+  background-color: rgba(164, 144, 247, 0.1) !important;
+  cursor: pointer;
+}
+
+/* Cell styles */
+.approval-grid .MuiDataGrid-cell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+/* Pagination styles */
+.approval-grid .MuiDataGrid-footerContainer {
+  background-color: #111C44 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.approval-grid .MuiTablePagination-root,
+.approval-grid .MuiTablePagination-selectIcon,
+.approval-grid .MuiTablePagination-actions button {
+  color: #fff !important;
+}
+
+/* === Action Button Styles === */
+.action-button {
+  padding: 8px 16px;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 32px; /* Fixed height for consistency */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
