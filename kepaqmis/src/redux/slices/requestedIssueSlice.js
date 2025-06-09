@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// ✅ Constants for action types
+// Constants for action types
 export const UPDATE_FIELD = 'requestedIssue/updateField';
 export const RESET_FORM = 'requestedIssue/resetForm';
 export const SUBMIT_START = 'requestedIssue/submit/pending';
@@ -10,7 +10,7 @@ export const SUBMIT_FAILURE = 'requestedIssue/submit/rejected';
 
 const API_URL = '/api/requested-issues';
 
-// ✅ Async Thunk for submission
+// Async Thunk for submission
 export const submitRequestedIssue = createAsyncThunk(
   'requestedIssue/submit',
   async (formData, { rejectWithValue }) => {
@@ -23,7 +23,7 @@ export const submitRequestedIssue = createAsyncThunk(
   }
 );
 
-// ✅ Initial state
+// Initial state
 const initialState = {
   formData: {
     qmSiNo: '',
@@ -48,7 +48,7 @@ const initialState = {
   successMessage: '',
 };
 
-// ✅ Slice
+// Slice
 const requestedIssueSlice = createSlice({
   name: 'requestedIssue',
   initialState,
@@ -90,7 +90,7 @@ const requestedIssueSlice = createSlice({
   },
 });
 
-// ✅ Export actions and reducer
+// Export actions and reducer
 export const {
   updateField,
   resetForm,
