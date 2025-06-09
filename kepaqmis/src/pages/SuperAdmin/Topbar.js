@@ -53,14 +53,14 @@ const Topbar = () => {
             fontWeight="bold"
             sx={{ fontFamily: 'DM Sans, sans-serif', color: '#fff' }}
           >
-            Welcome Quarter Master
+            Welcome Super Admin
           </Typography>
           <Typography
-            variant="h6"
+            variant="h9"
             fontWeight="bold"
             sx={{ fontFamily: 'DM Sans, sans-serif', color: '#ccc' }}
           >
-            (Issue Wing)
+            page / Super Admin
           </Typography>
         </Box>
 
