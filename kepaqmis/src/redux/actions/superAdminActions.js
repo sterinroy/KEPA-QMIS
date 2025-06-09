@@ -17,6 +17,9 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAILURE,
+  CREATE_USER_REQUEST,
+  CREATE_USER_SUCCESS,
+  CREATE_USER_FAILURE,
 } from "./actionTypes";
 
 export const fetchPendingUsers = () => {
@@ -116,6 +119,42 @@ export const deleteUser = (id) => {
       dispatch({ type: DELETE_USER_SUCCESS, payload: id });
     } catch (error) {
       dispatch({ type: DELETE_USER_FAILURE, payload: error.message });
+    }
+  };
+};
+
+
+export const createUser = (pen, name, phone, password, role) => {
+  return async (dispatch) => {
+    dispatch({ type: CREATE_USER_REQUEST });
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pen, name, phone, password, role }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        dispatch({
+          type: CREATE_USER_FAILURE,
+          payload: data.msg || "User creation failed",
+        });
+        throw new Error(data.msg || "User creation failed");
+      }
+
+      dispatch({ type: CREATE_USER_SUCCESS, payload: data });
+      // Optionally, refresh users list:
+      dispatch(fetchUsers());
+      return data;
+    } catch (error) {
+      dispatch({
+        type: "CREATE_USER_FAILURE",
+        payload: error.message,
+      });
+      throw error;
     }
   };
 };

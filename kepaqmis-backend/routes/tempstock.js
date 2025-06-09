@@ -4,7 +4,7 @@ const TempStock = require('../models/temp');
 
 
 router.post('/', async (req, res) => {
-  console.log('Payload:', req.body);
+  // console.log('Payload:', req.body);
 
   try {
     const newEntry = new TempStock(req.body);

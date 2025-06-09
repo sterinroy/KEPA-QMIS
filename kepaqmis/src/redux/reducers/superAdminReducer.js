@@ -17,6 +17,9 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAILURE,
+  CREATE_USER_REQUEST,
+  CREATE_USER_SUCCESS,
+  CREATE_USER_FAILURE,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -36,10 +39,12 @@ function superAdminReducer(state = initialState, action) {
     case REJECT_USER_REQUEST:
     case DELETE_USER_REQUEST:
       return { ...state, loading: true };
-
+    case CREATE_USER_REQUEST:
+      return { ...state, loading: true, error: null };
     case FETCH_PENDING_USERS_SUCCESS:
       return { ...state, loading: false, pendingUsers: action.payload };
-
+    case CREATE_USER_SUCCESS:
+      return { ...state, loading: false, error: null };
     case FETCH_LOGS_SUCCESS:
       return { ...state, loading: false, logs: action.payload };
 
@@ -53,7 +58,8 @@ function superAdminReducer(state = initialState, action) {
     case REJECT_USER_FAILURE:
     case DELETE_USER_FAILURE:
       return { ...state, loading: false, error: action.payload };
-
+    case CREATE_USER_FAILURE:
+      return { ...state, loading: false, error: action.payload };
     case APPROVE_USER_SUCCESS:
     case REJECT_USER_SUCCESS:
       return {

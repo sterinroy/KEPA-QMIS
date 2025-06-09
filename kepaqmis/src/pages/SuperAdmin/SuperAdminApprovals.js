@@ -4,6 +4,7 @@ import {
   fetchPendingUsers,
   approveUser,
   rejectUser,
+  fetchUsers,
 } from "../../redux/actions/superAdminActions";
 import "./SuperAdmin.css";
 
@@ -26,13 +27,16 @@ const SuperAdminApprovals = () => {
         return;
       }
       dispatch(approveUser(id, selectedRoles[id]));
+      dispatch(fetchUsers());
     } else {
       dispatch(approveUser(id, role));
+      dispatch(fetchUsers());
     }
   };
 
   const handleReject = (id) => {
     dispatch(rejectUser(id));
+    dispatch(fetchUsers());
   };
 
   const handleRoleChange = (id, newRole) => {

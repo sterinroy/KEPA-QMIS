@@ -27,7 +27,7 @@ export const submitTempStock = (formData) => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock', {
+      const response = await fetch('/api/tempstock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -51,7 +51,7 @@ export const fetchTempIssued = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock');
+      const response = await fetch('/api/tempstock');
       const data = await response.json();
 
       if (!response.ok) {
@@ -68,7 +68,7 @@ export const fetchLatestTempIssued = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
-      const response = await fetch('http://localhost:3000/api/tempstock');
+      const response = await fetch('/api/tempstock');
       const data = await response.json();
 
       if (!Array.isArray(data)) throw new Error('Invalid response');

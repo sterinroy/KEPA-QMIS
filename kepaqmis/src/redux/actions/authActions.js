@@ -53,15 +53,20 @@ export const register = (pen, name, phone, password, role) => {
       });
 
       const data = await response.json();
+      // console.log("hiii");
+
 
       if (!response.ok) {
         dispatch({ type: REGISTER_FAILURE, payload: data.msg || "Registration failed" });
-        return;
+        throw new Error(data.msg || "User creation failed");
       }
 
       dispatch({ type: REGISTER_SUCCESS, payload: data });
+      // dispatch(fetchUsers());
+      // return data;
     } catch (error) {
       dispatch({ type: REGISTER_FAILURE, payload: error.message });
+      throw error;
     }
   };
 };

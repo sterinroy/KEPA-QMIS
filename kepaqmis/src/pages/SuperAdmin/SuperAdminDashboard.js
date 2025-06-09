@@ -35,7 +35,7 @@ const SuperAdminDashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert("Logout logged successfully");
+      // alert("Logout logged successfully");
     } catch (error) {
       console.error("Error logging out:", error);
     }

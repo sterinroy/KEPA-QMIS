@@ -10,7 +10,8 @@ const tempStockSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   itemDescription: { type: String, required: true },
   purpose: { type: String, required: true },
-  qty: { type: Number, required: true }
+  qty: { type: Number, required: true },
+  office: { type: String, required: true },
 });
 
 module.exports = mongoose.model('TempStock', tempStockSchema);
