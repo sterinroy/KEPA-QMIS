@@ -30,6 +30,10 @@ import ReturnRequest from "./pages/QuarterMaster/Issue/ReturnRequest";
 import DirectIssueForm from "./pages/QuarterMaster/Issue/DirectIssueForm";
 import RequestedIssueForm from "./pages/QuarterMaster/Issue/RequestedIssueForm";
 
+// import PurchaseDashboard from "./pages/QuarterMaster/Purchase/Purchase";
+// import PurchaseTransfer from "./pages/QuarterMaster/Purchase/PurchaseTransfer";
+// import PurchaseForm from "./pages/QuarterMaster/Purchase/PurchaseForm";
+
 function App() {
   return (
     <Router>
@@ -46,6 +50,10 @@ function App() {
         <Route path="/stock" element={<StockDetails />} />
         <Route path="/return-request" element={<ReturnRequest />} />
         <Route path="/directissueform" element={<DirectIssueForm />} />
+
+        {/* <Route path="/purchase" element={<PurchaseDashboard />} />
+        <Route path="/purchase-form" element={<PurchaseForm />} />
+        <Route path="/purchased-stock-history" element={<PurchaseTransfer />} /> */}
 
         <Route
           path="/AdminDashboard"
