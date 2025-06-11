@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 const purchaseEntrySchema = new mongoose.Schema({
-  orderNo: { type: String },
+  orderNo: { type: String ,required: true },
   supplyOrderNo: { type: String },
-  invoiceDate: { type: Date },
-  itemCategory: { type: String },
+  invoiceDate: { type: Date ,required: true },
+  itemName: { type: String, required: true },
+  itemCategory: { type: String, required: true },
   quantity: { type: Number },
+  unit: { type: String },
   fromWhomPurchased: { type: String },
   toWhom: { type: String },
   billInvoiceNo: { type: String },

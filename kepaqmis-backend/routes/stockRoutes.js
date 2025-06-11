@@ -3,9 +3,8 @@ const router = express.Router();
 
 const PurchaseEntry = require("../models/PurchaseEntry");
 const StockItem = require("../models/StockItem");
-const UserIssuedItem = require("../models/UserIssuedItem");
-const ReturnItem = require("../models/ReturnItem");
-const stockController = require("../controllers/stockController");
+// const UserIssuedItem = require("../models/UserIssuedItem");
+// const ReturnItem = require("../models/ReturnItem");
 
 
 // 🔹 1. Purchase Wing: Submit Purchase Entry
@@ -23,7 +22,23 @@ router.post("/purchase/submit", async (req, res) => {
 router.post("/purchase/approve/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { itemName, category, quantity, unit, make, model, serialNumber, verifiedBy } = req.body;
+    const { 
+          orderNo,
+          invoiceDate,
+          supplyOrderNo,
+          fromWhomPurchased,
+          toWhom,
+          billInvoiceNo,
+          amount,
+          Qmno,
+          itemName, 
+          itemCategory, 
+          quantity, 
+          unit, 
+          make, 
+          model, 
+          serialNumber, 
+          verifiedBy } = req.body;
 
     const entry = await PurchaseEntry.findById(id);
     if (!entry || entry.status !== "Pending") {
@@ -32,12 +47,21 @@ router.post("/purchase/approve/:id", async (req, res) => {
 
     const stockItem = new StockItem({
       sourceType: "purchase",
-      itemName,
-      category,
-      quantity,
-      unit,
+      orderNo: orderNo || entry.orderNo,
+      invoiceDate: invoiceDate || entry.invoiceDate,
+      supplyOrderNo: supplyOrderNo || entry.supplyOrderNo,
+      fromWhomPurchased: fromWhomPurchased || entry.fromWhomPurchased,
+      toWhom: toWhom || entry.toWhom,
+      billInvoiceNo: billInvoiceNo || entry.billInvoiceNo,
+      amount: amount || entry.amount,      
+      Qmno,
+      itemName: entry.itemName || itemName,
+      itemCategory: entry.itemCategory || itemCategory,
+      quantity: entry.quantity || quantity,
+      unit: entry.unit || unit,
       make,
       model,
+      enteredBy: entry.enteredBy,
       serialNumber,
       dateOfVerification: new Date(),
       verifiedBy,
@@ -55,40 +79,58 @@ router.post("/purchase/approve/:id", async (req, res) => {
   }
 });
 
-// 🔹 3. Verification QM: Direct Issue (no purchase)
-router.post("/stock/direct-issue", async (req, res) => {
+// 🔹 3. Verification QM: Requested Issue (no purchase)
+router.post("/stock/requested-issue", async (req, res) => {
   try {
     const {
+      orderNo,
+      invoiceDate,
+      supplyOrderNo,
+      fromWhomPurchased,
+      toWhom,
+      billInvoiceNo,
+      amount,      
+      Qmno,
       itemName,
-      category,
+      itemCategory,
       quantity,
       unit,
       make,
       model,
+      enteredBy,
       serialNumber,
+      dateOfVerification,
+      dateOfPurchase,
       dateOfIssue,
-      from,
-      verifiedBy
+      verifiedBy,
     } = req.body;
 
     const stockItem = new StockItem({
       sourceType: "requested-issue",
+      orderNo,
+      invoiceDate,
+      supplyOrderNo,
+      fromWhomPurchased,
+      toWhom,
+      billInvoiceNo,
+      amount,      
       Qmno,
       itemName,
-      category,
+      itemCategory,
       quantity,
       unit,
       make,
       model,
+      enteredBy,
       serialNumber,
-      dateOfVerification: new Date(),
+      dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
+      dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
+      dateOfVerification: dateOfVerification ? new Date(dateOfVerification) : new Date(),
       verifiedBy,
-      dateOfIssue,
-      from
     });
 
     await stockItem.save();
-    res.status(201).json({ message: "Direct issue item added.", stockItem });
+    res.status(201).json({ message: "Requested issue item added.", stockItem });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -6,7 +6,6 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const tempStockRoutes = require('./routes/tempstock.js');
 
 
 
@@ -17,9 +16,8 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/superadmin', require('./routes/superadmin'));
-app.use('/api/tempstock', tempStockRoutes); 
 // app.use("/api", require("./routes/tempIssue"));
-// app.use("/api", require("./routes/stockRoutes"));
+app.use("/api", require("./routes/stockRoutes"));
 // app.use("/api", require("./routes/userStockRoutes"));
 
 
