@@ -11,6 +11,7 @@ import {
 const initialState = {
   token: null,
   role: null,
+  pen: null,
   isAuthenticated: false,
   loading: false,
   error: null,
@@ -28,6 +29,7 @@ function authReducer(state = initialState, action) {
         ...state,
         token: action.payload.token,
         role: action.payload.role,
+        pen: action.payload.pen,
         isAuthenticated: true,
         loading: false,
       };

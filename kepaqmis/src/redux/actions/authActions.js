@@ -20,6 +20,9 @@ export const login = (pen, password) => {
 
       const data = await response.json();
 
+      // 🔍 Debugging line — check this in browser console
+      // console.log("Login Response Data:", data);
+
       if (!response.ok) {
         dispatch({ type: LOGIN_FAILURE, payload: data.msg || "Login failed" });
         return;
@@ -28,6 +31,7 @@ export const login = (pen, password) => {
       dispatch({ type: LOGIN_SUCCESS, payload: data });
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("pen", data.pen);
     } catch (error) {
       dispatch({ type: LOGIN_FAILURE, payload: error.message });
     }
@@ -53,8 +57,6 @@ export const register = (pen, name, phone, password, role) => {
       });
 
       const data = await response.json();
-      // console.log("hiii");
-
 
       if (!response.ok) {
         dispatch({ type: REGISTER_FAILURE, payload: data.msg || "Registration failed" });
@@ -62,8 +64,6 @@ export const register = (pen, name, phone, password, role) => {
       }
 
       dispatch({ type: REGISTER_SUCCESS, payload: data });
-      // dispatch(fetchUsers());
-      // return data;
     } catch (error) {
       dispatch({ type: REGISTER_FAILURE, payload: error.message });
       throw error;

@@ -5,11 +5,14 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { useSelector } from "react-redux";
 
 const SuperAdminDashboard = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+  const [pen, setPen] = useState("");
 
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
@@ -19,10 +22,15 @@ const SuperAdminDashboard = () => {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (auth?.pen) {
+      setPen(auth.pen);
+    }
+  }, [auth]);
 
   const handleLogout = async () => {
     try {
@@ -77,7 +85,10 @@ const SuperAdminDashboard = () => {
       <main className="main">
         <nav className="top-navbar">
           <h1>
-            Welcome Super Admin
+            Welcome Super Admin{" "}
+            <span className="pen-display">
+              (PEN: {pen || "Loading..."})
+            </span>
             <br />
             <span>(Administrator Panel)</span>
           </h1>
