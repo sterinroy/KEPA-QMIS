@@ -3,22 +3,16 @@ import { DataGrid } from "@mui/x-data-grid";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { Box, Typography } from "@mui/material";
-import "./User.css"; // or create a ManageRequest.css if you prefer
+import "./User.css"; 
 
 const SIDEBAR_WIDTH = 240;
 
 const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  { field: "orderID", headerName: "Order ID", width: 130 },
-  { field: "invoiceDate", headerName: "Invoice Date", width: 130 },
-  { field: "fromWhom", headerName: "From Whom", width: 150 },
-  { field: "toWhom", headerName: "To Whom", width: 150 },
+  { field: "id", headerName: "PEN NO", width: 90 },
+  { field: "Date", headerName: "Date", width: 130 },
   { field: "item", headerName: "Item", width: 130 },
   { field: "subcategory", headerName: "Subcategory", width: 130 },
   { field: "quantity", headerName: "Quantity", width: 100 },
-  { field: "amount", headerName: "Amount", width: 100 },
-  { field: "billNo", headerName: "Bill/Invoice No", width: 150 },
-  { field: "verifyDate", headerName: "Verification Date", width: 150 },
 ];
 
 const rows = []; // Replace with real data

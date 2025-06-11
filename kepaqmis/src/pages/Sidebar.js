@@ -11,8 +11,7 @@ import logoac from "../../src/assets/police_academy2.png";
 
 const Sidebar = ({ activeItem }) => {
   const navigate = useNavigate();
-  const [activeNav, setActiveNav] = useState(activeItem || "dashboard");
-
+  const [activeNav, setActiveNav] = useState(activeItem );
   const handleNavigation = (page) => {
     setActiveNav(page);
     switch (page) {

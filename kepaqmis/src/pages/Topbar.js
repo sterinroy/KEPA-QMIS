@@ -24,8 +24,8 @@ const Topbar = () => {
   };
 
   const user = {
-    name: 'User (User)',
-    email: 'qm@example.com',
+    name: 'User (user)',
+    email: 'user@example.com',
     avatarUrl: 'https://i.pravatar.cc/300',
   };
 
@@ -53,7 +53,7 @@ const Topbar = () => {
             fontWeight="bold"
             sx={{ fontFamily: 'DM Sans, sans-serif', color: '#fff' }}
           >
-            Welcome ABCD
+            Welcome User
           </Typography>
           <Typography
             variant="h6"

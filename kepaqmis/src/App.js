@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import SendRequest from "./pages/SendRequest";
 import ManageRequest from "./pages/ManageRequest";
 import Temp from "./pages/Temp";
+import Return from "./pages/Return";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
@@ -86,6 +87,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <Temp />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Return"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Return />
             </ProtectedRoute>
           }
         />

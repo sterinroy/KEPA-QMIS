@@ -1,132 +1,89 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './UserDashboard.css';
-import userimg from '../../src/assets/user.jpg';
-import logoac from '../../src/assets/police_academy2.png';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import DescriptionIcon from '@mui/icons-material/Description';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import React, { useState, useEffect, useRef } from "react";
+import Sidebar from "./Sidebar";
+import Topbar from "./Topbar";
+import { Card, CardContent, Box, Typography, Grid } from "@mui/material";
+import "./User.css";
 
-const UserDashboard = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const profileRef = useRef(null);
-  const navigate = useNavigate();
+// Add Stock Widget Components
+const IconSprites = () => (
+  <svg width="0" height="0" display="none">
+    <symbol id="up" viewBox="0 0 16 16">
+      <g fill="none" stroke="currentcolor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+        <polyline points="2 8,8 2,14 8" />
+        <polyline points="8 2,8 14" />
+      </g>
+    </symbol>
+    <symbol id="down" viewBox="0 0 16 16">
+      <g fill="none" stroke="currentcolor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+        <polyline points="8 2,8 14" />
+        <polyline points="2 8,8 14,14 8" />
+      </g>
+    </symbol>
+  </svg>
+);
 
-  const toggleDropdown = () => setShowDropdown(prev => !prev);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.clear();
-    setShowDropdown(false);
-    navigate('/login');
-  };
-
-  // Fixed navigation functions
-  const Dashboard = () => {
-    navigate('/Userdashboard');
-  };
-
-  const SendRequest = () => {
-    navigate('/sendrequest');
-  };
-
-  const ManageRequest = () => {
-    navigate('/managerequest');
-  };
-
-  const Temp = () => {
-    navigate('/temp');
-  };
-
-  const Return = () => {
-    navigate('/return');
-  };
-
+const StockWidget = ({ title, value, change, trend }) => {
+  const isUp = trend === 'up';
+  
   return (
-    <div className="container">
-      <aside className="sidebar">
-        <div className="logo">
-          <img src={logoac} alt="logo" />
-        </div>
-        <nav className="nav-menu">
-          {/* Fixed navigation items with correct click handlers */}
-          <div className="nav-item active" onClick={Dashboard}>
-            <DashboardIcon className="icon" /> Dashboard
-          </div>
-          <div className="nav-item" onClick={SendRequest}>
-            <DescriptionIcon className="icon" /> Send Request
-          </div>
-          <div className="nav-item" onClick={Temp}>
-            <DescriptionIcon className="icon" /> Temporary Issue
-          </div>
-          <div className="nav-item" onClick={ManageRequest}>
-            <BookmarkIcon className="icon" /> Manage Request
-          </div>
-          
-          <div className="nav-item" onClick={Return}>
-            <AssignmentReturnIcon className="icon" /> Return
-          </div>
-        </nav>
-      </aside>
-
-      <main className="main">
-        <nav className="top-navbar">
-          <h1>Welcome ABCD<br /><span>(User)</span></h1>
-          <div className="header-right">
-            <input type="text" className="search" placeholder="Search" />
-            <NotificationsNoneIcon className="icon-bell" />
-            <div className="profile" ref={profileRef} onClick={toggleDropdown}>
-              <img src={userimg} alt="User" className="profile-pic" />
-              <span className="profile-name">ABCD</span>
-              {showDropdown && (
-                <div className="dropdown-menu">
-                  <img src={logoac} alt="User" className="dropdown-pic" />
-                  <div className="dropdown-details">
-                    <div className="name">ABCD</div>
-                  </div>
-                  <button className="logout-btn" onClick={handleLogout}>Logout</button>
-                </div>
-              )}
-            </div>
-          </div>
-        </nav>
-
-        {/* Added dashboard content area */}
-        <div className="dashboard-content">
-          <div className="large-box">
-            <h2>Dashboard Overview</h2>
-            <p>Welcome to your dashboard. Use the navigation menu to access different features.</p>
-          </div>
-          
-          <div className="card-row">
-            <div className="card">
-              <h3>Recent Requests</h3>
-              <p>View your recent submitted requests</p>
-            </div>
-            <div className="card">
-              <h3>Quick Actions</h3>
-              <p>Access frequently used features</p>
-            </div>
-            <div className="card">
-              <h3>Notifications</h3>
-              <p>Check your latest updates</p>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+    <Card className="stock-widget card-widget">
+      <CardContent>
+        <Typography variant="h6" color="text.secondary">
+          {title}
+        </Typography>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', my: 1 }}>
+          {value}
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <svg className={`icon icon--${isUp ? 'success' : 'error'}`} width="16px" height="16px">
+            <use href={`#${trend}`} />
+          </svg>
+          <Typography
+            variant="body2"
+            color={isUp ? "success.main" : "error.main"}
+            sx={{ ml: 1 }}
+          >
+            {change}% from last month
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 
-export default UserDashboard;
+const Dashboard = () => {
+  const stockData = [
+    { title: "Total Requests", value: "1,234", change: "12", trend: "up" },
+    { title: "Pending Items", value: "85", change: "5", trend: "down" },
+    { title: "Stock Value", value: "₹4.2M", change: "8", trend: "up" }
+  ];
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <Sidebar />
+      <Box sx={{ flexGrow: 1, backgroundColor: '#0C1227', minHeight: '100vh' }}>
+        <Topbar />
+        <Box sx={{ p: 3 }}>
+          <IconSprites />
+          <Grid 
+            container 
+            spacing={3} 
+            mb={4} 
+            sx={{ 
+              ml: 60,  // Add negative margin to push left
+              width: 'calc(100% + 40px)' // Compensate for the negative margin
+            }}
+          >
+            {stockData.map((stock, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <StockWidget {...stock} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default Dashboard;

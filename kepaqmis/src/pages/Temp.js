@@ -3,11 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitTempStock } from "../../src/redux/actions/tempActions";
 import Sidebar from "./Sidebar";
-
 import Topbar from "./Topbar";
-import "./User.css"
 
-import { TextField, Button, Typography, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -28,11 +35,7 @@ const Temp = () => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -45,6 +48,19 @@ const Temp = () => {
       alert("Error: " + err.message);
     }
   };
+
+  const officeOptions = [
+  "A block", "AC I Wing", "AC II Wing", "AD Admin", "AD MT", "AD Outdoor", "AD PS", "AD Training",
+  "Armour Wing", "B Block", "Computer Lab", "CPC", "Cyber Forensics Lab",
+  "Direct Bunglow", "Director Office", "DKMS", "Drinking Water Treatment Plant (DWTP)",
+  "Driving School", "Dry Canteen", "Duty Office", "DySP Admin", "DySP Indoor", "DySP PS1",
+  "DySP PS2", "DySP TTNS", "Guest House", "HoD Behavioral Science", "HoD Computer Application", "HoD Forensics Medicine",
+  "HoD Forensics Science", "HoD Law", "IGP/ DIG Training", "Indoor",
+  "Inspector Admin Office", "Inspector Indoor OFFICE", "Laundry", "Model PS",
+  "MT Office", "PRC", "R & P Wing", "SDTS", "SO Mess", "Super Market", "Swimming Pool",
+  "Telecommunication Wing", "TT 01", "TT 02", "TT 03", "TT 04", "TT 05", "TT 06", "TT 07", "TT 08",
+  "TT 09", "TT 10", "Unit Hospital", "Vishranthi", "Wet Canteen"
+  ];
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -80,10 +96,16 @@ const Temp = () => {
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
               margin: "0 auto",
               mt: "20px",
-              ml:"30px",
+              ml: "30px",
             }}
           >
-            <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+            <Typography
+              variant="h5"
+              mb={3}
+              fontWeight="bold"
+              textAlign="center"
+              color="white"
+            >
               Temporary Issue Form
             </Typography>
 
@@ -114,14 +136,6 @@ const Temp = () => {
                 fullWidth
               />
               <TextField
-                label="To Whom"
-                name="toWhom"
-                value={formData.toWhom}
-                onChange={handleChange}
-                required
-                fullWidth
-              />
-              <TextField
                 label="Name"
                 name="name"
                 value={formData.name}
@@ -129,6 +143,23 @@ const Temp = () => {
                 required
                 fullWidth
               />
+              <FormControl fullWidth required >
+                <InputLabel id="office-label">Office / Company</InputLabel>
+                <Select
+                  labelId="office-label"
+                  id="office"
+                  name="toWhom"
+                  value={formData.toWhom}
+                  onChange={handleChange}
+                  label="Office / Company"
+                >
+                  {officeOptions.map((label) => (
+                    <MenuItem key={label} value={label}>
+                      {label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <TextField
                 label="Mobile"
                 name="mobile"
@@ -149,7 +180,6 @@ const Temp = () => {
                 fullWidth
               />
               <TextField
-                className="hello"
                 label="Item Description"
                 name="itemDescription"
                 value={formData.itemDescription}
@@ -182,7 +212,7 @@ const Temp = () => {
                   },
                 }}
               />
-              <Box display="flex" justifyContent="flex-end" mt={.7} mr={-.05}>
+              <Box display="flex" justifyContent="flex-end" mt={0.7} mr={-0.05}>
                 <Button
                   variant="contained"
                   color="primary"

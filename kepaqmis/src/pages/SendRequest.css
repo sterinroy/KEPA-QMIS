@@ -1,9 +1,9 @@
 /* Main content */
-.container, .main {
+ .main {
   position: relative;
   margin-left: 260px;
   margin-top: 40px;
-  padding: 20px;
+  padding: 40px 20px;
   background-color: #0C1227;
   min-height: calc(100vh - 70px);
   display: flex;
@@ -12,8 +12,28 @@
   padding-top: 40px;
   background-color: #0C1227 !important;
   border-color: #0C1227 !important;
+  
 }
 
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0C1227;
+}
+
+.container {
+  /* width: 100%;
+  border-color: #0C1227 !important;
+  border-radius: 20px !important; */
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #0C1227;
+  overflow: hidden;
+  
+}
 /* Form container (purchase-form) */
 .purchase-form {
   background-color: #111C44 !important;
