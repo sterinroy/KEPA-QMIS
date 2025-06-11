@@ -14,7 +14,7 @@
   padding: 20px;
   background-color:#0B1437;
   /* border-top-left-radius: 30px; */
-  border-bottom-left-radius: 0px !important;
+  border-bottom-left-radius: 0px;
   z-index: 1;
   flex-grow: 1;
   background-color: #111C44;

@@ -10,6 +10,8 @@ import './Sidebar.css';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const hideOnPaths = ['/login'];
+    if (hideOnPaths.includes(location.pathname)) return null;
 
   const navItems = [
     { key: 'dashboard', icon: <DashboardIcon />, label: 'Dashboard', path: '/purchase' },
