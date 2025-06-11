@@ -14,10 +14,6 @@ import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentry";
-import Temp from "./pages/QuarterMaster/Temp/Temp";
-import Review from "./pages/QuarterMaster/Temp/Review";
-import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
 
 
 function App() {
@@ -27,10 +23,6 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/temp" element={<Temp />} />
-        <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
-        <Route path="/review" element={<Review />} />
-        <Route path="/tempissued" element={<Tempissued/>}/>
         
         <Route
           path="/AdminDashboard"

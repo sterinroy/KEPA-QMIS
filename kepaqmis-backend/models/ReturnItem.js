@@ -1,23 +1,26 @@
 const mongoose = require("mongoose");
 
-const ReturnItemSchema = new mongoose.Schema({
+const returnItemSchema = new mongoose.Schema({
   user: {
     pen: { type: String, required: true },
-    name: { type: String, required: true },
+    name: { type: String, required: true }
   },
-  itemId: { type: mongoose.Schema.Types.ObjectId, ref: "StockItem", required: true },
-  quantity: { type: Number, required: true, min: 1 },
+  stockItemId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "StockItem",
+    required: true
+  },
+  quantity: { type: Number, required: true },
   category: {
     type: String,
-    enum: ["Damaged", "Repairable", "Reusable"],
-    required: true,
+    enum: ["Damaged", "Repairable", "Reusable"]
   },
   returnDate: { type: Date, default: Date.now },
   processedBy: {
-    pen: String,
-    name: String,
+    pen: { type: String },
+    name: { type: String }
   },
-  processedAt: Date,
+  processedAt: { type: Date }
 });
 
-module.exports = mongoose.model("ReturnItem", ReturnItemSchema);
+module.exports = mongoose.model("ReturnItem", returnItemSchema);
