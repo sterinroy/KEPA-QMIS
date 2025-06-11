@@ -1,9 +1,10 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Pages
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; // Ensure this is imported
+import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
@@ -14,31 +15,36 @@ import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+//Issue
 import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentry";
 import Temp from "./pages/QuarterMaster/Temp/Temp";
 import Review from "./pages/QuarterMaster/Temp/Review";
 import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
+// Purchase Module
 import PurchaseDashboard from "./pages/QuarterMaster/Purchase/Purchase";
-import PurchaseTransfer from "./pages/QuarterMaster/Purchase/PurchaseTransfer"
-import PurchaseStockDetailEntry from "./pages/QuarterMaster/Purchase/PurchaseStockdetailentry";
-
-
+import PurchaseTransfer from "./pages/QuarterMaster/Purchase/PurchaseTransfer";
+import PurchaseForm from "./pages/QuarterMaster/Purchase/PurchaseForm"; // ← Now valid
 function App() {
   return (
     <Router>
       <Routes>
-
+        {/* Public Routes */}
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Purchase Routes */}
         <Route path="/purchase" element={<PurchaseDashboard />} />
-        <Route path="/purchasestockdetailentry" element={<PurchaseStockDetailEntry />} />
-        <Route path="/purchasetransfer" element={<PurchaseTransfer />} />
+        <Route path="/purchase-form" element={<PurchaseForm />} />
+        <Route path="/purchased-stock-history" element={<PurchaseTransfer />} />
+        {/* Temp Routes */}
         <Route path="/temp" element={<Temp />} />
         <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
         <Route path="/review" element={<Review />} />
-        <Route path="/tempissued" element={<Tempissued/>}/>
-        
+        <Route path="/tempissued" element={<Tempissued />} />
+
+        {/* Protected Routes - Admin */}
         <Route
           path="/AdminDashboard"
           element={
@@ -47,6 +53,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Routes - QuarterMasterPurchase */}
         <Route
           path="/QuarterMasterPurchase"
           element={
@@ -55,6 +63,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Routes - QuarterMasterIssue */}
         <Route
           path="/QuarterMasterIssue"
           element={
@@ -63,6 +73,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Routes - QuarterMasterACQM */}
         <Route
           path="/QuarterMasterACQM"
           element={
@@ -71,6 +83,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Routes - User */}
         <Route
           path="/UserDashboard"
           element={
@@ -79,6 +93,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Routes - SuperAdmin */}
         <Route
           path="/SuperAdminDashboard"
           element={
@@ -111,6 +127,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Unauthorized Route */}
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>

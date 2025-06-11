@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation,useNavigate } from 'react-router-dom';
 import './Purchase.css';
-import Sidebar from '../../../components/Sidebar';
-import Topbar from '../../../components/Topbar';
+import Sidebar from './Sidebar';
+import Topbar from './Topbar';
 import { fetchPurchases } from '../../../redux/actions/purchaseActions';
 import { useDispatch,useSelector } from 'react-redux';
 import Login from '../../Login';
@@ -82,7 +82,7 @@ const handleLogout = async () => {
 
       {/* Main Content */}
       <main className="main">
-        <Topbar pen={pen} role={role} />
+        {<Topbar pen={pen} role={role} />}
       </main>
     </div>
   );

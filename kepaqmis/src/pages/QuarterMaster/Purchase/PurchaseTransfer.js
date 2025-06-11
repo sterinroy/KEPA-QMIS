@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPurchases } from "../../../redux/actions/purchaseActions";
-import Sidebar from "../../../components/Sidebar";
-import Topbar from "../../../components/Topbar";
-import "./PurchaseTransfer.css";
+import Sidebar from "./Sidebar";
+import Topbar from "./Topbar";
+import "./Purchase.css";
 import { Box, Paper, Typography, Chip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { jsPDF } from "jspdf";
@@ -161,7 +161,7 @@ const PurchaseTransfer = () => {
       <Sidebar />
 
       <main className="main">
-        <Topbar pen={pen} role={role} />
+        {<Topbar pen={pen} role={role} />}
 
         <Box
           sx={{ flexGrow: 1, display: "flex", flexDirection: "column", mt: 2 }}
