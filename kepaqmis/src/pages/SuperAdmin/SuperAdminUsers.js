@@ -16,7 +16,7 @@ const SuperAdminUsers = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <h2>Manage Users</h2>
       {loading ? (
         <p>Loading...</p>

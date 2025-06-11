@@ -18,7 +18,7 @@ import Tempstockdetailentry from "./pages/QuarterMaster/Temp/Tempstockdetailentr
 import Temp from "./pages/QuarterMaster/Temp/Temp";
 import Review from "./pages/QuarterMaster/Temp/Review";
 import Tempissued from "./pages/QuarterMaster/Temp/Tempissued";
-
+import Layout from "./pages/SuperAdmin/Layout";
 
 function App() {
   return (
@@ -28,10 +28,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/temp" element={<Temp />} />
-        <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />} />
+        <Route
+          path="/tempstockdetailentry"
+          element={<Tempstockdetailentry />}
+        />
         <Route path="/review" element={<Review />} />
-        <Route path="/tempissued" element={<Tempissued/>}/>
-        
+        <Route path="/tempissued" element={<Tempissued />} />
+
         <Route
           path="/AdminDashboard"
           element={
@@ -76,11 +79,11 @@ function App() {
           path="/SuperAdminDashboard"
           element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminDashboard />
+              <Layout />
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/SuperAdminApprovals"
           element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
@@ -103,7 +106,7 @@ function App() {
               <SuperAdminLogs />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>
