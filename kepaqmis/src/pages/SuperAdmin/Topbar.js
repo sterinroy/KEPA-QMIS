@@ -24,8 +24,8 @@ const Topbar = ({ onLogout }) => {
   };
 
   const user = {
-    name: 'Quarter Master (Issue Wing)',
-    email: 'qm@example.com',
+    name: 'Super Admin',
+    email: 'superadmin@kepa.net',
     avatarUrl: 'https://i.pravatar.cc/300',
   };
 
@@ -37,10 +37,10 @@ const Topbar = ({ onLogout }) => {
         backgroundColor: '#0C1227',
         color: '#fff',
         boxShadow: 'none',
-        borderTopLeftRadius: 16,
+        
         height: 90,
         ml: '260px',
-        width: 'calc(100% - 260px)',
+        width: 'calc(100% - 270px)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

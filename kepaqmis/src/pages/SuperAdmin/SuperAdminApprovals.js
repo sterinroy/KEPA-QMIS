@@ -4,6 +4,7 @@ import {
   fetchPendingUsers,
   approveUser,
   rejectUser,
+  fetchUsers,
 } from "../../redux/actions/superAdminActions";
 import { DataGrid } from "@mui/x-data-grid";
 import Sidebar from "./Sidebar";
@@ -16,23 +17,33 @@ const SuperAdminApprovals = () => {
   const { pendingUsers, loading, error } = useSelector(
     (state) => state.superAdmin
   );
+  const [selectedRoles, setSelectedRoles] = React.useState({});
 
   useEffect(() => {
     dispatch(fetchPendingUsers());
   }, [dispatch]);
 
-  const handleApprove = (id, role) => {
-    dispatch(approveUser(id, role));
+ const handleApprove = (id, role) => {
+    if (role === "QuarterMaster") {
+      if (!selectedRoles[id]) {
+        alert("Please select a specific QuarterMaster role");
+        return;
+      }
+      dispatch(approveUser(id, selectedRoles[id]));
+      dispatch(fetchUsers());
+    } else {
+      dispatch(approveUser(id, role));
+      dispatch(fetchUsers());
+    }
   };
 
   const handleReject = (id) => {
     dispatch(rejectUser(id));
+    dispatch(fetchUsers());
   };
 
-  const handleRoleChange = (userId, newRole) => {
-    if (newRole) {
-      dispatch(approveUser(userId, newRole));
-    }
+  const handleRoleChange = (id, newRole) => {
+    setSelectedRoles({ ...selectedRoles, [id]: newRole });
   };
 
   const columns = [

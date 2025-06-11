@@ -3,12 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import {
-  Modal,
-  Box,
-  Button,
-  Typography
-} from "@mui/material";
+
 
 import "./SuperAdmin.css";
 import logo from '../../assets/police_academy2.png';
@@ -17,7 +12,7 @@ const Sidebar = ({ activeItem }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-  const [openModal, setOpenModal] = useState(false);
+  //const [openModal, setOpenModal] = useState(false);
 
   const handleNavigate = (path) => {
     navigate(path);
