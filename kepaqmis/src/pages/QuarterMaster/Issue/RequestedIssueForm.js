@@ -299,7 +299,7 @@ const RequestedIssueForm = () => {
                 </ToggleButton>
               </ToggleButtonGroup>
 
-              <Box display="flex" justifyContent="flex-end" sx={{ mb: 1, mr: "-580px" }}>
+              <Box display="flex" justifyContent="flex-end" sx={{ mb: 1, mr: "-100px" }}>
                 <Button
                   variant="contained"
                   color="primary"

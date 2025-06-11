@@ -1,37 +1,33 @@
-
 import React, { useState, useEffect } from 'react';
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Purchase.css';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-import { fetchPurchases } from '../../../redux/actions/purchaseActions';
-import { useDispatch,useSelector } from 'react-redux';
 import Login from '../../Login';
 
 const PurchaseDashboard = () => {
-  const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [pen, setPen] = useState('');
   const [role, setRole] = useState('');
-  const [isLoggedout,setIsLogout] = useState(false);
-  const toggleDropdown = () => setShowDropdown(!showDropdown);
-  const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth);
-  
-  useEffect(() => {
-    dispatch(fetchPurchases());
+  const [isLoggedout, setIsLogout] = useState(false);
 
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  useEffect(() => {
     const passedPen = location.state?.pen;
     const passedRole = location.state?.role;
 
-    if (!auth.isAuthenticated) {
-  navigate("/login");
-}
+    // Check if user is authenticated by looking at localStorage or some session logic
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
 
     if (passedPen) {
       setPen(passedPen);
-      localStorage.setItem('pen', passedPen); // optional
+      localStorage.setItem('pen', passedPen); // optional: persist
     } else {
       const storedPen = localStorage.getItem('pen') || 'NA';
       setPen(storedPen);
@@ -39,15 +35,14 @@ const PurchaseDashboard = () => {
 
     if (passedRole) {
       setRole(passedRole);
-      localStorage.setItem('role', passedRole); // optional
+      localStorage.setItem('role', passedRole); // optional: persist
     } else {
       const storedRole = localStorage.getItem('role') || 'NA';
       setRole(storedRole);
     }
-  }, [dispatch, location.state,auth]);
+  }, [location.state, navigate]);
 
-  
-const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
 
@@ -68,12 +63,10 @@ const handleLogout = async () => {
     setIsLogout(true);
     navigate("/login");
   };
+
   if (isLoggedout) {
     return <Login />; // Redirect to Login component if logged out
   }
-
-
-
 
   return (
     <div className="container">
@@ -82,11 +75,10 @@ const handleLogout = async () => {
 
       {/* Main Content */}
       <main className="main">
-        {<Topbar pen={pen} role={role} />}
+        <Topbar pen={pen} role={role} />
       </main>
     </div>
   );
 };
 
 export default PurchaseDashboard;
-

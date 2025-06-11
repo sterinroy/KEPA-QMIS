@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPurchases } from "../../../redux/actions/purchaseActions";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import "./Purchase.css";
@@ -10,16 +8,41 @@ import { DataGrid } from "@mui/x-data-grid";
 import { jsPDF } from "jspdf";
 
 const PurchaseTransfer = () => {
-  const dispatch = useDispatch();
   const location = useLocation();
   const [pen, setPen] = useState("");
-  const [role, setRole] = useState(false);
+  const [role, setRole] = useState("NA");
+  const [purchases, setPurchases] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const { purchases, loading } = useSelector((state) => state.purchase);
+  // Simulated purchase data (replace this with real API call if needed)
+  const mockData = [
+    {
+      order_no: "PO12345",
+      supply_order_no: "SO67890",
+      invoice_date: "2024-01-15T00:00:00Z",
+      from_whom: "Supplier A",
+      to_whom: "Warehouse B",
+      bill_invoice_no: "INV-001",
+      amount: 1500,
+      item: "Office Supplies",
+      sub_category: "Stationery",
+      quantity: 100,
+    },
+    {
+      order_no: "PO12346",
+      supply_order_no: "SO67891",
+      invoice_date: "2024-02-20T00:00:00Z",
+      from_whom: "Supplier B",
+      to_whom: "Store C",
+      bill_invoice_no: "INV-002",
+      amount: 3000,
+      item: "Electronics",
+      sub_category: "Printers",
+      quantity: 5,
+    },
+  ];
 
   useEffect(() => {
-    dispatch(fetchPurchases());
-
     const passedPen = location.state?.pen;
     const passedRole = location.state?.role;
 
@@ -38,7 +61,14 @@ const PurchaseTransfer = () => {
       const storedRole = localStorage.getItem("role") || "NA";
       setRole(storedRole);
     }
-  }, [dispatch, location.state]);
+
+    // Simulate API delay
+    setTimeout(() => {
+      setPurchases(mockData);
+      setLoading(false);
+    }, 1000);
+  }, [location.state]);
+
   const columns = [
     { field: "order_no", headerName: "Order No", width: 100 },
     { field: "supply_order_no", headerName: "Supply Order No", width: 120 },
@@ -154,6 +184,7 @@ const PurchaseTransfer = () => {
   const rows = purchases.map((purchase, index) => ({
     id: index,
     ...purchase,
+    status: "Pending", // You can adjust based on actual logic
   }));
 
   return (
@@ -161,11 +192,9 @@ const PurchaseTransfer = () => {
       <Sidebar />
 
       <main className="main">
-        {<Topbar pen={pen} role={role} />}
+        <Topbar pen={pen} role={role} />
 
-        <Box
-          sx={{ flexGrow: 1, display: "flex", flexDirection: "column", mt: 2 }}
-        >
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", mt: 2 }}>
           <Paper
             sx={{
               borderRadius: 2,
@@ -177,11 +206,7 @@ const PurchaseTransfer = () => {
             }}
           >
             <Box sx={{ px: 2, py: 2, borderBottom: 1, borderColor: "#2C2F57" }}>
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                sx={{ color: "white" }}
-              >
+              <Typography variant="h6" fontWeight="bold" sx={{ color: "white" }}>
                 Recent Transfers
               </Typography>
             </Box>
@@ -200,9 +225,7 @@ const PurchaseTransfer = () => {
                   backgroundColor: "#111C44",
                   color: "white",
                   border: "none",
-                  ".MuiDataGrid-cell": {
-                    color: "white",
-                  },
+                  ".MuiDataGrid-cell": { color: "white" },
                   ".MuiDataGrid-columnHeaders": {
                     backgroundColor: "#111C44",
                     color: "white",
@@ -212,15 +235,6 @@ const PurchaseTransfer = () => {
                     fontSize: "0.9rem",
                     color: "white",
                   },
-                  ".MuiDataGrid-columnHeader": {
-                    backgroundColor: "#111C44",
-                  },
-                  ".MuiDataGrid-virtualScrollerRenderZone": {
-                    backgroundColor: "#111C44",
-                  },
-                  ".MuiDataGrid-virtualScroller": {
-                    backgroundColor: "#111C44",
-                  },
                   ".MuiDataGrid-footerContainer": {
                     backgroundColor: "#1A2251",
                     color: "white",
@@ -228,54 +242,8 @@ const PurchaseTransfer = () => {
                   ".MuiDataGrid-row:hover": {
                     backgroundColor: "#2C2F57",
                   },
-
-                  // 🔥 Column menu (3 dots) + filters
-                  ".MuiDataGrid-menu": {
-                    backgroundColor: "#1A2251",
-                    color: "white",
-                  },
-                  ".MuiDataGrid-iconButtonContainer .MuiSvgIcon-root": {
-                    color: "white",
-                  },
-                  ".MuiPaper-root.MuiMenu-paper": {
-                    backgroundColor: "#1A2251 !important",
-                    color: "white",
-                  },
-                  ".MuiMenuItem-root": {
-                    color: "white",
-                  },
-                  ".MuiMenuItem-root:hover": {
-                    backgroundColor: "#2C2F57",
-                  },
-
-                  // 🔥 Tooltips
-                  ".MuiTooltip-tooltip": {
-                    backgroundColor: "#1A2251",
-                    color: "white",
-                  },
-
-                  // 🔥 Pagination (rows per page, page buttons, etc.)
-                  ".MuiTablePagination-root": {
-                    color: "white",
-                  },
-                  ".MuiTablePagination-selectLabel": {
-                    color: "white",
-                  },
-                  ".MuiSelect-icon": {
-                    color: "white",
-                  },
-                  ".MuiTablePagination-select": {
-                    color: "white",
-                  },
-                  ".MuiInputBase-root": {
-                    color: "white",
-                  },
-                  ".MuiSvgIcon-root": {
-                    color: "white",
-                  },
-                  ".Mui-disabled": {
-                    color: "#888", // Optional: faded color for disabled buttons
-                  },
+                  ".MuiTablePagination-root": { color: "white" },
+                  ".MuiSvgIcon-root": { color: "white" },
                 }}
               />
             </Box>
