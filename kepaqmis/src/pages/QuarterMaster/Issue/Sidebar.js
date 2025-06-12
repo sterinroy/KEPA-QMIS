@@ -72,10 +72,10 @@ const Sidebar = () => {
           </div>
 
           <div
-            className={`nav-item ${isActive("/tempstockdetailentry") ? "active" : ""}`}
-            onClick={() => handleNavigate("/tempstockdetailentry")}
+            className={`nav-item ${isActive("/tempissueform") ? "active" : ""}`}
+            onClick={() => handleNavigate("/tempissueform")}
             tabIndex={0}
-            onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/tempstockdetailentry"))}
+            onKeyDown={(e) => handleKeyDown(e, () => handleNavigate("/tempsissueform"))}
           >
             <DescriptionIcon className="icon" /> Temporary Issue Form
           </div>

@@ -46,7 +46,7 @@ const Review = () => {
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
-              onClick={() => navigate('/tempstockdetailentry', { state: { formData: latestData } })}
+              onClick={() => navigate('/tempissueform', { state: { formData: latestData } })}
               variant="outlined"
             >
               ← Back

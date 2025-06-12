@@ -157,7 +157,7 @@ const Tempissued = () => {
             mx: 'auto',
           }}
         >
-          <Button variant="outlined" color="secondary" onClick={() => navigate('/tempstockdetailentry')}>
+          <Button variant="outlined" color="secondary" onClick={() => navigate('/tempissueform')}>
             ← Back
           </Button>
           <Button variant="contained" color="primary" onClick={handleGeneratePDF}>

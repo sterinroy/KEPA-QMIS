@@ -21,7 +21,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Sidebar from "./pages/QuarterMaster/Issue/Sidebar";
 import Topbar from "./pages/QuarterMaster/Issue/Topbar";
 
-import Tempstockdetailentry from "./pages/QuarterMaster/Issue/Tempstockdetailentry";
+import TempIssueForm from "./pages/QuarterMaster/Issue/TempIssueForm";
 import Review from "./pages/QuarterMaster/Issue/Review";
 import Temphistory from "./pages/QuarterMaster/Issue/Temphistory";
 import IssueDashboard from "./pages/QuarterMaster/Issue/IssueDashboard";
@@ -42,7 +42,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/tempstockdetailentry" element={<Tempstockdetailentry />}/>
+        <Route path="/tempissueform" element={<TempIssueForm />}/>
         <Route path="/review" element={<Review />} />
         <Route path="/temphistory" element={<Temphistory />} />
         <Route path="/dashboard" element={<IssueDashboard />} />

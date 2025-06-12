@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextField,
   Button,
@@ -9,7 +9,16 @@ import {
   FormControl,
   InputLabel,
   Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
 } from '@mui/material';
+
+// ✅ Correct icon import
+import CloseIcon from '@mui/icons-material/Close';
+
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -27,10 +36,11 @@ const SIDEBAR_WIDTH = 240;
 
 const DirectIssueForm = () => {
   const dispatch = useDispatch();
-
-  // Grab formData and status from redux store
   const formData = useSelector((state) => state.directIssue);
   const { status, error, successMessage } = formData;
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [openAddAnotherDialog, setOpenAddAnotherDialog] = useState(false);
 
   useEffect(() => {
     dispatch(setInitialDates());
@@ -43,7 +53,39 @@ const DirectIssueForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(submitDirectIssue(formData));
+    setOpenConfirmDialog(true); // Open confirmation dialog
+  };
+
+  const handleConfirmSubmit = () => {
+    dispatch(submitDirectIssue(formData)); // Submit data
+    setOpenConfirmDialog(false);
+    setOpenAddAnotherDialog(true); // Ask if user wants to add more
+  };
+
+  const handleCloseDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const resetFormExceptIndent = () => {
+    const indentNo = formData.indentNo;
+    dispatch(resetForm()); // Resets all fields
+    dispatch(updateField('indentNo', indentNo)); // Restore indent number
+  };
+
+  const labelMap = {
+    dateOfIssue: 'Date of Issue',
+    dateOfPurchased: 'Date of Purchased',
+    fromChiefDistrictOrOther: 'Issued From',
+    item: 'Item',
+    category: 'Category',
+    subCategory: 'Sub Category',
+    make: 'Make / Brand',
+    model: 'Model',
+    modelNo: 'Model No',
+    productNo: 'Product No / Serial No',
+    qty: 'Quantity',
+    unit: 'Unit',
+    indentNo: 'Indent No',
   };
 
   return (
@@ -72,7 +114,7 @@ const DirectIssueForm = () => {
                 Direct Issue Form
               </Typography>
 
-              {/* Show success or error alerts */}
+              {/* Show alerts */}
               {status === 'failed' && (
                 <Alert severity="error" sx={{ mb: 2 }}>
                   {error}
@@ -240,6 +282,107 @@ const DirectIssueForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          Confirm Submission
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent dividers>
+          <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+            Please review your details before submitting:
+          </Typography>
+
+          {Object.entries(formData).map(([key, value]) => {
+            if (
+              ['status', 'error', 'successMessage'].includes(key) ||
+              value === '' ||
+              typeof value === 'function'
+            )
+              return null;
+
+            const label = labelMap[key] || key.replace(/([A-Z])/g, ' $1').trim();
+
+            return (
+              <Box key={key} display="flex" justifyContent="space-between" mb={1}>
+                <Typography color="textSecondary">{label}:</Typography>
+                <Typography>{value}</Typography>
+              </Box>
+            );
+          })}
+        </DialogContent>
+
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={handleCloseDialog} color="inherit">
+            Edit
+          </Button>
+          <Button onClick={handleConfirmSubmit} variant="contained" color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Add Another Item Dialog */}
+      <Dialog
+        open={openAddAnotherDialog}
+        onClose={() => setOpenAddAnotherDialog(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          Add Another Item?
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenAddAnotherDialog(false)}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent dividers>
+          <Typography>
+            Do you want to add another item under the same Indent Number?
+          </Typography>
+        </DialogContent>
+
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={() => {
+              setOpenAddAnotherDialog(false);
+              resetFormExceptIndent();
+            }}
+            color="primary"
+            variant="contained"
+          >
+            Yes, Add Another
+          </Button>
+          <Button
+            onClick={() => {
+              setOpenAddAnotherDialog(false);
+              dispatch(resetForm());
+            }}
+            color="inherit"
+            variant="outlined"
+          >
+            No, Finish
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Footer />
     </>
   );

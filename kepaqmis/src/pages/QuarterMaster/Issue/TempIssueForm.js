@@ -18,7 +18,7 @@ import {
 
 const SIDEBAR_WIDTH = 240;
 
-const Tempstockdetailentry = () => {
+const TempIssueForm = () => {
   const [formData, setFormData] = useState({
     slNo: "",
     PENNo: "",
@@ -52,7 +52,7 @@ const Tempstockdetailentry = () => {
   const officeOptions = [
   "A block", "AC I Wing", "AC II Wing", "AD Admin", "AD MT", "AD Outdoor", "AD PS", "AD Training",
   "Armour Wing", "B Block", "Computer Lab", "CPC", "Cyber Forensics Lab",
-  "Direct Bunglow", "Director Office", "DKMS", "Drinking Water Treatment Plant (DWTP)",
+  "Direcor Bunglow", "Director Office", "DKMS", "Drinking Water Treatment Plant (DWTP)",
   "Driving School", "Dry Canteen", "Duty Office", "DySP Admin", "DySP Indoor", "DySP PS1",
   "DySP PS2", "DySP TTNS", "Guest House", "HoD Behavioral Science", "HoD Computer Application", "HoD Forensics Medicine",
   "HoD Forensics Science", "HoD Law", "IGP/ DIG Training", "Indoor",
@@ -235,4 +235,4 @@ const Tempstockdetailentry = () => {
   );
 };
 
-export default Tempstockdetailentry;
+export default TempIssueForm;
