@@ -19,7 +19,7 @@ const SuperAdminDashboard = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
-
+  const [selectedRoles, setSelectedRoles] = useState({});
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
   useEffect(() => {
@@ -103,10 +103,122 @@ const SuperAdminDashboard = () => {
   ];
 
   const { logs = [] } = useSelector((state) => state.superAdmin);
+  const { pendingUsers = [] } = useSelector((state) => state.superAdmin);
 
   useEffect(() => {
     dispatch(fetchLogs());
+    dispatch(fetchPendingUsers());
   }, [dispatch]);
+
+  const handleApprove = (id, role) => {
+    dispatch(approveUser(id, role));
+    dispatch(fetchPendingUsers());
+  };
+
+  const handleReject = (id) => {
+    dispatch(rejectUser(id));
+    dispatch(fetchPendingUsers());
+  };
+
+  const handleRoleChange = (id, newRole) => {
+    setSelectedRoles({ ...selectedRoles, [id]: newRole });
+  };
+
+  const approvalColumns = [
+    {
+      field: "pen",
+      headerName: "PEN",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "assignRole",
+      headerName: "Assign Role",
+      flex: 1.5,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        return params.row.role === "QuarterMaster" ? (
+          <select
+            onChange={(e) => handleRoleChange(params.row._id, e.target.value)}
+            defaultValue=""
+            className="role-select"
+          >
+            <option value="" disabled>
+              Select role
+            </option>
+            <option value="QuarterMasterPurchase">
+              QuarterMaster (Purchase)
+            </option>
+            <option value="QuarterMasterIssue">QuarterMaster (Issue)</option>
+            <option value="QuarterMasterACQM">ACQM</option>
+          </select>
+        ) : (
+          "N/A"
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <button
+            className="action-button approve-button"
+            onClick={() => handleApprove(params.row._id, params.row.role)}
+          >
+            Approve
+          </button>
+          <button
+            className="action-button reject-button"
+            onClick={() => handleReject(params.row._id)}
+          >
+            Reject
+          </button>
+        </Box>
+      ),
+    },
+  ];
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -157,11 +269,8 @@ const SuperAdminDashboard = () => {
                         month === "May" ? "selected" : ""
                       }`}
                     >
-                      <div
-                        className={`bar h-${[
-                          "100",
-                          "50",
-                          "75",
+                {/* CALL THE API /  VALUES FOR THE BAR GRAPH HERE - ENDPOINT  */}
+                      <div className={`bar h-${["100","50","75",
                           "25",
                           "100",
                           "50",
@@ -185,21 +294,27 @@ const SuperAdminDashboard = () => {
                     <svg viewBox="0 0 36 36" className="circular-chart">
                       <path
                         className="circle"
+                        
                         strokeDasharray="100, 100"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
                       <path
                         className="circle"
-                        strokeDasharray="85, 100"
+                      //CIRCLE GRAPH ENDPOINT 1
+                        strokeDasharray="95, 100"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
                       <path
                         className="circle"
+                        
+                      //CIRCLE GRAPH ENDPOINT 2
                         strokeDasharray="60, 100"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
                       <path
                         className="circle"
+                        
+                      //CIRCLE GRAPH ENDPOINT 3
                         strokeDasharray="30, 100"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
@@ -210,6 +325,7 @@ const SuperAdminDashboard = () => {
 
                 <div className="info">
                   <p>
+                    {/* DUMMY STUFF - POWER AAVATTE */}
                     Most expensive category <br />
                     <span>Restaurants & Dining</span>
                   </p>
@@ -224,7 +340,7 @@ const SuperAdminDashboard = () => {
             </div>
           </Box>
 
-          {/* Add the new DataGrid section */}
+          {/* Datagrid 1 - LOG*/}
           <Box
             sx={{
               height: 400,
@@ -237,7 +353,7 @@ const SuperAdminDashboard = () => {
               strokeColor: "#2D396B",
               scrollbarGutter: "stable",
               scrollbarColor: "#2D396B #111C44",
-              scrollbarWidth:"auto", // Use thin scrollbar
+              scrollbarWidth: "auto", // Use thin scrollbar
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
               overflow: "hidden", // Add this to prevent content overflow
               "& .MuiDataGrid-root": {
@@ -289,7 +405,6 @@ const SuperAdminDashboard = () => {
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   backgroundColor: "#111C44",
-  
                 },
                 "& .MuiDataGrid-footerContainer": {
                   backgroundColor: "#1B254B",
@@ -299,7 +414,105 @@ const SuperAdminDashboard = () => {
                   fontSize: "14px",
                 },
                 "& .MuiDataGrid-row:hover": {
-                    backgroundColor: "#1B254B",
+                  backgroundColor: "#1B254B",
+                },
+                "& .MuiTablePagination-root": {
+                  color: "#ccc",
+                  "& .MuiSelect-select": {
+                    color: "#ccc",
+                  },
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "#1B254B",
+                },
+                // Add these to handle overflow
+                "& .MuiDataGrid-virtualScroller": {
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                },
+                "& .MuiDataGrid-virtualScrollerContent": {
+                  maxHeight: "none",
+                },
+              }}
+            />
+          </Box>
+
+          {/* Dtagrid 2 - Pending Approvals DataGrid */}
+          <Box
+            sx={{
+              height: "400PX",
+              width: "1100px",
+              backgroundColor: "#111C44",
+              borderRadius: "17px",
+              padding: "20px",
+              marginLeft: "20px",
+              autoheight: true,
+              strokeColor: "#2D396B",
+              scrollbarGutter: "stable",
+              scrollbarColor: "#2D396B #111C44",
+              scrollbarWidth: "auto", // Use thin scrollbar
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden", // Add this to prevent content overflow
+              "& .MuiDataGrid-root": {
+                maxHeight: "calc(100vh - 400px)", // Adjust based on your layout
+                minHeight: 300, // Minimum height
+              },
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#fff",
+                marginBottom: 2,
+                fontFamily: "DM Sans, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              Pending Approvals
+            </Typography>
+
+            <DataGrid
+              rows={pendingUsers.map((user) => ({
+                id: user._id,
+                ...user,
+              }))}
+              columns={approvalColumns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              disableSelectionOnClick
+              sx={{
+                width: "100%",
+                border: "none",
+                borderColor: "#060118",
+                borderRadius: "11px",
+                backgroundColor: "#1B254B",
+                height: "100%",
+                "& .MuiDataGrid-cell": {
+                  color: "#ccc",
+                  borderColor: "transparent",
+                  padding: "10px",
+                  backgroundColor: "#1B254B",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "14px",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#cccccc",
+                  // color: "#111C44",
+                  color: "#111C44",
+                  borderColor: "#111C44",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "16px",
+                  backgroundColor: "#111C44",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: "#1B254B",
+                  color: "#ccc",
+                  borderColor: "#A3AED0",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "14px",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "#1B254B",
                 },
                 "& .MuiTablePagination-root": {
                   color: "#ccc",

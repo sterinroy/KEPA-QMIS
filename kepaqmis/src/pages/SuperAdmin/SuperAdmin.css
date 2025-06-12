@@ -552,14 +552,35 @@ button:nth-child(2) {
 /* === Action Button Styles === */
 .action-button {
   padding: 8px 16px;
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  height: 32px; /* Fixed height for consistency */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.approve-button {
+  color: #05CD99;
+  border: 1px solid #05CD99;
+  background: transparent;
+}
+
+.approve-button:hover {
+  background: #05CD99;
+  color: white;
+}
+
+.reject-button {
+  color: #EE5D50;
+  border: 1px solid #EE5D50;
+  background: transparent;
+}
+
+.reject-button:hover {
+  background: #EE5D50;
+  color: white;
 }
 
 /* Add these styles */
