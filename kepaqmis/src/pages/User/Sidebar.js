@@ -7,7 +7,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 
 import "./User.css";
-import logoac from "../../src/assets/police_academy2.png"; 
+import logoac from "../../assets/police_academy2.png"; 
 
 const Sidebar = ({ activeItem }) => {
   const navigate = useNavigate();

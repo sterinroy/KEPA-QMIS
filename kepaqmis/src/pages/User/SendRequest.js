@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { submitTempStock } from "../../src/redux/actions/tempActions";
+import { submitTempStock } from "../../redux/actions/tempActions";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import "./User.css";
