@@ -35,7 +35,7 @@ const Login = () => {
           navigate("/UserDashboard");
           break;
         case "SuperAdmin":
-          navigate("/SuperAdminDashboard");
+          navigate("/SuperAdmin/SuperAdminDashboard");
           break;
         default:
           alert("Unknown role.");

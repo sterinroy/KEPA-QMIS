@@ -36,25 +36,25 @@ function Layout() {
   const navItems = [
     {
       label: "Dashboard",
-      path: "/SuperAdminDashboard",
+      path: "/SuperAdmin/SuperAdminDashboard",
       icon: <DashboardIcon className="icon" />,
       component: <SuperAdminDashboard />,
     },
     {
       label: "Approve Registrations",
-      path: "/SuperAdminApprovals",
+      path: "/SuperAdmin/SuperAdminApprovals",
       icon: <DescriptionIcon className="icon" />,
       component: <SuperAdminApprovals />,
     },
     {
       label: "Manage Users",
-      path: "/SuperAdminUsers",
+      path: "/SuperAdmin/SuperAdminUsers",
       icon: <GroupIcon className="icon" />,
       component: <SuperAdminUsers />,
     },
     {
       label: "Logs",
-      path: "/SuperAdminLogs",
+      path: "/SuperAdmin/SuperAdminLogs",
       icon: <HistoryIcon className="icon" />,
       component: <SuperAdminLogs />,
     },

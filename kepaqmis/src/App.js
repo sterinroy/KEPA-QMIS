@@ -65,7 +65,7 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path="/SuperAdmin"
           element={
             <ProtectedRoute>
               <Layout />
