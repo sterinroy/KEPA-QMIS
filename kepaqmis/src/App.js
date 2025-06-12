@@ -3,6 +3,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
+import IssueLayout from "./pages/QuarterMaster/Issue/IssueLayout";
+import IssueDashboard from "./pages/QuarterMaster/Issue/IssueDashboard";
 import Register from "./pages/Register"; // Ensure this is imported
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
@@ -23,7 +25,7 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
         <Route
           path="/AdminDashboard"
           element={
@@ -44,7 +46,7 @@ function App() {
           path="/QuarterMasterIssue"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
-              <QuarterMasterIssue />
+              <IssueLayout />
             </ProtectedRoute>
           }
         />

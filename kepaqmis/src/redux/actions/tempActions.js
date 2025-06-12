@@ -1,5 +1,3 @@
-// tempActions.js
-
 import {
   TEMP_STOCK_SUBMIT_REQUEST,
   TEMP_STOCK_SUBMIT_SUCCESS,
@@ -47,7 +45,7 @@ export const submitTempStock = (formData) => {
     }
   };
 };
-export const fetchTempIssued = () => {
+export const fetchTemphistory = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
@@ -64,7 +62,7 @@ export const fetchTempIssued = () => {
     }
   };
 };
-export const fetchLatestTempIssued = () => {
+export const fetchLatestTemphistory = () => {
   return async (dispatch) => {
     dispatch({ type: TEMP_STOCK_FETCH_REQUEST });
     try {
