@@ -7,6 +7,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 } from "./actionTypes";
+import { useNavigate } from "react-router-dom";
 
 export const login = (pen, password) => {
   return async (dispatch) => {
@@ -19,6 +20,7 @@ export const login = (pen, password) => {
       });
 
       const data = await response.json();
+      console.log("Login response data:", data);
 
       if (!response.ok) {
         dispatch({ type: LOGIN_FAILURE, payload: data.msg || "Login failed" });
@@ -28,6 +30,7 @@ export const login = (pen, password) => {
       dispatch({ type: LOGIN_SUCCESS, payload: data });
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("pen", data.pen);
     } catch (error) {
       dispatch({ type: LOGIN_FAILURE, payload: error.message });
     }
@@ -35,12 +38,14 @@ export const login = (pen, password) => {
 };
 
 export const logout = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("pen");
     dispatch({ type: LOGOUT });
   };
 };
+
 
 export const register = (pen, name, phone, password, role) => {
   return async (dispatch) => {

@@ -39,7 +39,7 @@ const SuperAdminLogs = () => {
   }));
 
   return (
-    <div className="container" style={{ height: 600, width: "100%" }}>
+    <div style={{ height: 600, width: "100%" }}>
       <h2>Login/Logout Logs</h2>
       {loading ? (
         <p>Loading...</p>

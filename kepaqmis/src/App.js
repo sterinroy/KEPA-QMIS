@@ -14,7 +14,7 @@ import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Layout from "./pages/SuperAdmin/Layout";
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
           path="/SuperAdminDashboard"
           element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminDashboard />
+              <Layout />
             </ProtectedRoute>
           }
         />
