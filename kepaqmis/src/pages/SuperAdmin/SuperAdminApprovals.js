@@ -44,7 +44,7 @@ const SuperAdminApprovals = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <h2>Pending Approvals</h2>
       {loading ? (
         <p>Loading...</p>
@@ -79,9 +79,15 @@ const SuperAdminApprovals = () => {
                       }
                       defaultValue=""
                     >
-                      <option value="" disabled>Select role</option>
-                      <option value="QuarterMasterPurchase">QuarterMaster (Purchase)</option>
-                      <option value="QuarterMasterIssue">QuarterMaster (Issue)</option>
+                      <option value="" disabled>
+                        Select role
+                      </option>
+                      <option value="QuarterMasterPurchase">
+                        QuarterMaster (Purchase)
+                      </option>
+                      <option value="QuarterMasterIssue">
+                        QuarterMaster (Issue)
+                      </option>
                       <option value="QuarterMasterACQM">ACQM</option>
                     </select>
                   ) : (
@@ -92,9 +98,7 @@ const SuperAdminApprovals = () => {
                   <button onClick={() => handleApprove(user._id, user.role)}>
                     Approve
                   </button>
-                  <button onClick={() => handleReject(user._id)}>
-                    Reject
-                  </button>
+                  <button onClick={() => handleReject(user._id)}>Reject</button>
                 </td>
               </tr>
             ))}

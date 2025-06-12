@@ -110,7 +110,7 @@ const rows = users.map(user => ({
 
 
   return (
-    <div className="container">
+    <div>
       <h2>Manage Users</h2>
       <Button variant="contained" color="primary" onClick={handleOpenDialog}>
         Add User

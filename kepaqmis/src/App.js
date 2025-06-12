@@ -15,6 +15,8 @@ import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import Layout from "./pages/SuperAdmin/Layout";
+
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/temp" element={<Temp />} />
+       
+
         
         <Route
           path="/AdminDashboard"
@@ -68,11 +73,11 @@ function App() {
           path="/SuperAdminDashboard"
           element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminDashboard />
+              <Layout />
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/SuperAdminApprovals"
           element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
@@ -95,7 +100,7 @@ function App() {
               <SuperAdminLogs />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>
