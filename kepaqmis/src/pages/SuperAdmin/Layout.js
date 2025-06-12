@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Outlet } from "react-router-dom";
 import SuperAdminUsers from "./SuperAdminUsers";
 import SuperAdminApprovals from "./SuperAdminApprovals";
 import SuperAdminLogs from "./SuperAdminLogs";
@@ -10,6 +10,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
+
 
 function Layout() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -65,7 +66,9 @@ function Layout() {
     <div className="container">
       <Sidebar navItems={navItems} onNavItemClick={handleNavItemClick} />
 
-      <Main>{activeComponent}</Main>
+      <Main>
+        <Outlet />
+      </Main>
     </div>
   );
 }

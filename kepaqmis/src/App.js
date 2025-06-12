@@ -65,13 +65,19 @@ function App() {
           }
         />
         <Route
-          path="/SuperAdminDashboard"
+          path="/"
           element={
-            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+            <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<SuperAdminDashboard />} />
+          <Route path="SuperAdminDashboard" element={<SuperAdminDashboard />} />
+          <Route path="SuperAdminApprovals" element={<SuperAdminApprovals />} />
+          <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
+          <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
+        </Route>
         <Route
           path="/SuperAdminApprovals"
           element={

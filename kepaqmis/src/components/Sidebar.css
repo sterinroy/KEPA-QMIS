@@ -160,7 +160,8 @@ main.main {
 
 div.logout-button {
   cursor: pointer;
-  color: red;
+  color: rgb(255, 255, 255);
+  width: 90%;
   font-weight: bold;
   margin-top: 60px;
   text-align: center;
@@ -172,7 +173,7 @@ div.logout-button {
     color 0.3s;
 }
 
-.logout-button:hover {
+div.logout-button:hover {
   background-color: red;
   color: white;
 }

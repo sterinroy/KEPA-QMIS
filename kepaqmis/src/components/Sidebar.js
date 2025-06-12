@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import logoac from "../assets/police_academy2.png";
 import "../components/Sidebar.css";
@@ -58,8 +57,9 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
       if (item.modal) {
         setOpenModal(true);
       } else {
-        onNavItemClick(item.component);
-        location.pathname = item.path;
+        // onNavItemClick(item.component);
+        // location.pathname = item.path;
+        navigate(item.path);
       }
     };
 

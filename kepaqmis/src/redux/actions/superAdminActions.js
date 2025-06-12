@@ -27,7 +27,7 @@ export const fetchPendingUsers = () => {
     dispatch({ type: FETCH_PENDING_USERS_REQUEST });
     try {
       const response = await fetch(
-        "http://localhost:3000/api/superadmin/pending-registrations"
+        "api/superadmin/pending-registrations"
       );
       const data = await response.json();
       dispatch({ type: FETCH_PENDING_USERS_SUCCESS, payload: data });

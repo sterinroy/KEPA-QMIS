@@ -110,6 +110,7 @@ const SuperAdminApprovals = () => {
           rows={rows}
           columns={columns}
           pageSize={10}
+          autoHeight
           rowsPerPageOptions={[10, 25, 50]}
           disableRowSelectionOnClick
           />
