@@ -8,13 +8,15 @@ import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
-import UserDashboard from "./pages/UserDashboard";
+import UserDashboard from "./pages/User/UserDashboard";
+import SendRequest from "./pages/User/SendRequest";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./pages/SuperAdmin/Layout";
+import UserLayout from "./pages/User/UserLayout";
 
 function App() {
   return (
@@ -60,7 +62,15 @@ function App() {
           path="/UserDashboard"
           element={
             <ProtectedRoute allowedRoles={["User"]}>
-              <UserDashboard />
+              <UserLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/SendRequest"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <UserLayout />
             </ProtectedRoute>
           }
         />
