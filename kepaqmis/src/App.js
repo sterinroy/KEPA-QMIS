@@ -17,7 +17,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import Layout from "./pages/SuperAdmin/Layout";
 
-
 function App() {
   return (
     <Router>
@@ -25,10 +24,7 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/temp" element={<Temp />} />
-       
 
-        
         <Route
           path="/AdminDashboard"
           element={
