@@ -69,10 +69,9 @@ body, html, .container {
 .request-issue-box {
   background-color: #111C44 !important;
   color: black;
+  margin-top: 200px;
   margin-left: 11px;
-  margin-top: 320px !important;
   margin-bottom: 20px;
-  padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -88,7 +87,6 @@ body, html, .container {
   display: flex;
   justify-content: center;
   align-items: flex-start; /* aligns top */
-  padding: 80px 20px 40px 20px; /* top, right, bottom, left */
   overflow-y: auto; /* allow scroll if content overflows */
   box-sizing: border-box;
 }
@@ -217,4 +215,21 @@ body, html, .container {
 
 .MuiToggleButton-root.Mui-selected:hover {
   background-color: #1565c0 !important;
+}
+
+
+/* Verify Form */
+.verify-issue-box {
+  background-color: #111C44 !important;
+  color: black;
+  margin-top: 350px;
+  margin-left: 11px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
 }

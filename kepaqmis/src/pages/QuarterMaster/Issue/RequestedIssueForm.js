@@ -152,7 +152,7 @@ const RequestedIssueForm = () => {
 
   return (
     <>
-      <Box className="direct-issue-box">
+      <Box className="request-issue-box">
         <Typography
           variant="h5"
           mb={2}

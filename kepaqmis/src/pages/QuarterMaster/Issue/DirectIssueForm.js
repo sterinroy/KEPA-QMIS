@@ -28,7 +28,7 @@ const DirectIssueForm = () => {
     qty: '',
     unit: '',
     indentNo: '',
-    perishableType: '', // ✅ Fixed:统一使用 perishableType
+    perishableType: '',
   });
 
   const [status, setStatus] = useState('');
@@ -139,7 +139,7 @@ const DirectIssueForm = () => {
     qty: 'Quantity',
     unit: 'Unit',
     indentNo: 'Indent No',
-    perishableType: 'Is Perishable', // ✅ Unified key used here
+    perishableType: 'Is Perishable',
   };
 
   return (

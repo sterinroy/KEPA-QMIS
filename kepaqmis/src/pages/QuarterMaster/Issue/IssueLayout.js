@@ -8,6 +8,7 @@ import RequestedIssueForm from "./RequestedIssueForm";
 import StockDetails from "./StockDetails";
 import TempIssueForm from "./TempIssueForm";
 import Temphistory from "./Temphistory";
+import VerificationForm from "./VerificationForm";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -53,6 +54,12 @@ function IssueLayout() {
       path: "/issue-request",
       icon: <AssignmentTurnedInIcon className="icon" />,
       component: <RequestedIssueForm />,
+    },
+    {
+      label: "Verification Form",
+      path: "/verification-form",
+      icon: <AssignmentTurnedInIcon className="icon" />,
+      component: <VerificationForm />,
     },
     {
       label: "Stock Details",
