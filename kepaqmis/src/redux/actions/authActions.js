@@ -7,7 +7,6 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 } from "./actionTypes";
-import { useNavigate } from "react-router-dom";
 
 export const login = (pen, password) => {
   return async (dispatch) => {

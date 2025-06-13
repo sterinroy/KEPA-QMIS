@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
-import { useNavigate,Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SuperAdminUsers from "./SuperAdminUsers";
 import SuperAdminApprovals from "./SuperAdminApprovals";
 import SuperAdminLogs from "./SuperAdminLogs";
@@ -13,25 +13,9 @@ import Main from "../../components/Main";
 
 
 function Layout() {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const profileRef = useRef(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const navigate = useNavigate();
-  const [activeComponent, setActiveComponent] = useState(
+  const [setActiveComponent] = useState(
     <SuperAdminDashboard />
   );
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const navItems = [
     {
