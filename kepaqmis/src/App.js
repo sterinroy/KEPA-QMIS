@@ -10,6 +10,7 @@ import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/User/UserDashboard";
 import SendRequest from "./pages/User/SendRequest";
+import Review from "./pages/User/Review";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
@@ -71,6 +72,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <UserLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Review />
             </ProtectedRoute>
           }
         />

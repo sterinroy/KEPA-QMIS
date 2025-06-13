@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { submitTempStock } from "../../redux/actions/tempActions";
+import React, { useState, useRef } from 'react';
+import Barcode from 'react-barcode';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import {
   TextField,
   Button,
@@ -14,7 +14,6 @@ import {
   Grid,
 } from "@mui/material";
 import "./User.css";
-import { green, red } from "@mui/material/colors";
 
 const SendRequest = () => {
   const [formData, setFormData] = useState({
@@ -33,22 +32,89 @@ const SendRequest = () => {
     Weapons: ["Pistol", "Rifle", "Shotgun"],
   });
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const barcodeRef = useRef();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const generatePDF = async () => {
+    try {
+      // Wait for barcode to render
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Create PDF with higher quality
+      const pdf = new jsPDF({
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // Get barcode element and convert to canvas with better settings
+      const barcodeElement = barcodeRef.current;
+      const canvas = await html2canvas(barcodeElement, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#111C44'
+      });
+
+      // Convert canvas to image data
+      const barcodeData = canvas.toDataURL('image/png');
+
+      // Add title with proper positioning
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(16);
+      pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
+
+      // Add form details with better spacing
+      pdf.setFontSize(12);
+      let y = 40;
+      const spacing = 10;
+      const indent = 20;
+
+      const details = [
+        `PEN No: ${formData.PENNo}`,
+        `Date: ${formData.date}`,
+        `Item: ${formData.item}`,
+        `Sub Category: ${formData.subCategory}`,
+        `Quantity: ${formData.qty}`
+      ];
+
+      details.forEach(detail => {
+        pdf.text(detail, indent, y);
+        y += spacing;
+      });
+
+      // Add barcode with proper sizing
+      pdf.addImage(
+        barcodeData, 
+        'PNG', 
+        indent, 
+        y + spacing,
+        175, // width in mm
+        40   // height in mm
+      );
+
+      // Save with error handling
+      try {
+        pdf.save(`KEPA-Request-${formData.PENNo}.pdf`);
+      } catch (saveError) {
+        throw new Error(`Failed to save PDF: ${saveError.message}`);
+      }
+
+    } catch (error) {
+      console.error('PDF Generation Error:', error);
+      alert(`Failed to generate PDF: ${error.message}`);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const message = await dispatch(submitTempStock(formData));
-      alert(message);
-      navigate("/review", { state: { formData } });
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
+    await generatePDF();
   };
 
   const handleCategoryChange = (e) => {
@@ -85,20 +151,11 @@ const SendRequest = () => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <div
-        style={{
-          marginLeft: 240,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div style={{ marginLeft: 240, flex: 1, display: "flex", flexDirection: "column" }}>
         <div className="send-box">
           <Box
             className="send-form"
             sx={{
-              width: "10000",
-             
               padding: "2rem",
               borderRadius: "12px",
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
@@ -147,11 +204,9 @@ const SendRequest = () => {
                     label="Item"
                     sx={{ mb: 2 }}
                   >
-                    <MenuItem value="Electronics">Electronics</MenuItem>
-                    <MenuItem value="Stationery">Stationery</MenuItem>
-                    <MenuItem value="Furniture">Furniture</MenuItem>
-                    <MenuItem value="Tools">Tools</MenuItem>
-                    <MenuItem value="Weapons">Weapons</MenuItem>
+                    {Object.keys(subCategories).map((cat) => (
+                      <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -213,9 +268,27 @@ const SendRequest = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Submit
+                  Submit and Download PDF
                 </Button>
               </Box>
+
+              {/* Hidden Barcode */}
+              <div style={{ 
+                position: 'absolute', 
+                left: '-9999px', 
+                top: '-9999px' 
+              }}>
+                <div ref={barcodeRef}>
+                  <Barcode
+                    value={`${formData.PENNo}-${formData.item}-${formData.subCategories}-${formData.qty}`}
+                    width={2}
+                    height={80}
+                    fontSize={16}
+                    margin={10}
+                    format="CODE128"
+                  />
+                </div>
+              </div>
             </form>
           </Box>
         </div>
