@@ -43,7 +43,7 @@ body, html, .container {
   background-color: #111C44 !important;
   color: black;
   margin-left: 11px;
-  margin-top: 115px;
+  margin-top: 135px;
   margin-bottom: 20px;
   padding: 2rem;
   border-radius: 20px;
@@ -92,25 +92,28 @@ body, html, .container {
 }
 
 .temp-issue-box {
-  background-color: #0C1227;
+  background-color: #111C44 !important;
   color: black;
-  padding: 2rem;
-  border-radius: 12px;
+  margin-top: 30px;
+  margin-left: 11px;
+  margin-bottom: 20px;
+  border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 1100px;
+  max-width: 1300px;
   box-sizing: border-box;
-  padding: 30px 40px 50px 40px;
+  padding: 30px 40px 20px 40px;
   min-height: 550px;
 }
 
 .temp-issue-root {
-  max-height: 670px;
+  min-height: 100vh;
   background-color: #0C1227;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 60px 15px;
+  align-items: flex-start; /* aligns top */
+  overflow-y: auto; /* allow scroll if content overflows */
+  box-sizing: border-box;
 }
 /* Title */
 .form-title {
@@ -222,12 +225,12 @@ body, html, .container {
 .verify-issue-box {
   background-color: #111C44 !important;
   color: black;
-  margin-top: 350px;
-  margin-left: 11px;
+  margin-top: 170px;
+  margin-left: 9px;
   margin-bottom: 20px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
+  width: 98%;
   max-width: 1300px;
   box-sizing: border-box;
   padding: 30px 40px 20px 40px;

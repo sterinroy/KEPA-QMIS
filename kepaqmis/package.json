@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.27.6",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
-    "@mui/x-data-grid": "^8.5.0",
+    "@mui/x-data-grid": "^8.5.2",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",
     "@reduxjs/toolkit": "^2.8.2",

@@ -11,10 +11,8 @@ import {
   Alert,
 } from "@mui/material";
 
-import "./Issue.css";
-
-const VerificationForm = () => {
-  const [formData, setFormData] = useState({
+const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
+  const [formData, setFormData] = useState(prefillData || {
     orderNo: "",
     supplyOrderNo: "",
     invoiceDate: "",
@@ -64,11 +62,9 @@ const VerificationForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setStatus("loading");
     setError("");
     setSuccessMessage("");
-
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -78,7 +74,6 @@ const VerificationForm = () => {
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
     const currentIndentNo = formData.indentNo;
-
     setFormData({
       orderNo: "",
       supplyOrderNo: "",
@@ -99,9 +94,8 @@ const VerificationForm = () => {
       isPerishable: "",
       qmNO: "",
       dateOfPurchased: "",
-      invoiveNumber: "", // ✅ Resetting same key
+      invoiveNumber: "",
     });
-
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item with the same indent.");
     setStatus("succeeded");
@@ -114,7 +108,6 @@ const VerificationForm = () => {
 
   const handleFinalSubmit = () => {
     console.log("Form Data Submitted:", formData);
-
     const today = new Date().toISOString().split("T")[0];
     setFormData({
       orderNo: "",
@@ -136,9 +129,8 @@ const VerificationForm = () => {
       isPerishable: "",
       qmNO: "",
       dateOfPurchased: "",
-      invoiveNumber: "", // ✅ Clearing after submit
+      invoiveNumber: "",
     });
-
     setShowPreviewModal(false);
     setSuccessMessage("Form submitted successfully!");
     setStatus("succeeded");
@@ -158,12 +150,12 @@ const VerificationForm = () => {
     model: "Model Name",
     modelNo: "Model No.",
     productNo: "Serial/ Product No.",
-    category: "Catergory",
+    category: "Category",
     subCategory: "Sub Category",
     qty: "Quantity",
     isPerishable: "Is Perishable",
     qmNO: "QM/ RV No.",
-    dateOfPurchased: "Date OF Purchase",
+    dateOfPurchased: "Date Of Purchase",
     invoiveNumber: "Invoice Number",
   };
 
@@ -193,6 +185,7 @@ const VerificationForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="mui-form">
+          {/* Form Fields */}
           <TextField
             label="Order No."
             name="orderNo"
@@ -367,7 +360,7 @@ const VerificationForm = () => {
             }}
           />
           <TextField
-            label="Catergory"
+            label="Category"
             name="category"
             value={formData.category}
             onChange={handleChange}
@@ -417,8 +410,8 @@ const VerificationForm = () => {
           >
             <InputLabel sx={{ color: "white" }}>Is Perishable</InputLabel>
             <Select
-              name="perishableType"
-              value={formData.perishableType}
+              name="isPerishable"
+              value={formData.isPerishable}
               onChange={handleChange}
               sx={{ color: "white" }}
             >
@@ -455,9 +448,9 @@ const VerificationForm = () => {
             }}
           />
           <TextField
-            label="Invoive Number"
-            name="invoiceNumber"
-            value={formData.invoiceNumber}
+            label="Invoice Number"
+            name="invoiveNumber"
+            value={formData.invoiveNumber}
             onChange={handleChange}
             required
             fullWidth
@@ -467,12 +460,29 @@ const VerificationForm = () => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <Box display="flex" justifyContent="flex-end" mt={2} ml={77}>
+
+          {/* Submit Button - Retain ml={77} but handle responsiveness */}
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mt={2}
+            sx={{
+              ml: 77, // Retain ml={77}
+              "@media (max-width: 600px)": {
+                ml: 0, // Remove margin on small screens
+              },
+            }}
+          >
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: "bold" }}
+              sx={{
+                borderRadius: 2,
+                px: 4,
+                py: 1,
+                fontWeight: "bold",
+              }}
               disabled={status === "loading"}
             >
               {status === "loading" ? "Submitting..." : "Submit"}
@@ -481,7 +491,7 @@ const VerificationForm = () => {
         </form>
       </Box>
 
-      {/* 🧨 Modal: Confirm Add More Items */}
+      {/* Modal: Confirm Add More Items */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -527,7 +537,7 @@ const VerificationForm = () => {
         </Box>
       )}
 
-      {/* 🧾 Modal: Preview Before Submit */}
+      {/* Modal: Preview Before Submit */}
       {showPreviewModal && (
         <Box
           position="fixed"
