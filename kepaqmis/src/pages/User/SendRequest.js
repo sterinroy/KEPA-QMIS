@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import Barcode from 'react-barcode';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import QMIDGenerator from './QMIDGenerator';
 import {
   TextField,
   Button,
@@ -24,6 +25,9 @@ const SendRequest = () => {
     qty: 1,
   });
 
+  const [qmid, setQmid] = useState('');
+  const barcodeRef = useRef();
+
   const [subCategories, setSubCategories] = useState({
     Electronics: ["Mobile", "Laptop", "Tablet"],
     Furniture: ["Chair", "Table", "Cabinet"],
@@ -32,89 +36,12 @@ const SendRequest = () => {
     Weapons: ["Pistol", "Rifle", "Shotgun"],
   });
 
-  const barcodeRef = useRef();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  };
-
-  const generatePDF = async () => {
-    try {
-      // Wait for barcode to render
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Create PDF with higher quality
-      const pdf = new jsPDF({
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      // Get barcode element and convert to canvas with better settings
-      const barcodeElement = barcodeRef.current;
-      const canvas = await html2canvas(barcodeElement, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#111C44'
-      });
-
-      // Convert canvas to image data
-      const barcodeData = canvas.toDataURL('image/png');
-
-      // Add title with proper positioning
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(16);
-      pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
-
-      // Add form details with better spacing
-      pdf.setFontSize(12);
-      let y = 40;
-      const spacing = 10;
-      const indent = 20;
-
-      const details = [
-        `PEN No: ${formData.PENNo}`,
-        `Date: ${formData.date}`,
-        `Item: ${formData.item}`,
-        `Sub Category: ${formData.subCategory}`,
-        `Quantity: ${formData.qty}`
-      ];
-
-      details.forEach(detail => {
-        pdf.text(detail, indent, y);
-        y += spacing;
-      });
-
-      // Add barcode with proper sizing
-      pdf.addImage(
-        barcodeData, 
-        'PNG', 
-        indent, 
-        y + spacing,
-        175, // width in mm
-        40   // height in mm
-      );
-
-      // Save with error handling
-      try {
-        pdf.save(`KEPA-Request-${formData.PENNo}.pdf`);
-      } catch (saveError) {
-        throw new Error(`Failed to save PDF: ${saveError.message}`);
-      }
-
-    } catch (error) {
-      console.error('PDF Generation Error:', error);
-      alert(`Failed to generate PDF: ${error.message}`);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await generatePDF();
   };
 
   const handleCategoryChange = (e) => {
@@ -147,6 +74,64 @@ const SendRequest = () => {
         alert("This Sub-Category already exists.");
       }
     }
+  };
+
+  const generatePDF = async (qmid) => {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+
+      const barcodeElement = barcodeRef.current;
+      const canvas = await html2canvas(barcodeElement, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#111C44'
+      });
+
+      const barcodeData = canvas.toDataURL('image/png');
+
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(16);
+      pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
+
+      pdf.setFontSize(12);
+      let y = 40;
+      const spacing = 10;
+      const indent = 20;
+
+      const details = [
+        `QMID: ${qmid}`,
+        `PEN No: ${formData.PENNo}`,
+        `Date: ${formData.date}`,
+        `Item: ${formData.item}`,
+        `Sub Category: ${formData.subCategory}`,
+        `Quantity: ${formData.qty}`
+      ];
+
+      details.forEach(detail => {
+        pdf.text(detail, indent, y);
+        y += spacing;
+      });
+
+      pdf.addImage(barcodeData, 'PNG', indent, y + spacing, 175, 40);
+
+      try {
+        pdf.save(`KEPA-Request-${formData.PENNo}.pdf`);
+      } catch (saveError) {
+        throw new Error(`Failed to save PDF: ${saveError.message}`);
+      }
+    } catch (error) {
+      console.error('PDF Generation Error:', error);
+      alert(`Failed to generate PDF: ${error.message}`);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newQMID = QMIDGenerator(); // Generate QMID
+    setQmid(newQMID);
+    await generatePDF(newQMID);
   };
 
   return (
@@ -226,12 +211,12 @@ const SendRequest = () => {
                       ))}
                     </Select>
                   </FormControl>
-                  <Button 
-                    className="plus purchase-form" 
+                  <Button
+                    className="plus purchase-form"
                     variant="outlined"
                     onClick={handleAddSubCategory}
-                    sx={{ 
-                      minWidth: '40px', 
+                    sx={{
+                      minWidth: '40px',
                       height: '56px',
                       p: 0,
                       '&:hover': {
@@ -273,20 +258,18 @@ const SendRequest = () => {
               </Box>
 
               {/* Hidden Barcode */}
-              <div style={{ 
-                position: 'absolute', 
-                left: '-9999px', 
-                top: '-9999px' 
-              }}>
+              <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
                 <div ref={barcodeRef}>
-                  <Barcode
-                    value={`${formData.PENNo}-${formData.item}-${formData.subCategories}-${formData.qty}`}
-                    width={2}
-                    height={80}
-                    fontSize={16}
-                    margin={10}
-                    format="CODE128"
-                  />
+                  {qmid && (
+                    <Barcode
+                      value={qmid}
+                      width={2}
+                      height={80}
+                      fontSize={16}
+                      margin={10}
+                      format="CODE128"
+                    />
+                  )}
                 </div>
               </div>
             </form>
