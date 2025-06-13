@@ -288,13 +288,48 @@ aside .sidebar {
 }
 
 /* Inputs */
-.mui-form .MuiInputBase-root {
+/* .mui-form .MuiInputBase-root {
   height: 50px;
   background-color: #111C44 !important;
   color: white !important;
   border-radius: 6px;
   font-weight: normal;
+}  */
+ .mui-form .MuiInputBase-root {
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+  padding: 0px;
 }
+
+/* Only apply fixed height to non-multiline inputs */
+ /* Only apply height to single-line inputs */
+.mui-form .MuiInputBase-root:not(.MuiInputBase-multiline) {
+  height: 50px;
+  
+}
+/* Fix the alignment issue inside multiline */
+.mui-form .MuiInputBase-multiline {
+  display: flex !important;
+  align-items: flex-start !important;
+  padding: 0 !important; /* Remove padding from container */
+}
+
+/* Style the actual textarea */
+.mui-form .MuiInputBase-root textarea {
+  padding: 12px !important;
+  color: white !important;
+  line-height: 1.5 !important;
+  box-sizing: border-box;
+}
+ 
+ /* .mui-form textarea {
+  padding: 1px !important;
+  line-height: 1.5 !important;
+  color: white !important;
+} */
+
 
 .mui-form .MuiFormLabel-root {
   color: #bbbbff !important;
