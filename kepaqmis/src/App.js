@@ -7,14 +7,18 @@ import Register from "./pages/Register"; // Ensure this is imported
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
-import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
+import QuarterLayout from "./pages/QuarterMaster/QuarterLayout";
+import QuarterDashboard from "./pages/QuarterMaster/QuarterDashboard.js";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./pages/SuperAdmin/Layout";
+// import PurchaseDashboard from "./pages/QuarterMaster/Purchase/PurchaseDashboard.js";
+import PurchaseLayout from "./pages/QuarterMaster/Purchase/PurchaseLayout.js"
+
 
 function App() {
   return (
@@ -36,7 +40,7 @@ function App() {
           path="/QuarterMasterPurchase"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
-              <QuarterMasterPurchase />
+              <PurchaseLayout />
             </ProtectedRoute>
           }
         />
@@ -48,14 +52,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/QuarterMasterACQM"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterACQM"]}>
               <QuarterMasterACQM />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/UserDashboard"
           element={
