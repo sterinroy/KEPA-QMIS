@@ -29,7 +29,7 @@ const ManageRequest = () => {
           <Box className="manage-form">
             <Typography
               variant="h5"
-              mb={3}
+              
               fontWeight="bold"
               textAlign="center"
               color="white"
