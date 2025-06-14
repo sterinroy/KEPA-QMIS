@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./reducers/authReducer";
 import superAdminReducer from "./reducers/superAdminReducer";
 import tempReducer from "./reducers/tempReducer";
+import stockReducer from "./reducers/stockReducer";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -17,6 +18,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     superAdmin: superAdminReducer,
     temp: tempReducer,
+    stock: stockReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

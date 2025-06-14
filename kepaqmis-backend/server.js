@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/superadmin', require('./routes/superadmin'));
 // app.use("/api", require("./routes/tempIssue"));
-app.use("/api", require("./routes/stockRoutes"));
+app.use("/api/stockRoutes", require("./routes/stockRoutes"));
 // app.use("/api", require("./routes/userStockRoutes"));
 
 

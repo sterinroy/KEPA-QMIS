@@ -7,7 +7,7 @@ const StockItem = require("../models/StockItem");
 // const ReturnItem = require("../models/ReturnItem");
 
 
-// 🔹 1. Purchase Wing: Submit Purchase Entry
+// 1. Purchase Wing: Submit Purchase Entry
 router.post("/purchase/submit", async (req, res) => {
   try {
     const entry = new PurchaseEntry(req.body);
@@ -18,6 +18,7 @@ router.post("/purchase/submit", async (req, res) => {
   }
 });
 
+//  2. Purchase Wing: Get Pending Purchase Entries
 router.get("/purchase/entries", async (req, res) => {
   try {
     const entries = await PurchaseEntry.find({ status: "Pending" });
@@ -28,7 +29,7 @@ router.get("/purchase/entries", async (req, res) => {
 });
       
 
-// 🔹 2. Verification QM: Approve & Add to Stock
+//  3. Verification QM: Approve & Add to Stock
 router.post("/purchase/approve/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -93,7 +94,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
   }
 });
 
-// 🔹 3. Verification QM: Requested Issue (no purchase)
+// 4. Verification QM: Requested Issue (no purchase)
 router.post("/stock/requested-issue", async (req, res) => {
   try {
     const {
@@ -154,7 +155,7 @@ router.post("/stock/requested-issue", async (req, res) => {
   }
 });
 
-// 🔹 4. Verification QM: direct Issue 
+// 5. Verification QM: direct Issue 
 router.post("/stock/direct-issue", async (req, res) => {
   try {
     const {      
@@ -204,6 +205,16 @@ router.post("/stock/direct-issue", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.get("/stockitems", async (req, res) => {
+  try {
+    const stockItems = await StockItem.find().sort({ invoiceDate: -1 });;
+    res.status(200).json(stockItems);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // 🔹 4. Issue Item to User
 router.post("/issue/item", async (req, res) => {

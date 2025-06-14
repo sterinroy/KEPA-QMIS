@@ -15,6 +15,7 @@ import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./pages/SuperAdmin/Layout";
+import StockItemView from "./pages/StockView";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/StockItemView" element={<StockItemView />} />
         
         <Route
           path="/AdminDashboard"
