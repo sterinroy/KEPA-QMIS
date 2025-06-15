@@ -50,6 +50,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
           make, 
           model,
           modelNo, 
+          perishable,
           serialNumber, 
           verifiedBy } = req.body;
 
@@ -76,6 +77,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
       make,
       model,
       modelNo,
+      perishable,
       enteredBy: entry.enteredBy,
       serialNumber,
       dateOfVerification: new Date(),
@@ -114,6 +116,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       make,
       model,
       modelNo,
+      perishable,
       enteredBy,
       serialNumber,
       dateOfVerification,
@@ -140,6 +143,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       make,
       model,
       modelNo,
+      perishable,
       enteredBy,
       serialNumber,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
@@ -172,6 +176,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       enteredBy,
       serialNumber,
       indentNo,
+      perishable,
       dateOfVerification,
       dateOfPurchase,
       dateOfIssue,
@@ -192,6 +197,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       modelNo,
       enteredBy,
       serialNumber,
+      perishable,
       indentNo,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
       dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
@@ -206,6 +212,8 @@ router.post("/stock/direct-issue", async (req, res) => {
   }
 });
 
+
+// 🔹 3. Get Stock Items
 router.get("/stockitems", async (req, res) => {
   try {
     const stockItems = await StockItem.find().sort({ invoiceDate: -1 });;

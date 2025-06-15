@@ -76,7 +76,7 @@ div.nav-item.active::before {
   width: 20px;
   height: 100%;
   border-radius: 5px 0 0 5px;
-  /* background: linear-gradient(90deg, #111c44 5%, #7551ff 85%); */
+  background: linear-gradient(90deg, #111c44 5%, #7551ff 85%);
 }
 
 div.nav-item:hover {
@@ -163,7 +163,7 @@ div.logout-button {
   color: rgb(255, 255, 255);
   width: 90%;
   font-weight: bold;
-  margin-top: 60px;
+  margin-top: 40px;
   text-align: center;
   padding: 10px;
   border: 1px solid red;

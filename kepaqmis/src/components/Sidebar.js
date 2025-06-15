@@ -12,6 +12,8 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 
 const Sidebar = ({ navItems, onNavItemClick }) => {
   const location = useLocation();
@@ -91,6 +93,7 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
           ))}
         </nav>
         <div className="logout-button" onClick={handleLogout}>
+          {/* <LogoutIcon className="logout-icon" /> */}
           Logout
         </div>
       </aside>

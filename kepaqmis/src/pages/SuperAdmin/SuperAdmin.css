@@ -257,3 +257,7 @@ button:nth-child(2) {
 .logout-btn:hover {
   background-color: #c0392b;
 }
+/* .logout-icon {
+  color: white;
+  margin-right: 8px;
+} */

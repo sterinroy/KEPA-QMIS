@@ -97,8 +97,11 @@ const SuperAdminApprovals = () => {
   };
 
   return (
-    <div style={{ height: 600, width: "100%" }}>
-      <h2>Pending Approvals</h2>
+    <div style={{width: "100%" }}>
+      <div>
+        <h2>Pending Approvals</h2>
+      </div>
+      <div style={{ height: 550}}>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -113,8 +116,10 @@ const SuperAdminApprovals = () => {
           autoHeight
           rowsPerPageOptions={[10, 25, 50]}
           disableRowSelectionOnClick
+          showToolbar
           />
       )}
+      </div>
     </div>
   );
 };

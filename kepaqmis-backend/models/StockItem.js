@@ -32,6 +32,7 @@ const stockItemSchema = new mongoose.Schema({
     pen: { type: String },
     name: { type: String }
   },
+  perisible: { type: Boolean, default: false },
   dateOfPurchase: { type: Date },
   dateOfIssue: { type: Date },
   purchaseEntryId: { 

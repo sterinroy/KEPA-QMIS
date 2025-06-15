@@ -79,6 +79,8 @@ function App() {
           <Route path="SuperAdminApprovals" element={<SuperAdminApprovals />} />
           <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
           <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
+          <Route path="StockItemView" element={<StockItemView />} /> 
+
         </Route>
         <Route
           path="/SuperAdminApprovals"

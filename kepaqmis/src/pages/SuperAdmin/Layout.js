@@ -10,6 +10,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
+import StockItemView from "../StockView";
 
 
 function Layout() {
@@ -41,6 +42,12 @@ function Layout() {
       path: "/SuperAdmin/SuperAdminLogs",
       icon: <HistoryIcon className="icon" />,
       component: <SuperAdminLogs />,
+    },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
     },
   ];
   const handleNavItemClick = (component) => {
