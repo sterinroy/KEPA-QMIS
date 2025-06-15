@@ -20,13 +20,13 @@ const Login = () => {
     if (auth.isAuthenticated) {
       switch (auth.role) {
         case "Admin":
-          navigate("/AdminDashboard");
+          navigate("/Admin/AdminDashboard");
           break;
         case "QuarterMasterPurchase":
-          navigate("/QuarterMasterPurchase");
+          navigate("/QuarterMasterPurchase/QMPDashboard");
           break;
         case "QuarterMasterIssue":
-          navigate("/QuarterMasterIssue");
+          navigate("/QuarterMasterIssue/QMIDashboard");
           break;
         case "QuarterMasterACQM":
           navigate("/QuarterMasterACQM");

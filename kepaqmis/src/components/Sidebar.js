@@ -12,7 +12,6 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 
 const Sidebar = ({ navItems, onNavItemClick }) => {

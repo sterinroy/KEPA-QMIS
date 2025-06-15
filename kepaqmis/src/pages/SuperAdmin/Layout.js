@@ -56,7 +56,6 @@ function Layout() {
   return (
     <div className="container">
       <Sidebar navItems={navItems} onNavItemClick={handleNavItemClick} />
-
       <Main>
         <Outlet />
       </Main>
