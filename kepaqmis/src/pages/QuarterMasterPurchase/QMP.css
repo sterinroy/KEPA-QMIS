@@ -1,0 +1,222 @@
+Root container and page background body,
+/* html,
+.container {
+  background-color: #0c1227 !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+} */
+
+.form {
+  margin-bottom: 2px;
+  margin-top: 20px;
+}
+
+/* Form container */
+
+.qouta-button {
+  background-color: #1976d2 !important; /* example: primary blue */
+  color: white !important;
+}
+.quota-button:hover {
+  background-color: #030d44 !important; /* darker blue on hover */
+}
+
+/* Style for Direct Entry button */
+.direct-button {
+  background-color: #9c27b0 !important; /* example: purple */
+  color: white !important;
+}
+
+.direct-button:hover {
+  background-color: #6d1b7b !important; /* darker purple on hover */
+}
+
+/* Style for Direct Entry button */
+.direct-button {
+  background-color: #070085 !important; /* example: purple */
+  color: white !important;
+}
+
+.direct-button:hover {
+  background-color: #26235d !important; /* darker purple on hover */
+}
+
+.direct-issue-box {
+  background-color: #111c44 !important;
+  color: black;
+  margin-left: 11px;
+  margin-top: 115px;
+  margin-bottom: 20px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
+}
+
+.direct-issue-root {
+  min-height: 100vh;
+  background-color: #0c1227;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* aligns top */
+  padding: 10px 20px 40px 20px; /* top, right, bottom, left */
+  overflow-y: auto; /* allow scroll if content overflows */
+  box-sizing: border-box;
+}
+
+.request-issue-box {
+  background-color: #111c44 !important;
+  color: black;
+  margin-left: 11px;
+  margin-top: 320px !important;
+  margin-bottom: 20px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
+}
+
+.request-issue-root {
+  min-height: 100vh;
+  background-color: #0c1227;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* aligns top */
+  padding: 80px 20px 40px 20px; /* top, right, bottom, left */
+  overflow-y: auto; /* allow scroll if content overflows */
+  box-sizing: border-box;
+}
+
+.temp-issue-box {
+  background-color: #0c1227;
+  color: black;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+  padding: 30px 40px 50px 40px;
+  min-height: 550px;
+}
+
+.temp-issue-root {
+  max-height: 670px;
+  background-color: #0c1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 15px;
+}
+/* Title */
+.form-title {
+  color: #000000;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Grid layout for form */
+.mui-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px 48px;
+}
+
+.mui-form > * {
+  min-height: 60px;
+}
+
+/* Inputs */
+.mui-form .MuiInputBase-root {
+  height: 50px;
+  background-color: #111c44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.mui-form .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.mui-form .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.mui-form .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.mui-form .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+.mui-form .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+/* Input field spacing */
+.mui-form .MuiTextField-root,
+.mui-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.mui-form .MuiInputBase-input,
+.mui-form .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.mui-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.mui-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
+/*Request*/
+.return-request-container h2,
+.return-request-container p {
+  color: white;
+  margin-left: 18px;
+}
+
+.MuiToggleButton-root {
+  background-color: #0c1227 !important;
+  color: white !important;
+  border: 1px solid white !important;
+
+  box-shadow: white !important;
+}
+
+.MuiToggleButton-root.Mui-selected {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
+.MuiToggleButton-root:hover {
+  background-color: #1e2a47 !important;
+}
+
+.MuiToggleButton-root.Mui-selected:hover {
+  background-color: #1565c0 !important;
+}

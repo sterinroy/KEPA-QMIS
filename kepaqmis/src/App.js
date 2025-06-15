@@ -7,8 +7,14 @@ import Register from "./pages/Register"; // Ensure this is imported
 import AdminDashboard from "./pages/AdminDashboard";
 import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
 import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
+import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
+import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
+import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
+import QMPDashboard from "./pages/QuarterMasterPurchase/QMPDashboard";
+import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
+import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
@@ -23,7 +29,66 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route
+          path="/QuarterMasterPurchase"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
+              <QMPLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<QMPDashboard />} />
+          <Route path="QMPDashboard" element={<QMPDashboard />} />
+          <Route path="QMPOrder" element={<QMPOrder />} />
+          {/* <Route path="QMPUsers" element={<SuperAdminUsers />} />
+          <Route path="QMPLogs" element={<SuperAdminLogs />} /> */}
+        </Route>
+        <Route
+          path="/QMPOrder"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
+              <QMPOrder />
+            </ProtectedRoute>
+          }
+        />
+        {/* <Route
+          path="/SuperAdminUsers"
+          element={
+            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+              <SuperAdminUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/SuperAdminLogs"
+          element={
+            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+              <SuperAdminLogs />
+            </ProtectedRoute>
+          }
+        /> */}
+        <Route
+          path="/QuarterMasterIssue"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
+              <QMILayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<QMIDashboard />} />
+          <Route path="QMIDashboard" element={<QMIDashboard />} />
+
+          <Route path="QMIEntries" element={<QMIEntries />} />
+        </Route>
+        <Route
+          path="/QMIEntries"
+          element={
+            <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
+              <QMIEntries />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/AdminDashboard"
           element={
@@ -32,22 +97,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/QuarterMasterPurchase"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
               <QuarterMasterPurchase />
             </ProtectedRoute>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path="/QuarterMasterIssue"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
               <QuarterMasterIssue />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/QuarterMasterACQM"
           element={

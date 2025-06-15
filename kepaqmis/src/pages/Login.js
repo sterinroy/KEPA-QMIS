@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/authActions";
 import { Snackbar, Alert } from "@mui/material";
 
-
 const Login = () => {
   const [pen, setPen] = useState("");
   const [password, setPassword] = useState("");
@@ -23,10 +22,10 @@ const Login = () => {
           navigate("/AdminDashboard");
           break;
         case "QuarterMasterPurchase":
-          navigate("/QuarterMasterPurchase");
+          navigate("/QuarterMasterPurchase/QMPDashboard");
           break;
         case "QuarterMasterIssue":
-          navigate("/QuarterMasterIssue");
+          navigate("/QuarterMasterIssue/QMIDashboard");
           break;
         case "QuarterMasterACQM":
           navigate("/QuarterMasterACQM");
@@ -48,14 +47,14 @@ const Login = () => {
   };
 
   useEffect(() => {
-  if (auth.error) {
-    setOpenSnackbar(true);
-  }
-}, [auth.error]);
+    if (auth.error) {
+      setOpenSnackbar(true);
+    }
+  }, [auth.error]);
 
-const handleSnackbarClose = () => {
-  setOpenSnackbar(false);
-};
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
 
   return (
     <div className="login-container">
@@ -103,7 +102,7 @@ const handleSnackbarClose = () => {
             },
           }}
         />
-        
+
         <Button
           fullWidth
           variant="contained"
@@ -156,12 +155,16 @@ const handleSnackbarClose = () => {
         open={openSnackbar}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           {auth.error}
         </Alert>
-    </Snackbar>
+      </Snackbar>
     </div>
   );
 };

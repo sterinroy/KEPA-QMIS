@@ -6,7 +6,6 @@ const StockItem = require("../models/StockItem");
 // const UserIssuedItem = require("../models/UserIssuedItem");
 // const ReturnItem = require("../models/ReturnItem");
 
-
 // 🔹 1. Purchase Wing: Submit Purchase Entry
 router.post("/purchase/submit", async (req, res) => {
   try {
@@ -18,31 +17,46 @@ router.post("/purchase/submit", async (req, res) => {
   }
 });
 
+//  fetch
+
+router.get("/purchaseentries", async (req, res) => {
+  try {
+    const entries = await PurchaseEntry.find({ status: "Pending" });
+    res.status(200).json(entries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 🔹 2. Verification QM: Approve & Add to Stock
 router.post("/purchase/approve/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { 
-          orderNo,
-          invoiceDate,
-          supplyOrderNo,
-          fromWhomPurchased,
-          toWhom,
-          billInvoiceNo,
-          amount,
-          Qmno,
-          itemName, 
-          itemCategory, 
-          quantity, 
-          unit, 
-          make, 
-          model, 
-          serialNumber, 
-          verifiedBy } = req.body;
+    const {
+      orderNo,
+      invoiceDate,
+      supplyOrderNo,
+      fromWhomPurchased,
+      toWhom,
+      verifyDate,
+      billInvoiceNo,
+      amount,
+      Qmno,
+      itemName,
+      itemCategory,
+      quantity,
+      unit,
+      make,
+      model,
+      serialNumber,
+      verifiedBy,
+    } = req.body;
 
     const entry = await PurchaseEntry.findById(id);
     if (!entry || entry.status !== "Pending") {
-      return res.status(404).json({ message: "Invalid or already verified entry." });
+      return res
+        .status(404)
+        .json({ message: "Invalid or already verified entry." });
     }
 
     const stockItem = new StockItem({
@@ -52,8 +66,9 @@ router.post("/purchase/approve/:id", async (req, res) => {
       supplyOrderNo: supplyOrderNo || entry.supplyOrderNo,
       fromWhomPurchased: fromWhomPurchased || entry.fromWhomPurchased,
       toWhom: toWhom || entry.toWhom,
+      verifyDate: verifyDate || entry.verifyDate,
       billInvoiceNo: billInvoiceNo || entry.billInvoiceNo,
-      amount: amount || entry.amount,      
+      amount: amount || entry.amount,
       Qmno,
       itemName: entry.itemName || itemName,
       itemCategory: entry.itemCategory || itemCategory,
@@ -66,14 +81,16 @@ router.post("/purchase/approve/:id", async (req, res) => {
       dateOfVerification: new Date(),
       verifiedBy,
       dateOfPurchase: entry.invoiceDate,
-      purchaseEntryId: entry._id
+      purchaseEntryId: entry._id,
     });
 
     await stockItem.save();
     entry.status = "Verified";
     await entry.save();
 
-    res.status(200).json({ message: "Purchase approved and added to stock.", stockItem });
+    res
+      .status(200)
+      .json({ message: "Purchase approved and added to stock.", stockItem });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -89,7 +106,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       fromWhomPurchased,
       toWhom,
       billInvoiceNo,
-      amount,      
+      amount,
       Qmno,
       itemName,
       itemCategory,
@@ -113,7 +130,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       fromWhomPurchased,
       toWhom,
       billInvoiceNo,
-      amount,      
+      amount,
       Qmno,
       itemName,
       itemCategory,
@@ -125,7 +142,9 @@ router.post("/stock/requested-issue", async (req, res) => {
       serialNumber,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
       dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
-      dateOfVerification: dateOfVerification ? new Date(dateOfVerification) : new Date(),
+      dateOfVerification: dateOfVerification
+        ? new Date(dateOfVerification)
+        : new Date(),
       verifiedBy,
     });
 
@@ -139,11 +158,19 @@ router.post("/stock/requested-issue", async (req, res) => {
 // 🔹 4. Issue Item to User
 router.post("/issue/item", async (req, res) => {
   try {
-    const { user, stockItemId, quantity, issuedBy, isTemporary = false } = req.body;
+    const {
+      user,
+      stockItemId,
+      quantity,
+      issuedBy,
+      isTemporary = false,
+    } = req.body;
 
     const stockItem = await StockItem.findById(stockItemId);
     if (!stockItem || stockItem.quantity < quantity) {
-      return res.status(400).json({ message: "Insufficient stock or invalid item." });
+      return res
+        .status(400)
+        .json({ message: "Insufficient stock or invalid item." });
     }
 
     stockItem.quantity -= quantity;
@@ -154,7 +181,7 @@ router.post("/issue/item", async (req, res) => {
       stockItemId,
       quantity,
       issuedBy,
-      isTemporary
+      isTemporary,
     });
 
     await issuedItem.save();
@@ -172,11 +199,13 @@ router.post("/return/item", async (req, res) => {
     const issuedItem = await UserIssuedItem.findOne({
       user,
       stockItemId,
-      status: "active"
+      status: "active",
     });
 
     if (!issuedItem || issuedItem.quantity < quantity) {
-      return res.status(400).json({ message: "Invalid or insufficient issued item." });
+      return res
+        .status(400)
+        .json({ message: "Invalid or insufficient issued item." });
     }
 
     issuedItem.quantity -= quantity;
@@ -188,11 +217,13 @@ router.post("/return/item", async (req, res) => {
     const returnItem = new ReturnItem({
       user,
       stockItemId,
-      quantity
+      quantity,
     });
 
     await returnItem.save();
-    res.status(201).json({ message: "Item returned successfully.", returnItem });
+    res
+      .status(201)
+      .json({ message: "Item returned successfully.", returnItem });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -206,7 +237,9 @@ router.post("/return/process/:id", async (req, res) => {
 
     const returnItem = await ReturnItem.findById(id);
     if (!returnItem || returnItem.processedAt) {
-      return res.status(400).json({ message: "Invalid or already processed return." });
+      return res
+        .status(400)
+        .json({ message: "Invalid or already processed return." });
     }
 
     returnItem.category = category;

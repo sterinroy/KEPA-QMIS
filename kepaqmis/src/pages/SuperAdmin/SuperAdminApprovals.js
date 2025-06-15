@@ -69,6 +69,7 @@ const SuperAdminApprovals = () => {
     pen: user.pen,
     name: user.name,
     phone: user.phone,
+    
     role: user.role,
   }));
 
