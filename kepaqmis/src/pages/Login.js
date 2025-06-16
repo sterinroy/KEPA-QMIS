@@ -8,6 +8,7 @@ import { login } from "../redux/actions/authActions";
 import { Snackbar, Alert } from "@mui/material";
 
 
+
 const Login = () => {
   const [pen, setPen] = useState("");
   const [password, setPassword] = useState("");
@@ -117,15 +118,7 @@ const handleSnackbarClose = () => {
         >
           Login
         </Button>
-        {/* <Button
-  fullWidth
-  variant="outlined"
-  sx={{ mt: 1, color: 'white', borderColor: 'white', fontWeight: 'bold' }}
-  component={RouterLink}
-  to="/temp"
->
-  Go to Temp Page
-</Button> */}
+        
         <Box mt={2} display="flex" justifyContent="flex-end">
           <RouterLink
             to="/register"

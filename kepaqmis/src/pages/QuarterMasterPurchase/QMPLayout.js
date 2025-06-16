@@ -6,6 +6,7 @@ import QMPOrder from "./QMPOrder";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Main from "../../components/Main";
+import QMPEntries from "./QMPEntries";
 
 function QMPLayout() {
   const [setActiveComponent] = useState(<QMPDashboard />);
@@ -22,6 +23,12 @@ function QMPLayout() {
       path: "/QuarterMasterPurchase/QMPOrder",
       icon: <LocalShippingIcon className="icon" />,
       component: <QMPOrder />,
+    },
+    {
+      label: "Entries",
+      path: "/QuarterMasterPurchase/QMPEntries",
+      icon: <LocalShippingIcon className="icon" />,
+      component: <QMPEntries />,
     },
   ];
   const handleNavItemClick = (component) => {

@@ -1,3 +1,7 @@
+const express = require("express");
+const router = express.Router();
+const ItemCategory = require("../models/ItemCategory");
+
 router.get("/categories", async (req, res) => {
   try {
     const categories = await ItemCategory.find();
@@ -31,3 +35,5 @@ router.post("/categories", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+module.exports = router;

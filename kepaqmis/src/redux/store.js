@@ -7,6 +7,8 @@ import qmpurchaseReducer from "./reducers/qmpurchaseReducer";
 import qmissueReducer from "./reducers/qmissueReducer";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import categoryReducer from "./reducers/categoryReducer";
+
 const authPersistConfig = {
   key: "auth",
   storage,
@@ -43,6 +45,7 @@ export const store = configureStore({
     stock: stockReducer,
     qmpurchase: persistedQMPurchaseReducer,
     qmissue: persistedQMIssueReducer,
+    category: categoryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
