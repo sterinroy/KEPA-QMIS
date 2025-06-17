@@ -15,10 +15,17 @@ const initialPendingItems = [
     billInvoiceNo: "INV1001",
     amount: "₹5000",
     item: "Printer",
+    make: "",
+    model: "",
+    modelNo: "",
+    productNo: "",
     category: "Electronics",
     subCategory: "Printers",
     qty: "2",
     isPerishable: "No",
+    qmNO: "",
+    dateOfPurchased: "",
+    invoiveNumber: "",
   },
   {
     id: 2,
@@ -31,10 +38,17 @@ const initialPendingItems = [
     billInvoiceNo: "INV1002",
     amount: "₹3000",
     item: "Ink",
+    make: "",
+    model: "",
+    modelNo: "",
+    productNo: "",
     category: "Stationery",
     subCategory: "Consumables",
     qty: "10",
     isPerishable: "Yes",
+    qmNO: "",
+    dateOfPurchased: "",
+    invoiveNumber: "",
   },
 ];
 
@@ -62,23 +76,141 @@ const VerificationStatus = () => {
   };
 
   const columns = [
-    { field: "orderNo", headerName: "Order No.", minWidth: 120 },
-    { field: "supplyOrderNo", headerName: "Supply Order No.", minWidth: 130 },
-    { field: "invoiceDate", headerName: "Date Of Invoice", minWidth: 110 },
-    { field: "from", headerName: "From", minWidth: 120 },
-    { field: "to", headerName: "To", minWidth: 120 },
+    {
+      field: "orderNo",
+      headerName: "Order No.",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "supplyOrderNo",
+      headerName: "Supply Order No.",
+      minWidth: 130,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "invoiceDate",
+      headerName: "Date Of Invoice",
+      minWidth: 110,
+      sortable: true,
+      type: "date",
+      valueGetter: (params) => {
+        const dateStr = params.row?.invoiceDate;
+        return dateStr ? new Date(dateStr) : null;
+      },
+    },
+    {
+      field: "from",
+      headerName: "From",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "to",
+      headerName: "To",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
     {
       field: "dateOfVerification",
       headerName: "Date Of Verification",
       minWidth: 130,
+      sortable: true,
+      type: "date",
+      valueGetter: (params) => {
+        const dateStr = params.row?.dateOfVerification;
+        return dateStr ? new Date(dateStr) : null;
+      },
     },
-    { field: "billInvoiceNo", headerName: "Bill Invoice No.", minWidth: 120 },
-    { field: "amount", headerName: "Amount", minWidth: 100 },
-    { field: "item", headerName: "Item", minWidth: 120 },
-    { field: "category", headerName: "Category", minWidth: 120 },
-    { field: "subCategory", headerName: "Sub Category", minWidth: 120 },
-    { field: "qty", headerName: "Qty", minWidth: 80 },
-    { field: "isPerishable", headerName: "Is Perishable", minWidth: 100 },
+    {
+      field: "billInvoiceNo",
+      headerName: "Bill Invoice No.",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      minWidth: 100,
+      sortable: true,
+      valueGetter: (params) => {
+        const amountStr = params.row?.amount;
+        return amountStr ? parseFloat(amountStr.replace(/[^\d.-]/g, '')) || 0 : 0;
+      },
+      sortComparator: (v1, v2) => v1 - v2,
+    },
+    {
+      field: "item",
+      headerName: "Item",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "make",
+      headerName: "Make/ Brand",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "model",
+      headerName: "Model Name",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "modelNo",
+      headerName: "Model No",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "productNo",
+      headerName: "Serial/ Product No",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "category",
+      headerName: "Category",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "subCategory",
+      headerName: "Sub Category",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "qty",
+      headerName: "Qty",
+      minWidth: 80,
+      sortable: true,
+      valueGetter: (params) => {
+        const qtyStr = params.row?.qty;
+        return qtyStr ? parseInt(qtyStr) || 0 : 0;
+      },
+      sortComparator: (v1, v2) => v1 - v2,
+    },
+    {
+      field: "isPerishable",
+      headerName: "Is Perishable",
+      minWidth: 100,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
     {
       field: "actions",
       headerName: "Action",
@@ -105,11 +237,7 @@ const VerificationStatus = () => {
 
       {/* Scrollable Table Container */}
       <Box sx={{ mb: 2 }}>
-        <Box
-          sx={{
-            maxWidth: "100%",
-          }}
-        >
+        <Box sx={{ maxWidth: "100%" }}>
           <DataGrid
             rows={pendingItems}
             columns={columns}
@@ -119,6 +247,12 @@ const VerificationStatus = () => {
             autoHeight
             getRowHeight={() => "auto"}
             columnResizeMode="on"
+            sortingMode="client"
+            initialState={{
+              sorting: {
+                sortModel: [{ field: 'invoiceDate', sort: 'desc' }],
+              },
+            }}
             sx={{
               "& .MuiDataGrid-cell": {
                 whiteSpace: "normal",
@@ -139,26 +273,26 @@ const VerificationStatus = () => {
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
           prefillData={{
-            orderNo: currentItem.orderNo,
-            supplyOrderNo: currentItem.supplyOrderNo,
-            invoiceDate: currentItem.invoiceDate,
-            from: currentItem.from,
-            to: currentItem.to,
-            dateOfVerification: currentItem.dateOfVerification,
-            billInvoiceNo: currentItem.billInvoiceNo,
-            amount: currentItem.amount,
-            item: currentItem.item,
-            make: "",
-            model: "",
-            modelNo: "",
-            productNo: "",
-            category: currentItem.category,
-            subCategory: currentItem.subCategory,
-            qty: currentItem.qty,
-            isPerishable: currentItem.isPerishable,
-            qmNO: "",
-            dateOfPurchased: "",
-            invoiveNumber: "",
+            orderNo: currentItem.orderNo || "",
+            supplyOrderNo: currentItem.supplyOrderNo || "",
+            invoiceDate: currentItem.invoiceDate || "",
+            from: currentItem.from || "",
+            to: currentItem.to || "",
+            dateOfVerification: currentItem.dateOfVerification || "",
+            billInvoiceNo: currentItem.billInvoiceNo || "",
+            amount: currentItem.amount || "",
+            item: currentItem.item || "",
+            make: currentItem.make || "",
+            model: currentItem.model || "",
+            modelNo: currentItem.modelNo || "",
+            productNo: currentItem.productNo || "",
+            category: currentItem.category || "",
+            subCategory: currentItem.subCategory || "",
+            qty: currentItem.qty || "",
+            isPerishable: currentItem.isPerishable || "",
+            qmNO: currentItem.qmNO || "",
+            dateOfPurchased: currentItem.dateOfPurchased || "",
+            invoiveNumber: currentItem.invoiveNumber || "",
           }}
         />
       )}

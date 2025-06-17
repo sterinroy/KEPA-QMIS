@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
-  const [formData, setFormData] = useState(prefillData || {
+  const [formData, setFormData] = useState({
     orderNo: "",
     supplyOrderNo: "",
     invoiceDate: "",
@@ -33,6 +33,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
+    ...prefillData,
   });
 
   const [status, setStatus] = useState("");
@@ -46,9 +47,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     const today = new Date().toISOString().split("T")[0];
     setFormData((prev) => ({
       ...prev,
-      dateOfVerification: today,
-      dateOfPurchased: today,
-      invoiceDate: today,
+      dateOfVerification: prev.dateOfVerification || today,
+      dateOfPurchased: prev.dateOfPurchased || today,
+      invoiceDate: prev.invoiceDate || today,
     }));
   }, []);
 
@@ -65,6 +66,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
+
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -73,8 +75,8 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
 
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
-    const currentIndentNo = formData.indentNo;
-    setFormData({
+    setFormData((prev) => ({
+      ...prev,
       orderNo: "",
       supplyOrderNo: "",
       invoiceDate: "",
@@ -95,9 +97,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
       qmNO: "",
       dateOfPurchased: "",
       invoiveNumber: "",
-    });
+    }));
     setShowConfirmModal(false);
-    setSuccessMessage("Ready to add another item with the same indent.");
+    setSuccessMessage("Ready to add another item.");
     setStatus("succeeded");
   };
 
@@ -108,7 +110,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
 
   const handleFinalSubmit = () => {
     console.log("Form Data Submitted:", formData);
-    const today = new Date().toISOString().split("T")[0];
+    onSubmit(formData);
     setFormData({
       orderNo: "",
       supplyOrderNo: "",
@@ -172,7 +174,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           Verification Form
         </Typography>
 
-        {/* Show success or error alerts */}
+        {/* Show alerts */}
         {status === "failed" && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -461,15 +463,15 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
 
-          {/* Submit Button - Retain ml={77} but handle responsiveness */}
+          {/* Submit Button - With ml={77} and responsiveness */}
           <Box
             display="flex"
             justifyContent="flex-end"
             mt={2}
             sx={{
-              ml: 77, // Retain ml={77}
+              ml: 77,
               "@media (max-width: 600px)": {
-                ml: 0, // Remove margin on small screens
+                ml: 0,
               },
             }}
           >
@@ -479,7 +481,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
               type="submit"
               sx={{
                 borderRadius: 2,
-                px: 4,
+                px: 8.3,
                 py: 1,
                 fontWeight: "bold",
               }}
@@ -491,7 +493,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
         </form>
       </Box>
 
-      {/* Modal: Confirm Add More Items */}
+      {/* Confirm Add More Modal */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -505,31 +507,15 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same QM/RV No. Number?
+              Do you want to add more items under the same QM/RV No.?
             </Typography>
             <Box mt={2}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleAddMoreYes}
-                sx={{ mr: 2 }}
-              >
+              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
                 Yes
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleAddMoreNo}
-              >
+              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
                 No
               </Button>
             </Box>
@@ -537,7 +523,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
         </Box>
       )}
 
-      {/* Modal: Preview Before Submit */}
+      {/* Preview Submission Modal */}
       {showPreviewModal && (
         <Box
           position="fixed"
@@ -551,14 +537,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="500px"
-            width="100%"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%">
             <Typography variant="h6" gutterBottom textAlign="center">
               Confirm Submission
             </Typography>
@@ -567,12 +546,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
                 if (!value) return null;
                 const label = labelMap[key] || key;
                 return (
-                  <Box
-                    key={key}
-                    display="flex"
-                    justifyContent="space-between"
-                    mb={1}
-                  >
+                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
                     <Typography fontWeight="bold">{label}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
@@ -583,11 +557,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
               <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
                 Cancel
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleFinalSubmit}
-              >
+              <Button variant="contained" color="primary" onClick={handleFinalSubmit}>
                 Confirm Submit
               </Button>
             </Box>
