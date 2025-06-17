@@ -16,40 +16,30 @@ const rows = []; // Replace with real data
 
 const ManageRequest = () => {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <div
-        style={{
-          marginLeft: 240,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div className="manage-box">
-          <Box className="manage-form">
-            <Typography
-              variant="h5"
-              
-              fontWeight="bold"
-              textAlign="center"
-              color="white"
-            >
-              Manage Requests
+      <div className="manage-box">
+        {/* <div style={{ display: "flex", height: "100vh" }}>
+        <div style={{ justifyItems: "center", alignContent: "center"}}> */}
+        <Box className="manage-form">
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            textAlign="center"
+            color="#0111C44"
+          >
+            Manage Requests
             </Typography>
 
-            <DataGrid
+            {/* <DataGrid
               rows={rows}
               columns={columns}
               pageSize={5}
-              checkboxSelection
               disableRowSelectionOnClick
-              autoHeight
               getRowId={(row) => row.id}
               sx={{
-                backgroundColor: "white",
+                backgroundColor: "#111C44",
                 borderRadius: "8px",
-              }}
-            />
+              }} */}
+            
 
             {rows.length === 0 && (
               <Typography mt={2} variant="body2" align="center" color="white">
@@ -58,8 +48,10 @@ const ManageRequest = () => {
             )}
           </Box>
         </div>
-      </div>
-    </div>
+        // </div>
+        // </div>
+      
+    
   );
 };
 

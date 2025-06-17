@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Barcode from 'react-barcode';
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
 import QMIDGenerator from './QMIDGenerator';
 import {
@@ -136,7 +136,7 @@ const SendRequest = () => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <div style={{ marginLeft: 240, flex: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{ justifyItems: "center", alignContent: "center"}}>
         <div className="send-box">
           <Box
             className="send-form"
@@ -258,7 +258,7 @@ const SendRequest = () => {
               </Box>
 
               {/* Hidden Barcode */}
-              <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+              <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', overflow: 'hidden' }}>
                 <div ref={barcodeRef}>
                   {qmid && (
                     <Barcode
@@ -276,7 +276,8 @@ const SendRequest = () => {
           </Box>
         </div>
       </div>
-    </div>
+      </div>
+
   );
 };
 

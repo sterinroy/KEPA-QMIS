@@ -12,6 +12,7 @@ import UserDashboard from "./UserDashboard";
 import SendRequest from "./SendRequest";
 import ManageRequest from "./ManageRequest";
 import Temp from "./Temp";
+import Return from "./Return";
 import { Send } from "@mui/icons-material";
 
 
@@ -64,7 +65,16 @@ function UserLayout() {
       path: "/Temp",
       icon: <Send className="icon" />,
       component: <Temp />,
+    },
+
+    {
+      label: "Return",
+      path: "/Return",
+      icon: <Send className="icon" />,
+      component: <Return />,
     }
+
+
   ];
   const handleNavItemClick = (component) => {
     setActiveComponent(component);

@@ -10,6 +10,9 @@ import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/User/UserDashboard";
 import SendRequest from "./pages/User/SendRequest";
+import ManageRequest from "./pages/User/ManageRequest";
+import Return from "./pages/User/Return";
+import Temp from "./pages/User/Temp";
 import Review from "./pages/User/Review";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
@@ -72,6 +75,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <UserLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Return"
+          element={
+            <ProtectedRoute allowedRoles={["User"]}>
+              <Return />
             </ProtectedRoute>
           }
         />
