@@ -18,6 +18,10 @@ const itemRequestSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected", "returned"],
     default: "pending"
   },
+  issuedFrom: [{
+  stockItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'StockItem' },
+  deductedQty: Number
+}],
   approvedBy: {
     pen: { type: String },
     name: { type: String }
