@@ -22,7 +22,10 @@ import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
 import QMPEntries from "./pages/QuarterMasterPurchase/QMPEntries";
-
+import QMALayout from "./pages/QuarterMaster/QMALayout";
+import QMADashboard from "./pages/QuarterMaster/QMADashboard";
+import QMAPurchase from "./pages/QuarterMaster/QMAPurchase"
+import QMACategories from "./pages/QuarterMaster/QMACategories";
 function App() {
   return (
     <Router>
@@ -73,10 +76,16 @@ function App() {
           path="/QuarterMasterACQM"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterACQM"]}>
-              <QuarterMasterACQM />
+              <QMALayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<QMADashboard />} />
+          <Route path="QMADashboard" element={<QMADashboard />} />
+          <Route path="QMAPurchase" element={<QMAPurchase />} />
+          <Route path="QMACategories" element={<QMACategories />}/>
+
+        </Route>
         <Route
           path="/UserDashboard"
           element={

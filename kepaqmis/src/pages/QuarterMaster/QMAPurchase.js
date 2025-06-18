@@ -1,0 +1,59 @@
+// QMIssueEntries.js
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchQMIssueEntries } from "../../redux/actions/qmissueActions";
+import { DataGrid } from "@mui/x-data-grid";
+
+const QMAPurchase = () => {
+  const dispatch = useDispatch();
+  const { loading, entries, error } = useSelector((state) => state.qmissue);
+
+  useEffect(() => {
+    dispatch(fetchQMIssueEntries());
+  }, [dispatch]);
+
+  console.log("QM Purchase state:", { loading, entries, error });
+
+  const columns = [
+    { field: "orderNo", headerName: "Order No", flex: 1 },
+    { field: "itemName", headerName: "Item Name", flex: 1 },
+    { field: "quantity", headerName: "Quantity", flex: 1 },
+    { field: "status", headerName: "Status", flex: 1 },
+  ];
+
+  const rows = entries.map((entry, index) => ({
+    id: entry._id || index, // Use _id if available, otherwise use index
+    orderNo: entry.orderNo,
+    itemName: entry.itemName,
+    quantity: entry.quantity,
+    status: entry.status,
+  }));
+
+  return (
+    <div style={{ width: "100%" }}>
+      <div>
+        <h2>QM Purchase Entries</h2>
+      </div>
+      <div style={{ height: 600 }}>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : entries.length === 0 ? (
+        <p>No QMIssue entries.</p>
+      ) : (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 25, 50]}
+          disableRowSelectionOnClick
+          showToolbar
+        />
+      )}
+      </div>
+    </div>
+  );
+};
+
+export default QMAPurchase;
