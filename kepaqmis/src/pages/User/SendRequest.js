@@ -154,7 +154,7 @@ const SendRequest = () => {
               textAlign="center"
               color="white"
             >
-              Send Request
+              Indent Generation
             </Typography>
             <form onSubmit={handleSubmit} className="mui-form">
               <TextField
@@ -179,7 +179,7 @@ const SendRequest = () => {
               />
               <Grid item xs={12} md={6}>
                 <FormControl fullWidth required sx={{ mb: 2 }}>
-                  <InputLabel>Item</InputLabel>
+                  <InputLabel>Category</InputLabel>
                   <Select
                     name="item"
                     value={formData.item}

@@ -48,7 +48,7 @@ function UserLayout() {
       component: <UserDashboard />,
     },
     {
-      label: "Send Request",
+      label: "Indent Generation",
       path: "/SendRequest",
       icon: <DescriptionIcon className="icon" />,
       component: <SendRequest />,
@@ -70,7 +70,7 @@ function UserLayout() {
     {
       label: "Return",
       path: "/Return",
-      icon: <Send className="icon" />,
+      icon: <HistoryIcon className="icon" />,
       component: <Return />,
     }
 
