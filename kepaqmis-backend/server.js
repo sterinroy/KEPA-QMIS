@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const itemCategoryRoutes = require('./routes/itemCategoryRoutes'); 
+const ItemRequestRoutes = require('./routes/itemRequestRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ app.use("/api/stockRoutes", require("./routes/stockRoutes"));
 // app.use("/api", require("./routes/userStockRoutes"));
 app.use('/api/dashboardRoutes', dashboardRoutes);
 app.use('/api/itemCategoryRoutes', itemCategoryRoutes);
+app.use('/api/itemRequestRoutes', ItemRequestRoutes);
 
 
 // Catch-all for unmatched routes

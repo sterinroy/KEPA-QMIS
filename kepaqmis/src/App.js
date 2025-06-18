@@ -22,6 +22,7 @@ import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
 import QMPEntries from "./pages/QuarterMasterPurchase/QMPEntries";
+import QMIDirectForm from "./pages/QuarterMasterIssue/QMIDirectForm"; // Ensure this is imported
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
           <Route index element={<QMIDashboard />} />
           <Route path="QMIDashboard" element={<QMIDashboard />} />
           <Route path="QMIEntries" element={<QMIEntries />} />
+          <Route path="QMIDirectIssueForm" element={<QMIDirectIssueForm />} />
         </Route>
         <Route
           path="/QuarterMasterACQM"

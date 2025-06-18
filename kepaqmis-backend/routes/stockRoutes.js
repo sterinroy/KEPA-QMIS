@@ -213,7 +213,7 @@ router.post("/stock/direct-issue", async (req, res) => {
 });
 
 
-// 🔹 3. Get Stock Items
+// 🔹 6. Get Stock Items
 router.get("/stockitems", async (req, res) => {
   try {
     const stockItems = await StockItem.find().sort({ invoiceDate: -1 });;
@@ -224,94 +224,5 @@ router.get("/stockitems", async (req, res) => {
 });
 
 
-// 🔹 4. Issue Item to User
-router.post("/issue/item", async (req, res) => {
-  try {
-    const { user, stockItemId, quantity, issuedBy, isTemporary = false } = req.body;
-
-    const stockItem = await StockItem.findById(stockItemId);
-    if (!stockItem || stockItem.quantity < quantity) {
-      return res.status(400).json({ message: "Insufficient stock or invalid item." });
-    }
-
-    stockItem.quantity -= quantity;
-    await stockItem.save();
-
-    const issuedItem = new UserIssuedItem({
-      user,
-      stockItemId,
-      quantity,
-      issuedBy,
-      isTemporary
-    });
-
-    await issuedItem.save();
-    res.status(201).json({ message: "Item issued successfully.", issuedItem });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// 🔹 5. Return Item
-router.post("/return/item", async (req, res) => {
-  try {
-    const { user, stockItemId, quantity } = req.body;
-
-    const issuedItem = await UserIssuedItem.findOne({
-      user,
-      stockItemId,
-      status: "active"
-    });
-
-    if (!issuedItem || issuedItem.quantity < quantity) {
-      return res.status(400).json({ message: "Invalid or insufficient issued item." });
-    }
-
-    issuedItem.quantity -= quantity;
-    if (issuedItem.quantity === 0) {
-      issuedItem.status = "returned";
-    }
-    await issuedItem.save();
-
-    const returnItem = new ReturnItem({
-      user,
-      stockItemId,
-      quantity
-    });
-
-    await returnItem.save();
-    res.status(201).json({ message: "Item returned successfully.", returnItem });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// 🔹 6. Process Returned Item (Categorize)
-router.post("/return/process/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { category, processedBy } = req.body;
-
-    const returnItem = await ReturnItem.findById(id);
-    if (!returnItem || returnItem.processedAt) {
-      return res.status(400).json({ message: "Invalid or already processed return." });
-    }
-
-    returnItem.category = category;
-    returnItem.processedBy = processedBy;
-    returnItem.processedAt = new Date();
-    await returnItem.save();
-
-    const stockItem = await StockItem.findById(returnItem.stockItemId);
-    if (category === "Reusable") {
-      stockItem.quantity += returnItem.quantity;
-      await stockItem.save();
-    }
-
-    res.status(200).json({ message: "Return processed.", returnItem });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
+// 🔹 7. Issue Item to User
 module.exports = router;

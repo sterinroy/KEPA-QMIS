@@ -12,7 +12,7 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-
+import Login from "../pages/Login";
 
 const Sidebar = ({ navItems, onNavItemClick }) => {
   const location = useLocation();
@@ -44,9 +44,17 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
     setOpenModal(true);
   };
   const confirmLogout = () => {
-    dispatch(logout());
-    navigate("/login");
-    setOpenModal(false);
+    try {
+      dispatch(logout());
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("pen");
+      navigate("/login", { replace: true });
+      setOpenModal(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Optionally, you can show an error message to the user
+    }
   };
 
   const cancelLogout = () => {
