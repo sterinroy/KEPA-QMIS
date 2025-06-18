@@ -11,7 +11,7 @@ router.get("/stock-dashboard", async (req, res) => {
       const d = i.dateOfPurchase;
       if (!d) return false;
       const today = new Date();
-      return d.toDateString() === today.toDateString();
+      return d.toDateString() === today.toDateString();add.
     }).length;
 
     const byCategory = {};
