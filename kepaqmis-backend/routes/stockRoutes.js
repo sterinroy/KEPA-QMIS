@@ -7,7 +7,7 @@ const StockItem = require("../models/StockItem");
 // const ReturnItem = require("../models/ReturnItem");
 
 
-// 🔹 1. Purchase Wing: Submit Purchase Entry
+// 1. Purchase Wing: Submit Purchase Entry
 router.post("/purchase/submit", async (req, res) => {
   try {
     const entry = new PurchaseEntry(req.body);
@@ -18,7 +18,18 @@ router.post("/purchase/submit", async (req, res) => {
   }
 });
 
-// 🔹 2. Verification QM: Approve & Add to Stock
+//  2. Purchase Wing: Get Pending Purchase Entries
+router.get("/purchase/entries", async (req, res) => {
+  try {
+    const entries = await PurchaseEntry.find({ status: "Pending" });
+    res.status(200).json(entries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+      
+
+//  3. Verification QM: Approve & Add to Stock
 router.post("/purchase/approve/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -33,10 +44,13 @@ router.post("/purchase/approve/:id", async (req, res) => {
           Qmno,
           itemName, 
           itemCategory, 
+          itemSubCategory,
           quantity, 
           unit, 
           make, 
-          model, 
+          model,
+          modelNo, 
+          perishable,
           serialNumber, 
           verifiedBy } = req.body;
 
@@ -57,10 +71,13 @@ router.post("/purchase/approve/:id", async (req, res) => {
       Qmno,
       itemName: entry.itemName || itemName,
       itemCategory: entry.itemCategory || itemCategory,
+      itemSubCategory: entry.itemSubCategory || itemSubCategory,
       quantity: entry.quantity || quantity,
       unit: entry.unit || unit,
       make,
       model,
+      modelNo,
+      perishable,
       enteredBy: entry.enteredBy,
       serialNumber,
       dateOfVerification: new Date(),
@@ -79,7 +96,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
   }
 });
 
-// 🔹 3. Verification QM: Requested Issue (no purchase)
+// 4. Verification QM: Requested Issue (no purchase)
 router.post("/stock/requested-issue", async (req, res) => {
   try {
     const {
@@ -93,10 +110,13 @@ router.post("/stock/requested-issue", async (req, res) => {
       Qmno,
       itemName,
       itemCategory,
+      itemSubCategory,
       quantity,
       unit,
       make,
       model,
+      modelNo,
+      perishable,
       enteredBy,
       serialNumber,
       dateOfVerification,
@@ -117,10 +137,13 @@ router.post("/stock/requested-issue", async (req, res) => {
       Qmno,
       itemName,
       itemCategory,
+      itemSubCategory,
       quantity,
       unit,
       make,
       model,
+      modelNo,
+      perishable,
       enteredBy,
       serialNumber,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
@@ -135,6 +158,71 @@ router.post("/stock/requested-issue", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// 5. Verification QM: direct Issue 
+router.post("/stock/direct-issue", async (req, res) => {
+  try {
+    const {      
+      Qmno,
+      itemName,
+      itemCategory,
+      itemSubCategory,
+      quantity,
+      unit,
+      issuedBy,
+      make,
+      model,
+      modelNo,
+      enteredBy,
+      serialNumber,
+      indentNo,
+      perishable,
+      dateOfVerification,
+      dateOfPurchase,
+      dateOfIssue,
+      verifiedBy,
+    } = req.body;
+
+    const stockItem = new StockItem({
+      sourceType: "direct-issue",
+      Qmno,
+      itemName,
+      itemCategory,
+      itemSubCategory,
+      quantity,
+      unit,
+      issuedBy,
+      make,
+      model,
+      modelNo,
+      enteredBy,
+      serialNumber,
+      perishable,
+      indentNo,
+      dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
+      dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
+      dateOfVerification: dateOfVerification ? new Date(dateOfVerification) : new Date(),
+      verifiedBy,
+    });
+
+    await stockItem.save();
+    res.status(201).json({ message: "Requested issue item added.", stockItem });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// 🔹 3. Get Stock Items
+router.get("/stockitems", async (req, res) => {
+  try {
+    const stockItems = await StockItem.find().sort({ invoiceDate: -1 });;
+    res.status(200).json(stockItems);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // 🔹 4. Issue Item to User
 router.post("/issue/item", async (req, res) => {

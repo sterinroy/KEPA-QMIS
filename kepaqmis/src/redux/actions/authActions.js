@@ -7,7 +7,6 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 } from "./actionTypes";
-import { useNavigate } from "react-router-dom";
 
 export const login = (pen, password) => {
   return async (dispatch) => {
@@ -38,13 +37,33 @@ export const login = (pen, password) => {
 };
 
 export const logout = () => {
-  return (dispatch, getState) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      dispatch({ type: LOGOUT });
+      return;
+    }
+
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error("Logout logging failed:", error);
+    }
+
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("pen");
-    dispatch({ type: LOGOUT });
+
+    dispatch({ type:  LOGOUT });
   };
 };
+
 
 
 export const register = (pen, name, phone, password, role) => {

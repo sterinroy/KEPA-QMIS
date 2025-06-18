@@ -1,50 +1,22 @@
-Root container and page background
-body, html, .container {
-  background-color: #0C1227 !important;
+/* Root container and page background */
+/* body, html, .container {
+  background-color: greenyellow !important;
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: Arial, sans-serif;
   overflow-y: auto;
-}
+} */
 
 /* Form container */
 
-.qouta-button {
-  background-color: #1976d2 !important;  /* example: primary blue */
-  color: white !important;;
-}
-.quota-button:hover {
-  background-color: #030d44 !important; /* darker blue on hover */
-}
-
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #9c27b0 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #6d1b7b !important; /* darker purple on hover */
-}
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #070085 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #26235d !important; /* darker purple on hover */
-}
 
 .direct-issue-box {
   background-color: #111C44 !important;
   color: black;
   margin-left: 11px;
-  margin-top: 135px;
-  margin-bottom: 20px;
+  margin-top: 250px;
+  margin-bottom: 40px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -66,10 +38,10 @@ body, html, .container {
   box-sizing: border-box;
 }
 
-.request-issue-box {
+.purchase-issue-box {
   background-color: #111C44 !important;
   color: black;
-  margin-top: 220px;
+  margin-top: 260px;
   margin-left: 11px;
   margin-bottom: 30px;
   border-radius: 20px;
@@ -77,18 +49,8 @@ body, html, .container {
   width: 100%;
   max-width: 1300px;
   box-sizing: border-box;
-  padding: 30px 40px 20px 40px;
+  padding: 30px 40px 25px 40px;
   min-height: 550px;
-}
-
-.request-issue-root {
-  min-height: 100vh;
-  background-color: #0C1227;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* aligns top */
-  overflow-y: auto; /* allow scroll if content overflows */
-  box-sizing: border-box;
 }
 
 .temp-issue-box {
@@ -123,6 +85,39 @@ body, html, .container {
   font-weight: 700;
   font-size: 1.5rem;
 }
+
+/* Modal Button Styling */
+.modal-button {
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.modal-button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.purchased-button {
+  background-color: #1976d2; /* Custom primary blue */
+}
+
+.purchased-button:hover {
+  background-color: #1565c0;
+}
+
+.direct-button {
+  background-color: #dc004e; /* Custom secondary red */
+}
+
+.direct-button:hover {
+  background-color: #c2185b;
+}
+
 
 /* Grid layout for form */
 .mui-form {
@@ -225,9 +220,9 @@ body, html, .container {
 .verify-issue-box {
   background-color: #111C44 !important;
   color: black;
-  margin-top: 170px;
+  margin-top: 185px;
   margin-left: 9px;
-  margin-bottom: 160px;
+  margin-bottom: 40px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 98%;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import VerificationForm from "./VerificationForm";
+import QMIVerificationForm from "./QMIVerificationForm";
 
 const initialPendingItems = [
   {
@@ -10,14 +10,19 @@ const initialPendingItems = [
     supplyOrderNo: "SUP1001",
     invoiceDate: "2025-04-01",
     from: "ABC Supplier",
-    to: "Director Office",
+    to: "HQ Office",
     dateOfVerification: "2025-04-05",
     billInvoiceNo: "INV1001",
     amount: "₹5000",
     item: "Printer",
+    make: "",
+    model: "",
+    modelNo: "",
+    productNo: "",
     category: "Electronics",
     subCategory: "Printers",
     qty: "2",
+    isPerishable: "No",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
@@ -28,21 +33,26 @@ const initialPendingItems = [
     supplyOrderNo: "SUP1002",
     invoiceDate: "2025-04-02",
     from: "XYZ Supplier",
-    to: "AD Outdoor",
+    to: "Branch Office",
     dateOfVerification: "2025-04-06",
     billInvoiceNo: "INV1002",
     amount: "₹3000",
-    item: "Chair",
-    category: "Furniture",
-    subCategory: "Chair",
+    item: "Ink",
+    make: "",
+    model: "",
+    modelNo: "",
+    productNo: "",
+    category: "Stationery",
+    subCategory: "Consumables",
     qty: "10",
+    isPerishable: "Yes",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
   },
 ];
 
-const VerificationStatus = () => {
+const QMIVerificationStatus = () => {
   const [pendingItems, setPendingItems] = useState(initialPendingItems);
   const [showForm, setShowForm] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -93,14 +103,14 @@ const VerificationStatus = () => {
     },
     {
       field: "from",
-      headerName: "Supplier Name",
+      headerName: "From",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
     {
       field: "to",
-      headerName: "To (Office/ Company)",
+      headerName: "To",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -138,7 +148,35 @@ const VerificationStatus = () => {
     },
     {
       field: "item",
-      headerName: "Item Name",
+      headerName: "Item",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "make",
+      headerName: "Make/ Brand",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "model",
+      headerName: "Model Name",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "modelNo",
+      headerName: "Model No",
+      minWidth: 120,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "productNo",
+      headerName: "Serial/ Product No",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -169,6 +207,13 @@ const VerificationStatus = () => {
       sortComparator: (v1, v2) => v1 - v2,
     },
     {
+      field: "isPerishable",
+      headerName: "Is Perishable",
+      minWidth: 100,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
       field: "actions",
       headerName: "Action",
       width: 90,
@@ -188,12 +233,7 @@ const VerificationStatus = () => {
 
   return (
     <Box sx={{ width: "100%", padding: 3 }}>
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ color: "white" }}
-      >
+      <Typography variant="h5" fontWeight="bold" gutterBottom>
         Verification Status
       </Typography>
 
@@ -231,7 +271,7 @@ const VerificationStatus = () => {
 
       {/* Modal Form */}
       {showForm && currentItem && (
-        <VerificationForm
+        <QMIVerificationForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
           prefillData={{
@@ -244,9 +284,14 @@ const VerificationStatus = () => {
             billInvoiceNo: currentItem.billInvoiceNo || "",
             amount: currentItem.amount || "",
             item: currentItem.item || "",
+            make: currentItem.make || "",
+            model: currentItem.model || "",
+            modelNo: currentItem.modelNo || "",
+            productNo: currentItem.productNo || "",
             category: currentItem.category || "",
             subCategory: currentItem.subCategory || "",
             qty: currentItem.qty || "",
+            isPerishable: currentItem.isPerishable || "",
             qmNO: currentItem.qmNO || "",
             dateOfPurchased: currentItem.dateOfPurchased || "",
             invoiveNumber: currentItem.invoiveNumber || "",
@@ -257,4 +302,4 @@ const VerificationStatus = () => {
   );
 };
 
-export default VerificationStatus;
+export default QMIVerificationStatus;

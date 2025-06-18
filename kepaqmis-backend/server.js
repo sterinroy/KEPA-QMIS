@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const itemCategoryRoutes = require('./routes/itemCategoryRoutes'); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,8 +19,10 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/superadmin', require('./routes/superadmin'));
 // app.use("/api", require("./routes/tempIssue"));
-app.use("/api", require("./routes/stockRoutes"));
+app.use("/api/stockRoutes", require("./routes/stockRoutes"));
 // app.use("/api", require("./routes/userStockRoutes"));
+app.use('/api/dashboardRoutes', dashboardRoutes);
+app.use('/api/itemCategoryRoutes', itemCategoryRoutes);
 
 
 // Catch-all for unmatched routes

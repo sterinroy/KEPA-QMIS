@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import logoac from "../assets/police_academy2.png";
 import "../components/Sidebar.css";
@@ -36,13 +35,19 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
     }
   }, [user]);
 
-  const isActive = (path) => {
+  const isActive = (path, item) => {
+    // Use manual highlight if defined
+    if (item && item.isActive !== undefined) {
+      return item.isActive;
+    }
+    // Otherwise check current path
     return location.pathname === path;
   };
 
   const handleLogout = () => {
     setOpenModal(true);
   };
+
   const confirmLogout = () => {
     dispatch(logout());
     navigate("/login");
@@ -57,15 +62,16 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
     const handleClick = () => {
       if (item.modal) {
         setOpenModal(true);
+      } else if (onNavItemClick) {
+        onNavItemClick(item); // Custom handler from layout
       } else {
-        onNavItemClick(item.component);
-        location.pathname = item.path;
+        navigate(item.path); // Default behavior
       }
     };
 
     return (
       <div
-        className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+        className={`nav-item ${isActive(item.path, item) ? "active" : ""}`}
         onClick={handleClick}
         tabIndex={0}
         onKeyDown={(e) => handleKeyDown(e, handleClick)}
@@ -94,34 +100,27 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
           Logout
         </div>
       </aside>
+
+      {/* Logout Confirmation Modal */}
       <Dialog
         open={openModal}
         onClose={cancelLogout}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        classes={{
-          container: "dialog-container",
-          paper: "dialog-paper",
-        }}
       >
-        <DialogTitle id="alert-dialog-title" className="dialog-title">
-          Confirm Logout
-        </DialogTitle>
-        <DialogContent className="dialog-content">
-          <DialogContentText
-            id="alert-dialog-description"
-            className="dialog-content-text"
-          >
+        <DialogTitle id="alert-dialog-title">Confirm Logout</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
             Are you sure you want to log out?
           </DialogContentText>
         </DialogContent>
-        <DialogActions className="dialog-actions">
-          <Button onClick={cancelLogout} className="dialog-button-no">
+        <DialogActions>
+          <Button onClick={cancelLogout} color="primary">
             No
           </Button>
-          <Button onClick={confirmLogout} className="dialog-button-yes">
+          <Button onClick={confirmLogout} color="primary" autoFocus>
             Yes
-          </Button> 
+          </Button>
         </DialogActions>
       </Dialog>
     </>

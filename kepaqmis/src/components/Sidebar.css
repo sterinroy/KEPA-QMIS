@@ -66,6 +66,37 @@ div.nav-item {
   width: 100%;
 }
 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.nav-menu {
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background-color: white;
+  color: #000000;
+}
 /* The vertical gradient strip on the left on hover and active */
 div.nav-item:hover::before,
 div.nav-item.active::before {
@@ -76,7 +107,7 @@ div.nav-item.active::before {
   width: 20px;
   height: 100%;
   border-radius: 5px 0 0 5px;
-  /* background: linear-gradient(90deg, #111c44 5%, #7551ff 85%); */
+  background: linear-gradient(90deg, #111c44 5%, #7551ff 85%);
 }
 
 div.nav-item:hover {
@@ -160,9 +191,10 @@ main.main {
 
 div.logout-button {
   cursor: pointer;
-  color: red;
+  color: rgb(255, 255, 255);
+  width: 90%;
   font-weight: bold;
-  margin-top: 60px;
+  margin-top: 40px;
   text-align: center;
   padding: 10px;
   border: 1px solid red;
@@ -172,7 +204,7 @@ div.logout-button {
     color 0.3s;
 }
 
-.logout-button:hover {
+div.logout-button:hover {
   background-color: red;
   color: white;
 }

@@ -3,13 +3,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import IssueLayout from "./pages/QuarterMaster/Issue/IssueLayout";
-import IssueDashboard from "./pages/QuarterMaster/Issue/IssueDashboard";
 import Register from "./pages/Register"; // Ensure this is imported
-import AdminDashboard from "./pages/AdminDashboard";
-import QuarterMasterPurchase from "./pages/QuarterMaster/QuarterMasterPurchase";
-import QuarterMasterIssue from "./pages/QuarterMaster/QuarterMasterIssue";
-import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
+// import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
@@ -17,6 +12,20 @@ import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./pages/SuperAdmin/Layout";
+import StockItemView from "./pages/StockView";
+import QMPDashboard from "./pages/QuarterMasterPurchase/QMPDashboard";
+import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
+import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder";
+import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
+import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
+import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
+import QMIPurchasedStock from "./pages/QuarterMasterIssue/QMIPurchasedStock";
+import QMIDirectStock from "./pages/QuarterMasterIssue/QMIDirectStock";
+import QMIVerificationStatus from "./pages/QuarterMasterIssue/QMIVerificationStatus";
+import QMITempIssueForm from "./pages/QuarterMasterIssue/QMITempIssueForm";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import AdminLayout from "./pages/AdminDashboard/AdminLayout";
+import QMPEntries from "./pages/QuarterMasterPurchase/QMPEntries";
 
 function App() {
   return (
@@ -25,39 +34,71 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/StockItemView" element={<StockItemView />} />
 
         <Route
-          path="/AdminDashboard"
+          path="/Admin"
           element={
             <ProtectedRoute allowedRoles={["Admin"]}>
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="AdminDashboard" element={<AdminDashboard />} />
+          <Route path="StockItemView" element={<StockItemView />} />
+        </Route>
         <Route
           path="/QuarterMasterPurchase"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterPurchase"]}>
-              <QuarterMasterPurchase />
+              <QMPLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<QMPDashboard />} />
+          <Route path="QMPDashboard" element={<QMPDashboard />} />
+          <Route path="QMPOrder" element={<QMPOrder />} />
+          <Route path="QMPEntries" element={<QMPEntries />} />
+        </Route>
+        {/* QuarterMaster Issue Routes */}
         <Route
           path="/QuarterMasterIssue"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterIssue"]}>
-              <IssueLayout />
+              <QMILayout />
             </ProtectedRoute>
           }
-        />
-        <Route
+        >
+          <Route index element={<QMIDashboard />} />
+          <Route path="QMIDashboard" element={<QMIDashboard />} />
+
+          {/* Stock Entries */}
+          <Route
+            path="QMIEntries/QMIPurchasedStock"
+            element={<QMIPurchasedStock />}
+          />
+          <Route
+            path="QMIEntries/QMIDirectStock"
+            element={<QMIDirectStock />}
+          />
+          <Route
+            path="QMIVerificationStatus"
+            element={<QMIVerificationStatus />}
+          />
+          <Route
+            path="QMITempIssueForm"
+            element={<QMITempIssueForm />}
+          />
+        </Route>
+        {/* <Route
           path="/QuarterMasterACQM"
           element={
             <ProtectedRoute allowedRoles={["QuarterMasterACQM"]}>
               <QuarterMasterACQM />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/UserDashboard"
           element={
@@ -67,37 +108,20 @@ function App() {
           }
         />
         <Route
-          path="/SuperAdminDashboard"
+          path="/SuperAdmin"
           element={
-            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+            <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/SuperAdminApprovals"
-          element={
-            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminApprovals />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/SuperAdminUsers"
-          element={
-            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminUsers />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/SuperAdminLogs"
-          element={
-            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
-              <SuperAdminLogs />
-            </ProtectedRoute>
-          }
-        />
+        >
+          <Route index element={<SuperAdminDashboard />} />
+          <Route path="SuperAdminDashboard" element={<SuperAdminDashboard />} />
+          <Route path="SuperAdminApprovals" element={<SuperAdminApprovals />} />
+          <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
+          <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
+          <Route path="StockItemView" element={<StockItemView />} />
+        </Route>
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
     </Router>

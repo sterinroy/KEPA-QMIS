@@ -1,11 +1,11 @@
 import React from "react";
 
-const Dashboard = () => {
+const QMIDashboard = () => {
   return (
     <div>
       <h1>Hi everyone</h1>
       <p>
-        Welcome to the SuperAdmin Dashboard! Here you can manage users, approve
+        Welcome to the QM Issue Dashboard! Here you can manage users, approve
         registrations, and view logs. Feel free to explore the different
         sections.
       </p>
@@ -13,4 +13,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default QMIDashboard;

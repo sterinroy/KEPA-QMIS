@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, deleteUser, createUser } from "../../redux/actions/superAdminActions";
+import { fetchUsers, deleteUser } from "../../redux/actions/superAdminActions";
 import "./SuperAdmin.css";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { register } from "../../redux/actions/authActions";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid} from "@mui/x-data-grid";
 
 const SuperAdminUsers = () => {
   const dispatch = useDispatch();
@@ -65,7 +65,6 @@ const SuperAdminUsers = () => {
     newUser.role
   ) {
     try {
-      // console.log("hiii");
       await dispatch(register(newUser.pen, newUser.name, newUser.phone, newUser.password, newUser.role));
       handleCloseDialog();
     } catch (err) {
@@ -85,7 +84,6 @@ const columns = [
     field: 'status', 
     headerName: 'Status', 
     flex: 1,
-    // Optional: if you want to show text or badges based on status
   },
   {
     field: 'delete',
@@ -102,7 +100,7 @@ const columns = [
 ];
 
 const rows = users.map(user => ({
-  id: user._id,    // DataGrid needs a unique id field
+  id: user._id,    
   ...user
 }));
 
@@ -110,8 +108,12 @@ const rows = users.map(user => ({
 
 
   return (
-    <div style={{ height: 600, width: "100%" }}>
-      <h2>Manage Users</h2>
+    <div style={{ width: "100%" }}>
+      <div>
+        <h2>Manage Users</h2>
+      </div>
+      {/* <h2>Manage Users</h2> */}
+      <div style={{ height: 550}}>
       <Button variant="contained" color="primary" onClick={handleOpenDialog}>
         Add User
       </Button>
@@ -193,8 +195,10 @@ const rows = users.map(user => ({
           pageSize={10}
           rowsPerPageOptions={[10, 25, 50]}
           disableRowSelectionOnClick
+          showToolbar
           />
       )}
+      </div>
     </div>
   );
 };

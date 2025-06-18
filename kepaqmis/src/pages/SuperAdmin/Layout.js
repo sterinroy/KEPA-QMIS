@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SuperAdminUsers from "./SuperAdminUsers";
 import SuperAdminApprovals from "./SuperAdminApprovals";
 import SuperAdminLogs from "./SuperAdminLogs";
@@ -10,52 +10,44 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
+import StockItemView from "../StockView";
+
 
 function Layout() {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const profileRef = useRef(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const navigate = useNavigate();
-  const [activeComponent, setActiveComponent] = useState(
+  const [setActiveComponent] = useState(
     <SuperAdminDashboard />
   );
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const navItems = [
     {
       label: "Dashboard",
-      path: "/SuperAdminDashboard",
+      path: "/SuperAdmin/SuperAdminDashboard",
       icon: <DashboardIcon className="icon" />,
       component: <SuperAdminDashboard />,
     },
     {
       label: "Approve Registrations",
-      path: "/SuperAdminApprovals",
+      path: "/SuperAdmin/SuperAdminApprovals",
       icon: <DescriptionIcon className="icon" />,
       component: <SuperAdminApprovals />,
     },
     {
       label: "Manage Users",
-      path: "/SuperAdminUsers",
+      path: "/SuperAdmin/SuperAdminUsers",
       icon: <GroupIcon className="icon" />,
       component: <SuperAdminUsers />,
     },
     {
       label: "Logs",
-      path: "/SuperAdminLogs",
+      path: "/SuperAdmin/SuperAdminLogs",
       icon: <HistoryIcon className="icon" />,
       component: <SuperAdminLogs />,
+    },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
     },
   ];
   const handleNavItemClick = (component) => {
@@ -64,8 +56,9 @@ function Layout() {
   return (
     <div className="container">
       <Sidebar navItems={navItems} onNavItemClick={handleNavItemClick} />
-
-      <Main>{activeComponent}</Main>
+      <Main>
+        <Outlet />
+      </Main>
     </div>
   );
 }

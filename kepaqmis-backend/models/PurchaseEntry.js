@@ -6,6 +6,7 @@ const purchaseEntrySchema = new mongoose.Schema({
   invoiceDate: { type: Date ,required: true },
   itemName: { type: String, required: true },
   itemCategory: { type: String, required: true },
+  itemSubCategory: { type: String },
   quantity: { type: Number },
   unit: { type: String },
   fromWhomPurchased: { type: String },

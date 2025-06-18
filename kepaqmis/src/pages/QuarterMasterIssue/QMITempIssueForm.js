@@ -10,25 +10,82 @@ import {
   InputLabel,
   Alert,
 } from "@mui/material";
+import "./Issue.css";
 
-const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
+const QMITempIssueForm = () => {
+  // List of offices/companies
+  const officeOptions = [
+    "A block",
+    "AC I Wing",
+    "AC II Wing",
+    "AD Admin",
+    "AD MT",
+    "AD Outdoor",
+    "AD PS",
+    "AD Training",
+    "Armour Wing",
+    "B Block",
+    "Computer Lab",
+    "CPC",
+    "Cyber Forensics Lab",
+    "Direcor Bunglow",
+    "Director Office",
+    "DKMS",
+    "Drinking Water Treatment Plant (DWTP)",
+    "Driving School",
+    "Dry Canteen",
+    "Duty Office",
+    "DySP Admin",
+    "DySP Indoor",
+    "DySP PS1",
+    "DySP PS2",
+    "DySP TTNS",
+    "Guest House",
+    "HoD Behavioral Science",
+    "HoD Computer Application",
+    "HoD Forensics Medicine",
+    "HoD Forensics Science",
+    "HoD Law",
+    "IGP/ DIG Training",
+    "Indoor",
+    "Inspector Admin Office",
+    "Inspector Indoor OFFICE",
+    "Laundry",
+    "Model PS",
+    "MT Office",
+    "PRC",
+    "R & P Wing",
+    "SDTS",
+    "SO Mess",
+    "Super Market",
+    "Swimming Pool",
+    "Telecommunication Wing",
+    "TT 01",
+    "TT 02",
+    "TT 03",
+    "TT 04",
+    "TT 05",
+    "TT 06",
+    "TT 07",
+    "TT 08",
+    "TT 09",
+    "TT 10",
+    "Unit Hospital",
+    "Vishranthi",
+    "Wet Canteen"
+  ];
+
   const [formData, setFormData] = useState({
-    orderNo: "",
-    supplyOrderNo: "",
-    invoiceDate: "",
-    from: "",
+    dateOfIssue: "",
+    slNo: "",
+    penNo: "",
     to: "",
-    dateOfVerification: "",
-    billInvoiceNo: "",
-    amount: "",
+    name: "",
+    mobile: "",
     item: "",
-    category: "",
-    subCategory: "",
+    itemDescription: "",
+    pupose: "",
     qty: "",
-    qmNO: "",
-    dateOfPurchased: "",
-    invoiveNumber: "",
-    ...prefillData,
   });
 
   const [status, setStatus] = useState("");
@@ -42,9 +99,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     const today = new Date().toISOString().split("T")[0];
     setFormData((prev) => ({
       ...prev,
-      dateOfVerification: prev.dateOfVerification || today,
-      dateOfPurchased: prev.dateOfPurchased || today,
-      invoiceDate: prev.invoiceDate || today,
+      dateOfIssue: today,
     }));
   }, []);
 
@@ -70,26 +125,23 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
 
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
-    setFormData((prev) => ({
-      ...prev,
-      orderNo: "",
-      supplyOrderNo: "",
-      invoiceDate: "",
-      from: "",
+    const currentIndentNo = formData.indentNo;
+
+    setFormData({
+      slNo: "",
+      penNo: "",
       to: "",
-      dateOfVerification: "",
-      billInvoiceNo: "",
-      amount: "",
+      dateOfIssue: today,
+      name: "",
+      mobile: "",
       item: "",
-      category: "",
-      subCategory: "",
-      qty: "",
-      qmNO: "",
-      dateOfPurchased: "",
-      invoiveNumber: "",
-    }));
+      itemDescription: "",
+      pupose: "",
+      qty: "", // ✅ Resetting same key
+    });
+
     setShowConfirmModal(false);
-    setSuccessMessage("Ready to add another item.");
+    setSuccessMessage("Ready to add another item with the same indent.");
     setStatus("succeeded");
   };
 
@@ -100,23 +152,18 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
 
   const handleFinalSubmit = () => {
     console.log("Form Data Submitted:", formData);
-    onSubmit(formData);
+    const today = new Date().toISOString().split("T")[0];
     setFormData({
-      orderNo: "",
-      supplyOrderNo: "",
-      invoiceDate: "",
-      from: "",
+      slNo: "",
+      penNo: "",
       to: "",
-      dateOfVerification: "",
-      billInvoiceNo: "",
-      amount: "",
+      dateOfIssue: today,
+      name: "",
+      mobile: "",
       item: "",
-      category: "",
-      subCategory: "",
+      itemDescription: "",
+      pupose: "",
       qty: "",
-      qmNO: "",
-      dateOfPurchased: "",
-      invoiveNumber: "",
     });
     setShowPreviewModal(false);
     setSuccessMessage("Form submitted successfully!");
@@ -124,26 +171,21 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
   };
 
   const labelMap = {
-    orderNo: "Order No.",
-    supplyOrderNo: "Supply Order No.",
-    invoiceDate: "Date Of Invoice",
-    from: "Supplier Name",
-    to: "To (Office/Company)",
-    dateOfVerification: "Date Of Verification",
-    billInvoiceNo: "Bill Invoice No.",
-    amount: "Amount",
+    dateOfIssue: "Date Of Issue",
+    slNo: "Sl No.",
+    penNo: "PEN No.",
+    to: "To (Office / Company)",
+    name: "Name",
+    mobile: "Mobile No.",
     item: "Item",
-    category: "Category",
-    subCategory: "Sub Category",
+    itemDescription: "Item Description",
+    pupose: "Purpose",
     qty: "Quantity",
-    qmNO: "QM/ RV No.",
-    dateOfPurchased: "Date Of Purchase",
-    invoiveNumber: "Invoice Number",
   };
 
   return (
     <>
-      <Box className="verify-issue-box">
+      <Box className="temp-issue-box">
         <Typography
           variant="h5"
           mb={2}
@@ -151,10 +193,10 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           textAlign="center"
           color="white"
         >
-          Verification Form
+          Temporary Issue Form
         </Typography>
 
-        {/* Show alerts */}
+        {/* Show success or error alerts */}
         {status === "failed" && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -167,11 +209,10 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
         )}
 
         <form onSubmit={handleSubmit} className="mui-form">
-          {/* Form Fields */}
           <TextField
-            label="Order No."
-            name="orderNo"
-            value={formData.orderNo}
+            label="Sl No."
+            name="slNo"
+            value={formData.slNo}
             onChange={handleChange}
             required
             fullWidth
@@ -182,23 +223,10 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="Supply Order No."
-            name="supplyOrderNo"
-            value={formData.supplyOrderNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Date Of Invoice"
+            label="Date of Issue"
             type="date"
-            name="invoiceDate"
-            value={formData.invoiceDate}
+            name="dateOfIssue"
+            value={formData.dateOfIssue}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             required
@@ -209,10 +237,11 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
               fieldset: { borderColor: "white" },
             }}
           />
+          
           <TextField
-            label="Supplier Name"
-            name="from"
-            value={formData.from}
+            label="PEN No."
+            name="penNo"
+            value={formData.penNo}
             onChange={handleChange}
             required
             fullWidth
@@ -223,9 +252,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="To (Office/ Company)"
-            name="to"
-            value={formData.to}
+            label="Name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
             fullWidth
@@ -235,77 +264,37 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <TextField
-            label="Date Of Verification"
-            type="date"
-            name="dateOfVerification"
-            value={formData.dateOfVerification}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            required
+
+          {/* ✅ Dropdown for To (Office / Company) */}
+          <FormControl
             fullWidth
+            required
             sx={{
-              input: { color: "white" },
               label: { color: "white" },
+              svg: { color: "white" },
               fieldset: { borderColor: "white" },
             }}
-          />
+          >
+            <InputLabel sx={{ color: "white" }}>To (Office / Company)</InputLabel>
+            <Select
+              name="to"
+              value={formData.to}
+              onChange={handleChange}
+              sx={{ color: "white" }}
+            >
+              {officeOptions.map((office) => (
+                <MenuItem key={office} value={office}>
+                  {office}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          
           <TextField
-            label="Bill Invoice No."
-            name="billInvoiceNo"
-            value={formData.billInvoiceNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Amount"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Item"
-            name="item"
-            value={formData.item}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Sub Category"
-            name="subCategory"
-            value={formData.subCategory}
+            label="Mobile No."
+            name="mobile"
+            value={formData.mobile}
             onChange={handleChange}
             required
             fullWidth
@@ -330,12 +319,14 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="QM/ RV No."
-            name="qmNO"
-            value={formData.qmNO}
+            label="Item Description"
+            name="itemDescription"
+            value={formData.itemDescription}
             onChange={handleChange}
             required
             fullWidth
+            multiline
+            rows={1}
             sx={{
               input: { color: "white" },
               label: { color: "white" },
@@ -343,56 +334,28 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="Date Of Purchase"
-            type="date"
-            name="dateOfPurchased"
-            value={formData.dateOfPurchased}
+            label="Purpose"
+            name="pupose"
+            value={formData.pupose}
             onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
             required
             fullWidth
+            multiline
+            rows={1}
             sx={{
               input: { color: "white" },
               label: { color: "white" },
               fieldset: { borderColor: "white" },
             }}
           />
-          <TextField
-            label="Invoice Number"
-            name="invoiveNumber"
-            value={formData.invoiveNumber}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
+          
 
-          {/* Submit Button - With ml={77} and responsiveness */}
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            mt={2}
-            sx={{
-              ml: 60,
-              "@media (max-width: 600px)": {
-                ml: 0,
-              },
-            }}
-          >
+          <Box display="flex" justifyContent="flex-end" mt={2} ml={50}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              sx={{
-                borderRadius: 2,
-                px: 8.3,
-                py: 1,
-                fontWeight: "bold",
-              }}
+              sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: "bold" }}
               disabled={status === "loading"}
             >
               {status === "loading" ? "Submitting..." : "Submit"}
@@ -401,7 +364,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
         </form>
       </Box>
 
-      {/* Confirm Add More Modal */}
+      {/* 🧨 Modal: Confirm Add More Items */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -415,15 +378,31 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same QM/RV No.?
+              Do you want to add more items under the same Sl No.?
             </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleAddMoreYes}
+                sx={{ mr: 2 }}
+              >
                 Yes
               </Button>
-              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddMoreNo}
+              >
                 No
               </Button>
             </Box>
@@ -431,7 +410,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
         </Box>
       )}
 
-      {/* Preview Submission Modal */}
+      {/* 🧾 Modal: Preview Before Submit */}
       {showPreviewModal && (
         <Box
           position="fixed"
@@ -445,7 +424,14 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%">
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="500px"
+            width="100%"
+          >
             <Typography variant="h6" gutterBottom textAlign="center">
               Confirm Submission
             </Typography>
@@ -476,4 +462,4 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
   );
 };
 
-export default VerificationForm;
+export default QMITempIssueForm;
