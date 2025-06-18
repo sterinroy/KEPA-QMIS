@@ -278,6 +278,19 @@ const QMIPurchasedStock = () => {
             }}
           />
           <TextField
+            label="Purchase Order No."
+            name="purchaseOrderNo"
+            value={formData.purchaseOrderNo}
+            onChange={handleChange}
+            required
+            fullWidth
+            sx={{
+              input: { color: "white" },
+              label: { color: "white" },
+              fieldset: { borderColor: "white" },
+            }}
+          />
+          <TextField
             label="Item"
             name="item"
             value={formData.item}
@@ -442,19 +455,6 @@ const QMIPurchasedStock = () => {
             </Select>
           </FormControl>
           <TextField
-            label="Purchase Order No."
-            name="purchaseOrderNo"
-            value={formData.purchaseOrderNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
             label="Type Of Fund"
             name="typeOfFund"
             value={formData.typeOfFund}
@@ -603,7 +603,7 @@ const QMIPurchasedStock = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same QM/ SL No.?
+              Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
               <Button
