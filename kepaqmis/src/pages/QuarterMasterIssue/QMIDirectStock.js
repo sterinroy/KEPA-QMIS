@@ -34,6 +34,12 @@ const QMIDirectStock = () => {
     perishableType: "",
   });
 
+  const defaultSubCategories = ["Printers", "Inks", "Consumables", "Stationery", "Electronics"];
+
+  const [customSubCategories, setCustomSubCategories] = useState([]);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customInputValue, setCustomInputValue] = useState("");
+
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -41,29 +47,22 @@ const QMIDirectStock = () => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showPdfModal, setShowPdfModal] = useState(false);
 
-  // Sub Category State
-  const defaultSubCategories = ["Printers", "Inks", "Consumables", "Stationery", "Electronics"];
-  const [customSubCategories, setCustomSubCategories] = useState([]);
-  const [showCustomInput, setShowCustomInput] = useState(false);
-  const [customInputValue, setCustomInputValue] = useState("");
-
   const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
+  const inputStyles = {
+    input: { color: "white" },
+    label: { color: "white" },
+    fieldset: { borderColor: "white" },
+  };
 
   // Set today's date on load
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    setFormData((prev) => ({
-      ...prev,
-      dateOfIssue: prev.dateOfIssue || today,
-    }));
+    if (!formData.dateOfIssue) setFormData((prev) => ({ ...prev, dateOfIssue: today }));
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedData = {
-      ...formData,
-      [name]: value,
-    };
+    let updatedData = { ...formData, [name]: value };
 
     if (name === "warranty" && value === "No") {
       updatedData = {
@@ -84,9 +83,7 @@ const QMIDirectStock = () => {
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
-      setCustomSubCategories((prev) =>
-        prev.filter((cat) => cat !== catToDelete)
-      );
+      setCustomSubCategories((prev) => prev.filter((cat) => cat !== catToDelete));
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else {
       setShowCustomInput(false);
@@ -95,13 +92,11 @@ const QMIDirectStock = () => {
   };
 
   const handleAddNewSubCategory = () => {
-    if (!customInputValue.trim()) return;
+    const trimmed = customInputValue.trim();
+    if (!trimmed || customSubCategories.includes(trimmed)) return;
 
-    if (!customSubCategories.includes(customInputValue)) {
-      setCustomSubCategories((prev) => [...prev, customInputValue]);
-    }
-
-    setFormData((prev) => ({ ...prev, subCategory: customInputValue }));
+    setCustomSubCategories((prev) => [...prev, trimmed]);
+    setFormData((prev) => ({ ...prev, subCategory: trimmed }));
     setCustomInputValue("");
     setShowCustomInput(false);
   };
@@ -111,6 +106,7 @@ const QMIDirectStock = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
+
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -119,8 +115,7 @@ const QMIDirectStock = () => {
 
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
       qmNo: "",
       requestNo: "",
       dateOfIssue: today,
@@ -138,7 +133,7 @@ const QMIDirectStock = () => {
       warrantyType: "",
       indentNo: "",
       perishableType: "",
-    }));
+    });
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item.");
     setStatus("succeeded");
@@ -161,17 +156,20 @@ const QMIDirectStock = () => {
     doc.text(`Direct Stock Issue`, 20, 20);
     doc.setFontSize(12);
     let y = 30;
+
     Object.entries(formData).forEach(([key, value]) => {
       if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
     });
+
     if (formData.warranty === "Yes") {
       doc.text(`Warranty Period: ${formData.warrantyPeriod}`, 20, y);
       y += 10;
       doc.text(`Warranty Type: ${formData.warrantyType}`, 20, y);
     }
+
     doc.save("DirectStockIssue.pdf");
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
@@ -212,97 +210,31 @@ const QMIDirectStock = () => {
         </Typography>
 
         {/* Alerts */}
-        {status === "failed" && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        {status === "failed" && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {status === "succeeded" && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {successMessage}
-          </Alert>
+          <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>
         )}
 
         <form onSubmit={handleSubmit} className="mui-form">
-          <TextField
-            label="QM No."
-            name="qmNo"
-            value={formData.qmNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Request No"
-            name="requestNo"
-            value={formData.requestNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Date Of Issue"
-            type="date"
-            name="dateOfIssue"
-            value={formData.dateOfIssue}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Item"
-            name="item"
-            value={formData.item}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
+          {/* Auto-filled Fields */}
+          {["qmNo", "requestNo", "dateOfIssue", "item", "category"].map((field) => (
+            <TextField
+              key={field}
+              label={labelMap[field]}
+              name={field}
+              type={field === "dateOfIssue" ? "date" : "text"}
+              value={formData[field]}
+              onChange={handleChange}
+              required
+              fullWidth
+              InputLabelProps={field === "dateOfIssue" ? { shrink: true } : undefined}
+              sx={inputStyles}
+            />
+          ))}
 
-          {/* 🔁 Custom Sub Category Dropdown with Remove Option */}
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>Sub Category</InputLabel>
+          {/* Sub Category */}
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>Sub Category</InputLabel>
             <Select
               name="subCategory"
               value={formData.subCategory || ""}
@@ -322,6 +254,7 @@ const QMIDirectStock = () => {
             </Select>
           </FormControl>
 
+          {/* Custom Sub Category Input */}
           {showCustomInput && (
             <Box display="flex" gap={1} mt={1}>
               <TextField
@@ -330,128 +263,68 @@ const QMIDirectStock = () => {
                 onChange={(e) => setCustomInputValue(e.target.value)}
                 fullWidth
                 size="small"
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
+                sx={inputStyles}
               />
-              <Button variant="outlined" size="small" onClick={handleAddNewSubCategory}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleAddNewSubCategory}
+              >
                 Add
               </Button>
             </Box>
           )}
 
-          {/* Other fields remain unchanged */}
-          <TextField
-            label="Make / Brand"
-            name="make"
-            value={formData.make}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Model"
-            name="model"
-            value={formData.model}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Model No"
-            name="modelNo"
-            value={formData.modelNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Product No / Serial No"
-            name="productNo"
-            value={formData.productNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Quantity"
-            type="number"
-            name="qty"
-            value={formData.qty}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>Unit</InputLabel>
+          {/* Make / Brand through Product No fields */}
+          {["make", "model", "modelNo", "productNo", "qty"].map((field) => (
+            <TextField
+              key={field}
+              label={labelMap[field]}
+              name={field}
+              type={field === "qty" ? "number" : "text"}
+              value={formData[field]}
+              onChange={handleChange}
+              required
+              fullWidth
+              sx={inputStyles}
+            />
+          ))}
+
+          {/* Unit */}
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>Unit</InputLabel>
             <Select
               name="unit"
               value={formData.unit}
               onChange={handleChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value="Nos">Nos</MenuItem>
-              <MenuItem value="Litre">Litre</MenuItem>
-              <MenuItem value="Kilogram">Kilogram</MenuItem>
-              <MenuItem value="Meter">Meter</MenuItem>
+              {["Nos", "Litre", "Kilogram", "Meter"].map((unit) => (
+                <MenuItem key={unit} value={unit}>
+                  {unit}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>Warranty</InputLabel>
+
+          {/* Warranty */}
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>Warranty</InputLabel>
             <Select
               name="warranty"
               value={formData.warranty}
               onChange={handleChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value="Yes">Yes</MenuItem>
-              <MenuItem value="No">No</MenuItem>
+              {["Yes", "No"].map((opt) => (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 
+          {/* Conditional Fields based on Warranty */}
           {formData.warranty === "Yes" && (
             <>
               <TextField
@@ -462,36 +335,28 @@ const QMIDirectStock = () => {
                 onChange={handleChange}
                 required
                 fullWidth
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
+                sx={inputStyles}
               />
-              <FormControl
-                fullWidth
-                required
-                sx={{
-                  label: { color: "white" },
-                  svg: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              >
-                <InputLabel sx={{ color: "white" }}>Warranty Type</InputLabel>
+
+              <FormControl fullWidth required sx={inputStyles}>
+                <InputLabel>Warranty Type</InputLabel>
                 <Select
                   name="warrantyType"
                   value={formData.warrantyType}
                   onChange={handleChange}
                   sx={{ color: "white" }}
                 >
-                  <MenuItem value="On-Site">On-Site</MenuItem>
-                  <MenuItem value="Replacement">Replacement</MenuItem>
-                  <MenuItem value="Pickup & Drop">Pickup & Drop</MenuItem>
+                  {["On-Site", "Replacement", "Pickup & Drop"].map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </>
           )}
 
+          {/* Indent No */}
           <TextField
             label="Indent No."
             name="indentNo"
@@ -499,30 +364,23 @@ const QMIDirectStock = () => {
             onChange={handleChange}
             required
             fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
+            sx={inputStyles}
           />
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>Is Perishable</InputLabel>
+
+          {/* Is Perishable */}
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>Is Perishable</InputLabel>
             <Select
               name="perishableType"
               value={formData.perishableType}
               onChange={handleChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value="Yes">Yes</MenuItem>
-              <MenuItem value="No">No</MenuItem>
+              {["Yes", "No"].map((opt) => (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -546,6 +404,7 @@ const QMIDirectStock = () => {
         </form>
       </Box>
 
+      {/* Modals */}
       {/* Confirm Modal */}
       {showConfirmModal && (
         <Box
