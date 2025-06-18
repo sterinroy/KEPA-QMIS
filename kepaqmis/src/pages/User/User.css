@@ -34,11 +34,11 @@
   gap: 24px 48px;
 }
 
+
 .mui-form > * {
   min-height: 60px;
 }
 
-/* Inputs */
 .mui-form .MuiInputBase-root {
   height: 50px;
   background-color: #111C44 !important;
@@ -153,7 +153,7 @@
 }
 
 .send-box {
-  width: 100%;
+  
   justify-items: center;
   padding: 20px;
 }
@@ -161,7 +161,6 @@
   justify-content: center;
    align-items: center;
   align-content: center;
-  width: 1000px;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -169,7 +168,85 @@
 .send-box .MuiTextField-root {
   margin-bottom: 16px;
 
+
 }
+
+
+.intend-form{
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px 48px;
+
+}
+.intend-form > * {
+  min-height: 60px;
+}
+
+.intend-form .MuiInputBase-root {
+  height: 50px;
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.intend-form .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.intend-form .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.intend-form .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.intend-form .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+
+.intend-form .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+
+/* Input field spacing */
+.intend-form .MuiTextField-root,
+.intend-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.intend-form .MuiInputBase-input,
+.mui-form .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.intend-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.intend-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+.cat{
+  width: 115px;
+}
+
+.sub-cat{
+  width: 150px;
+}
+.unit-cat{
+  width: 150px;
+  
+}
+
 
 .manage-box{
   
@@ -182,3 +259,5 @@
   max-width: 101%;
 
 }
+
+

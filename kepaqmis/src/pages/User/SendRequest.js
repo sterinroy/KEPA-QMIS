@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Barcode from 'react-barcode';
-import html2canvas from "html2canvas";
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import QMIDGenerator from './QMIDGenerator';
+import QMIDGenerator from './QMIDGenerator'; // Assuming this generates unique QMID
 import {
   TextField,
   Button,
@@ -17,17 +17,21 @@ import {
 import "./User.css";
 
 const SendRequest = () => {
+  
+  
   const [formData, setFormData] = useState({
-    PENNo: "",
-    date: new Date().toISOString().split("T")[0],
-    item: "",
-    subCategory: "",
-    qty: 1,
+    OfficeNo: "",
+    date: new Date().toISOString().split("T")[0], 
+    qtyinhand: "",
+    unitsinhand: "",
   });
 
-  const [qmid, setQmid] = useState('');
-  const barcodeRef = useRef();
+  
+  const [rows, setRows] = useState([
+    { item: '', subCategory: '', qty: 1, unit: '' }
+  ]);
 
+  // Predefined category-subcategory map
   const [subCategories, setSubCategories] = useState({
     Electronics: ["Mobile", "Laptop", "Tablet"],
     Furniture: ["Chair", "Table", "Cabinet"],
@@ -36,102 +40,84 @@ const SendRequest = () => {
     Weapons: ["Pistol", "Rifle", "Shotgun"],
   });
 
-  const handleChange = (e) => {
+  // Generated QMID
+  const [qmid, setQmid] = useState('');
+
+  // Handle changes in OfficeNo, date, qtyinhand, unitsinhand
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedCategory = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      item: selectedCategory,
-      subCategory: "",
-    }));
+  // Handle changes in each row’s item, subCategory, qty, unit
+  const handleRowChange = (idx, e) => {
+    const { name, value } = e.target;
+    setRows(prev =>
+      prev.map((r, i) =>
+        i === idx
+          ? { ...r, [name]: value, ...(name === 'item' && { subCategory: '' }) }
+          : r
+      )
+    );
   };
 
-  const handleAddSubCategory = () => {
-    const category = formData.item;
-    if (!category) {
-      alert("Please select an Item first.");
-      return;
+  // Add a new item row
+  const addRow = () =>
+    setRows(prev => [...prev, { item: '', subCategory: '', qty: 1, unit: '' }]);
+
+  // Remove a row by index
+  const removeRow = (idx) =>
+    setRows(prev => prev.filter((_, i) => i !== idx));
+
+  
+  const handleAddSubCategory = (idx) => {
+    const category = rows[idx].item;
+    if (!category) return alert("Please select an item/category first.");
+    const newSub = prompt(`Enter new sub-category for "${category}":`);
+    if (newSub && !subCategories[category]?.includes(newSub)) {
+      // Update subCategories list
+      setSubCategories(prev => ({
+        ...prev,
+        [category]: [...(prev[category] || []), newSub]
+      }));
+      // Auto-select the newly added sub-category
+      setRows(prev =>
+        prev.map((r, i) => (i === idx ? { ...r, subCategory: newSub } : r))
+      );
     }
-    const newSubCategory = prompt(`Add new Sub-Category under "${category}":`);
-    if (newSubCategory) {
-      if (!subCategories[category].includes(newSubCategory)) {
-        setSubCategories((prev) => ({
-          ...prev,
-          [category]: [...prev[category], newSubCategory],
-        }));
-        setFormData((prev) => ({
-          ...prev,
-          subCategory: newSubCategory,
-        }));
-      } else {
-        alert("This Sub-Category already exists.");
-      }
-    }
   };
 
+  // Generate and download PDF with all form and row data
   const generatePDF = async (qmid) => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFontSize(16);
+    pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
+    pdf.setFontSize(12);
+    let y = 40;
 
-      const barcodeElement = barcodeRef.current;
-      const canvas = await html2canvas(barcodeElement, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#111C44'
-      });
+    // General form info
+    pdf.text(`Office No: ${formData.OfficeNo}`, 20, y); y += 10;
+    pdf.text(`Date: ${formData.date}`, 20, y); y += 10;
+    pdf.text(`Qty in Hand: ${formData.qtyinhand}`, 20, y); y += 10;
+    pdf.text(`Unit in Hand: ${formData.unitsinhand}`, 20, y); y += 15;
 
-      const barcodeData = canvas.toDataURL('image/png');
+    // Loop through item rows and add them to PDF
+    rows.forEach((r, i) => {
+      pdf.text(`Item ${i + 1}: ${r.item} / ${r.subCategory}`, 20, y); y += 7;
+      pdf.text(`Qty: ${r.qty} | Unit: ${r.unit}`, 30, y); y += 10;
+    });
 
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(16);
-      pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
-
-      pdf.setFontSize(12);
-      let y = 40;
-      const spacing = 10;
-      const indent = 20;
-
-      const details = [
-        `QMID: ${qmid}`,
-        `PEN No: ${formData.PENNo}`,
-        `Date: ${formData.date}`,
-        `Item: ${formData.item}`,
-        `Sub Category: ${formData.subCategory}`,
-        `Quantity: ${formData.qty}`
-      ];
-
-      details.forEach(detail => {
-        pdf.text(detail, indent, y);
-        y += spacing;
-      });
-
-      pdf.addImage(barcodeData, 'PNG', indent, y + spacing, 175, 40);
-
-      try {
-        pdf.save(`KEPA-Request-${formData.PENNo}.pdf`);
-      } catch (saveError) {
-        throw new Error(`Failed to save PDF: ${saveError.message}`);
-      }
-    } catch (error) {
-      console.error('PDF Generation Error:', error);
-      alert(`Failed to generate PDF: ${error.message}`);
-    }
+    // Save PDF file
+    pdf.save(`KEPA-Request-${formData.OfficeNo}.pdf`);
   };
 
+  // Handle final form submission and trigger PDF generation
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newQMID = QMIDGenerator(); // Generate QMID
-    setQmid(newQMID);
-    await generatePDF(newQMID);
+    setQmid(newQMID); // Update state (can be used for barcode)
+    await generatePDF(newQMID); // Generate PDF with current form
   };
 
   return (
@@ -146,7 +132,7 @@ const SendRequest = () => {
               boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
               backgroundColor: "#111C44",
             }}
-          >
+            >
             <Typography
               variant="h5"
               mb={3}
@@ -156,38 +142,56 @@ const SendRequest = () => {
             >
               Indent Generation
             </Typography>
-            <form onSubmit={handleSubmit} className="mui-form">
-              <TextField
-                label="PEN No"
-                name="PENNo"
-                value={formData.PENNo}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Date"
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{ mb: 2 }}
-                InputLabelProps={{ shrink: true }}
-              />
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth required sx={{ mb: 2 }}>
+      <form onSubmit={handleSubmit} className="intend-form">
+        
+        <Box display="flex" gap={2} flexWrap="wrap" mb={2}>
+          <TextField
+            label="Office No"
+            name="OfficeNo"
+            value={formData.OfficeNo}
+            onChange={handleFormChange}
+            required
+            
+          />
+          <TextField
+            label="Date"
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleFormChange}
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Qty in Hand"
+            name="qtyinhand"
+            value={formData.qtyinhand}
+            onChange={handleFormChange}
+            required
+          />
+          <TextField
+            label="Unit in Hand"
+            name="unitsinhand"
+            value={formData.unitsinhand}
+            onChange={handleFormChange}
+          />
+        </Box>
+
+       
+        {rows.map((r, idx) => (
+          <Box>
+            <Grid  container spacing={2} >
+              {/* Category */}
+              <Grid className="cat" >
+                <FormControl>
                   <InputLabel>Category</InputLabel>
                   <Select
                     name="item"
-                    value={formData.item}
-                    onChange={handleCategoryChange}
+                    value={r.item}
+                    onChange={(e) => handleRowChange(idx, e)}
                     required
-                    fullWidth
-                    label="Item"
-                    sx={{ mb: 2 }}
+                  
+                    
                   >
                     {Object.keys(subCategories).map((cat) => (
                       <MenuItem key={cat} value={cat}>{cat}</MenuItem>
@@ -195,89 +199,89 @@ const SendRequest = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={10} md={5}>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <FormControl required sx={{ flex: 1 }}>
+
+              {/* Sub-Category with Add Option */}
+              <Grid item >
+                <Box display="flex" gap={2}>
+                  <FormControl >
                     <InputLabel>Sub-Category</InputLabel>
-                    <Select
+                    <Select className="sub-cat"
                       name="subCategory"
-                      value={formData.subCategory}
-                      onChange={handleChange}
-                      label="Sub-Category"
-                      fullWidth
+                      value={r.subCategory}
+                      onChange={(e) => handleRowChange(idx, e)}
+                      required
                     >
-                      {subCategories[formData.item]?.map((subCat, idx) => (
-                        <MenuItem key={idx} value={subCat}>{subCat}</MenuItem>
+                      {(subCategories[r.item] || []).map((sub) => (
+                        <MenuItem key={sub} value={sub}>{sub}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                  <Button
-                    className="plus purchase-form"
-                    variant="outlined"
-                    onClick={handleAddSubCategory}
-                    sx={{
-                      minWidth: '40px',
-                      height: '56px',
-                      p: 0,
-                      '&:hover': {
-                        backgroundColor: '#7551FF !important',
-                        color: 'white !important',
-                        borderColor: '#7551FF !important'
-                      }
-                    }}
-                  >
-                    +
-                  </Button>
+                  <Button onClick={() => handleAddSubCategory(idx)}>+</Button>
                 </Box>
               </Grid>
-              <TextField
-                label="Quantity"
-                type="number"
-                name="qty"
-                inputProps={{ min: 1 }}
-                value={formData.qty}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Box display="flex" justifyContent="flex-end" mt={0.7}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  sx={{
-                    borderRadius: 2,
-                    px: 5,
-                    py: 0,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Submit and Download PDF
-                </Button>
-              </Box>
 
-              {/* Hidden Barcode */}
-              <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', overflow: 'hidden' }}>
-                <div ref={barcodeRef}>
-                  {qmid && (
-                    <Barcode
-                      value={qmid}
-                      width={2}
-                      height={80}
-                      fontSize={16}
-                      margin={10}
-                      format="CODE128"
-                    />
-                  )}
-                </div>
-              </div>
-            </form>
+              {/* Quantity */}
+              <Grid className="cat">
+                <TextField
+                  label="Qty"
+                  name="qty"
+                  type="number"
+                  inputProps={{ min: 1 }}
+                  value={r.qty}
+                  onChange={(e) => handleRowChange(idx, e)}
+                  required
+                  
+                />
+              </Grid>
+
+              {/* Unit */}
+              <Grid item xs={12} md={2}>
+                <FormControl>
+                  <InputLabel>Unit</InputLabel>
+                  <Select className="unit-cat"
+                    name="unit"
+                    value={r.unit}
+                    onChange={(e) => handleRowChange(idx, e)}
+                    required
+                    >
+                    {["Number", "Liter", "Kilogram", "Meter"].map((unit) => (
+                      <MenuItem key={unit} value={unit}>{unit}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Remove Button */}
+              <Grid item xs={12} md={1}>
+                {rows.length > 1 && (
+                  <Button color="error" onClick={() => removeRow(idx)}>Remove</Button>
+                )}
+              </Grid>
+            </Grid>
           </Box>
-        </div>
-      </div>
-      </div>
+        ))}
 
+        {/* Add Another Item Row */}
+        <Button variant="outlined" onClick={addRow}>+ Add Another Item</Button>
+
+        {/* Submit */}
+        <Box mt={3}>
+          <Button variant="contained" color="primary" type="submit">
+            Submit & Print
+          </Button>
+        </Box>
+      </form>
+
+      {/* Barcode (Optional Hidden or Use Later) */}
+      {qmid && (
+        <Box sx={{ visibility: 'hidden', position: 'fixed' }}>
+          <Barcode value={qmid} format="CODE128" />
+        </Box>
+      )}
+    </Box>
+    </div>
+    </div>
+    </div>
   );
 };
 
