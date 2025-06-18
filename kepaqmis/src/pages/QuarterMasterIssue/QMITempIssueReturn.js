@@ -11,6 +11,8 @@ import {
   Alert,
 } from "@mui/material";
 import "./Issue.css";
+import { Category } from "@mui/icons-material";
+import { addSubcategory } from "../../redux/actions/categoryActions";
 
 const QMITempIssueForm = () => {
   // List of offices/companies
@@ -76,7 +78,7 @@ const QMITempIssueForm = () => {
   ];
 
   const [formData, setFormData] = useState({
-    dateOfIssue: "",
+    dateOfReturn: "",
     slNo: "",
     penNo: "",
     to: "",
@@ -132,7 +134,7 @@ const QMITempIssueForm = () => {
     const currentIndentNo = formData.indentNo;
 
     setFormData({
-      dateOfIssue: "",
+      dateOfReturn: "",
       slNo: "",
       penNo: "",
       to: "",
@@ -162,7 +164,7 @@ const QMITempIssueForm = () => {
     console.log("Form Data Submitted:", formData);
     const today = new Date().toISOString().split("T")[0];
     setFormData({
-      dateOfIssue: today,
+      dateOfReturn: today,
       slNo: "",
       penNo: "",
       to: "",
@@ -183,7 +185,7 @@ const QMITempIssueForm = () => {
   };
 
   const labelMap = {
-    dateOfIssue: "Date Of Issue",
+    dateOfReturn: "Date Of Return",
     slNo: "SL No.",
     penNo: "PEN No.",
     to: "To (Company/ Office)",
@@ -209,7 +211,7 @@ const QMITempIssueForm = () => {
           textAlign="center"
           color="white"
         >
-          Temporary Issue Form
+          Temporary Issue Return Form
         </Typography>
 
         {/* Show success or error alerts */}
@@ -239,9 +241,9 @@ const QMITempIssueForm = () => {
             }}
           />
           <TextField
-            label="Date of Issue"
+            label="Date of Return"
             type="date"
-            name="dateOfIssue"
+            name="dateOfReturn"
             value={formData.dateOfIssue}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
@@ -347,61 +349,19 @@ const QMITempIssueForm = () => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <FormControl
-            fullWidth
+          <TextField
+            label="Sub Category"
+            name="subCategory"
+            value={formData.subCategory}
+            onChange={handleChange}
             required
+            fullWidth
             sx={{
+              input: { color: "white" },
               label: { color: "white" },
-              svg: { color: "white" },
               fieldset: { borderColor: "white" },
             }}
-          >
-            <InputLabel sx={{ color: "white" }}>Sub Category</InputLabel>
-            <Select
-              name="subCategory"
-              value={formData.subCategory || ""}
-              onChange={handleSubCategoryChange}
-              sx={{ color: "white" }}
-            >
-              {allSubCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-              {customSubCategories.map((cat) => (
-                <MenuItem
-                  key={`CUSTOM_DELETE_${cat}`}
-                  value={`CUSTOM_DELETE_${cat}`}
-                >
-                  {cat} ❌
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {showCustomInput && (
-            <Box display="flex" gap={1} mt={1}>
-              <TextField
-                label="Enter New Sub Category"
-                value={customInputValue}
-                onChange={(e) => setCustomInputValue(e.target.value)}
-                fullWidth
-                size="small"
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
+          />
           <TextField
             label="Quantity"
             type="number"
@@ -437,36 +397,6 @@ const QMITempIssueForm = () => {
               <MenuItem value="meter">Meter</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            label="Purpose"
-            name="pupose"
-            value={formData.pupose}
-            onChange={handleChange}
-            required
-            fullWidth
-            multiline
-            rows={1}
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Usage"
-            name="usage"
-            value={formData.usage}
-            onChange={handleChange}
-            required
-            fullWidth
-            multiline
-            rows={1}
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
           <FormControl
             fullWidth
             required
@@ -488,7 +418,7 @@ const QMITempIssueForm = () => {
             </Select>
           </FormControl>
 
-          <Box display="flex" justifyContent="flex-start" mt={2} ml={62.5}>
+          <Box display="flex" justifyContent="flex-start" mt={2} ml={63}>
             <Button
               variant="contained"
               color="primary"

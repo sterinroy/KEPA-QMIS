@@ -10,85 +10,19 @@ import {
   InputLabel,
   Alert,
 } from "@mui/material";
+import jsPDF from "jspdf";
 import "./Issue.css";
 
-const QMITempIssueForm = () => {
-  // List of offices/companies
-  const officeOptions = [
-    "A block",
-    "AC I Wing",
-    "AC II Wing",
-    "AD Admin",
-    "AD MT",
-    "AD Outdoor",
-    "AD PS",
-    "AD Training",
-    "Armour Wing",
-    "B Block",
-    "Computer Lab",
-    "CPC",
-    "Cyber Forensics Lab",
-    "Direcor Bunglow",
-    "Director Office",
-    "DKMS",
-    "Drinking Water Treatment Plant (DWTP)",
-    "Driving School",
-    "Dry Canteen",
-    "Duty Office",
-    "DySP Admin",
-    "DySP Indoor",
-    "DySP PS1",
-    "DySP PS2",
-    "DySP TTNS",
-    "Guest House",
-    "HoD Behavioral Science",
-    "HoD Computer Application",
-    "HoD Forensics Medicine",
-    "HoD Forensics Science",
-    "HoD Law",
-    "IGP/ DIG Training",
-    "Indoor",
-    "Inspector Admin Office",
-    "Inspector Indoor OFFICE",
-    "Laundry",
-    "Model PS",
-    "MT Office",
-    "PRC",
-    "R & P Wing",
-    "SDTS",
-    "SO Mess",
-    "Super Market",
-    "Swimming Pool",
-    "Telecommunication Wing",
-    "TT 01",
-    "TT 02",
-    "TT 03",
-    "TT 04",
-    "TT 05",
-    "TT 06",
-    "TT 07",
-    "TT 08",
-    "TT 09",
-    "TT 10",
-    "Unit Hospital",
-    "Vishranthi",
-    "Wet Canteen",
-  ];
-
+const QMIStockIssueForm = () => {
   const [formData, setFormData] = useState({
+    qmNo: "",
+    requestNo: "",
     dateOfIssue: "",
-    slNo: "",
-    penNo: "",
-    to: "",
-    name: "",
-    mobile: "",
     item: "",
-    Category: "",
-    Subcategory: "",
-    purpose: "",
+    category: "",
+    subCategory: "",
     qty: "",
     unit: "",
-    usage: "",
     perishableType: "",
   });
 
@@ -97,13 +31,29 @@ const QMITempIssueForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
-  // Set today's date on load
+  // ✅ List of submitted items under same indent number
+  const [submittedItems, setSubmittedItems] = useState([]);
+
+  const [labelMap] = useState({
+    qmNo: "QM No.",
+    requestNo: "Request No.",
+    dateOfIssue: "Date of Issue",
+    item: "Item",
+    category: "Category",
+    subCategory: "Sub Category",
+    qty: "Quantity",
+    unit: "Unit",
+    perishableType: "Is Perishable",
+  });
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFormData((prev) => ({
       ...prev,
       dateOfIssue: today,
+      dateOfReceive: today,
     }));
   }, []);
 
@@ -119,9 +69,10 @@ const QMITempIssueForm = () => {
     e.preventDefault();
     setStatus("loading");
     setError("");
-    setSuccessMessage("");
 
     setTimeout(() => {
+      // Add current data to list
+      setSubmittedItems((prev) => [...prev, formData]);
       setShowConfirmModal(true);
       setStatus("idle");
     }, 500);
@@ -129,24 +80,19 @@ const QMITempIssueForm = () => {
 
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
-    const currentIndentNo = formData.indentNo;
 
-    setFormData({
-      dateOfIssue: "",
-      slNo: "",
-      penNo: "",
-      to: "",
-      name: "",
-      mobile: "",
+    setFormData((prev) => ({
+      ...prev,
+      qmNo: "",
+      requestNo: "",
+      dateOfIssue: today,
       item: "",
-      Category: "",
-      Subcategory: "",
-      purpose: "",
+      category: "",
+      subCategory: "",
       qty: "",
       unit: "",
-      usage: "",
       perishableType: "",
-    });
+    }));
 
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item with the same indent.");
@@ -159,49 +105,61 @@ const QMITempIssueForm = () => {
   };
 
   const handleFinalSubmit = () => {
-    console.log("Form Data Submitted:", formData);
+    setShowPreviewModal(false);
+    setShowPdfModal(true);
+  };
+
+  const generateAndDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    const indentNumber = formData.indentNo || "N/A";
+    doc.setFontSize(16);
+    doc.text(`Indent Number: ${indentNumber}`, 20, 20);
+    doc.setFontSize(14);
+    doc.text("Submitted Items", 20, 30);
+    doc.setFontSize(10);
+
+    let y = 40;
+
+    submittedItems.forEach((item, index) => {
+      doc.text(`Item #${index + 1}:`, 20, y);
+      y += 5;
+      Object.entries(item).forEach(([key, value]) => {
+        if (value && key !== "dateOfIssue" && key !== "dateOfReceive") {
+          doc.text(`${labelMap[key] || key}: ${value}`, 25, y);
+          y += 5;
+        }
+      });
+      y += 10;
+    });
+
+    doc.save(`form_entry_indent_${indentNumber}.pdf`);
+    resetFormAndState();
+  };
+
+  const resetFormAndState = () => {
     const today = new Date().toISOString().split("T")[0];
     setFormData({
       dateOfIssue: today,
-      slNo: "",
-      penNo: "",
-      to: "",
-      name: "",
-      mobile: "",
+      qmNo: "",
+      requestNo: "",
       item: "",
-      Category: "",
-      Subcategory: "",
-      purpose: "",
+      category: "",
+      subCategory: "",
       qty: "",
       unit: "",
-      usage: "",
       perishableType: "",
     });
-    setShowPreviewModal(false);
+
+    setSubmittedItems([]);
     setSuccessMessage("Form submitted successfully!");
     setStatus("succeeded");
-  };
-
-  const labelMap = {
-    dateOfIssue: "Date Of Issue",
-    slNo: "SL No.",
-    penNo: "PEN No.",
-    to: "To (Company/ Office)",
-    name: "Name",
-    mobile: "Mobile",
-    item: "Item",
-    Category: "Category",
-    Subcategory: "Sub Category",
-    purpose: "Purpose",
-    qty: "Quantity",
-    unit: "Unit",
-    usage: "Usage",
-    perishableType: "Is Perishable?",
+    setShowPdfModal(false);
   };
 
   return (
     <>
-      <Box className="temp-issue-box">
+      <Box className="stock-issue-box">
         <Typography
           variant="h5"
           mb={2}
@@ -209,26 +167,33 @@ const QMITempIssueForm = () => {
           textAlign="center"
           color="white"
         >
-          Temporary Issue Form
+          Stock Issue - Entry Form
         </Typography>
 
-        {/* Show success or error alerts */}
-        {status === "failed" && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        {/* Alerts */}
+        {status === "failed" && <Alert severity="error">{error}</Alert>}
         {status === "succeeded" && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {successMessage}
-          </Alert>
+          <Alert severity="success">{successMessage}</Alert>
         )}
 
         <form onSubmit={handleSubmit} className="mui-form">
           <TextField
-            label="Sl No."
-            name="slNo"
-            value={formData.slNo}
+            label="QM No."
+            name="qmNo"
+            value={formData.qmNo}
+            onChange={handleChange}
+            required
+            fullWidth
+            sx={{
+              input: { color: "white" },
+              label: { color: "white" },
+              fieldset: { borderColor: "white" },
+            }}
+          />
+          <TextField
+            label="Request No."
+            name="requestNo"
+            value={formData.requestNo}
             onChange={handleChange}
             required
             fullWidth
@@ -255,73 +220,6 @@ const QMITempIssueForm = () => {
           />
 
           <TextField
-            label="PEN No."
-            name="penNo"
-            value={formData.penNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-
-          {/* ✅ Dropdown for To (Office / Company) */}
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>
-              To (Office / Company)
-            </InputLabel>
-            <Select
-              name="to"
-              value={formData.to}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {officeOptions.map((office) => (
-                <MenuItem key={office} value={office}>
-                  {office}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Mobile No."
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
             label="Item"
             name="item"
             value={formData.item}
@@ -334,6 +232,7 @@ const QMITempIssueForm = () => {
               fieldset: { borderColor: "white" },
             }}
           />
+
           <TextField
             label="Category"
             name="category"
@@ -347,61 +246,20 @@ const QMITempIssueForm = () => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <FormControl
-            fullWidth
+
+          <TextField
+            label="Sub Category"
+            name="subCategory"
+            value={formData.subCategory}
+            onChange={handleChange}
             required
+            fullWidth
             sx={{
+              input: { color: "white" },
               label: { color: "white" },
-              svg: { color: "white" },
               fieldset: { borderColor: "white" },
             }}
-          >
-            <InputLabel sx={{ color: "white" }}>Sub Category</InputLabel>
-            <Select
-              name="subCategory"
-              value={formData.subCategory || ""}
-              onChange={handleSubCategoryChange}
-              sx={{ color: "white" }}
-            >
-              {allSubCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-              {customSubCategories.map((cat) => (
-                <MenuItem
-                  key={`CUSTOM_DELETE_${cat}`}
-                  value={`CUSTOM_DELETE_${cat}`}
-                >
-                  {cat} ❌
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {showCustomInput && (
-            <Box display="flex" gap={1} mt={1}>
-              <TextField
-                label="Enter New Sub Category"
-                value={customInputValue}
-                onChange={(e) => setCustomInputValue(e.target.value)}
-                fullWidth
-                size="small"
-                sx={{
-                  input: { color: "white" },
-                  label: { color: "white" },
-                  fieldset: { borderColor: "white" },
-                }}
-              />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
+          />
           <TextField
             label="Quantity"
             type="number"
@@ -437,36 +295,7 @@ const QMITempIssueForm = () => {
               <MenuItem value="meter">Meter</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            label="Purpose"
-            name="pupose"
-            value={formData.pupose}
-            onChange={handleChange}
-            required
-            fullWidth
-            multiline
-            rows={1}
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Usage"
-            name="usage"
-            value={formData.usage}
-            onChange={handleChange}
-            required
-            fullWidth
-            multiline
-            rows={1}
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
+
           <FormControl
             fullWidth
             required
@@ -488,12 +317,12 @@ const QMITempIssueForm = () => {
             </Select>
           </FormControl>
 
-          <Box display="flex" justifyContent="flex-start" mt={2} ml={62.5}>
+          <Box display="flex" justifyContent="flex-start" mt={12} ml={-12.5}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: "bold" }}
+              sx={{ borderRadius: 2, px: 5.3, py: 0, fontWeight: "bold" }}
               disabled={status === "loading"}
             >
               {status === "loading" ? "Submitting..." : "Submit"}
@@ -502,7 +331,7 @@ const QMITempIssueForm = () => {
         </form>
       </Box>
 
-      {/* 🧨 Modal: Confirm Add More Items */}
+      {/* Modal: Confirm Add More Items */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -525,7 +354,7 @@ const QMITempIssueForm = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same Sl No.?
+              Do you want to add more items under the same QM No?
             </Typography>
             <Box mt={2}>
               <Button
@@ -548,7 +377,7 @@ const QMITempIssueForm = () => {
         </Box>
       )}
 
-      {/* 🧾 Modal: Preview Before Submit */}
+      {/* Modal: Preview Before Submit */}
       {showPreviewModal && (
         <Box
           position="fixed"
@@ -576,7 +405,6 @@ const QMITempIssueForm = () => {
             <Box mb={2}>
               {Object.entries(formData).map(([key, value]) => {
                 if (!value) return null;
-                const label = labelMap[key] || key;
                 return (
                   <Box
                     key={key}
@@ -584,7 +412,9 @@ const QMITempIssueForm = () => {
                     justifyContent="space-between"
                     mb={1}
                   >
-                    <Typography fontWeight="bold">{label}:</Typography>
+                    <Typography fontWeight="bold">
+                      {labelMap[key] || key}:
+                    </Typography>
                     <Typography>{value}</Typography>
                   </Box>
                 );
@@ -605,8 +435,54 @@ const QMITempIssueForm = () => {
           </Box>
         </Box>
       )}
+
+      {/* Modal: Generate PDF? */}
+      {showPdfModal && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Would you like to generate a PDF of this entry?
+            </Typography>
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndDownloadPDF}
+                sx={{ mr: 2 }}
+              >
+                Yes, Download PDF
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={resetFormAndState}
+              >
+                No, Skip
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };
 
-export default QMITempIssueForm;
+export default QMIStockIssueForm;

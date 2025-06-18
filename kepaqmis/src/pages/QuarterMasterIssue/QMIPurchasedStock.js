@@ -4,14 +4,13 @@ import {
   TextField,
   Select,
   MenuItem,
-  Button,
   FormControl,
   InputLabel,
+  Button,
   Typography,
-  CircularProgress,
   Alert,
 } from "@mui/material";
-
+import jsPDF from "jspdf";
 import "./Issue.css";
 
 const QMIPurchasedStock = () => {
@@ -27,8 +26,9 @@ const QMIPurchasedStock = () => {
     modelNo: "",
     productNo: "",
     qty: "",
-    quantityUnit: "",
+    Unit: "",
     purchaseOrderNo: "",
+    typeOfFund: "",
     amount: "",
     warranty: "",
     warrantyPeriod: "",
@@ -41,31 +41,52 @@ const QMIPurchasedStock = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
+
+  // Sub Category state
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customSubCategory, setCustomSubCategory] = useState("");
+  const [subCategories, setSubCategories] = useState([
+    "Printers",
+    "Inks",
+    "Consumables",
+    "Stationery",
+    "Electronics",
+    "+ Add New",
+  ]);
 
   // Set today's date on load
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFormData((prev) => ({
       ...prev,
-      dateOfPurchased: today,
+      dateOfPurchased: prev.dateOfPurchased || today,
     }));
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+    let updatedData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+
+    if (name === "warranty" && value === "No") {
+      updatedData = {
+        ...updatedData,
+        warrantyPeriod: "",
+        warrantyType: "",
+      };
+    }
+
+    setFormData(updatedData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setStatus("loading");
     setError("");
     setSuccessMessage("");
-
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -74,10 +95,9 @@ const QMIPurchasedStock = () => {
 
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
-
     setFormData((prev) => ({
       ...prev,
-      qmNo: prev.qmNo, // Keep QM/SL No.
+      qmNo: "",
       from: "",
       dateOfPurchased: today,
       item: "",
@@ -88,15 +108,15 @@ const QMIPurchasedStock = () => {
       modelNo: "",
       productNo: "",
       qty: "",
-      quantityUnit: "",
+      Unit: "",
       purchaseOrderNo: "",
+      typeOfFund: "",
       amount: "",
       warranty: "",
       warrantyPeriod: "",
       warrantyType: "",
       perishableType: "",
     }));
-
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item with the same QM/ SL No.");
     setStatus("succeeded");
@@ -109,53 +129,85 @@ const QMIPurchasedStock = () => {
 
   const handleFinalSubmit = () => {
     console.log("Form Data Submitted:", formData);
-
-    const today = new Date().toISOString().split("T")[0];
-    setFormData({
-      qmNo: "",
-      from: "",
-      dateOfPurchased: today,
-      item: "",
-      category: "",
-      subCategory: "",
-      make: "",
-      model: "",
-      modelNo: "",
-      productNo: "",
-      qty: "",
-      quantityUnit: "",
-      purchaseOrderNo: "",
-      amount: "",
-      warranty: "",
-      warrantyPeriod: "",
-      warrantyType: "",
-      perishableType: "",
-    });
-
     setShowPreviewModal(false);
+    setShowPdfModal(true);
+  };
+
+  const generateAndDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(`Purchased Stock Entry`, 20, 20);
+    doc.setFontSize(12);
+    let y = 30;
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
+        doc.text(`${key}: ${value}`, 20, y);
+        y += 10;
+      }
+    });
+    if (formData.warranty === "Yes") {
+      doc.text(`Warranty Period: ${formData.warrantyPeriod}`, 20, y);
+      y += 10;
+      doc.text(`Warranty Type: ${formData.warrantyType}`, 20, y);
+    }
+    doc.save("PurchasedStockEntry.pdf");
+    setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
     setStatus("succeeded");
   };
 
   const labelMap = {
     qmNo: "QM No.",
-    from: "Supplier's Name",
+    from: "Supplier Name",
     dateOfPurchased: "Date Of Purchased",
     item: "Item",
     category: "Category",
     subCategory: "Sub Category",
-    make: "Make/ Brand",
+    make: "Make / Brand",
     model: "Model",
     modelNo: "Model No",
-    productNo: "Product No",
+    productNo: "Product No / Serial No",
     qty: "Quantity",
-    quantityUnit: "Unit",
-    purchaseOrderNo: "Purchase Order No",
+    Unit: "Unit",
+    purchaseOrderNo: "Purchase Order No.",
+    typeOfFund: "Type Of Fund",
     amount: "Amount",
     warranty: "Warranty",
     warrantyPeriod: "Warranty Period",
     warrantyType: "Warranty Type",
     perishableType: "Is Perishable",
+  };
+
+  const handleSubCategoryChange = (e) => {
+    const value = e.target.value;
+
+    if (value === "+ Add New") {
+      setShowCustomInput(true);
+      setFormData((prev) => ({ ...prev, subCategory: "" }));
+    } else {
+      setShowCustomInput(false);
+      setFormData((prev) => ({ ...prev, subCategory: value }));
+    }
+  };
+
+  const handleCustomSubCategorySubmit = () => {
+    if (!customSubCategory.trim()) return;
+
+    if (!subCategories.includes(customSubCategory)) {
+      setSubCategories((prev) => [
+        ...prev.filter((cat) => cat !== "+ Add New"),
+        customSubCategory,
+        "+ Add New",
+      ]);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      subCategory: customSubCategory,
+    }));
+
+    setCustomSubCategory("");
+    setShowCustomInput(false);
   };
 
   return (
@@ -171,7 +223,7 @@ const QMIPurchasedStock = () => {
           Purchased Stock Entry Form
         </Typography>
 
-        {/* Show success or error alerts */}
+        {/* Alerts */}
         {status === "failed" && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -198,9 +250,9 @@ const QMIPurchasedStock = () => {
             }}
           />
           <TextField
-            label="Supplier's Name"
-            name="item"
-            value={formData.item}
+            label="Supplier Name"
+            name="from"
+            value={formData.from}
             onChange={handleChange}
             required
             fullWidth
@@ -251,21 +303,58 @@ const QMIPurchasedStock = () => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <TextField
-            label="Sub Category"
-            name="subCategory"
-            value={formData.subCategory}
-            onChange={handleChange}
-            required
+
+          {/* 🔁 Custom Sub Category Input */}
+          <FormControl
             fullWidth
+            required
             sx={{
-              input: { color: "white" },
               label: { color: "white" },
+              svg: { color: "white" },
               fieldset: { borderColor: "white" },
             }}
-          />
+          >
+            <InputLabel sx={{ color: "white" }}>Sub Category</InputLabel>
+            <Select
+              name="subCategory"
+              value={formData.subCategory || ""}
+              onChange={handleSubCategoryChange}
+              sx={{ color: "white" }}
+            >
+              {subCategories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {showCustomInput && (
+            <Box display="flex" gap={1} mt={1}>
+              <TextField
+                label="Enter New Sub Category"
+                value={customSubCategory}
+                onChange={(e) => setCustomSubCategory(e.target.value)}
+                fullWidth
+                size="small"
+                sx={{
+                  input: { color: "white" },
+                  label: { color: "white" },
+                  fieldset: { borderColor: "white" },
+                }}
+              />
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleCustomSubCategorySubmit}
+              >
+                Add
+              </Button>
+            </Box>
+          )}
+
           <TextField
-            label="Make/ Brand"
+            label="Make / Brand"
             name="make"
             value={formData.make}
             onChange={handleChange}
@@ -304,7 +393,7 @@ const QMIPurchasedStock = () => {
             }}
           />
           <TextField
-            label="Product No/ Serial No"
+            label="Product No / Serial No"
             name="productNo"
             value={formData.productNo}
             onChange={handleChange}
@@ -332,6 +421,7 @@ const QMIPurchasedStock = () => {
           />
           <FormControl
             fullWidth
+            required
             sx={{
               label: { color: "white" },
               svg: { color: "white" },
@@ -340,21 +430,34 @@ const QMIPurchasedStock = () => {
           >
             <InputLabel sx={{ color: "white" }}>Unit</InputLabel>
             <Select
-              name="quantityUnit"
-              value={formData.quantityUnit}
+              name="unit"
+              value={formData.unit}
               onChange={handleChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value="kg">Kilogram</MenuItem>
-              <MenuItem value="litre">Litre</MenuItem>
-              <MenuItem value="nos">Nos</MenuItem>
-              <MenuItem value="meter">Meter</MenuItem>
+              <MenuItem value="Nos">Nos</MenuItem>
+              <MenuItem value="Litre">Litre</MenuItem>
+              <MenuItem value="Kilogram">Kilogram</MenuItem>
+              <MenuItem value="Meter">Meter</MenuItem>
             </Select>
           </FormControl>
           <TextField
-            label="Purchase Order No"
+            label="Purchase Order No."
             name="purchaseOrderNo"
             value={formData.purchaseOrderNo}
+            onChange={handleChange}
+            required
+            fullWidth
+            sx={{
+              input: { color: "white" },
+              label: { color: "white" },
+              fieldset: { borderColor: "white" },
+            }}
+          />
+          <TextField
+            label="Type Of Fund"
+            name="typeOfFund"
+            value={formData.typeOfFund}
             onChange={handleChange}
             required
             fullWidth
@@ -377,7 +480,6 @@ const QMIPurchasedStock = () => {
               fieldset: { borderColor: "white" },
             }}
           />
-          {/* Warranty */}
           <FormControl
             fullWidth
             required
@@ -398,8 +500,6 @@ const QMIPurchasedStock = () => {
               <MenuItem value="No">No</MenuItem>
             </Select>
           </FormControl>
-
-          {/* Conditional Fields */}
           {formData.warranty === "Yes" && (
             <>
               <TextField
@@ -416,7 +516,6 @@ const QMIPurchasedStock = () => {
                   fieldset: { borderColor: "white" },
                 }}
               />
-
               <FormControl
                 fullWidth
                 required
@@ -440,7 +539,6 @@ const QMIPurchasedStock = () => {
               </FormControl>
             </>
           )}
-          {/* ✅ Is Perishable Dropdown */}
           <FormControl
             fullWidth
             required
@@ -462,12 +560,18 @@ const QMIPurchasedStock = () => {
             </Select>
           </FormControl>
 
-          <Box display="flex" justifyContent="felx-start" mt={3.5} ml={60.8}>
+          {/* Submit Button */}
+          <Box display="flex" justifyContent="flex-end" mt={2}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              sx={{ borderRadius: 2, px: 9.3, py: 0, fontWeight: "bold" }}
+              sx={{
+                borderRadius: 2,
+                px: 8.3,
+                py: 0,
+                fontWeight: "bold",
+              }}
               disabled={status === "loading"}
             >
               {status === "loading" ? "Submitting..." : "Submit"}
@@ -476,7 +580,7 @@ const QMIPurchasedStock = () => {
         </form>
       </Box>
 
-      {/* 🧨 Modal: Confirm Add More Items */}
+      {/* Confirm Add More Modal */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -522,7 +626,7 @@ const QMIPurchasedStock = () => {
         </Box>
       )}
 
-      {/* 🧾 Modal: Preview Before Submit */}
+      {/* Preview Modal */}
       {showPreviewModal && (
         <Box
           position="fixed"
@@ -552,12 +656,7 @@ const QMIPurchasedStock = () => {
                 if (!value) return null;
                 const label = labelMap[key] || key;
                 return (
-                  <Box
-                    key={key}
-                    display="flex"
-                    justifyContent="space-between"
-                    mb={1}
-                  >
+                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
                     <Typography fontWeight="bold">{label}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
@@ -574,6 +673,52 @@ const QMIPurchasedStock = () => {
                 onClick={handleFinalSubmit}
               >
                 Confirm Submit
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* Generate PDF Modal */}
+      {showPdfModal && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Would you like to generate a PDF of this entry?
+            </Typography>
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndDownloadPDF}
+                sx={{ mr: 2 }}
+              >
+                Yes, Download PDF
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setShowPdfModal(false)}
+              >
+                No, Skip
               </Button>
             </Box>
           </Box>

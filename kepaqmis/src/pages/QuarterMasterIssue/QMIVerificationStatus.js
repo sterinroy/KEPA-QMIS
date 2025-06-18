@@ -22,10 +22,15 @@ const initialPendingItems = [
     category: "Electronics",
     subCategory: "Printers",
     qty: "2",
+    unit: "Nos",
     isPerishable: "No",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
+    warranty: "No",
+    warrantyPeriod: "",
+    warrantyType: "",
+    perishableType: "",
   },
   {
     id: 2,
@@ -45,10 +50,15 @@ const initialPendingItems = [
     category: "Stationery",
     subCategory: "Consumables",
     qty: "10",
+    unit: "Nos",
     isPerishable: "Yes",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
+    warranty: "Yes",
+    warrantyPeriod: "",
+    warrantyType: "",
+    perishableType: "",
   },
 ];
 
@@ -207,6 +217,38 @@ const QMIVerificationStatus = () => {
       sortComparator: (v1, v2) => v1 - v2,
     },
     {
+      field: "unit",
+      headerName: "Unit",
+      minWidth: 80,
+      sortable: true,
+      valueGetter: (params) => params.row?.unit || "",
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "warranty",
+      headerName: "Warranty",
+      minWidth: 80,
+      sortable: true,
+      valueGetter: (params) => params.row?.warranty || "",
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "warrantyPeriod",
+      headerName: "Warranty Period",
+      minWidth: 100,
+      sortable: true,
+      valueGetter: (params) => params.row?.warrantyPeriod || "",
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
+      field: "warrantyType",
+      headerName: "Warranty Type",
+      minWidth: 100,
+      sortable: true,
+      valueGetter: (params) => params.row?.warrantyType || "",
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
       field: "isPerishable",
       headerName: "Is Perishable",
       minWidth: 100,
@@ -247,6 +289,7 @@ const QMIVerificationStatus = () => {
             rowsPerPageOptions={[5, 10]}
             disableRowSelectionOnClick
             autoHeight
+            getRowId={(row) => row.id} // Ensure MUI can find the ID
             getRowHeight={() => "auto"}
             columnResizeMode="on"
             sortingMode="client"
@@ -291,10 +334,14 @@ const QMIVerificationStatus = () => {
             category: currentItem.category || "",
             subCategory: currentItem.subCategory || "",
             qty: currentItem.qty || "",
+            unit: currentItem.unit || "",
             isPerishable: currentItem.isPerishable || "",
             qmNO: currentItem.qmNO || "",
             dateOfPurchased: currentItem.dateOfPurchased || "",
             invoiveNumber: currentItem.invoiveNumber || "",
+            warranty: currentItem.warranty || "",
+            warrantyType: currentItem.warrantyType || "",
+            warrantyPeriod: currentItem.warrantyPeriod || "",
           }}
         />
       )}
