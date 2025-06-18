@@ -22,14 +22,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     billInvoiceNo: "",
     amount: "",
     item: "",
-    make: "",
-    model: "",
-    modelNo: "",
-    productNo: "",
     category: "",
     subCategory: "",
     qty: "",
-    isPerishable: "",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
@@ -86,14 +81,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
       billInvoiceNo: "",
       amount: "",
       item: "",
-      make: "",
-      model: "",
-      modelNo: "",
-      productNo: "",
       category: "",
       subCategory: "",
       qty: "",
-      isPerishable: "",
       qmNO: "",
       dateOfPurchased: "",
       invoiveNumber: "",
@@ -121,14 +111,9 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
       billInvoiceNo: "",
       amount: "",
       item: "",
-      make: "",
-      model: "",
-      modelNo: "",
-      productNo: "",
       category: "",
       subCategory: "",
       qty: "",
-      isPerishable: "",
       qmNO: "",
       dateOfPurchased: "",
       invoiveNumber: "",
@@ -142,20 +127,15 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
     orderNo: "Order No.",
     supplyOrderNo: "Supply Order No.",
     invoiceDate: "Date Of Invoice",
-    from: "From (Party Name)",
+    from: "Supplier Name",
     to: "To (Office/Company)",
     dateOfVerification: "Date Of Verification",
     billInvoiceNo: "Bill Invoice No.",
     amount: "Amount",
     item: "Item",
-    make: "Make/ Brand",
-    model: "Model Name",
-    modelNo: "Model No.",
-    productNo: "Serial/ Product No.",
     category: "Category",
     subCategory: "Sub Category",
     qty: "Quantity",
-    isPerishable: "Is Perishable",
     qmNO: "QM/ RV No.",
     dateOfPurchased: "Date Of Purchase",
     invoiveNumber: "Invoice Number",
@@ -230,7 +210,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="From (Party Name)"
+            label="Supplier Name"
             name="from"
             value={formData.from}
             onChange={handleChange}
@@ -310,58 +290,6 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             }}
           />
           <TextField
-            label="Make/ Brand"
-            name="make"
-            value={formData.make}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Model Name"
-            name="model"
-            value={formData.model}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Model No."
-            name="modelNo"
-            value={formData.modelNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
-            label="Serial/ Product No."
-            name="productNo"
-            value={formData.productNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: "white" },
-              label: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          />
-          <TextField
             label="Category"
             name="category"
             value={formData.category}
@@ -401,26 +329,6 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
               fieldset: { borderColor: "white" },
             }}
           />
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: "white" },
-              svg: { color: "white" },
-              fieldset: { borderColor: "white" },
-            }}
-          >
-            <InputLabel sx={{ color: "white" }}>Is Perishable</InputLabel>
-            <Select
-              name="isPerishable"
-              value={formData.isPerishable}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              <MenuItem value="Yes">Yes</MenuItem>
-              <MenuItem value="No">No</MenuItem>
-            </Select>
-          </FormControl>
           <TextField
             label="QM/ RV No."
             name="qmNO"
@@ -469,7 +377,7 @@ const VerificationForm = ({ onClose, onSubmit, prefillData }) => {
             justifyContent="flex-end"
             mt={2}
             sx={{
-              ml: 77,
+              ml: 60,
               "@media (max-width: 600px)": {
                 ml: 0,
               },

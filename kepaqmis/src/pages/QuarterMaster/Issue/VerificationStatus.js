@@ -10,19 +10,14 @@ const initialPendingItems = [
     supplyOrderNo: "SUP1001",
     invoiceDate: "2025-04-01",
     from: "ABC Supplier",
-    to: "HQ Office",
+    to: "Director Office",
     dateOfVerification: "2025-04-05",
     billInvoiceNo: "INV1001",
     amount: "₹5000",
     item: "Printer",
-    make: "",
-    model: "",
-    modelNo: "",
-    productNo: "",
     category: "Electronics",
     subCategory: "Printers",
     qty: "2",
-    isPerishable: "No",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
@@ -33,19 +28,14 @@ const initialPendingItems = [
     supplyOrderNo: "SUP1002",
     invoiceDate: "2025-04-02",
     from: "XYZ Supplier",
-    to: "Branch Office",
+    to: "AD Outdoor",
     dateOfVerification: "2025-04-06",
     billInvoiceNo: "INV1002",
     amount: "₹3000",
-    item: "Ink",
-    make: "",
-    model: "",
-    modelNo: "",
-    productNo: "",
-    category: "Stationery",
-    subCategory: "Consumables",
+    item: "Chair",
+    category: "Furniture",
+    subCategory: "Chair",
     qty: "10",
-    isPerishable: "Yes",
     qmNO: "",
     dateOfPurchased: "",
     invoiveNumber: "",
@@ -103,14 +93,14 @@ const VerificationStatus = () => {
     },
     {
       field: "from",
-      headerName: "From",
+      headerName: "Supplier Name",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
     {
       field: "to",
-      headerName: "To",
+      headerName: "To (Office/ Company)",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -140,41 +130,15 @@ const VerificationStatus = () => {
       sortable: true,
       valueGetter: (params) => {
         const amountStr = params.row?.amount;
-        return amountStr ? parseFloat(amountStr.replace(/[^\d.-]/g, '')) || 0 : 0;
+        return amountStr
+          ? parseFloat(amountStr.replace(/[^\d.-]/g, "")) || 0
+          : 0;
       },
       sortComparator: (v1, v2) => v1 - v2,
     },
     {
       field: "item",
-      headerName: "Item",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "make",
-      headerName: "Make/ Brand",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "model",
-      headerName: "Model Name",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "modelNo",
-      headerName: "Model No",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "productNo",
-      headerName: "Serial/ Product No",
+      headerName: "Item Name",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -205,13 +169,6 @@ const VerificationStatus = () => {
       sortComparator: (v1, v2) => v1 - v2,
     },
     {
-      field: "isPerishable",
-      headerName: "Is Perishable",
-      minWidth: 100,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
       field: "actions",
       headerName: "Action",
       width: 90,
@@ -231,7 +188,12 @@ const VerificationStatus = () => {
 
   return (
     <Box sx={{ width: "100%", padding: 3 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        gutterBottom
+        sx={{ color: "white" }}
+      >
         Verification Status
       </Typography>
 
@@ -250,7 +212,7 @@ const VerificationStatus = () => {
             sortingMode="client"
             initialState={{
               sorting: {
-                sortModel: [{ field: 'invoiceDate', sort: 'desc' }],
+                sortModel: [{ field: "invoiceDate", sort: "desc" }],
               },
             }}
             sx={{
@@ -282,14 +244,9 @@ const VerificationStatus = () => {
             billInvoiceNo: currentItem.billInvoiceNo || "",
             amount: currentItem.amount || "",
             item: currentItem.item || "",
-            make: currentItem.make || "",
-            model: currentItem.model || "",
-            modelNo: currentItem.modelNo || "",
-            productNo: currentItem.productNo || "",
             category: currentItem.category || "",
             subCategory: currentItem.subCategory || "",
             qty: currentItem.qty || "",
-            isPerishable: currentItem.isPerishable || "",
             qmNO: currentItem.qmNO || "",
             dateOfPurchased: currentItem.dateOfPurchased || "",
             invoiveNumber: currentItem.invoiveNumber || "",

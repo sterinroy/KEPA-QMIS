@@ -3,7 +3,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const IssueDashboard = () => {
   return (
-    <div>
+    <div style={{ color: 'white' }}>
       <h1>Hi everyone</h1>
       <p>
         Welcome to the QM Dashboard! Here you can manage users, approve

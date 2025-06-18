@@ -16,7 +16,7 @@ import './Issue.css';
 
 const RequestedIssueForm = () => {
   const [formData, setFormData] = useState({
-    qmSlNo: '',
+    qmNo: '',
     dateOfPurchased: '',
     item: '',
     category: '',
@@ -75,7 +75,7 @@ const RequestedIssueForm = () => {
 
     setFormData((prev) => ({
       ...prev,
-      qmSlNo: prev.qmSlNo, // Keep QM/SL No.
+      qmNo: prev.qmNo, // Keep QM/SL No.
       dateOfPurchased: today,
       item: '',
       category: '',
@@ -108,7 +108,7 @@ const RequestedIssueForm = () => {
 
     const today = new Date().toISOString().split('T')[0];
     setFormData({
-      qmSlNo: '',
+      qmNo: '',
       dateOfPurchased: today,
       item: '',
       category: '',
@@ -132,7 +132,7 @@ const RequestedIssueForm = () => {
   };
 
   const labelMap = {
-    qmSlNo: 'QM/ SL No.',
+    qmNo: 'QM No.',
     dateOfPurchased: 'Date Of Purchased',
     item: 'Item',
     category: 'Category',
@@ -177,9 +177,9 @@ const RequestedIssueForm = () => {
 
         <form onSubmit={handleSubmit} className="mui-form">
           <TextField
-            label="QM/ SL No."
-            name="qmSlNo"
-            value={formData.qmSlNo}
+            label="QM No."
+            name="qmNo"
+            value={formData.qmNo}
             onChange={handleChange}
             required
             fullWidth

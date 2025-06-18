@@ -326,7 +326,7 @@ const TempIssueForm = () => {
             required
             fullWidth
             multiline
-            rows={2}
+            rows={1}
             sx={{
               input: { color: "white" },
               label: { color: "white" },
@@ -341,7 +341,7 @@ const TempIssueForm = () => {
             required
             fullWidth
             multiline
-            rows={2}
+            rows={1}
             sx={{
               input: { color: "white" },
               label: { color: "white" },

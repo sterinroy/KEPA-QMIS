@@ -16,7 +16,7 @@ import './Issue.css';
 const DirectIssueForm = () => {
   const [formData, setFormData] = useState({
     dateOfIssue: '',
-    dateOfPurchased: '',
+    dateOfReceive: '',
     fromChiefDistrictOrOther: '',
     item: '',
     category: '',
@@ -43,7 +43,7 @@ const DirectIssueForm = () => {
 
   const [labelMap] = useState({
     dateOfIssue: 'Date of Issue',
-    dateOfPurchased: 'Date of Purchased',
+    dateOfReceive: 'Date of Receive',
     fromChiefDistrictOrOther: 'Issued From',
     item: 'Item',
     category: 'Category',
@@ -63,7 +63,7 @@ const DirectIssueForm = () => {
     setFormData((prev) => ({
       ...prev,
       dateOfIssue: today,
-      dateOfPurchased: today,
+      dateOfReceive: today,
     }));
   }, []);
 
@@ -94,7 +94,7 @@ const DirectIssueForm = () => {
     setFormData((prev) => ({
       ...prev,
       dateOfIssue: today,
-      dateOfPurchased: today,
+      dateOfReceive: today,
       fromChiefDistrictOrOther: '',
       item: '',
       category: '',
@@ -139,7 +139,7 @@ const DirectIssueForm = () => {
       doc.text(`Item #${index + 1}:`, 20, y);
       y += 5;
       Object.entries(item).forEach(([key, value]) => {
-        if (value && key !== 'dateOfIssue' && key !== 'dateOfPurchased') {
+        if (value && key !== 'dateOfIssue' && key !== 'dateOfReceive') {
           doc.text(`${labelMap[key] || key}: ${value}`, 25, y);
           y += 5;
         }
@@ -155,7 +155,7 @@ const DirectIssueForm = () => {
     const today = new Date().toISOString().split('T')[0];
     setFormData({
       dateOfIssue: today,
-      dateOfPurchased: today,
+      dateOfReceive: today,
       fromChiefDistrictOrOther: '',
       item: '',
       category: '',
@@ -199,8 +199,8 @@ const DirectIssueForm = () => {
             }}
           />
 
-          <TextField label="Date of Purchased" type="date" name="dateOfPurchased"
-            value={formData.dateOfPurchased}
+          <TextField label="Date of Receive" type="date" name="dateOfReceive"
+            value={formData.dateOfReceive}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             required fullWidth sx={{
