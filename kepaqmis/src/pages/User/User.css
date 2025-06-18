@@ -153,32 +153,30 @@
 }
 
 .send-box {
-  
-  justify-items: center;
   padding: 20px;
 }
 .send-form{
-  justify-content: center;
-   align-items: center;
-  align-content: center;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 .send-box .MuiTextField-root {
   margin-bottom: 16px;
-
-
 }
 
 
 .intend-form{
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 24px 48px;
+  display:grid;
+  
 
 }
 .intend-form > * {
   min-height: 60px;
+}
+
+.submit-button{
+  color: #f44336;
+
 }
 
 .intend-form .MuiInputBase-root {
@@ -243,7 +241,7 @@
   width: 150px;
 }
 .unit-cat{
-  width: 150px;
+  width: 100px;
   
 }
 
