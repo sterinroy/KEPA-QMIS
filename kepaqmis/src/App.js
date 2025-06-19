@@ -26,6 +26,8 @@ import QMALayout from "./pages/QuarterMaster/QMALayout";
 import QMADashboard from "./pages/QuarterMaster/QMADashboard";
 import QMAPurchase from "./pages/QuarterMaster/QMAPurchase"
 import QMACategories from "./pages/QuarterMaster/QMACategories";
+import QMAPurchaseOverview from "./pages/QuarterMaster/QMAPurchaseOverview";
+import QMAIssueOverview from "./pages/QuarterMaster/QMAIssueOverview";
 function App() {
   return (
     <Router>
@@ -84,6 +86,10 @@ function App() {
           <Route path="QMADashboard" element={<QMADashboard />} />
           <Route path="QMAPurchase" element={<QMAPurchase />} />
           <Route path="QMACategories" element={<QMACategories />}/>
+          <Route path="QMAPurchaseOverview" element={<QMAPurchaseOverview />}/>
+          <Route path="QMPEntries" element={<QMPEntries />} />
+          <Route path="QMPOrder" element={<QMPOrder />} />
+          <Route path="QMAIssueOverview" element={<QMAIssueOverview />}/>
 
         </Route>
         <Route

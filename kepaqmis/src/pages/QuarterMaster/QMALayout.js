@@ -10,7 +10,8 @@ import Main from "../../components/Main";
 import QMAPurchase from "./QMAPurchase"
 import QMACategories from "./QMACategories"
 import AddIcon from '@mui/icons-material/Add';
-
+import QMAPurchaseOverview from "./QMAPurchaseOverview";
+import QMAIssueOverview from "./QMAIssueOverview";
 function QMALayout() {
   const [setActiveComponent] = useState(<QMADashboard />);
 
@@ -21,17 +22,29 @@ function QMALayout() {
       icon: <DashboardIcon className="icon" />,
       component: <QMADashboard />,
     },
-        {
-      label: "PurchaseEntries",
-      path: "/QuarterMasterACQM/QMAPurchase",
-      icon: <LocalShippingIcon className="icon" />,
-      component: <QMAPurchase />,
-    },
+    //     {
+    //   label: "PurchaseEntries",
+    //   path: "/QuarterMasterACQM/QMAPurchase",
+    //   icon: <LocalShippingIcon className="icon" />,
+    //   component: <QMAPurchase />,
+    // },
             {
       label: "Categories",
       path: "/QuarterMasterACQM/QMACategories",
       icon: <AddIcon className="icon" />,
       component: <QMACategories/>,
+    },
+    {
+      label: "Purchase",
+      path: "/QuarterMasterACQM/QMAPurchaseOverview",
+      icon: <LocalShippingIcon className="icon" />,
+      component: <QMAPurchaseOverview />,
+    },
+        {
+      label: "Issue",
+      path: "/QuarterMasterACQM/QMAIssueOverview",
+      icon: <LocalShippingIcon className="icon" />,
+      component: <QMAIssueOverview />,
     },
  
   ];

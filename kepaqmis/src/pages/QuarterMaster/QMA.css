@@ -115,3 +115,11 @@ button:hover {
  .MuiSvgIcon-root {
   color: #ffffff;
 }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 80px 100px;
+  max-width: 1000px;
+  width: 100%;
+  justify-items: center;
+}

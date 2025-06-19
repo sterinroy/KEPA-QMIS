@@ -5,8 +5,8 @@ const QMADashboard = () => {
     <div>
       <h1>Hi everyone</h1>
       <p>
-        Welcome to the QM Purchase Dashboard! Here you can manage users, approve
-        registrations, and view logs. Feel free to explore the different
+        Welcome to the ACQM Dashboard! Here you can manage purchase, issue
+        manage, and add categories. Feel free to explore the different
         sections.
       </p>
     </div>
