@@ -14,32 +14,54 @@ import jsPDF from "jspdf";
 import "./Issue.css";
 
 const QMIDirectStock = () => {
-  const [formData, setFormData] = useState({
-    qmNo: "",
-    requestNo: "",
-    dateOfIssue: "",
-    item: "",
-    category: "",
-    subCategory: "",
-    make: "",
-    model: "",
-    modelNo: "",
-    productNo: "",
-    qty: "",
-    unit: "",
-    warranty: "",
-    warrantyPeriod: "",
-    warrantyType: "",
-    indentNo: "",
-    perishableType: "",
-  });
+  // === Field Configuration ===
+  const fieldConfig = [
+    { name: "qmNo", label: "QM No.", type: "text", required: true },
+    { name: "requestNo", label: "Request No", type: "text", required: true },
+    { name: "dateOfIssue", label: "Date Of Issue", type: "date", required: true },
+    { name: "item", label: "Item", type: "text", required: true },
+    { name: "category", label: "Category", type: "text", required: true },
+    { name: "subCategory", label: "Sub Category", type: "select", required: true },
+    { name: "make", label: "Make / Brand", type: "text", required: true },
+    { name: "model", label: "Model", type: "text", required: true },
+    { name: "modelNo", label: "Model No", type: "text", required: true },
+    { name: "productNo", label: "Product No / Serial No", type: "text", required: true },
+    { name: "qty", label: "Quantity", type: "number", required: true },
+    { name: "unit", label: "Unit", type: "select", options: ["Nos", "Litre", "Kilogram", "Meter"], required: true },
+    { name: "warranty", label: "Warranty", type: "select", options: ["Yes", "No"], required: true },
+    {
+      condition: (data) => data.warranty === "Yes",
+      fields: [
+        { name: "warrantyPeriod", label: "Warranty Period (in months)", type: "number", required: true },
+        { name: "warrantyType", label: "Warranty Type", type: "select", options: ["On-Site", "Replacement", "Pickup & Drop"], required: true },
+      ],
+    },
+    { name: "indentNo", label: "Indent No.", type: "text", required: true },
+    { name: "perishableType", label: "Is Perishable", type: "select", options: ["Yes", "No"], required: true },
+  ];
 
+  // === Initial Form State & Reset Function ===
+  const getInitialFormData = () => {
+    const data = {};
+    fieldConfig.forEach((field) => {
+      if (field.name) data[field.name] = "";
+      if (field.fields) field.fields.forEach((f) => (data[f.name] = ""));
+    });
+    data.dateOfIssue = new Date().toISOString().split("T")[0];
+    return data;
+  };
+
+  const [formData, setFormData] = useState(getInitialFormData());
+
+  // === Subcategories Logic ===
   const defaultSubCategories = ["Printers", "Inks", "Consumables", "Stationery", "Electronics"];
-
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
 
+  const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
+
+  // === Modal & Status States ===
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -47,7 +69,6 @@ const QMIDirectStock = () => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showPdfModal, setShowPdfModal] = useState(false);
 
-  const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
   const inputStyles = {
     input: { color: "white" },
     label: { color: "white" },
@@ -57,11 +78,14 @@ const QMIDirectStock = () => {
   // Set today's date on load
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    if (!formData.dateOfIssue) setFormData((prev) => ({ ...prev, dateOfIssue: today }));
+    if (!formData.dateOfIssue)
+      setFormData((prev) => ({ ...prev, dateOfIssue: today }));
   }, []);
 
+  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     let updatedData = { ...formData, [name]: value };
 
     if (name === "warranty" && value === "No") {
@@ -77,7 +101,6 @@ const QMIDirectStock = () => {
 
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
-
     if (value === "+ Add New") {
       setShowCustomInput(true);
       setFormData((prev) => ({ ...prev, subCategory: "" }));
@@ -94,7 +117,6 @@ const QMIDirectStock = () => {
   const handleAddNewSubCategory = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
-
     setCustomSubCategories((prev) => [...prev, trimmed]);
     setFormData((prev) => ({ ...prev, subCategory: trimmed }));
     setCustomInputValue("");
@@ -106,7 +128,6 @@ const QMIDirectStock = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
-
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -116,23 +137,8 @@ const QMIDirectStock = () => {
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
     setFormData({
-      qmNo: "",
-      requestNo: "",
+      ...getInitialFormData(),
       dateOfIssue: today,
-      item: "",
-      category: "",
-      subCategory: "",
-      make: "",
-      model: "",
-      modelNo: "",
-      productNo: "",
-      qty: "",
-      unit: "",
-      warranty: "",
-      warrantyPeriod: "",
-      warrantyType: "",
-      indentNo: "",
-      perishableType: "",
     });
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item.");
@@ -171,88 +177,132 @@ const QMIDirectStock = () => {
     }
 
     doc.save("DirectStockIssue.pdf");
+
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
-    setStatus("succeeded");
+    resetForm(); // Reset form after download
   };
 
-  const labelMap = {
-    qmNo: "QM No.",
-    requestNo: "Request No",
-    dateOfIssue: "Date Of Issue",
-    item: "Item",
-    category: "Category",
-    subCategory: "Sub Category",
-    make: "Make / Brand",
-    model: "Model",
-    modelNo: "Model No",
-    productNo: "Product No / Serial No",
-    qty: "Quantity",
-    unit: "Unit",
-    warranty: "Warranty",
-    warrantyPeriod: "Warranty Period",
-    warrantyType: "Warranty Type",
-    indentNo: "Indent No.",
-    perishableType: "Is Perishable",
+  // === Reset Form Function ===
+  const resetForm = () => {
+    setFormData(getInitialFormData());
+    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setShowCustomInput(false);
+    setCustomInputValue("");
+    setStatus("idle");
+  };
+
+  // === Render Field Component ===
+  const renderField = (field) => {
+    const value = formData[field.name];
+
+    switch (field.type) {
+      case "text":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="text"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            sx={inputStyles}
+          />
+        );
+      case "number":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="number"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            sx={inputStyles}
+          />
+        );
+      case "date":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="date"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            sx={inputStyles}
+          />
+        );
+      case "select":
+        return (
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>{field.label}</InputLabel>
+            <Select name={field.name} value={value} onChange={handleChange} sx={{ color: "white" }}>
+              {(field.options || []).map((opt) => (
+                <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
     <>
       <Box className="direct-issue-box">
-        <Typography
-          variant="h5"
-          mb={2}
-          fontWeight="bold"
-          textAlign="center"
-          color="white"
-        >
+        <Typography variant="h5" mb={2} fontWeight="bold" textAlign="center" color="white">
           Direct Issued Stock Entry Form
         </Typography>
 
         {/* Alerts */}
         {status === "failed" && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {status === "succeeded" && (
-          <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>
-        )}
+        {status === "succeeded" && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
         <form onSubmit={handleSubmit} className="mui-form">
-          {/* Auto-filled Fields */}
-          {["qmNo", "requestNo", "dateOfIssue", "item", "category"].map((field) => (
-            <TextField
-              key={field}
-              label={labelMap[field]}
-              name={field}
-              type={field === "dateOfIssue" ? "date" : "text"}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              fullWidth
-              InputLabelProps={field === "dateOfIssue" ? { shrink: true } : undefined}
-              sx={inputStyles}
-            />
-          ))}
+          {/* Render All Fields Dynamically */}
+          {fieldConfig.map((field, index) => {
+            if (field.condition && !field.condition(formData)) return null;
 
-          {/* Sub Category */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Sub Category</InputLabel>
-            <Select
-              name="subCategory"
-              value={formData.subCategory || ""}
-              onChange={handleSubCategoryChange}
-              sx={{ color: "white" }}
-            >
-              {allSubCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-              {customSubCategories.map((cat) => (
-                <MenuItem key={`CUSTOM_DELETE_${cat}`} value={`CUSTOM_DELETE_${cat}`}>
-                  {cat} ❌
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            if (field.name === "subCategory") {
+              return (
+                <FormControl fullWidth required sx={inputStyles} key={field.name}>
+                  <InputLabel>Sub Category</InputLabel>
+                  <Select
+                    name="subCategory"
+                    value={formData.subCategory || ""}
+                    onChange={handleSubCategoryChange}
+                    sx={{ color: "white" }}
+                  >
+                    {allSubCategories.map((cat) => (
+                      <MenuItem key={cat} value={cat}>
+                        {cat}
+                      </MenuItem>
+                    ))}
+                    {customSubCategories.map((cat) => (
+                      <MenuItem key={`CUSTOM_DELETE_${cat}`} value={`CUSTOM_DELETE_${cat}`}>
+                        {cat} ❌
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              );
+            }
+
+            if (field.fields) {
+              return field.fields.map((f) => renderField(f));
+            }
+
+            return renderField(field);
+          })}
 
           {/* Custom Sub Category Input */}
           {showCustomInput && (
@@ -265,124 +315,11 @@ const QMIDirectStock = () => {
                 size="small"
                 sx={inputStyles}
               />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
+              <Button variant="outlined" size="small" onClick={handleAddNewSubCategory}>
                 Add
               </Button>
             </Box>
           )}
-
-          {/* Make / Brand through Product No fields */}
-          {["make", "model", "modelNo", "productNo", "qty"].map((field) => (
-            <TextField
-              key={field}
-              label={labelMap[field]}
-              name={field}
-              type={field === "qty" ? "number" : "text"}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              fullWidth
-              sx={inputStyles}
-            />
-          ))}
-
-          {/* Unit */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Unit</InputLabel>
-            <Select
-              name="unit"
-              value={formData.unit}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {["Nos", "Litre", "Kilogram", "Meter"].map((unit) => (
-                <MenuItem key={unit} value={unit}>
-                  {unit}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Warranty */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Warranty</InputLabel>
-            <Select
-              name="warranty"
-              value={formData.warranty}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {["Yes", "No"].map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Conditional Fields based on Warranty */}
-          {formData.warranty === "Yes" && (
-            <>
-              <TextField
-                label="Warranty Period (in months)"
-                type="number"
-                name="warrantyPeriod"
-                value={formData.warrantyPeriod}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={inputStyles}
-              />
-
-              <FormControl fullWidth required sx={inputStyles}>
-                <InputLabel>Warranty Type</InputLabel>
-                <Select
-                  name="warrantyType"
-                  value={formData.warrantyType}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  {["On-Site", "Replacement", "Pickup & Drop"].map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </>
-          )}
-
-          {/* Indent No */}
-          <TextField
-            label="Indent No."
-            name="indentNo"
-            value={formData.indentNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={inputStyles}
-          />
-
-          {/* Is Perishable */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Is Perishable</InputLabel>
-            <Select
-              name="perishableType"
-              value={formData.perishableType}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {["Yes", "No"].map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
           {/* Submit Button */}
           <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -404,7 +341,6 @@ const QMIDirectStock = () => {
         </form>
       </Box>
 
-      {/* Modals */}
       {/* Confirm Modal */}
       {showConfirmModal && (
         <Box
@@ -419,31 +355,15 @@ const QMIDirectStock = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
             <Typography variant="h6" gutterBottom>
               Do you want to add more items under the same QM/ SL No.?
             </Typography>
             <Box mt={2}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleAddMoreYes}
-                sx={{ mr: 2 }}
-              >
+              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
                 Yes
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleAddMoreNo}
-              >
+              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
                 No
               </Button>
             </Box>
@@ -465,22 +385,16 @@ const QMIDirectStock = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="500px"
-            width="100%"
-            textAlign="center"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%" textAlign="center">
             <Typography variant="h6" gutterBottom>
               Confirm Submission
             </Typography>
             <Box mb={2}>
               {Object.entries(formData).map(([key, value]) => {
                 if (!value) return null;
-                const label = labelMap[key] || key;
+                const label = key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (char) => char.toUpperCase());
                 return (
                   <Box key={key} display="flex" justifyContent="space-between" mb={1}>
                     <Typography fontWeight="bold">{label}:</Typography>
@@ -515,14 +429,7 @@ const QMIDirectStock = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
             <Typography variant="h6" gutterBottom>
               Would you like to generate a PDF of this entry?
             </Typography>
@@ -538,7 +445,10 @@ const QMIDirectStock = () => {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setShowPdfModal(false)}
+                onClick={() => {
+                  setShowPdfModal(false);
+                  resetForm(); // Reset form when skipping PDF
+                }}
               >
                 No, Skip
               </Button>

@@ -14,28 +14,54 @@ import jsPDF from "jspdf";
 import "./Issue.css";
 
 const QMIPurchasedStock = () => {
-  const [formData, setFormData] = useState({
-    qmNo: "",
-    from: "",
-    dateOfPurchased: "",
-    item: "",
-    category: "",
-    subCategory: "",
-    make: "",
-    model: "",
-    modelNo: "",
-    productNo: "",
-    qty: "",
-    Unit: "",
-    purchaseOrderNo: "",
-    typeOfFund: "",
-    amount: "",
-    warranty: "",
-    warrantyPeriod: "",
-    warrantyType: "",
-    perishableType: "",
-  });
+  // === Field Configuration ===
+  const fieldConfig = [
+    { name: "qmNo", label: "QM No.", type: "text", required: true },
+    { name: "from", label: "Supplier Name", type: "text", required: true },
+    { name: "dateOfPurchased", label: "Date Of Purchased", type: "date", required: true },
+    { name: "purchaseOrderNo", label: "Purchase Order No.", type: "text", required: true },
+    { name: "item", label: "Item", type: "text", required: true },
+    { name: "category", label: "Category", type: "text", required: true },
+    { name: "subCategory", label: "Sub Category", type: "select", required: true },
+    { name: "make", label: "Make / Brand", type: "text", required: true },
+    { name: "model", label: "Model", type: "text", required: true },
+    { name: "modelNo", label: "Model No", type: "text", required: true },
+    { name: "productNo", label: "Product No / Serial No", type: "text", required: true },
+    { name: "qty", label: "Quantity", type: "number", required: true },
+    { name: "Unit", label: "Unit", type: "select", options: ["Nos", "Litre", "Kilogram", "Meter"], required: true },
+    { name: "typeOfFund", label: "Type Of Fund", type: "text", required: true },
+    { name: "amount", label: "Amount", type: "text", required: true },
+    { name: "warranty", label: "Warranty", type: "select", options: ["Yes", "No"], required: true },
+    {
+      condition: (data) => data.warranty === "Yes",
+      fields: [
+        { name: "warrantyPeriod", label: "Warranty Period (in months)", type: "number", required: true },
+        {
+          name: "warrantyType",
+          label: "Warranty Type",
+          type: "select",
+          options: ["On-Site", "Replacement", "Pickup & Drop"],
+          required: true,
+        },
+      ],
+    },
+    { name: "perishableType", label: "Is Perishable", type: "select", options: ["Yes", "No"], required: true },
+  ];
 
+  // === Initial Form State & Reset Function ===
+  const getInitialFormData = () => {
+    const data = {};
+    fieldConfig.forEach((field) => {
+      if (field.name) data[field.name] = "";
+      if (field.fields) field.fields.forEach((f) => (data[f.name] = ""));
+    });
+    data.dateOfPurchased = new Date().toISOString().split("T")[0];
+    return data;
+  };
+
+  const [formData, setFormData] = useState(getInitialFormData());
+
+  // === Subcategories Logic ===
   const defaultSubCategories = ["Printers", "Inks", "Consumables", "Stationery", "Electronics"];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
@@ -43,6 +69,7 @@ const QMIPurchasedStock = () => {
 
   const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
 
+  // === Modal & Status States ===
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -50,14 +77,23 @@ const QMIPurchasedStock = () => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showPdfModal, setShowPdfModal] = useState(false);
 
+  const inputStyles = {
+    input: { color: "white" },
+    label: { color: "white" },
+    fieldset: { borderColor: "white" },
+  };
+
   // Set today's date on load
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    if (!formData.dateOfPurchased) setFormData((prev) => ({ ...prev, dateOfPurchased: today }));
+    if (!formData.dateOfPurchased)
+      setFormData((prev) => ({ ...prev, dateOfPurchased: today }));
   }, []);
 
+  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     let updatedData = { ...formData, [name]: value };
 
     if (name === "warranty" && value === "No") {
@@ -73,7 +109,6 @@ const QMIPurchasedStock = () => {
 
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
-
     if (value === "+ Add New") {
       setShowCustomInput(true);
       setFormData((prev) => ({ ...prev, subCategory: "" }));
@@ -90,7 +125,6 @@ const QMIPurchasedStock = () => {
   const handleAddNewSubCategory = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
-
     setCustomSubCategories((prev) => [...prev, trimmed]);
     setFormData((prev) => ({ ...prev, subCategory: trimmed }));
     setCustomInputValue("");
@@ -102,7 +136,6 @@ const QMIPurchasedStock = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
-
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus("idle");
@@ -112,28 +145,11 @@ const QMIPurchasedStock = () => {
   const handleAddMoreYes = () => {
     const today = new Date().toISOString().split("T")[0];
     setFormData({
-      qmNo: "",
-      from: "",
+      ...getInitialFormData(),
       dateOfPurchased: today,
-      item: "",
-      category: "",
-      subCategory: "",
-      make: "",
-      model: "",
-      modelNo: "",
-      productNo: "",
-      qty: "",
-      Unit: "",
-      purchaseOrderNo: "",
-      typeOfFund: "",
-      amount: "",
-      warranty: "",
-      warrantyPeriod: "",
-      warrantyType: "",
-      perishableType: "",
     });
     setShowConfirmModal(false);
-    setSuccessMessage("Ready to add another item with the same QM/ SL No.");
+    setSuccessMessage("Ready to add another item.");
     setStatus("succeeded");
   };
 
@@ -169,37 +185,85 @@ const QMIPurchasedStock = () => {
     }
 
     doc.save("PurchasedStockEntry.pdf");
+
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
-    setStatus("succeeded");
+    resetForm(); // Reset form after download
   };
 
-  const labelMap = {
-    qmNo: "QM No.",
-    from: "Supplier Name",
-    dateOfPurchased: "Date Of Purchased",
-    item: "Item",
-    category: "Category",
-    subCategory: "Sub Category",
-    make: "Make / Brand",
-    model: "Model",
-    modelNo: "Model No",
-    productNo: "Product No / Serial No",
-    qty: "Quantity",
-    Unit: "Unit",
-    purchaseOrderNo: "Purchase Order No.",
-    typeOfFund: "Type Of Fund",
-    amount: "Amount",
-    warranty: "Warranty",
-    warrantyPeriod: "Warranty Period",
-    warrantyType: "Warranty Type",
-    perishableType: "Is Perishable",
+  // === Reset Form Function ===
+  const resetForm = () => {
+    setFormData(getInitialFormData());
+    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setShowCustomInput(false);
+    setCustomInputValue("");
+    setStatus("idle");
   };
 
-  const inputStyles = {
-    input: { color: "white" },
-    label: { color: "white" },
-    fieldset: { borderColor: "white" },
+  // === Render Field Component ===
+  const renderField = (field) => {
+    const value = formData[field.name];
+
+    switch (field.type) {
+      case "text":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="text"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            sx={inputStyles}
+          />
+        );
+      case "number":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="number"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            sx={inputStyles}
+          />
+        );
+      case "date":
+        return (
+          <TextField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            type="date"
+            value={value}
+            onChange={handleChange}
+            required={field.required}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            sx={inputStyles}
+          />
+        );
+      case "select":
+        return (
+          <FormControl fullWidth required sx={inputStyles}>
+            <InputLabel>{field.label}</InputLabel>
+            <Select name={field.name} value={value} onChange={handleChange} sx={{ color: "white" }}>
+              {(field.options || []).map((opt) => (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -211,50 +275,44 @@ const QMIPurchasedStock = () => {
 
         {/* Alerts */}
         {status === "failed" && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {status === "succeeded" && (
-          <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>
-        )}
+        {status === "succeeded" && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
         <form onSubmit={handleSubmit} className="mui-form">
-          {/* Auto-filled Fields */}
-          {["qmNo", "from", "dateOfPurchased", "purchaseOrderNo", "item", "category"].map(
-            (field) => (
-              <TextField
-                key={field}
-                label={labelMap[field]}
-                name={field}
-                type={field === "dateOfPurchased" ? "date" : "text"}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-                fullWidth
-                InputLabelProps={field === "dateOfPurchased" ? { shrink: true } : undefined}
-                sx={inputStyles}
-              />
-            )
-          )}
+          {/* Render All Fields Dynamically */}
+          {fieldConfig.map((field, index) => {
+            if (field.condition && !field.condition(formData)) return null;
 
-          {/* Sub Category Selector */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Sub Category</InputLabel>
-            <Select
-              name="subCategory"
-              value={formData.subCategory || ""}
-              onChange={handleSubCategoryChange}
-              sx={{ color: "white" }}
-            >
-              {allSubCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-              {customSubCategories.map((cat) => (
-                <MenuItem key={`CUSTOM_DELETE_${cat}`} value={`CUSTOM_DELETE_${cat}`}>
-                  {cat} ❌
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            if (field.name === "subCategory") {
+              return (
+                <FormControl fullWidth required sx={inputStyles} key={field.name}>
+                  <InputLabel>Sub Category</InputLabel>
+                  <Select
+                    name="subCategory"
+                    value={formData.subCategory || ""}
+                    onChange={handleSubCategoryChange}
+                    sx={{ color: "white" }}
+                  >
+                    {allSubCategories.map((cat) => (
+                      <MenuItem key={cat} value={cat}>
+                        {cat}
+                      </MenuItem>
+                    ))}
+                    {customSubCategories.map((cat) => (
+                      <MenuItem key={`CUSTOM_DELETE_${cat}`} value={`CUSTOM_DELETE_${cat}`}>
+                        {cat} ❌
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              );
+            }
+
+            if (field.fields) {
+              return field.fields.map((f) => renderField(f));
+            }
+
+            return renderField(field);
+          })}
 
           {/* Custom Sub Category Input */}
           {showCustomInput && (
@@ -272,113 +330,6 @@ const QMIPurchasedStock = () => {
               </Button>
             </Box>
           )}
-
-          {/* General Info Fields */}
-          {["make", "model", "modelNo", "productNo", "qty"].map((field) => (
-            <TextField
-              key={field}
-              label={labelMap[field]}
-              name={field}
-              type={field === "qty" ? "number" : "text"}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              fullWidth
-              sx={inputStyles}
-            />
-          ))}
-
-          {/* Unit */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Unit</InputLabel>
-            <Select name="unit" value={formData.unit} onChange={handleChange} sx={{ color: "white" }}>
-              {["Nos", "Litre", "Kilogram", "Meter"].map((unit) => (
-                <MenuItem key={unit} value={unit}>
-                  {unit}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Financial Info */}
-          {["typeOfFund", "amount"].map((field) => (
-            <TextField
-              key={field}
-              label={labelMap[field]}
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              fullWidth
-              sx={inputStyles}
-            />
-          ))}
-
-          {/* Warranty */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Warranty</InputLabel>
-            <Select
-              name="warranty"
-              value={formData.warranty}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {["Yes", "No"].map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Conditional Fields based on Warranty */}
-          {formData.warranty === "Yes" && (
-            <>
-              <TextField
-                label="Warranty Period (in months)"
-                type="number"
-                name="warrantyPeriod"
-                value={formData.warrantyPeriod}
-                onChange={handleChange}
-                required
-                fullWidth
-                sx={inputStyles}
-              />
-
-              <FormControl fullWidth required sx={inputStyles}>
-                <InputLabel>Warranty Type</InputLabel>
-                <Select
-                  name="warrantyType"
-                  value={formData.warrantyType}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  {["On-Site", "Replacement", "Pickup & Drop"].map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </>
-          )}
-
-          {/* Is Perishable */}
-          <FormControl fullWidth required sx={inputStyles}>
-            <InputLabel>Is Perishable</InputLabel>
-            <Select
-              name="perishableType"
-              value={formData.perishableType}
-              onChange={handleChange}
-              sx={{ color: "white" }}
-            >
-              {["Yes", "No"].map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
           {/* Submit Button */}
           <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -400,7 +351,6 @@ const QMIPurchasedStock = () => {
         </form>
       </Box>
 
-      {/* Modals */}
       {/* Confirm Modal */}
       {showConfirmModal && (
         <Box
@@ -467,7 +417,9 @@ const QMIPurchasedStock = () => {
             <Box mb={2}>
               {Object.entries(formData).map(([key, value]) => {
                 if (!value) return null;
-                const label = labelMap[key] || key;
+                const label = key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (char) => char.toUpperCase());
                 return (
                   <Box key={key} display="flex" justifyContent="space-between" mb={1}>
                     <Typography fontWeight="bold">{label}:</Typography>
@@ -525,7 +477,10 @@ const QMIPurchasedStock = () => {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setShowPdfModal(false)}
+                onClick={() => {
+                  setShowPdfModal(false);
+                  resetForm(); // Reset form when skipping
+                }}
               >
                 No, Skip
               </Button>
