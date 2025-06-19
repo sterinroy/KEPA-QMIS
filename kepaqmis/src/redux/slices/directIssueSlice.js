@@ -1,36 +1,36 @@
-const UPDATE_FIELD = 'directIssue/updateField'; 
-const RESET_FORM = 'directIssue/resetForm';
+const UPDATE_FIELD = "directIssue/updateField";
+const RESET_FORM = "directIssue/resetForm";
 
-const SUBMIT_START = 'directIssue/submitStart';
-const SUBMIT_SUCCESS = 'directIssue/submitSuccess';
-const SUBMIT_FAILURE = 'directIssue/submitFailure';
+const SUBMIT_START = "directIssue/submitStart";
+const SUBMIT_SUCCESS = "directIssue/submitSuccess";
+const SUBMIT_FAILURE = "directIssue/submitFailure";
 
 const getTodayDateISO = () => {
   const today = new Date();
   const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 };
 
 const initialState = {
   dateOfIssue: getTodayDateISO(),
   dateOfPurchased: getTodayDateISO(),
-  item: '',
-  category: '',
-  subCategory: '',
-  make: '',
-  model: '',
-  modelNo: '',
-  productNo: '',
-  qty: '',
-  unit: '',
-  fromChiefDistrictOrOther: '',
-  indentNo: '',
+  item: "",
+  category: "",
+  subCategory: "",
+  make: "",
+  model: "",
+  modelNo: "",
+  serialNumber: "",
+  qty: "",
+  unit: "",
+  fromChiefDistrictOrOther: "",
+  indentNo: "",
 
-  status: 'idle',       // 'idle' | 'loading' | 'succeeded' | 'failed'
-  error: null,          // error message string if any
-  successMessage: '',   // success message string
+  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null, // error message string if any
+  successMessage: "", // success message string
 };
 
 export default function directIssueReducer(state = initialState, action) {
@@ -49,23 +49,23 @@ export default function directIssueReducer(state = initialState, action) {
     case SUBMIT_START:
       return {
         ...state,
-        status: 'loading',
+        status: "loading",
         error: null,
-        successMessage: '',
+        successMessage: "",
       };
     case SUBMIT_SUCCESS:
       return {
         ...state,
-        status: 'succeeded',
+        status: "succeeded",
         error: null,
-        successMessage: 'Form submitted successfully!',
+        successMessage: "Form submitted successfully!",
       };
     case SUBMIT_FAILURE:
       return {
         ...state,
-        status: 'failed',
+        status: "failed",
         error: action.payload,
-        successMessage: '',
+        successMessage: "",
       };
     default:
       return state;
@@ -83,23 +83,23 @@ export const resetForm = () => ({
 
 export const setInitialDates = () => (dispatch) => {
   const today = getTodayDateISO();
-  dispatch(updateField('dateOfIssue', today));
-  dispatch(updateField('dateOfPurchased', today));
+  dispatch(updateField("dateOfIssue", today));
+  dispatch(updateField("dateOfPurchased", today));
 };
 
 export const submitDirectIssue = (formData) => async (dispatch) => {
   dispatch({ type: SUBMIT_START });
   try {
     // Replace with real API endpoint
-    const response = await fetch('/api/direct-issue', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/direct-issue", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to submit form');
+      throw new Error(errorData.message || "Failed to submit form");
     }
 
     // If success:

@@ -16,21 +16,48 @@ import "./Issue.css";
 const QMITempIssueForm = () => {
   // === Field Configuration ===
   const fieldConfig = [
-    { name: "qmNo", label: "QM No.", type: "text", required: true },
-    { name: "dateOfIssue", label: "Date Of Issue", type: "date", required: true },
+    { name: "Qmno", label: "QM No.", type: "text", required: true },
+    {
+      name: "dateOfIssue",
+      label: "Date Of Issue",
+      type: "date",
+      required: true,
+    },
     { name: "requestNo", label: "Request No.", type: "text", required: true },
     { name: "name", label: "Name", type: "text", required: true },
     { name: "penNo", label: "Pen No.", type: "text", required: true },
-    { name: "to", label: "To (Office / Company)", type: "text", required: true },
+    {
+      name: "toWhom",
+      label: "To (Office / Company)",
+      type: "text",
+      required: true,
+    },
     { name: "mobile", label: "Mobile", type: "text", required: true },
-    { name: "item", label: "Item", type: "text", required: true },
-    { name: "category", label: "Category", type: "text", required: true },
-    { name: "subCategory", label: "Sub Category", type: "select", required: true },
+    { name: "itemName", label: "Item", type: "text", required: true },
+    { name: "itemCategory", label: "Category", type: "text", required: true },
+    {
+      name: "itemSubCategory",
+      label: "Sub Category",
+      type: "select",
+      required: true,
+    },
     { name: "qty", label: "Quantity", type: "number", required: true },
-    { name: "unit", label: "Unit", type: "select", options: ["Nos", "Litre", "Kilogram", "Meter"], required: true },
+    {
+      name: "unit",
+      label: "Unit",
+      type: "select",
+      options: ["Nos", "Litre", "Kilogram", "Meter"],
+      required: true,
+    },
     { name: "usage", label: "Usage", type: "text", required: true },
     { name: "purpose", label: "Purpose", type: "text", required: true },
-    { name: "perishableType", label: "Is Perishable", type: "select", options: ["Yes", "No"], required: true },
+    {
+      name: "perishable",
+      label: "Is Perishable",
+      type: "select",
+      options: ["Yes", "No"],
+      required: true,
+    },
   ];
 
   // === Initial Form State & Reset Function ===
@@ -51,7 +78,11 @@ const QMITempIssueForm = () => {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
 
-  const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
+  const allSubCategories = [
+    ...defaultSubCategories,
+    ...customSubCategories,
+    "+ Add New",
+  ];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
@@ -87,7 +118,9 @@ const QMITempIssueForm = () => {
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
-      setCustomSubCategories((prev) => prev.filter((cat) => cat !== catToDelete));
+      setCustomSubCategories((prev) =>
+        prev.filter((cat) => cat !== catToDelete)
+      );
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else {
       setShowCustomInput(false);
@@ -219,7 +252,12 @@ const QMITempIssueForm = () => {
         return (
           <FormControl fullWidth required sx={inputStyles}>
             <InputLabel>{field.label}</InputLabel>
-            <Select name={field.name} value={value} onChange={handleChange} sx={{ color: "white" }}>
+            <Select
+              name={field.name}
+              value={value}
+              onChange={handleChange}
+              sx={{ color: "white" }}
+            >
               {(field.options || []).map((opt) => (
                 <MenuItem key={opt} value={opt}>
                   {opt}
@@ -236,13 +274,21 @@ const QMITempIssueForm = () => {
   return (
     <>
       <Box className="temp-issue-box">
-        <Typography variant="h5" mb={2} fontWeight="bold" textAlign="center" color="white">
+        <Typography
+          variant="h5"
+          mb={2}
+          fontWeight="bold"
+          textAlign="center"
+          color="white"
+        >
           Temporary Issue Entry Form
         </Typography>
 
         {/* Alerts */}
         {status === "failed" && <Alert severity="error">{error}</Alert>}
-        {status === "succeeded" && <Alert severity="success">{successMessage}</Alert>}
+        {status === "succeeded" && (
+          <Alert severity="success">{successMessage}</Alert>
+        )}
 
         <form onSubmit={handleSubmit} className="mui-form">
           {/* Render All Fields Dynamically */}
@@ -259,7 +305,11 @@ const QMITempIssueForm = () => {
                 size="small"
                 sx={inputStyles}
               />
-              <Button variant="outlined" size="small" onClick={handleAddNewSubCategory}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleAddNewSubCategory}
+              >
                 Add
               </Button>
             </Box>
@@ -299,15 +349,31 @@ const QMITempIssueForm = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
             <Typography variant="h6" gutterBottom>
               Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleAddMoreYes}
+                sx={{ mr: 2 }}
+              >
                 Yes
               </Button>
-              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddMoreNo}
+              >
                 No
               </Button>
             </Box>
@@ -329,7 +395,15 @@ const QMITempIssueForm = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%" textAlign="center">
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="500px"
+            width="100%"
+            textAlign="center"
+          >
             <Typography variant="h6" gutterBottom>
               Confirm Submission
             </Typography>
@@ -340,7 +414,12 @@ const QMITempIssueForm = () => {
                   .replace(/([A-Z])/g, " $1")
                   .replace(/^./, (char) => char.toUpperCase());
                 return (
-                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
+                  <Box
+                    key={key}
+                    display="flex"
+                    justifyContent="space-between"
+                    mb={1}
+                  >
                     <Typography fontWeight="bold">{label}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
@@ -351,7 +430,11 @@ const QMITempIssueForm = () => {
               <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary" onClick={handleFinalSubmit}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFinalSubmit}
+              >
                 Confirm Submit
               </Button>
             </Box>
@@ -373,7 +456,14 @@ const QMITempIssueForm = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
             <Typography variant="h6" gutterBottom>
               Would you like to generate a PDF of this entry?
             </Typography>

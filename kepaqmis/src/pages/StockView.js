@@ -23,7 +23,7 @@ const StockItemView = () => {
       headerName: "Model",
       flex: 1,
       valueGetter: (params) =>
-  `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim()
+        `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim(),
     },
     {
       field: "invoiceDate",
@@ -54,9 +54,9 @@ const StockItemView = () => {
       headerName: "Entered By",
       flex: 1,
       valueGetter: (params) =>
-  params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
-    ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
-    : "-",
+        params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
+          ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
+          : "-",
     },
     {
       field: "barcodeImage",
@@ -81,24 +81,24 @@ const StockItemView = () => {
       <div>
         <h2>Stock Items</h2>
       </div>
-      <div style={{ height: 600 }}> 
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : rows.length === 0 ? (
-        <p>No stock items available.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-        />
-      )}
-      </div> 
+      <div style={{ height: 600 }}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : rows.length === 0 ? (
+          <p>No stock items available.</p>
+        ) : (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10, 25, 50]}
+            disableRowSelectionOnClick
+            showToolbar
+          />
+        )}
+      </div>
     </div>
   );
 };

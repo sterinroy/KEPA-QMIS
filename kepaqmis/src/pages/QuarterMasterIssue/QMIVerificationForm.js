@@ -28,9 +28,14 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       type: "date",
       required: true,
     },
-    { name: "from", label: "Supplier Name", type: "text", required: true },
     {
-      name: "to",
+      name: "fromWhomPurchased",
+      label: "Supplier Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "toWhom",
       label: "To (Office / Company)",
       type: "text",
       required: true,
@@ -48,10 +53,10 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       required: true,
     },
     { name: "amount", label: "Amount", type: "text", required: true },
-    { name: "item", label: "Item", type: "text", required: true },
-    { name: "category", label: "Category", type: "text", required: true },
+    { name: "itemName", label: "Item", type: "text", required: true },
+    { name: "itemCategory", label: "Category", type: "text", required: true },
     {
-      name: "subCategory",
+      name: "itemSubCategory",
       label: "Sub Category",
       type: "select",
       required: true,
@@ -64,7 +69,7 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       options: ["Nos", "Litre", "Kilogram", "Meter"],
       required: true,
     },
-    { name: "qmNO", label: "QM No.", type: "text", required: true },
+    { name: "Qmno", label: "QM No.", type: "text", required: true },
     {
       name: "dateOfPurchased",
       label: "Date Of Purchase",
@@ -103,7 +108,7 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       ],
     },
     {
-      name: "perishableType",
+      name: "perishable",
       label: "Is Perishable",
       type: "select",
       options: ["Yes", "No"],

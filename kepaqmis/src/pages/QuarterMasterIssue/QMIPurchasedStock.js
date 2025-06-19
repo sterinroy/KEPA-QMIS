@@ -16,26 +16,68 @@ import "./Issue.css";
 const QMIPurchasedStock = () => {
   // === Field Configuration ===
   const fieldConfig = [
-    { name: "qmNo", label: "QM No.", type: "text", required: true },
-    { name: "from", label: "Supplier Name", type: "text", required: true },
-    { name: "dateOfPurchased", label: "Date Of Purchased", type: "date", required: true },
-    { name: "purchaseOrderNo", label: "Purchase Order No.", type: "text", required: true },
-    { name: "item", label: "Item", type: "text", required: true },
-    { name: "category", label: "Category", type: "text", required: true },
-    { name: "subCategory", label: "Sub Category", type: "select", required: true },
+    { name: "Qmno", label: "QM No.", type: "text", required: true },
+    {
+      name: "fromWhomPurchased",
+      label: "Supplier Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "dateOfPurchased",
+      label: "Date Of Purchased",
+      type: "date",
+      required: true,
+    },
+    {
+      name: "purchaseOrderNo",
+      label: "Purchase Order No.",
+      type: "text",
+      required: true,
+    },
+    { name: "itemName", label: "Item", type: "text", required: true },
+    { name: "itemCategory", label: "Category", type: "text", required: true },
+    {
+      name: "itemSubCategory",
+      label: "Sub Category",
+      type: "select",
+      required: true,
+    },
     { name: "make", label: "Make / Brand", type: "text", required: true },
     { name: "model", label: "Model", type: "text", required: true },
     { name: "modelNo", label: "Model No", type: "text", required: true },
-    { name: "productNo", label: "Product No / Serial No", type: "text", required: true },
+    {
+      name: "serialNumber",
+      label: "Product No / Serial No",
+      type: "text",
+      required: true,
+    },
     { name: "qty", label: "Quantity", type: "number", required: true },
-    { name: "Unit", label: "Unit", type: "select", options: ["Nos", "Litre", "Kilogram", "Meter"], required: true },
+    {
+      name: "Unit",
+      label: "Unit",
+      type: "select",
+      options: ["Nos", "Litre", "Kilogram", "Meter"],
+      required: true,
+    },
     { name: "typeOfFund", label: "Type Of Fund", type: "text", required: true },
     { name: "amount", label: "Amount", type: "text", required: true },
-    { name: "warranty", label: "Warranty", type: "select", options: ["Yes", "No"], required: true },
+    {
+      name: "warranty",
+      label: "Warranty",
+      type: "select",
+      options: ["Yes", "No"],
+      required: true,
+    },
     {
       condition: (data) => data.warranty === "Yes",
       fields: [
-        { name: "warrantyPeriod", label: "Warranty Period (in months)", type: "number", required: true },
+        {
+          name: "warrantyPeriod",
+          label: "Warranty Period (in months)",
+          type: "number",
+          required: true,
+        },
         {
           name: "warrantyType",
           label: "Warranty Type",
@@ -45,7 +87,13 @@ const QMIPurchasedStock = () => {
         },
       ],
     },
-    { name: "perishableType", label: "Is Perishable", type: "select", options: ["Yes", "No"], required: true },
+    {
+      name: "perishable",
+      label: "Is Perishable",
+      type: "select",
+      options: ["Yes", "No"],
+      required: true,
+    },
   ];
 
   // === Initial Form State & Reset Function ===
@@ -62,12 +110,22 @@ const QMIPurchasedStock = () => {
   const [formData, setFormData] = useState(getInitialFormData());
 
   // === Subcategories Logic ===
-  const defaultSubCategories = ["Printers", "Inks", "Consumables", "Stationery", "Electronics"];
+  const defaultSubCategories = [
+    "Printers",
+    "Inks",
+    "Consumables",
+    "Stationery",
+    "Electronics",
+  ];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
 
-  const allSubCategories = [...defaultSubCategories, ...customSubCategories, "+ Add New"];
+  const allSubCategories = [
+    ...defaultSubCategories,
+    ...customSubCategories,
+    "+ Add New",
+  ];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
@@ -114,7 +172,9 @@ const QMIPurchasedStock = () => {
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
-      setCustomSubCategories((prev) => prev.filter((cat) => cat !== catToDelete));
+      setCustomSubCategories((prev) =>
+        prev.filter((cat) => cat !== catToDelete)
+      );
       setFormData((prev) => ({ ...prev, subCategory: "" }));
     } else {
       setShowCustomInput(false);
@@ -252,7 +312,12 @@ const QMIPurchasedStock = () => {
         return (
           <FormControl fullWidth required sx={inputStyles}>
             <InputLabel>{field.label}</InputLabel>
-            <Select name={field.name} value={value} onChange={handleChange} sx={{ color: "white" }}>
+            <Select
+              name={field.name}
+              value={value}
+              onChange={handleChange}
+              sx={{ color: "white" }}
+            >
               {(field.options || []).map((opt) => (
                 <MenuItem key={opt} value={opt}>
                   {opt}
@@ -269,13 +334,27 @@ const QMIPurchasedStock = () => {
   return (
     <>
       <Box className="purchase-issue-box">
-        <Typography variant="h5" mb={2} fontWeight="bold" textAlign="center" color="white">
+        <Typography
+          variant="h5"
+          mb={2}
+          fontWeight="bold"
+          textAlign="center"
+          color="white"
+        >
           Purchased Stock Entry Form
         </Typography>
 
         {/* Alerts */}
-        {status === "failed" && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {status === "succeeded" && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
+        {status === "failed" && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        {status === "succeeded" && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {successMessage}
+          </Alert>
+        )}
 
         <form onSubmit={handleSubmit} className="mui-form">
           {/* Render All Fields Dynamically */}
@@ -284,7 +363,12 @@ const QMIPurchasedStock = () => {
 
             if (field.name === "subCategory") {
               return (
-                <FormControl fullWidth required sx={inputStyles} key={field.name}>
+                <FormControl
+                  fullWidth
+                  required
+                  sx={inputStyles}
+                  key={field.name}
+                >
                   <InputLabel>Sub Category</InputLabel>
                   <Select
                     name="subCategory"
@@ -298,7 +382,10 @@ const QMIPurchasedStock = () => {
                       </MenuItem>
                     ))}
                     {customSubCategories.map((cat) => (
-                      <MenuItem key={`CUSTOM_DELETE_${cat}`} value={`CUSTOM_DELETE_${cat}`}>
+                      <MenuItem
+                        key={`CUSTOM_DELETE_${cat}`}
+                        value={`CUSTOM_DELETE_${cat}`}
+                      >
                         {cat} ❌
                       </MenuItem>
                     ))}
@@ -325,7 +412,11 @@ const QMIPurchasedStock = () => {
                 size="small"
                 sx={inputStyles}
               />
-              <Button variant="outlined" size="small" onClick={handleAddNewSubCategory}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleAddNewSubCategory}
+              >
                 Add
               </Button>
             </Box>
@@ -377,10 +468,19 @@ const QMIPurchasedStock = () => {
               Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleAddMoreYes}
+                sx={{ mr: 2 }}
+              >
                 Yes
               </Button>
-              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddMoreNo}
+              >
                 No
               </Button>
             </Box>
@@ -421,7 +521,12 @@ const QMIPurchasedStock = () => {
                   .replace(/([A-Z])/g, " $1")
                   .replace(/^./, (char) => char.toUpperCase());
                 return (
-                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
+                  <Box
+                    key={key}
+                    display="flex"
+                    justifyContent="space-between"
+                    mb={1}
+                  >
                     <Typography fontWeight="bold">{label}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
@@ -432,7 +537,11 @@ const QMIPurchasedStock = () => {
               <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary" onClick={handleFinalSubmit}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFinalSubmit}
+              >
                 Confirm Submit
               </Button>
             </Box>
