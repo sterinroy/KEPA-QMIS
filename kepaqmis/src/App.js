@@ -14,6 +14,7 @@ import ManageRequest from "./pages/User/ManageRequest";
 import Return from "./pages/User/Return";
 import Temp from "./pages/User/Temp";
 import Review from "./pages/User/Review";
+import Indent from "./pages/User/Indent";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/indent" element={<Indent />}/>
         
         <Route
           path="/AdminDashboard"
