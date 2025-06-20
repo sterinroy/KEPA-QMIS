@@ -3,16 +3,16 @@ import { DataGrid } from "@mui/x-data-grid";
 import "./User.css";
 
 const columns = [
-  { field: "date", headerName: "Date", width: 130 },
-  { field: "item", headerName: "Item", width: 130 },
-  { field: "category", headerName: "Category", width: 130 },
-  { field: "subcategory", headerName: "Subcategory", width: 130 },
-  { field: "quantity", headerName: "Quantity", width: 100 },
-  { field: "status", headerName: "Status", width: 120 },
+  { field: "date", headerName: "Date", flex: 1},
+  { field: "item", headerName: "Item", flex: 1 },
+  { field: "category", headerName: "Category", flex: 1 },
+  { field: "subcategory", headerName: "Subcategory", flex: 1 },
+  { field: "quantity", headerName: "Quantity", flex: 1 },
+  { field: "status", headerName: "Status", flex: 1 },
   {
     field: "IndentBill",
     headerName: "IndentBill",
-    width: 120,
+    flex: 1,
     renderCell: (params) => (
       <button onClick={() => alert(`Exporting ${params.row.item}`)}>
         IndentBill
@@ -47,7 +47,7 @@ const UserManageRequest = () => {
             : "N/A",
           item: entry.item?.itemName || "N/A",
           category: entry.item?.itemCategory || "N/A",
-          subcategory: entry.item?.itemSubcategory || "N/A",
+          subcategory: entry.item?.itemSubCategory || "N/A",
           quantity: `${entry.requestedQty} ${entry.unit || ""}`,
           status: entry.status,
         }));
