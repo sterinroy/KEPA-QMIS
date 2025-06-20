@@ -233,18 +233,16 @@ const filteredItems = (stocks || []).filter(
               )}
             </Select>
           </FormControl>
-          {selectedItem && (
-                <Typography variant="body2" color="white" mt={-6} marginLeft={4}>
-                  Unit: {selectedItem.unit}
-                </Typography>
-              )}
-
-
           <Box display="flex" justifyContent="flex-end" mt={2}>
             <Button variant="contained" type="submit" >
               Submit
             </Button>
           </Box>
+          {selectedItem && (
+                <Typography variant="body2" color="white" mt={-6} marginLeft={4}>
+                  Unit: {selectedItem.unit}
+                </Typography>
+              )}
         </form>
       </Box>
     </div>
