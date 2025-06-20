@@ -110,7 +110,7 @@ const UserTemp = () => {
       required: true
     }
   ];
-  const selectedItem = stockItems.find(item => item._id === formData.itemId);
+  const selectedItem = stockItems?.find(item => item._id === formData.itemId);
 
 
   const categories = [...new Set(stockItems.map((item) => item.itemCategory))];
