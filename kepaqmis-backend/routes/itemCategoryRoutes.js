@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const ItemCategory = require("../models/ItemCategory");
+const Item Category = require("../models/Item Category");
 
 router.get("/categories", async (req, res) => {
   try {
-    const categories = await ItemCategory.find();
+    const categories = await Item Category.find();
     res.status(200).json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -12,25 +12,30 @@ router.get("/categories", async (req, res) => {
 });
 
 router.post("/categories", async (req, res) => {
-  const { name, subcategory } = req.body;
+  const { name, Sub Category } = req.body;
 
   try {
-    let category = await ItemCategory.findOne({ name });
+    let itemCategory = await Item Category.findOne({ name });
 
-    if (category) {
-      if (subcategory && !category.subcategories.includes(subcategory)) {
-        category.subcategories.push(subcategory);
-        await category.save();
+    if (itemCategory) {
+      if (
+        Sub Category &&
+        !itemCategory.subcategories.includes(Sub Category)
+      ) {
+        itemCategory.subcategories.push(Sub Category);
+        await itemCategory.save();
       }
     } else {
-      category = new ItemCategory({
+      itemCategory = new Item Category({
         name,
-        subcategories: subcategory ? [subcategory] : []
+        subcategories: Sub Category ? [Sub Category] : [],
       });
-      await category.save();
+      await itemCategory.save();
     }
 
-    res.status(200).json({ message: "Category updated/created", category });
+    res
+      .status(200)
+      .json({ message: "itemCategory updated/created", itemCategory });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

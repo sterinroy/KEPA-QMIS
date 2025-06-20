@@ -82,7 +82,7 @@ const QMIDirectStock = () => {
     { name: "indentNo", label: "Indent No.", type: "text", required: true },
     {
       name: "perishable",
-      label: "Is Perishable",
+      label: "Perishable?",
       type: "select",
       options: ["Yes", "No"],
       required: true,
@@ -102,8 +102,25 @@ const QMIDirectStock = () => {
 
   const [formData, setFormData] = useState(getInitialFormData());
 
-  // === Subcategory Logic (used for both itemSubCategory and fromWhomPurchased) ===
-  const defaultSubCategories = ["Chief", "District", "Others"];
+  // === FromWhomPurchased Dropdown Logic ===
+  const defaultFromOptions = ["Chief", "District", "Others"];
+  const [customFromValues, setCustomFromValues] = useState([]);
+  const [showFromInput, setShowFromInput] = useState(false);
+  const [customFromValue, setCustomFromValue] = useState("");
+  const allFromOptions = [
+    ...defaultFromOptions,
+    ...customFromValues,
+    "+ Add New",
+  ];
+
+  // === itemSubCategory Dropdown Logic ===
+  const defaultSubCategories = [
+    "Printers",
+    "Inks",
+    "Consumables",
+    "Stationery",
+    "Electronics",
+  ];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
@@ -148,20 +165,46 @@ const QMIDirectStock = () => {
     setFormData(updatedData);
   };
 
+  // === Handlers for `fromWhomPurchased` Dropdown ===
+  const handleFromChange = (e) => {
+    const value = e.target.value;
+    if (value === "+ Add New") {
+      setShowFromInput(true);
+      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
+    } else if (value.startsWith("CUSTOM_DELETE_")) {
+      const valToDelete = value.replace("CUSTOM_DELETE_", "");
+      setCustomFromValues((prev) => prev.filter((v) => v !== valToDelete));
+      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
+    } else {
+      setShowFromInput(false);
+      setFormData((prev) => ({ ...prev, fromWhomPurchased: value }));
+    }
+  };
+
+  const handleAddNewFrom = () => {
+    const trimmed = customFromValue.trim();
+    if (!trimmed || customFromValues.includes(trimmed)) return;
+    setCustomFromValues((prev) => [...prev, trimmed]);
+    setFormData((prev) => ({ ...prev, fromWhomPurchased: trimmed }));
+    setCustomFromValue("");
+    setShowFromInput(false);
+  };
+
+  // === Handlers for `itemSubCategory` Dropdown ===
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
     if (value === "+ Add New") {
       setShowCustomInput(true);
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
       setCustomSubCategories((prev) =>
         prev.filter((cat) => cat !== catToDelete)
       );
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else {
       setShowCustomInput(false);
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: value }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: value }));
     }
   };
 
@@ -169,11 +212,12 @@ const QMIDirectStock = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
     setCustomSubCategories((prev) => [...prev, trimmed]);
-    setFormData((prev) => ({ ...prev, fromWhomPurchased: trimmed }));
+    setFormData((prev) => ({ ...prev, itemSubCategory: trimmed }));
     setCustomInputValue("");
     setShowCustomInput(false);
   };
 
+  // === Submit Handler ===
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -215,11 +259,7 @@ const QMIDirectStock = () => {
     let y = 30;
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (
-        value &&
-        key !== "warrantyPeriod" &&
-        key !== "warrantyType"
-      ) {
+      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
@@ -239,8 +279,11 @@ const QMIDirectStock = () => {
 
   const resetForm = () => {
     setFormData(getInitialFormData());
-    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setCustomFromValues([]);
+    setCustomSubCategories([]);
+    setShowFromInput(false);
     setShowCustomInput(false);
+    setCustomFromValue("");
     setCustomInputValue("");
     setStatus("idle");
   };
@@ -345,89 +388,135 @@ const QMIDirectStock = () => {
           {fieldConfig.map((field, index) => {
             if (field.condition && !field.condition(formData)) return null;
 
+            // Custom rendering for fromWhomPurchased
             if (field.name === "fromWhomPurchased") {
               return (
-                <FormControl fullWidth sx={inputStyles} key={field.name}>
-                  <InputLabel>From</InputLabel>
-                  <Select
-                    name="fromWhomPurchased"
-                    value={formData.fromWhomPurchased || ""}
-                    onChange={handleSubCategoryChange}
-                    sx={{ color: "white" }}
-                  >
-                    {allSubCategories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>
-                        {cat}
-                      </MenuItem>
-                    ))}
-                    {customSubCategories.map((cat) => (
-                      <MenuItem
-                        key={`CUSTOM_DELETE_${cat}`}
-                        value={`CUSTOM_DELETE_${cat}`}
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
+                  <FormControl fullWidth sx={inputStyles}>
+                    <InputLabel>From</InputLabel>
+                    <Select
+                      name="fromWhomPurchased"
+                      value={formData.fromWhomPurchased || ""}
+                      onChange={handleFromChange}
+                      sx={{ color: "white" }}
+                    >
+                      {allFromOptions.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      {customFromValues.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {showFromInput && (
+                    <>
+                      <TextField
+                        label="Enter New From"
+                        value={customFromValue}
+                        onChange={(e) => setCustomFromValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          width: "calc(100% - 140px)",
+                          input: { color: "white" },
+                          label: { color: "white" },
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewFrom}
+                        sx={{ height: "40px" }}
                       >
-                        {cat} ❌
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                        Add
+                      </Button>
+                    </>
+                  )}
+                </Box>
               );
             }
 
-            if (field.name === "subCategory") {
+            // Custom rendering for itemSubCategory
+            if (field.name === "itemSubCategory") {
               return (
-                <FormControl fullWidth required sx={inputStyles} key={field.name}>
-                  <InputLabel>Sub Category</InputLabel>
-                  <Select
-                    name="subCategory"
-                    value={formData.subCategory || ""}
-                    onChange={handleSubCategoryChange}
-                    sx={{ color: "white" }}
-                  >
-                    {allSubCategories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>
-                        {cat}
-                      </MenuItem>
-                    ))}
-                    {customSubCategories.map((cat) => (
-                      <MenuItem
-                        key={`CUSTOM_DELETE_${cat}`}
-                        value={`CUSTOM_DELETE_${cat}`}
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
+                  <FormControl fullWidth sx={inputStyles}>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      name="itemSubCategory"
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleSubCategoryChange}
+                      sx={{ color: "white" }}
+                    >
+                      {allSubCategories.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      {customSubCategories.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {showCustomInput && (
+                    <>
+                      <TextField
+                        label="Enter New Sub Category"
+                        value={customInputValue}
+                        onChange={(e) => setCustomInputValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          width: "calc(100% - 140px)",
+                          input: { color: "white" },
+                          label: { color: "white" },
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewSubCategory}
+                        sx={{ height: "40px" }}
                       >
-                        {cat} ❌
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                        Add
+                      </Button>
+                    </>
+                  )}
+                </Box>
               );
             }
 
+            // Render normal fields
             if (field.fields) {
               return field.fields.map((f) => renderField(f));
             }
 
             return renderField(field);
           })}
-
-          {/* Custom From Input */}
-          {showCustomInput && (
-            <Box display="flex" gap={1} mt={1}>
-              <TextField
-                label="Enter New From"
-                value={customInputValue}
-                onChange={(e) => setCustomInputValue(e.target.value)}
-                fullWidth
-                size="small"
-                sx={inputStyles}
-              />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
 
           {/* Submit Button */}
           <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -526,7 +615,7 @@ const QMIDirectStock = () => {
                 if (!value) return null;
                 const label = key
                   .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (char) => char.toUpperCase());
+                  .replace(/^./, (c) => c.toUpperCase());
                 return (
                   <Box
                     key={key}
@@ -579,7 +668,7 @@ const QMIDirectStock = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Would you like to generate a PDF of this entry?
+              Would you like to generate a PDF?
             </Typography>
             <Box mt={2}>
               <Button

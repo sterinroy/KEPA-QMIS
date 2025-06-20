@@ -124,6 +124,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 24px 48px;
+  /* margin-left: 10px;
+  margin-right: 10px; */
 }
 
 .mui-form > * {
@@ -220,15 +222,19 @@
 .verify-issue-box {
   background-color: #111C44 !important;
   color: black;
-  margin-top: 135px;
+  margin-top: 145px;
   margin-left: 9px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 98%;
   max-width: 1300px;
   box-sizing: border-box;
-  padding: 35px 40px 35px 40px;
+  padding-top: 35px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 30px;
+  /* padding: 45px 50px 35px 40px; */
   min-height: 550px;
 }
 

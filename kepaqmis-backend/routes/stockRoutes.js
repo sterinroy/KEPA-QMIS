@@ -41,7 +41,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
       amount,
       Qmno,
       itemName,
-      itemCategory,
+      Item Category,
       itemSubCategory,
       quantity,
       unit,
@@ -49,7 +49,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
       model,
       modelNo,
       perishable,
-      serialNumber,
+      serialNo,
       verifiedBy,
     } = req.body;
 
@@ -71,7 +71,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
       amount: amount || entry.amount,
       Qmno,
       itemName: entry.itemName || itemName,
-      itemCategory: entry.itemCategory || itemCategory,
+      Item Category: entry.Item Category || Item Category,
       itemSubCategory: entry.itemSubCategory || itemSubCategory,
       quantity: entry.quantity || quantity,
       unit: entry.unit || unit,
@@ -80,7 +80,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
       modelNo,
       perishable,
       enteredBy: entry.enteredBy,
-      serialNumber,
+      serialNo,
       dateOfVerification: new Date(),
       verifiedBy,
       dateOfPurchase: entry.invoiceDate,
@@ -112,7 +112,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       amount,
       Qmno,
       itemName,
-      itemCategory,
+      Item Category,
       itemSubCategory,
       quantity,
       unit,
@@ -121,7 +121,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       modelNo,
       perishable,
       enteredBy,
-      serialNumber,
+      serialNo,
       dateOfVerification,
       dateOfPurchase,
       dateOfIssue,
@@ -139,7 +139,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       amount,
       Qmno,
       itemName,
-      itemCategory,
+      Item Category,
       itemSubCategory,
       quantity,
       unit,
@@ -148,7 +148,7 @@ router.post("/stock/requested-issue", async (req, res) => {
       modelNo,
       perishable,
       enteredBy,
-      serialNumber,
+      serialNo,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
       dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
       dateOfVerification: dateOfVerification
@@ -170,7 +170,7 @@ router.post("/stock/direct-issue", async (req, res) => {
     const {
       Qmno,
       itemName,
-      itemCategory,
+      Item Category,
       itemSubCategory,
       quantity,
       unit,
@@ -179,7 +179,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       model,
       modelNo,
       enteredBy,
-      serialNumber,
+      serialNo,
       indentNo,
       perishable,
       dateOfVerification,
@@ -192,7 +192,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       sourceType: "direct-issue",
       Qmno,
       itemName,
-      itemCategory,
+      Item Category,
       itemSubCategory,
       quantity,
       unit,
@@ -201,7 +201,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       model,
       modelNo,
       enteredBy,
-      serialNumber,
+      serialNo,
       perishable,
       indentNo,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
@@ -307,7 +307,7 @@ router.post("/return/item", async (req, res) => {
 router.post("/return/process/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { category, processedBy } = req.body;
+    const { itemCategory, processedBy } = req.body;
 
     const returnItem = await ReturnItem.findById(id);
     if (!returnItem || returnItem.processedAt) {
@@ -316,13 +316,13 @@ router.post("/return/process/:id", async (req, res) => {
         .json({ message: "Invalid or already processed return." });
     }
 
-    returnItem.category = category;
+    returnItem.itemCategory = itemCategory;
     returnItem.processedBy = processedBy;
     returnItem.processedAt = new Date();
     await returnItem.save();
 
     const stockItem = await StockItem.findById(returnItem.stockItemId);
-    if (category === "Reusable") {
+    if (itemCategory === "Reusable") {
       stockItem.quantity += returnItem.quantity;
       await stockItem.save();
     }

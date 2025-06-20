@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const purchaseEntrySchema = new mongoose.Schema({
-  orderNo: { type: String ,required: true },
+  orderNo: { type: String, required: true },
   supplyOrderNo: { type: String },
-  invoiceDate: { type: Date ,required: true },
+  invoiceDate: { type: Date, required: true },
   itemName: { type: String, required: true },
-  itemCategory: { type: String, required: true },
+  Item Category: { type: String, required: true },
   itemSubCategory: { type: String },
   quantity: { type: Number },
   unit: { type: String },
@@ -15,14 +15,14 @@ const purchaseEntrySchema = new mongoose.Schema({
   amount: { type: Number },
   enteredBy: {
     pen: { type: String },
-    name: { type: String }
+    name: { type: String },
   },
   status: {
     type: String,
     enum: ["Pending", "Verified"],
-    default: "Pending"
+    default: "Pending",
   },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("PurchaseEntry", purchaseEntrySchema);

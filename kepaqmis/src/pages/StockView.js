@@ -13,9 +13,9 @@ const StockItemView = () => {
 
   const columns = [
     { field: "itemName", headerName: "Item Name", flex: 1 },
-    { field: "itemCategory", headerName: "Category", flex: 1 },
-    { field: "itemSubCategory", headerName: "Subcategory", flex: 1 },
-    { field: "quantity", headerName: "Qty", flex: 0.5 },
+    { field: "Item Category", headerName: "itemCategory", flex: 1 },
+    { field: "itemSubCategory", headerName: "Sub Category", flex: 1 },
+    { field: "quantity", headerName: "Quantity", flex: 0.5 },
     { field: "unit", headerName: "Unit", flex: 0.5 },
     { field: "Qmno", headerName: "QM No", flex: 1 },
     {

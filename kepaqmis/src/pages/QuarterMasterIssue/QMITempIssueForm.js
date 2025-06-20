@@ -25,14 +25,13 @@ const QMITempIssueForm = () => {
     },
     { name: "requestNo", label: "Request No.", type: "text", required: true },
     { name: "name", label: "Name", type: "text", required: true },
-    { name: "penNo", label: "Pen No.", type: "text", required: true },
+    { name: "pen", label: "PEN No.", type: "number", required: true },
     {
       name: "toWhom",
-      label: "To (Office / Company)",
-      type: "text",
+      label: "To (Office/ Company/ Person)",
+      type: "selectWithAddNew",
       required: true,
     },
-    { name: "mobile", label: "Mobile", type: "text", required: true },
     { name: "itemName", label: "Item", type: "text", required: true },
     { name: "itemCategory", label: "Category", type: "text", required: true },
     {
@@ -72,17 +71,12 @@ const QMITempIssueForm = () => {
 
   const [formData, setFormData] = useState(getInitialFormData());
 
-  // === Subcategories Logic ===
-  const defaultSubCategories = ["Consumables", "Stationery", "Electronics"];
+  // === Subcategory Logic ===
+  // const defaultSubCategories = ["Consumables", "Stationery", "Electronics"];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
-
-  const allSubCategories = [
-    ...defaultSubCategories,
-    ...customSubCategories,
-    "+ Add New",
-  ];
+  const allSubCategories = [...customSubCategories, "+ Add New"];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
@@ -97,6 +91,67 @@ const QMITempIssueForm = () => {
     label: { color: "white" },
     fieldset: { borderColor: "white" },
   };
+  const [customToOptions, setCustomToOptions] = useState([]);
+  const [showCustomToInput, setShowCustomToInput] = useState(false);
+  const [customToInputValue, setCustomToInputValue] = useState("");
+  const defaultToOptions = [
+    "AC I Wing",
+    "AC II Wing",
+    "AD Admin",
+    "AD MT",
+    "AD Outdoor",
+    "AD PS",
+    "AD Training",
+    "A block",
+    "Armour Wing",
+    "B Block",
+    "Computer Lab",
+    "CPC",
+    "Cyber Forensics Lab",
+    "Direct Bunglow",
+    "Director Office",
+    "DySP Admin",
+    "DySP Indoor",
+    "DySP PS1",
+    "DySP PS2",
+    "DySP TTNS",
+    "Driving School",
+    "Dry Canteen",
+    "Drinking Water Treatment Plant (DWTP)",
+    "Guest House",
+    "HoD BS",
+    "HoD Computer Application",
+    "HoD Forensics Medicine",
+    "HoD Forensics Science",
+    "HoD Law",
+    "IGP/ DIG Training",
+    "Indoor",
+    "INSPECTOR ADMIN OFFICE",
+    "Inspector INDOOR OFFICE",
+    "Laundry",
+    "Model PS",
+    "MT Office",
+    "PRC",
+    "QMITempIssueForm",
+    "R & P Wing",
+    "SDTS",
+    "SO Mess",
+    "Swimming Pool",
+    "Telecommunication Wing",
+    "TT 01",
+    "TT 02",
+    "TT 03",
+    "TT 04",
+    "TT 05",
+    "TT 06",
+    "TT 07",
+    "TT 08",
+    "TT 09",
+    "TT 10",
+    "Unit Hospital",
+    "Vishranthi",
+    "Wet Canteen",
+  ];
 
   // Set today's date on load
   useEffect(() => {
@@ -111,20 +166,22 @@ const QMITempIssueForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // === Subcategory Handlers ===
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
+
     if (value === "+ Add New") {
       setShowCustomInput(true);
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
       setCustomSubCategories((prev) =>
         prev.filter((cat) => cat !== catToDelete)
       );
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else {
       setShowCustomInput(false);
-      setFormData((prev) => ({ ...prev, subCategory: value }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: value }));
     }
   };
 
@@ -132,9 +189,8 @@ const QMITempIssueForm = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
     setCustomSubCategories((prev) => [...prev, trimmed]);
-    setFormData((prev) => ({ ...prev, subCategory: trimmed }));
+    setFormData((prev) => ({ ...prev, itemSubCategory: trimmed }));
     setCustomInputValue("");
-    setShowCustomInput(false);
   };
 
   const handleSubmit = (e) => {
@@ -173,28 +229,26 @@ const QMITempIssueForm = () => {
   const generateAndDownloadPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(16);
-    doc.text(`Temp Issue`, 20, 20);
+    doc.text(`Temporary Issue Entry`, 20, 20);
     doc.setFontSize(12);
     let y = 30;
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (value) {
+      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
     });
 
     doc.save("Temp_Issue.pdf");
-
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
-    resetForm(); // Reset form after download
+    resetForm(); // Reset after download
   };
 
-  // === Reset Form Function ===
   const resetForm = () => {
     setFormData(getInitialFormData());
-    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setCustomSubCategories([]);
     setShowCustomInput(false);
     setCustomInputValue("");
     setStatus("idle");
@@ -203,7 +257,6 @@ const QMITempIssueForm = () => {
   // === Render Field Component ===
   const renderField = (field) => {
     const value = formData[field.name];
-
     switch (field.type) {
       case "text":
         return (
@@ -266,6 +319,52 @@ const QMITempIssueForm = () => {
             </Select>
           </FormControl>
         );
+      case "selectWithAddNew":
+        const allToOptions = [
+          ...defaultToOptions,
+          ...customToOptions,
+          "+ Add New",
+        ];
+        return (
+          <FormControl fullWidth sx={inputStyles} key={field.name}>
+            <InputLabel>{field.label}</InputLabel>
+            <Select
+              name="toWhom"
+              value={formData.toWhom || ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "+ Add New") {
+                  setShowCustomToInput(true);
+                  setFormData((prev) => ({ ...prev, toWhom: "" }));
+                } else if (val.startsWith("CUSTOM_DELETE_")) {
+                  const optToDelete = val.replace("CUSTOM_DELETE_", "");
+                  setCustomToOptions((prev) =>
+                    prev.filter((opt) => opt !== optToDelete)
+                  );
+                  setFormData((prev) => ({ ...prev, toWhom: "" }));
+                } else {
+                  setShowCustomToInput(false);
+                  setFormData((prev) => ({ ...prev, toWhom: val }));
+                }
+              }}
+              sx={{ color: "white" }}
+            >
+              {allToOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+              {customToOptions.map((option) => (
+                <MenuItem
+                  key={`CUSTOM_DELETE_${option}`}
+                  value={`CUSTOM_DELETE_${option}`}
+                >
+                  {option} ❌
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        );
       default:
         return null;
     }
@@ -285,38 +384,128 @@ const QMITempIssueForm = () => {
         </Typography>
 
         {/* Alerts */}
-        {status === "failed" && <Alert severity="error">{error}</Alert>}
+        {status === "failed" && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         {status === "succeeded" && (
-          <Alert severity="success">{successMessage}</Alert>
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {successMessage}
+          </Alert>
         )}
 
         <form onSubmit={handleSubmit} className="mui-form">
           {/* Render All Fields Dynamically */}
-          {fieldConfig.map((field) => renderField(field))}
+          {fieldConfig.map((field, index) => {
+            if (field.condition && !field.condition(formData)) return null;
 
-          {/* Custom Sub Category Input */}
-          {showCustomInput && (
-            <Box display="flex" gap={1} mt={1}>
-              <TextField
-                label="Enter New Sub Category"
-                value={customInputValue}
-                onChange={(e) => setCustomInputValue(e.target.value)}
-                fullWidth
-                size="small"
-                sx={inputStyles}
-              />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
+            // Special handling for itemSubCategory
+            if (field.name === "itemSubCategory") {
+              return (
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
+                  {/* Subcategory dropdown */}
+                  <FormControl fullWidth sx={inputStyles}>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      name="itemSubCategory"
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleSubCategoryChange}
+                      sx={{ color: "white" }}
+                    >
+                      {allSubCategories.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      {customSubCategories.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {/* Show custom input if needed */}
+                  {showCustomInput && (
+                    <Box display="flex" gap={1} mt={1}>
+                      <TextField
+                        label="Enter New Sub Category"
+                        value={customInputValue}
+                        onChange={(e) => setCustomInputValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          width: "calc(100% - 140px)",
+                          input: { color: "white" },
+                          label: { color: "white" },
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewSubCategory}
+                      >
+                        Add
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+              );
+            }
+
+            // Render normal fields
+            const renderedField = renderField(field);
+
+            // After rendering all fields, check if it's the "toWhom" field
+            if (field.name === "toWhom") {
+  return (
+    <Box display="flex" gap={1} alignItems="center" key={field.name}>
+      {renderedField}
+      {showCustomToInput && (
+        <>
+          <TextField
+            label="New To"
+            value={customToInputValue}
+            onChange={(e) => setCustomToInputValue(e.target.value)}
+            size="small"
+            sx={{ width: "calc(60% - 8px)" }}
+            InputProps={{ style: { color: "white" } }}
+            InputLabelProps={{ style: { color: "white" } }}
+          />
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              const trimmed = customToInputValue.trim();
+              if (!trimmed || customToOptions.includes(trimmed)) return;
+              setCustomToOptions((prev) => [...prev, trimmed]);
+              setFormData((prev) => ({ ...prev, toWhom: trimmed }));
+              setCustomToInputValue("");
+              setShowCustomToInput(false);
+            }}
+          >
+            Add
+          </Button>
+        </>
+      )}
+    </Box>
+  );
+}
+
+            return renderedField;
+          })}
 
           {/* Submit Button */}
-          <Box display="flex" justifyContent="flex-start" mt={2} ml={45}>
+          <Box display="flex" justifyContent="flex-start" mt={2} ml={62.5}>
             <Button
               variant="contained"
               color="primary"
@@ -358,7 +547,7 @@ const QMITempIssueForm = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same QM No.?
+              Do you want to add more items under the same QM/ SL No.?
             </Typography>
             <Box mt={2}>
               <Button
@@ -481,7 +670,7 @@ const QMITempIssueForm = () => {
                 color="secondary"
                 onClick={() => {
                   setShowPdfModal(false);
-                  resetForm(); // Reset form when skipping
+                  resetForm();
                 }}
               >
                 No, Skip

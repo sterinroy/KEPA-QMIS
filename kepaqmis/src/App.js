@@ -17,7 +17,7 @@ import QMPDashboard from "./pages/QuarterMasterPurchase/QMPDashboard";
 import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
 import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder";
 import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
-import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
+// import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
 import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import QMIPurchasedStock from "./pages/QuarterMasterIssue/QMIPurchasedStock";
 import QMIDirectStock from "./pages/QuarterMasterIssue/QMIDirectStock";
@@ -25,6 +25,7 @@ import QMIVerificationStatus from "./pages/QuarterMasterIssue/QMIVerificationSta
 import QMITempIssueForm from "./pages/QuarterMasterIssue/QMITempIssueForm";
 import QMIStockIssueForm from "./pages/QuarterMasterIssue/QMIStockIssueForm";
 import QMITempIssueReturn from "./pages/QuarterMasterIssue/QMITempIssueReturn";
+import QMIManageRequest from "./pages/QuarterMasterIssue/QMIManageRequest";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
 import QMPEntries from "./pages/QuarterMasterPurchase/QMPEntries";
@@ -99,6 +100,10 @@ function App() {
           <Route
             path="QMITempIssueReturn"
             element={<QMITempIssueReturn />}
+          />
+          <Route
+            path="QMIManageRequest"
+            element={<QMIManageRequest />}
           />
         </Route>
         {/* <Route

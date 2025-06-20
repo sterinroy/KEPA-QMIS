@@ -18,8 +18,8 @@ const initialPendingItems = [
     make: "",
     model: "",
     modelNo: "",
-    serialNumber: "",
-    category: "Electronics",
+    serialNo: "",
+    itemCategory: "Electronics",
     subCategory: "Printers",
     qty: "2",
     unit: "Nos",
@@ -46,8 +46,8 @@ const initialPendingItems = [
     make: "",
     model: "",
     modelNo: "",
-    serialNumber: "",
-    category: "Stationery",
+    serialNo: "",
+    itemCategory: "Stationery",
     subCategory: "Consumables",
     qty: "10",
     unit: "Nos",
@@ -185,14 +185,14 @@ const QMIVerificationStatus = () => {
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
     {
-      field: "serialNumber",
+      field: "serialNo",
       headerName: "Serial/ Product No",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
     {
-      field: "category",
+      field: "itemCategory",
       headername: "itemCategory",
       minWidth: 120,
       sortable: true,
@@ -250,7 +250,7 @@ const QMIVerificationStatus = () => {
     },
     {
       field: "perishable",
-      headerName: "Is Perishable",
+      headerName: "Perishable?",
       minWidth: 100,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -275,7 +275,7 @@ const QMIVerificationStatus = () => {
 
   return (
     <Box sx={{ width: "100%", padding: 3 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
+      <Typography variant="h5" fontWeight="bold" gutterBottom color="white">
         Verification Status
       </Typography>
 
@@ -330,8 +330,8 @@ const QMIVerificationStatus = () => {
             make: currentItem.make || "",
             model: currentItem.model || "",
             modelNo: currentItem.modelNo || "",
-            serialNumber: currentItem.serialNumber || "",
-            category: currentItem.category || "",
+            serialNo: currentItem.serialNo || "",
+            itemCategory: currentItem.itemCategory || "",
             subCategory: currentItem.subCategory || "",
             qty: currentItem.qty || "",
             unit: currentItem.unit || "",

@@ -11,7 +11,7 @@ const stockItemSchema = new mongoose.Schema({
   invoiceDate: { type: Date },
   Qmno: { type: String, required: true },
   itemName: { type: String, required: true },
-  itemCategory: { type: String, required: true },
+  Item Category: { type: String, required: true },
   itemSubCategory: { type: String, required: true },
   quantity: { type: Number, required: true },
   unit: { type: String, required: true },
@@ -26,7 +26,7 @@ const stockItemSchema = new mongoose.Schema({
     pen: { type: String },
     name: { type: String },
   },
-  serialNumber: { type: String },
+  serialNo: { type: String },
   dateOfVerification: { type: Date },
   verifiedBy: {
     pen: { type: String },

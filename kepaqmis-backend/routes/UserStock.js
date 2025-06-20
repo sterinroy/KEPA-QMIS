@@ -12,10 +12,12 @@ router.post("/request-item", async (req, res) => {
     const { user, itemId, quantity } = req.body;
 
     // Basic validation
-    if (!user || !itemId || !quantity) return res.status(400).json({ message: "Missing required fields." });
+    if (!user || !itemId || !quantity)
+      return res.status(400).json({ message: "Missing required fields." });
 
     const stockItem = await StockItem.findById(itemId);
-    if (!stockItem) return res.status(404).json({ message: "Stock item not found." });
+    if (!stockItem)
+      return res.status(404).json({ message: "Stock item not found." });
 
     // Create request
     const newRequest = new UserRequest({ user, itemId, quantity });
@@ -35,12 +37,15 @@ router.post("/request-item/:id/approve", async (req, res) => {
     const { approve, qm } = req.body; // qm = {pen, name}
 
     const request = await UserRequest.findById(id);
-    if (!request) return res.status(404).json({ message: "Request not found." });
-    if (request.status !== "Pending") return res.status(400).json({ message: "Request already processed." });
+    if (!request)
+      return res.status(404).json({ message: "Request not found." });
+    if (request.status !== "Pending")
+      return res.status(400).json({ message: "Request already processed." });
 
     if (approve) {
       const stockItem = await StockItem.findById(request.itemId);
-      if (!stockItem) return res.status(404).json({ message: "Stock item not found." });
+      if (!stockItem)
+        return res.status(404).json({ message: "Stock item not found." });
 
       if (stockItem.quantity < request.quantity)
         return res.status(400).json({ message: "Insufficient stock." });
@@ -56,7 +61,10 @@ router.post("/request-item/:id/approve", async (req, res) => {
       await request.save();
 
       // Add to issued items for user
-      let issuedItem = await UserIssuedItem.findOne({ user: request.user, itemId: request.itemId });
+      let issuedItem = await UserIssuedItem.findOne({
+        user: request.user,
+        itemId: request.itemId,
+      });
       if (issuedItem) {
         issuedItem.quantity += request.quantity;
         await issuedItem.save();
@@ -91,19 +99,26 @@ router.post("/return-item", async (req, res) => {
     const { user, itemId, quantity } = req.body;
 
     // Basic validation
-    if (!user || !itemId || !quantity) return res.status(400).json({ message: "Missing required fields." });
+    if (!user || !itemId || !quantity)
+      return res.status(400).json({ message: "Missing required fields." });
 
     // Check user issued item quantity
     const issuedItem = await UserIssuedItem.findOne({ user, itemId });
-    if (!issuedItem) return res.status(400).json({ message: "No issued item found for user." });
-    if (issuedItem.quantity < quantity) return res.status(400).json({ message: "Return quantity exceeds issued quantity." });
+    if (!issuedItem)
+      return res
+        .status(400)
+        .json({ message: "No issued item found for user." });
+    if (issuedItem.quantity < quantity)
+      return res
+        .status(400)
+        .json({ message: "Return quantity exceeds issued quantity." });
 
-    // Create return record with category = null (unprocessed)
+    // Create return record with itemCategory = null (unprocessed)
     const returnRecord = new ReturnItem({
       user,
       itemId,
       quantity,
-      category: null, // to be updated by QM later
+      itemCategory: null, // to be updated by QM later
     });
 
     await returnRecord.save();
@@ -119,21 +134,31 @@ router.post("/return-item", async (req, res) => {
 router.post("/return-item/:id/process", async (req, res) => {
   try {
     const { id } = req.params;
-    const { category, qm } = req.body; // qm = {pen, name}
+    const { itemCategory, qm } = req.body; // qm = {pen, name}
 
-    if (!["Damaged", "Repairable", "Reusable"].includes(category)) {
-      return res.status(400).json({ message: "Invalid category." });
+    if (!["Damaged", "Repairable", "Reusable"].includes(itemCategory)) {
+      return res.status(400).json({ message: "Invalid itemCategory." });
     }
 
     const returnRecord = await ReturnItem.findById(id);
-    if (!returnRecord) return res.status(404).json({ message: "Return record not found." });
-    if (returnRecord.category) return res.status(400).json({ message: "Return already processed." });
+    if (!returnRecord)
+      return res.status(404).json({ message: "Return record not found." });
+    if (returnRecord.itemCategory)
+      return res.status(400).json({ message: "Return already processed." });
 
-    const issuedItem = await UserIssuedItem.findOne({ user: returnRecord.user, itemId: returnRecord.itemId });
-    if (!issuedItem) return res.status(404).json({ message: "Issued item not found for user." });
+    const issuedItem = await UserIssuedItem.findOne({
+      user: returnRecord.user,
+      itemId: returnRecord.itemId,
+    });
+    if (!issuedItem)
+      return res
+        .status(404)
+        .json({ message: "Issued item not found for user." });
 
     if (issuedItem.quantity < returnRecord.quantity) {
-      return res.status(400).json({ message: "Return quantity exceeds issued quantity." });
+      return res
+        .status(400)
+        .json({ message: "Return quantity exceeds issued quantity." });
     }
 
     // Deduct issued quantity
@@ -144,26 +169,26 @@ router.post("/return-item/:id/process", async (req, res) => {
       await issuedItem.save();
     }
 
-    // Process based on category
-    if (category === "Reusable") {
+    // Process based on itemCategory
+    if (itemCategory === "Reusable") {
       // Add back to stock
       const stockItem = await StockItem.findById(returnRecord.itemId);
       if (stockItem) {
         stockItem.quantity += returnRecord.quantity;
         await stockItem.save();
       }
-    } else if (category === "Repairable") {
+    } else if (itemCategory === "Repairable") {
       // TODO: Could add to Repair collection (optional)
-    } else if (category === "Damaged") {
+    } else if (itemCategory === "Damaged") {
       // TODO: Could log damaged items (optional)
     }
 
-    returnRecord.category = category;
+    returnRecord.itemCategory = itemCategory;
     returnRecord.processedBy = qm;
     returnRecord.processedAt = new Date();
     await returnRecord.save();
 
-    res.json({ message: `Return processed as ${category}.` });
+    res.json({ message: `Return processed as ${itemCategory}.` });
   } catch (err) {
     console.error("Process Return Error:", err);
     res.status(500).json({ message: "Server error." });
