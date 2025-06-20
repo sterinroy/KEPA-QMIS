@@ -467,39 +467,45 @@ const QMITempIssueForm = () => {
 
             // After rendering all fields, check if it's the "toWhom" field
             if (field.name === "toWhom") {
-  return (
-    <Box display="flex" gap={1} alignItems="center" key={field.name}>
-      {renderedField}
-      {showCustomToInput && (
-        <>
-          <TextField
-            label="New To"
-            value={customToInputValue}
-            onChange={(e) => setCustomToInputValue(e.target.value)}
-            size="small"
-            sx={{ width: "calc(60% - 8px)" }}
-            InputProps={{ style: { color: "white" } }}
-            InputLabelProps={{ style: { color: "white" } }}
-          />
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => {
-              const trimmed = customToInputValue.trim();
-              if (!trimmed || customToOptions.includes(trimmed)) return;
-              setCustomToOptions((prev) => [...prev, trimmed]);
-              setFormData((prev) => ({ ...prev, toWhom: trimmed }));
-              setCustomToInputValue("");
-              setShowCustomToInput(false);
-            }}
-          >
-            Add
-          </Button>
-        </>
-      )}
-    </Box>
-  );
-}
+              return (
+                <Box
+                  display="flex"
+                  gap={1}
+                  alignItems="center"
+                  key={field.name}
+                >
+                  {renderedField}
+                  {showCustomToInput && (
+                    <>
+                      <TextField
+                        label="New To"
+                        value={customToInputValue}
+                        onChange={(e) => setCustomToInputValue(e.target.value)}
+                        size="small"
+                        sx={{ width: "calc(60% - 8px)" }}
+                        InputProps={{ style: { color: "white" } }}
+                        InputLabelProps={{ style: { color: "white" } }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                          const trimmed = customToInputValue.trim();
+                          if (!trimmed || customToOptions.includes(trimmed))
+                            return;
+                          setCustomToOptions((prev) => [...prev, trimmed]);
+                          setFormData((prev) => ({ ...prev, toWhom: trimmed }));
+                          setCustomToInputValue("");
+                          setShowCustomToInput(false);
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  )}
+                </Box>
+              );
+            }
 
             return renderedField;
           })}

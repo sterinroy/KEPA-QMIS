@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import QMIVerificationForm from "./QMIVerificationForm";
+import QMIManageRequestForm from "./QMIManageRequestForm";
 
 const initialPendingItems = [
   {
     id: 1,
-    slNo: 1,
+    Qmno: 1,
     dateOfRequest: "",
     requestedBy: "",
     toWhom: "",
@@ -18,7 +18,7 @@ const initialPendingItems = [
   },
   {
     id: 2,
-    slNo: 2,
+    Qmno: 2,
     dateOfRequest: "",
     requestedBy: "",
     toWhom: "",
@@ -55,8 +55,8 @@ const QMIManageRequest = () => {
 
   const columns = [
     {
-      field: "slNo",
-      headerName: "SL No.",
+      field: "Qmno",
+      headerName: "QM No.",
       minWidth: 120,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -136,8 +136,15 @@ const QMIManageRequest = () => {
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
     {
+      field: "temporary",
+      headerName: "Temporary",
+      minWidth: 100,
+      sortable: true,
+      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+    },
+    {
       field: "perishable",
-      headerName: "Perishable?",
+      headerName: "Perishable",
       minWidth: 100,
       sortable: true,
       sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
@@ -154,7 +161,7 @@ const QMIManageRequest = () => {
           size="small"
           onClick={() => handlePendingClick(params.row)}
         >
-          Pending
+          Approve
         </Button>
       ),
     },
@@ -176,7 +183,7 @@ const QMIManageRequest = () => {
             rowsPerPageOptions={[5, 10]}
             disableRowSelectionOnClick
             autoHeight
-            getRowId={(row) => row.slNo} // Ensure MUI can find the ID
+            getRowId={(row) => row.Qmno} // Ensure MUI can find the ID
             getRowHeight={() => "auto"}
             columnResizeMode="on"
             sortingMode="client"
@@ -201,12 +208,12 @@ const QMIManageRequest = () => {
 
       {/* Modal Form */}
       {showForm && currentItem && (
-        <QMIVerificationForm
+        <QMIManageRequestForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
           prefillData={{
             orderNo: currentItem.orderNo || "",
-            slNo: currentItem.slNo || "",
+            Qmno: currentItem.Qmno || "",
             requestedBy: currentItem.requestedBy || "",
             toWhom: currentItem.toWhom || "",
             mobile: currentItem.mobile || "",

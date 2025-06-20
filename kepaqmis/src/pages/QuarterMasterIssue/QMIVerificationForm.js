@@ -106,7 +106,7 @@ const QMIVerificationForm = ({ prefillData, onClose, onSubmit }) => {
     },
     {
       name: "perishable",
-      label: "Perishable?",
+      label: "Perishable",
       type: "select",
       options: ["Yes", "No"],
       required: true,

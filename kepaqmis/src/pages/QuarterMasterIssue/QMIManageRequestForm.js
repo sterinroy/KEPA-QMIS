@@ -13,40 +13,59 @@ import {
 import jsPDF from "jspdf";
 import "./Issue.css";
 
-const QMIDirectStock = () => {
+const QMIManageRequestForm = ({ prefillData, onClose, onSubmit }) => {
   // === Field Configuration ===
   const fieldConfig = [
+    {
+      name: "dateOfRequest",
+      label: "Date Of Request",
+      type: "date",
+      required: true,
+    },
     { name: "Qmno", label: "QM No.", type: "text", required: true },
     {
-      name: "dateOfIssue",
-      label: "Date Of Issue",
+      name: "requestedBy",
+      label: "Requested By",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "toWhom",
+      label: "To (Company/ Office)",
       type: "date",
       required: true,
     },
     {
-      name: "fromWhomPurchased",
-      label: "From",
-      type: "select",
+      name: "mobile",
+      label: "Mobile",
+      type: "text",
       required: true,
     },
-    { name: "itemName", label: "Item", type: "text", required: true },
-    { name: "itemCategory", label: "Category", type: "text", required: true },
+    {
+      name: "itemName",
+      label: "Item Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "itemCategory",
+      label: "Item Category",
+      type: "select",
+      options: ["Electronics", "Furniture", "Clothing"],
+      required: true,
+    },
     {
       name: "itemSubCategory",
       label: "Sub Category",
       type: "select",
       required: true,
     },
-    { name: "make", label: "Make / Brand", type: "text", required: true },
-    { name: "model", label: "Model", type: "text", required: true },
-    { name: "modelNo", label: "Model No", type: "text", required: true },
     {
-      name: "serialNumber",
-      label: "Product No / Serial No",
+      name: "quantity",
+      label: "Quantity",
       type: "text",
       required: true,
     },
-    { name: "quantity", label: "Quantity", type: "number", required: true },
     {
       name: "unit",
       label: "Unit",
@@ -55,31 +74,12 @@ const QMIDirectStock = () => {
       required: true,
     },
     {
-      name: "warranty",
-      label: "Warranty",
+      name: "temporary",
+      label: "Temporary",
       type: "select",
       options: ["Yes", "No"],
       required: true,
     },
-    {
-      condition: (data) => data.warranty === "Yes",
-      fields: [
-        {
-          name: "warrantyPeriod",
-          label: "Warranty Period (in months)",
-          type: "number",
-          required: true,
-        },
-        {
-          name: "warrantyType",
-          label: "Warranty Type",
-          type: "select",
-          options: ["On-Site", "Replacement", "Pickup & Drop"],
-          required: true,
-        },
-      ],
-    },
-    { name: "indentNo", label: "Indent No.", type: "text", required: true },
     {
       name: "perishable",
       label: "Perishable",
@@ -87,48 +87,44 @@ const QMIDirectStock = () => {
       options: ["Yes", "No"],
       required: true,
     },
+    {
+      name: "remarks",
+      label: "Remarks",
+      type: "text",
+      required: true,
+    },
   ];
 
   // === Initial Form State ===
   const getInitialFormData = () => {
+    const today = new Date().toISOString().split("T")[0];
     const data = {};
     fieldConfig.forEach((field) => {
-      if (field.name) data[field.name] = "";
-      if (field.fields) field.fields.forEach((f) => (data[f.name] = ""));
+      if (field.name) {
+        data[field.name] = prefillData?.[field.name] || "";
+        if (field.type === "date" && !data[field.name]) {
+          data[field.name] = today;
+        }
+      }
+      if (field.fields) {
+        field.fields.forEach((f) => {
+          data[f.name] = prefillData?.[f.name] || "";
+          if (f.type === "date" && !data[f.name]) {
+            data[f.name] = today;
+          }
+        });
+      }
     });
-    data.dateOfIssue = new Date().toISOString().split("T")[0];
     return data;
   };
 
   const [formData, setFormData] = useState(getInitialFormData());
 
-  // === FromWhomPurchased Dropdown Logic ===
-  const defaultFromOptions = ["Chief", "District", "Others"];
-  const [customFromValues, setCustomFromValues] = useState([]);
-  const [showFromInput, setShowFromInput] = useState(false);
-  const [customFromValue, setCustomFromValue] = useState("");
-  const allFromOptions = [
-    ...defaultFromOptions,
-    ...customFromValues,
-    "+ Add New",
-  ];
-
-  // === itemSubCategory Dropdown Logic ===
-  const defaultSubCategories = [
-    "Printers",
-    "Inks",
-    "Consumables",
-    "Stationery",
-    "Electronics",
-  ];
+  // === Subcategory Logic for itemSubCategory ===
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
-  const allSubCategories = [
-    ...defaultSubCategories,
-    ...customSubCategories,
-    "+ Add New",
-  ];
+  const allSubCategories = [...customSubCategories, "+ Add New"];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
@@ -147,50 +143,17 @@ const QMIDirectStock = () => {
   // Set today's date on load
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    if (!formData.dateOfIssue)
-      setFormData((prev) => ({ ...prev, dateOfIssue: today }));
+    if (!formData.dateOfRequest)
+      setFormData((prev) => ({ ...prev, dateOfRequest: today }));
   }, []);
 
   // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedData = { ...formData, [name]: value };
-    if (name === "warranty" && value === "No") {
-      updatedData = {
-        ...updatedData,
-        warrantyPeriod: "",
-        warrantyType: "",
-      };
-    }
-    setFormData(updatedData);
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // === Handlers for `fromWhomPurchased` Dropdown ===
-  const handleFromChange = (e) => {
-    const value = e.target.value;
-    if (value === "+ Add New") {
-      setShowFromInput(true);
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
-    } else if (value.startsWith("CUSTOM_DELETE_")) {
-      const valToDelete = value.replace("CUSTOM_DELETE_", "");
-      setCustomFromValues((prev) => prev.filter((v) => v !== valToDelete));
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: "" }));
-    } else {
-      setShowFromInput(false);
-      setFormData((prev) => ({ ...prev, fromWhomPurchased: value }));
-    }
-  };
-
-  const handleAddNewFrom = () => {
-    const trimmed = customFromValue.trim();
-    if (!trimmed || customFromValues.includes(trimmed)) return;
-    setCustomFromValues((prev) => [...prev, trimmed]);
-    setFormData((prev) => ({ ...prev, fromWhomPurchased: trimmed }));
-    setCustomFromValue("");
-    setShowFromInput(false);
-  };
-
-  // === Handlers for `itemSubCategory` Dropdown ===
+  // Handle Subcategory Change
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
     if (value === "+ Add New") {
@@ -208,6 +171,7 @@ const QMIDirectStock = () => {
     }
   };
 
+  // Add New Subcategory
   const handleAddNewSubCategory = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
@@ -217,7 +181,6 @@ const QMIDirectStock = () => {
     setShowCustomInput(false);
   };
 
-  // === Submit Handler ===
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -233,7 +196,7 @@ const QMIDirectStock = () => {
     const today = new Date().toISOString().split("T")[0];
     setFormData({
       ...getInitialFormData(),
-      dateOfIssue: today,
+      dateOfRequest: today,
     });
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item.");
@@ -254,24 +217,16 @@ const QMIDirectStock = () => {
   const generateAndDownloadPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(16);
-    doc.text(`Direct Stock Issue`, 20, 20);
+    doc.text(`Manage Requests`, 20, 20);
     doc.setFontSize(12);
     let y = 30;
-
     Object.entries(formData).forEach(([key, value]) => {
-      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
+      if (value) {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
     });
-
-    if (formData.warranty === "Yes") {
-      doc.text(`Warranty Period: ${formData.warrantyPeriod}`, 20, y);
-      y += 10;
-      doc.text(`Warranty Type: ${formData.warrantyType}`, 20, y);
-    }
-
-    doc.save("DirectStockIssue.pdf");
+    doc.save("Manage_Requests.pdf");
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
     resetForm(); // Reset after download
@@ -279,11 +234,8 @@ const QMIDirectStock = () => {
 
   const resetForm = () => {
     setFormData(getInitialFormData());
-    setCustomFromValues([]);
     setCustomSubCategories([]);
-    setShowFromInput(false);
     setShowCustomInput(false);
-    setCustomFromValue("");
     setCustomInputValue("");
     setStatus("idle");
   };
@@ -360,7 +312,7 @@ const QMIDirectStock = () => {
 
   return (
     <>
-      <Box className="direct-issue-box">
+      <Box className="manage-request-box">
         <Typography
           variant="h5"
           mb={2}
@@ -368,7 +320,7 @@ const QMIDirectStock = () => {
           textAlign="center"
           color="white"
         >
-          Direct Issued Stock Entry Form
+          Manage Request Form
         </Typography>
 
         {/* Alerts */}
@@ -388,68 +340,6 @@ const QMIDirectStock = () => {
           {fieldConfig.map((field, index) => {
             if (field.condition && !field.condition(formData)) return null;
 
-            // Custom rendering for fromWhomPurchased
-            if (field.name === "fromWhomPurchased") {
-              return (
-                <Box
-                  key={field.name}
-                  display="flex"
-                  gap={2}
-                  alignItems="center"
-                  mb={2}
-                >
-                  <FormControl fullWidth sx={inputStyles}>
-                    <InputLabel>From</InputLabel>
-                    <Select
-                      name="fromWhomPurchased"
-                      value={formData.fromWhomPurchased || ""}
-                      onChange={handleFromChange}
-                      sx={{ color: "white" }}
-                    >
-                      {allFromOptions.map((cat) => (
-                        <MenuItem key={cat} value={cat}>
-                          {cat}
-                        </MenuItem>
-                      ))}
-                      {customFromValues.map((cat) => (
-                        <MenuItem
-                          key={`CUSTOM_DELETE_${cat}`}
-                          value={`CUSTOM_DELETE_${cat}`}
-                        >
-                          {cat} ❌
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  {showFromInput && (
-                    <>
-                      <TextField
-                        label="Enter New From"
-                        value={customFromValue}
-                        onChange={(e) => setCustomFromValue(e.target.value)}
-                        size="small"
-                        sx={{
-                          width: "calc(100% - 140px)",
-                          input: { color: "white" },
-                          label: { color: "white" },
-                        }}
-                      />
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleAddNewFrom}
-                        sx={{ height: "40px" }}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              );
-            }
-
-            // Custom rendering for itemSubCategory
             if (field.name === "itemSubCategory") {
               return (
                 <Box
@@ -459,7 +349,7 @@ const QMIDirectStock = () => {
                   alignItems="center"
                   mb={2}
                 >
-                  <FormControl fullWidth sx={inputStyles}>
+                  <FormControl fullWidth required sx={inputStyles}>
                     <InputLabel>Sub Category</InputLabel>
                     <Select
                       name="itemSubCategory"
@@ -483,6 +373,7 @@ const QMIDirectStock = () => {
                     </Select>
                   </FormControl>
 
+                  {/* Show Custom Input Inline */}
                   {showCustomInput && (
                     <>
                       <TextField
@@ -510,7 +401,6 @@ const QMIDirectStock = () => {
               );
             }
 
-            // Render normal fields
             if (field.fields) {
               return field.fields.map((f) => renderField(f));
             }
@@ -519,7 +409,7 @@ const QMIDirectStock = () => {
           })}
 
           {/* Submit Button */}
-          <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Box display="flex" justifyContent="flex-start" mt={2} ml={45}>
             <Button
               variant="contained"
               color="primary"
@@ -561,7 +451,7 @@ const QMIDirectStock = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Do you want to add more items under the same QM/ SL No.?
+              Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
               <Button
@@ -615,7 +505,7 @@ const QMIDirectStock = () => {
                 if (!value) return null;
                 const label = key
                   .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (c) => c.toUpperCase());
+                  .replace(/^./, (char) => char.toUpperCase());
                 return (
                   <Box
                     key={key}
@@ -668,7 +558,7 @@ const QMIDirectStock = () => {
             textAlign="center"
           >
             <Typography variant="h6" gutterBottom>
-              Would you like to generate a PDF?
+              Would you like to generate a PDF of this entry?
             </Typography>
             <Box mt={2}>
               <Button
@@ -697,4 +587,4 @@ const QMIDirectStock = () => {
   );
 };
 
-export default QMIDirectStock;
+export default QMIManageRequestForm;
