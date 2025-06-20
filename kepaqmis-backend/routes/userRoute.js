@@ -4,7 +4,7 @@ const router = express.Router();
 const ItemRequest = require("../models/ItemRequest");
 
 // GET /my-issued-items/:pen
-router.get("/my-issued-items/:pen", async (req, res) => {
+router.get('/my-issued-items/:pen', async (req, res) => {
   try {
     const userPen = req.params.pen;
 
