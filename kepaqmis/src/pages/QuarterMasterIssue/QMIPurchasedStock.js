@@ -96,7 +96,7 @@ const QMIPurchasedStock = () => {
     },
   ];
 
-  // === Initial Form State & Reset Function ===
+  // === Initial Form State ===
   const getInitialFormData = () => {
     const data = {};
     fieldConfig.forEach((field) => {
@@ -109,23 +109,11 @@ const QMIPurchasedStock = () => {
 
   const [formData, setFormData] = useState(getInitialFormData());
 
-  // === Subcategories Logic ===
-  const defaultSubCategories = [
-    "Printers",
-    "Inks",
-    "Consumables",
-    "Stationery",
-    "Electronics",
-  ];
+  // === Subcategories Logic (No Default Values) ===
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
-
-  const allSubCategories = [
-    ...defaultSubCategories,
-    ...customSubCategories,
-    "+ Add New",
-  ];
+  const allSubCategories = [...customSubCategories, "+ Add New"];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
@@ -151,9 +139,7 @@ const QMIPurchasedStock = () => {
   // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     let updatedData = { ...formData, [name]: value };
-
     if (name === "warranty" && value === "No") {
       updatedData = {
         ...updatedData,
@@ -161,7 +147,6 @@ const QMIPurchasedStock = () => {
         warrantyType: "",
       };
     }
-
     setFormData(updatedData);
   };
 
@@ -169,16 +154,16 @@ const QMIPurchasedStock = () => {
     const value = e.target.value;
     if (value === "+ Add New") {
       setShowCustomInput(true);
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
       setCustomSubCategories((prev) =>
         prev.filter((cat) => cat !== catToDelete)
       );
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else {
       setShowCustomInput(false);
-      setFormData((prev) => ({ ...prev, subCategory: value }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: value }));
     }
   };
 
@@ -186,7 +171,7 @@ const QMIPurchasedStock = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
     setCustomSubCategories((prev) => [...prev, trimmed]);
-    setFormData((prev) => ({ ...prev, subCategory: trimmed }));
+    setFormData((prev) => ({ ...prev, itemSubCategory: trimmed }));
     setCustomInputValue("");
     setShowCustomInput(false);
   };
@@ -232,7 +217,11 @@ const QMIPurchasedStock = () => {
     let y = 30;
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
+      if (
+        value &&
+        key !== "warrantyPeriod" &&
+        key !== "warrantyType"
+      ) {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
@@ -245,16 +234,14 @@ const QMIPurchasedStock = () => {
     }
 
     doc.save("PurchasedStockEntry.pdf");
-
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
-    resetForm(); // Reset form after download
+    resetForm();
   };
 
-  // === Reset Form Function ===
   const resetForm = () => {
     setFormData(getInitialFormData());
-    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setCustomSubCategories([]);
     setShowCustomInput(false);
     setCustomInputValue("");
     setStatus("idle");
@@ -263,7 +250,6 @@ const QMIPurchasedStock = () => {
   // === Render Field Component ===
   const renderField = (field) => {
     const value = formData[field.name];
-
     switch (field.type) {
       case "text":
         return (
@@ -361,36 +347,56 @@ const QMIPurchasedStock = () => {
           {fieldConfig.map((field, index) => {
             if (field.condition && !field.condition(formData)) return null;
 
-            if (field.name === "subCategory") {
+            if (field.name === "itemSubCategory") {
               return (
-                <FormControl
-                  fullWidth
-                  required
-                  sx={inputStyles}
-                  key={field.name}
-                >
-                  <InputLabel>Sub Category</InputLabel>
-                  <Select
-                    name="subCategory"
-                    value={formData.subCategory || ""}
-                    onChange={handleSubCategoryChange}
-                    sx={{ color: "white" }}
-                  >
-                    {allSubCategories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>
-                        {cat}
-                      </MenuItem>
-                    ))}
-                    {customSubCategories.map((cat) => (
-                      <MenuItem
-                        key={`CUSTOM_DELETE_${cat}`}
-                        value={`CUSTOM_DELETE_${cat}`}
+                <Box key={field.name} display="flex" gap={2} alignItems="center" mb={2}>
+                  <FormControl fullWidth required sx={inputStyles}>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      name="itemSubCategory"
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleSubCategoryChange}
+                      sx={{ color: "white" }}
+                    >
+                      {allSubCategories.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      {customSubCategories.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {showCustomInput && (
+                    <>
+                      <TextField
+                        label="Enter New Sub Category"
+                        value={customInputValue}
+                        onChange={(e) => setCustomInputValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          ...inputStyles,
+                          width: "calc(100% - 140px)",
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewSubCategory}
+                        sx={{ height: "40px" }}
                       >
-                        {cat} ❌
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                        Add
+                      </Button>
+                    </>
+                  )}
+                </Box>
               );
             }
 
@@ -400,27 +406,6 @@ const QMIPurchasedStock = () => {
 
             return renderField(field);
           })}
-
-          {/* Custom Sub Category Input */}
-          {showCustomInput && (
-            <Box display="flex" gap={1} mt={1}>
-              <TextField
-                label="Enter New Sub Category"
-                value={customInputValue}
-                onChange={(e) => setCustomInputValue(e.target.value)}
-                fullWidth
-                size="small"
-                sx={inputStyles}
-              />
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleAddNewSubCategory}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
 
           {/* Submit Button */}
           <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -444,43 +429,16 @@ const QMIPurchasedStock = () => {
 
       {/* Confirm Modal */}
       {showConfirmModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
+        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
             <Typography variant="h6" gutterBottom>
               Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleAddMoreYes}
-                sx={{ mr: 2 }}
-              >
+              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
                 Yes
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleAddMoreNo}
-              >
+              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
                 No
               </Button>
             </Box>
@@ -490,43 +448,15 @@ const QMIPurchasedStock = () => {
 
       {/* Preview Modal */}
       {showPreviewModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="500px"
-            width="100%"
-            textAlign="center"
-          >
-            <Typography variant="h6" gutterBottom>
-              Confirm Submission
-            </Typography>
+        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%" textAlign="center">
+            <Typography variant="h6" gutterBottom>Confirm Submission</Typography>
             <Box mb={2}>
               {Object.entries(formData).map(([key, value]) => {
                 if (!value) return null;
-                const label = key
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (char) => char.toUpperCase());
+                const label = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
                 return (
-                  <Box
-                    key={key}
-                    display="flex"
-                    justifyContent="space-between"
-                    mb={1}
-                  >
+                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
                     <Typography fontWeight="bold">{label}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
@@ -534,16 +464,8 @@ const QMIPurchasedStock = () => {
               })}
             </Box>
             <Box display="flex" justifyContent="flex-end">
-              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleFinalSubmit}
-              >
-                Confirm Submit
-              </Button>
+              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>Cancel</Button>
+              <Button variant="contained" color="primary" onClick={handleFinalSubmit}>Confirm Submit</Button>
             </Box>
           </Box>
         </Box>
@@ -551,36 +473,11 @@ const QMIPurchasedStock = () => {
 
       {/* PDF Modal */}
       {showPdfModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
-            <Typography variant="h6" gutterBottom>
-              Would you like to generate a PDF of this entry?
-            </Typography>
+        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
+            <Typography variant="h6" gutterBottom>Would you like to generate a PDF?</Typography>
             <Box mt={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={generateAndDownloadPDF}
-                sx={{ mr: 2 }}
-              >
+              <Button variant="contained" color="primary" onClick={generateAndDownloadPDF} sx={{ mr: 2 }}>
                 Yes, Download PDF
               </Button>
               <Button
@@ -588,7 +485,7 @@ const QMIPurchasedStock = () => {
                 color="secondary"
                 onClick={() => {
                   setShowPdfModal(false);
-                  resetForm(); // Reset form when skipping
+                  resetForm();
                 }}
               >
                 No, Skip

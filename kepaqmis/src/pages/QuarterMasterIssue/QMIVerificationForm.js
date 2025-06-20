@@ -10,15 +10,22 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
+import jsPDF from "jspdf";
 import "./Issue.css";
 
-const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
+const QMIVerificationForm = ({ prefillData, onClose, onSubmit }) => {
   // === Field Configuration ===
   const fieldConfig = [
+    {
+      name: "dateOfVerification",
+      label: "Date Of Verification",
+      type: "date",
+      required: true,
+    },
     { name: "orderNo", label: "Order No.", type: "text", required: true },
     {
       name: "supplyOrderNo",
-      label: "Supply Order No.",
+      label: "Supply Order No",
       type: "text",
       required: true,
     },
@@ -29,57 +36,47 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       required: true,
     },
     {
+      name: "billInvoiceNo",
+      label: "Bill Invoice No. No",
+      type: "text",
+      required: true,
+    },
+    {
       name: "fromWhomPurchased",
       label: "Supplier Name",
       type: "text",
       required: true,
     },
+    { name: "amount", label: "Amount", type: "number", required: true },
+    { name: "itemName", label: "Item Name", type: "text", required: true },
+    { name: "make", label: "Make/ Brand", type: "text", required: true },
+    { name: "model", label: "Model Name", type: "text", required: true },
+    { name: "modelNo", label: "Model No.", type: "text", required: true },
     {
-      name: "toWhom",
-      label: "To (Office / Company)",
+      name: "serialNo",
+      label: "Serial/ Product No.",
       type: "text",
       required: true,
     },
     {
-      name: "dateOfVerification",
-      label: "Date Of Verification",
-      type: "date",
-      required: true,
-    },
-    {
-      name: "billInvoiceNo",
-      label: "Bill Invoice No.",
+      name: "itemCategory",
+      label: "Item Category ",
       type: "text",
       required: true,
     },
-    { name: "amount", label: "Amount", type: "text", required: true },
-    { name: "itemName", label: "Item", type: "text", required: true },
-    { name: "itemCategory", label: "Category", type: "text", required: true },
     {
       name: "itemSubCategory",
       label: "Sub Category",
       type: "select",
       required: true,
     },
-    { name: "qty", label: "Quantity", type: "number", required: true },
+    { name: "quantity", label: "Quantity", type: "number", required: true },
+
     {
       name: "unit",
       label: "Unit",
       type: "select",
       options: ["Nos", "Litre", "Kilogram", "Meter"],
-      required: true,
-    },
-    { name: "Qmno", label: "QM No.", type: "text", required: true },
-    {
-      name: "dateOfPurchased",
-      label: "Date Of Purchase",
-      type: "date",
-      required: true,
-    },
-    {
-      name: "invoiveNumber",
-      label: "Invoice Number",
-      type: "text",
       required: true,
     },
     {
@@ -94,7 +91,7 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
       fields: [
         {
           name: "warrantyPeriod",
-          label: "Warranty Period",
+          label: "Warranty Period (in months)",
           type: "number",
           required: true,
         },
@@ -109,7 +106,7 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
     },
     {
       name: "perishable",
-      label: "Is Perishable",
+      label: "Perishable?",
       type: "select",
       options: ["Yes", "No"],
       required: true,
@@ -118,38 +115,43 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
 
   // === Initial Form State & Reset Function ===
   const getInitialFormData = () => {
+    const today = new Date().toISOString().split("T")[0];
     const data = {};
     fieldConfig.forEach((field) => {
-      if (field.name) data[field.name] = "";
-      if (field.fields) field.fields.forEach((f) => (data[f.name] = ""));
+      if (field.name) {
+        data[field.name] = prefillData?.[field.name] || "";
+        if (field.type === "date" && !data[field.name]) {
+          data[field.name] = today;
+        }
+      }
+      if (field.fields) {
+        field.fields.forEach((f) => {
+          data[f.name] = prefillData?.[f.name] || "";
+          if (f.type === "date" && !data[f.name]) {
+            data[f.name] = today;
+          }
+        });
+      }
     });
-
-    const today = new Date().toISOString().split("T")[0];
-    data.invoiceDate = data.invoiceDate || today;
-    data.dateOfVerification = data.dateOfVerification || today;
-    data.dateOfPurchased = data.dateOfPurchased || today;
-
-    return { ...data, ...prefillData };
+    return data;
   };
 
   const [formData, setFormData] = useState(getInitialFormData());
 
-  // === Subcategories Logic ===
-  const defaultSubCategories = ["Consumables", "Stationery", "Electronics"];
+  // === Subcategory Logic for itemSubCategory ===
+  // const defaultSubCategories = ["Sanitization", "Stationary", "Others"];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
-
-  const allSubCategories = [
-    ...defaultSubCategories,
-    ...customSubCategories,
-    "+ Add New",
-  ];
+  const allSubCategories = [...customSubCategories, "+ Add New"];
 
   // === Modal & Status States ===
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
   const inputStyles = {
     input: { color: "white" },
@@ -157,12 +159,17 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
     fieldset: { borderColor: "white" },
   };
 
+  // Set today's date on load
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    if (!formData.dateOfIssue)
+      setFormData((prev) => ({ ...prev, dateOfIssue: today }));
+  }, []);
+
   // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     let updatedData = { ...formData, [name]: value };
-
     if (name === "warranty" && value === "No") {
       updatedData = {
         ...updatedData,
@@ -170,24 +177,25 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
         warrantyType: "",
       };
     }
-
     setFormData(updatedData);
   };
 
+  // === Subcategory Handlers ===
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
+
     if (value === "+ Add New") {
       setShowCustomInput(true);
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else if (value.startsWith("CUSTOM_DELETE_")) {
       const catToDelete = value.replace("CUSTOM_DELETE_", "");
       setCustomSubCategories((prev) =>
         prev.filter((cat) => cat !== catToDelete)
       );
-      setFormData((prev) => ({ ...prev, subCategory: "" }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
     } else {
       setShowCustomInput(false);
-      setFormData((prev) => ({ ...prev, subCategory: value }));
+      setFormData((prev) => ({ ...prev, itemSubCategory: value }));
     }
   };
 
@@ -195,9 +203,8 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
     setCustomSubCategories((prev) => [...prev, trimmed]);
-    setFormData((prev) => ({ ...prev, subCategory: trimmed }));
+    setFormData((prev) => ({ ...prev, itemSubCategory: trimmed }));
     setCustomInputValue("");
-    setShowCustomInput(false);
   };
 
   const handleSubmit = (e) => {
@@ -206,16 +213,62 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
     setError("");
     setSuccessMessage("");
     setTimeout(() => {
-      onSubmit(formData);
-      onClose();
+      setShowConfirmModal(true);
       setStatus("idle");
     }, 500);
   };
 
-  // === Reset Form Function ===
+  const handleAddMoreYes = () => {
+    const today = new Date().toISOString().split("T")[0];
+    setFormData({
+      ...getInitialFormData(),
+      dateOfIssue: today,
+    });
+    setShowConfirmModal(false);
+    setSuccessMessage("Ready to add another item.");
+    setStatus("succeeded");
+  };
+
+  const handleAddMoreNo = () => {
+    setShowConfirmModal(false);
+    setShowPreviewModal(true);
+  };
+
+  const handleFinalSubmit = () => {
+    console.log("Form Data Submitted:", formData);
+    setShowPreviewModal(false);
+    setShowPdfModal(true);
+  };
+
+  const generateAndDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(`Stock Verification`, 20, 20);
+    doc.setFontSize(12);
+    let y = 30;
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
+        doc.text(`${key}: ${value}`, 20, y);
+        y += 10;
+      }
+    });
+
+    if (formData.warranty === "Yes") {
+      doc.text(`Warranty Period: ${formData.warrantyPeriod}`, 20, y);
+      y += 10;
+      doc.text(`Warranty Type: ${formData.warrantyType}`, 20, y);
+    }
+
+    doc.save("Stock_Verification.pdf");
+    setShowPdfModal(false);
+    setSuccessMessage("Form submitted successfully!");
+    resetForm(); // Reset after download
+  };
+
   const resetForm = () => {
     setFormData(getInitialFormData());
-    setCustomSubCategories([]); // Optional: reset custom subcategories
+    setCustomSubCategories([]);
     setShowCustomInput(false);
     setCustomInputValue("");
     setStatus("idle");
@@ -224,7 +277,6 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
   // === Render Field Component ===
   const renderField = (field) => {
     const value = formData[field.name];
-
     switch (field.type) {
       case "text":
         return (
@@ -293,109 +345,279 @@ const QMIVerificationForm = ({ onClose, onSubmit, prefillData }) => {
   };
 
   return (
-    <Box className="verify-issue-box">
-      <Typography
-        variant="h5"
-        mb={2}
-        fontWeight="bold"
-        textAlign="center"
-        color="white"
-      >
-        Verification Form
-      </Typography>
+    <>
+      <Box className="verify-issue-box">
+        <Typography
+          variant="h5"
+          mb={2}
+          fontWeight="bold"
+          textAlign="center"
+          color="white"
+        >
+          Stock Verification Form
+        </Typography>
 
-      {/* Alerts */}
-      {status === "failed" && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      {status === "succeeded" && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {successMessage}
-        </Alert>
-      )}
-
-      <form onSubmit={handleSubmit} className="mui-form">
-        {/* Render All Fields Dynamically */}
-        {fieldConfig.map((field, index) => {
-          if (field.condition && !field.condition(formData)) return null;
-
-          if (field.name === "subCategory") {
-            return (
-              <FormControl fullWidth required sx={inputStyles} key={field.name}>
-                <InputLabel>Sub Category</InputLabel>
-                <Select
-                  name="subCategory"
-                  value={formData.subCategory || ""}
-                  onChange={handleSubCategoryChange}
-                  sx={{ color: "white" }}
-                >
-                  {allSubCategories.map((cat) => (
-                    <MenuItem key={cat} value={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                  {customSubCategories.map((cat) => (
-                    <MenuItem
-                      key={`CUSTOM_DELETE_${cat}`}
-                      value={`CUSTOM_DELETE_${cat}`}
-                    >
-                      {cat} ❌
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            );
-          }
-
-          if (field.fields) {
-            return field.fields.map((f) => renderField(f));
-          }
-
-          return renderField(field);
-        })}
-
-        {/* Custom Sub Category Input */}
-        {showCustomInput && (
-          <Box display="flex" gap={1} mt={1}>
-            <TextField
-              label="Enter New Sub Category"
-              value={customInputValue}
-              onChange={(e) => setCustomInputValue(e.target.value)}
-              fullWidth
-              size="small"
-              sx={inputStyles}
-            />
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={handleAddNewSubCategory}
-            >
-              Add
-            </Button>
-          </Box>
+        {/* Alerts */}
+        {status === "failed" && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        {status === "succeeded" && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {successMessage}
+          </Alert>
         )}
 
-        {/* Submit Button */}
-        <Box display="flex" justifyContent="flex-start" mt={2} ml={62}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            sx={{
-              borderRadius: 2,
-              px: 8.3,
-              py: 1,
-              fontWeight: "bold",
-            }}
-            disabled={status === "loading"}
+        <form onSubmit={handleSubmit} className="mui-form">
+          {/* Render All Fields Dynamically */}
+          {fieldConfig.map((field, index) => {
+            if (field.condition && !field.condition(formData)) return null;
+
+            if (field.name === "itemSubCategory") {
+              return (
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
+                  <FormControl fullWidth sx={inputStyles}>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      name="itemSubCategory"
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleSubCategoryChange}
+                      sx={{ color: "white" }}
+                    >
+                      {allSubCategories.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      {customSubCategories.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {/* Show Custom Input Inline */}
+                  {showCustomInput && (
+                    <>
+                      <TextField
+                        label="Enter New Sub Category"
+                        value={customInputValue}
+                        onChange={(e) => setCustomInputValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          width: "calc(100% - 140px)",
+                          input: { color: "white" },
+                          label: { color: "white" },
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewSubCategory}
+                        sx={{ height: "40px" }}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  )}
+                </Box>
+              );
+            }
+
+            if (field.fields) {
+              return field.fields.map((f) => renderField(f));
+            }
+
+            return renderField(field);
+          })}
+
+          {/* Submit Button */}
+          <Box display="flex" justifyContent="flex-start" mt={2} ml={61.3}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{
+                borderRadius: 2,
+                px: 8.3,
+                py: 0,
+                fontWeight: "bold",
+              }}
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Submitting..." : "Submit"}
+            </Button>
+          </Box>
+        </form>
+      </Box>
+
+      {/* Confirm Modal */}
+      {showConfirmModal && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
           >
-            {status === "loading" ? "Submitting..." : "Submit"}
-          </Button>
+            <Typography variant="h6" gutterBottom>
+              Do you want to add more items under the same QM/ SL No.?
+            </Typography>
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleAddMoreYes}
+                sx={{ mr: 2 }}
+              >
+                Yes
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddMoreNo}
+              >
+                No
+              </Button>
+            </Box>
+          </Box>
         </Box>
-      </form>
-    </Box>
+      )}
+
+      {/* Preview Modal */}
+      {showPreviewModal && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="500px"
+            width="100%"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Confirm Submission
+            </Typography>
+            <Box mb={2}>
+              {Object.entries(formData).map(([key, value]) => {
+                if (!value) return null;
+                const label = key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (char) => char.toUpperCase());
+                return (
+                  <Box
+                    key={key}
+                    display="flex"
+                    justifyContent="space-between"
+                    mb={1}
+                  >
+                    <Typography fontWeight="bold">{label}:</Typography>
+                    <Typography>{value}</Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+            <Box display="flex" justifyContent="flex-end">
+              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFinalSubmit}
+              >
+                Confirm Submit
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* PDF Modal */}
+      {showPdfModal && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Would you like to generate a PDF of this entry?
+            </Typography>
+            <Box mt={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndDownloadPDF}
+                sx={{ mr: 2 }}
+              >
+                Yes, Download PDF
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  setShowPdfModal(false);
+                  resetForm();
+                }}
+              >
+                No, Skip
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </>
   );
 };
 

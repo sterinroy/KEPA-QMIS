@@ -6,6 +6,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import DescriptionIcon from "@mui/icons-material/Description";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import UndoIcon from '@mui/icons-material/Undo';
 import Main from "../../components/Main";
 import { Box, Modal, Button, Typography } from "@mui/material";
@@ -33,6 +34,11 @@ function QMILayout() {
       label: "Verification Status",
       path: "/QuarterMasterIssue/QMIVerificationStatus",
       icon: <VerifiedIcon className="icon" />, // Optional: add MUI VerifiedIcon
+    },
+    {
+      label: "Manage Requests",
+      path: "/QuarterMasterIssue/QMIManageRequest",
+      icon: <PendingActionsIcon className="icon" />,
     },
     {
       label: "Stock Issue Form",
