@@ -99,7 +99,7 @@ function App() {
 
 
         <Route
-          path="/UserDashboard"
+          path="/User"
           element={
             <ProtectedRoute allowedRoles={["User"]}>
               <UserLayout />

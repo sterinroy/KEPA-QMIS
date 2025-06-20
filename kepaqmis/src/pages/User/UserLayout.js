@@ -22,33 +22,33 @@ function UserLayout() {
   const navItems = [
     {
       label: "Dashboard",
-      path: "/UserDashboard",
+      path: "/User/UserDashboard",
       icon: <DashboardIcon className="icon" />,
       component: <UserDashboard />,
     },
     {
       label: "Indent Generation",
-      path: "/UserIndent",
+      path: "/User/UserIndent",
       icon: <DescriptionIcon className="icon" />,
       component: <UserIndent/>,
     },
     {
       label: "Manage Requests",
-      path: "/UserManageRequest",
+      path: "/User/ManageRequest",
       icon: <GroupIcon className="icon" />,
       component: <UserManageRequest />,
     },
   
     {
       label: "Temporary Stock",
-      path: "/UserTemp",
+      path: "/User/UserTemp",
       icon: <Send className="icon" />,
       component: <UserTemp />,
     },
 
     {
       label: "Return",
-      path: "/UserReturn",
+      path: "/User/UserReturn",
       icon: <HistoryIcon className="icon" />,
       component: <UserReturn />,
     }
