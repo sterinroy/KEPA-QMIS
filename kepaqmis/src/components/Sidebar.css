@@ -154,7 +154,7 @@ div.logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto; /* Ensure the image doesn't overflow the container */
+  overflow: hidden; /* Ensure the image doesn't overflow the container */
 }
 
 .logo > img {

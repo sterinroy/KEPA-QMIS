@@ -96,7 +96,6 @@ const Sidebar = ({ navItems }) => {
           ))}
         </nav>
         <div className="logout-button" onClick={handleLogout}>
-          {/* <LogoutIcon className="logout-icon" /> */}
           Logout
         </div>
       </aside>
