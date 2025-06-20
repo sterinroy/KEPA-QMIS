@@ -30,6 +30,7 @@ export const login = (pen, password) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("pen", data.pen);
+      localStorage.setItem("name", data.name);
     } catch (error) {
       dispatch({ type: LOGIN_FAILURE, payload: error.message });
     }
@@ -59,6 +60,7 @@ export const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("pen");
+    localStorage.removeItem("name");
 
     dispatch({ type:  LOGOUT });
   };

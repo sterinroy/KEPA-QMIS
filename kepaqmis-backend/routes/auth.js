@@ -63,7 +63,7 @@ router.post("/login", async (req, res) => {
     action: "login",
   });
 
-  res.json({ token, role: user.role, pen: user.pen });
+  res.json({ token, role: user.role, pen: user.pen , name: user.name });
 });
 
 router.post("/logout", authMiddleware, async (req, res) => {

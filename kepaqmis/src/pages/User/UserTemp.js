@@ -1,198 +1,249 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { submitTempStock } from "../../redux/actions/tempActions";
+import React, { useState, useEffect } from "react";
 import {
-  TextField,
-  Button,
-  Typography,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  TextField, Button, Typography, Box, FormControl,
+  InputLabel, Select, MenuItem
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOffices } from "../../redux/actions/officeActions";
+import { fetchStockItems } from "../../redux/actions/stockActions"; 
 
-const Temp = () => {
+import "./User.css";
+
+const UserTemp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const pen = localStorage.getItem("pen") || "";
+  const name = localStorage.getItem("name") || "";
+
+
   const [formData, setFormData] = useState({
     slNo: "",
-    PENNo: "",
+    PENNo: pen,
+    name: name,
     toWhom: "",
-    dateOfissue: new Date().toISOString().split("T")[0],
-    name: "",
+    dateOfrequest: new Date().toISOString().split("T")[0],
     mobile: "",
-    itemDescription: "",
+    itemId: "",
+    category: "",
+    subcategory: "",
     purpose: "",
     qty: 1,
   });
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { offices } = useSelector((state) => state.office);
+  const { stockItems, loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
+
+
+  useEffect(() => {
+    dispatch(fetchOffices());
+    dispatch(fetchStockItems());
+  }, [dispatch]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (e.target.name === "category") {
+      setFormData((prev) => ({
+        ...prev,
+        subcategory: "",
+        itemId: ""
+      }));
+    } else if (e.target.name === "subcategory") {
+      setFormData((prev) => ({
+        ...prev,
+        itemId: ""
+      }));
+    }
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const message = await dispatch(submitTempStock(formData));
-      alert(message);
-      navigate("/review", { state: { formData } });
+      const payload = {
+        itemId: formData.itemId,
+        quantity: formData.qty,
+        unit: selectedItem?.unit,
+        temporary: true,
+        user: {
+          pen: formData.PENNo,
+          name: formData.name
+        },
+        extra: {
+          slNo: formData.slNo,
+          toWhom: formData.toWhom,
+          mobile: formData.mobile,
+          dateOfrequest: formData.dateOfrequest,
+          purpose: formData.purpose
+        }
+      };
+
+      const res = await fetch("/api/itemRequestRoutes/item-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Submission failed");
+
+      alert("Request submitted successfully");
+      navigate("/User/UserTemp", { state: formData });
     } catch (err) {
       alert("Error: " + err.message);
     }
   };
+  const selectedItem = stockItems.find(item => item._id === formData.itemId);
 
-  const officeOptions = [
-  "A block", "AC I Wing", "AC II Wing", "AD Admin", "AD MT", "AD Outdoor", "AD PS", "AD Training",
-  "Armour Wing", "B Block", "Computer Lab", "CPC", "Cyber Forensics Lab",
-  "Direct Bunglow", "Director Office", "DKMS", "Drinking Water Treatment Plant (DWTP)",
-  "Driving School", "Dry Canteen", "Duty Office", "DySP Admin", "DySP Indoor", "DySP PS1",
-  "DySP PS2", "DySP TTNS", "Guest House", "HoD Behavioral Science", "HoD Computer Application", "HoD Forensics Medicine",
-  "HoD Forensics Science", "HoD Law", "IGP/ DIG Training", "Indoor",
-  "Inspector Admin Office", "Inspector Indoor OFFICE", "Laundry", "Model PS",
-  "MT Office", "PRC", "R & P Wing", "SDTS", "SO Mess", "Super Market", "Swimming Pool",
-  "Telecommunication Wing", "TT 01", "TT 02", "TT 03", "TT 04", "TT 05", "TT 06", "TT 07", "TT 08",
-  "TT 09", "TT 10", "Unit Hospital", "Vishranthi", "Wet Canteen"
+
+  const formFields = [
+    { name: "slNo", label: "Sl No", type: "text", required: true },
+    { name: "dateOfrequest", label: "Date of Issue", type: "date", required: true },
+    { name: "mobile", label: "Mobile", type: "number", required: true },
+    { name: "qty", label: "Quantity", type: "number", required: true },
+    {
+      name: "purpose",
+      label: "Purpose",
+      multiline: true,
+      rows: 3,
+      required: true
+    }
   ];
+
+  const categories = [...new Set(stockItems.map((item) => item.itemCategory))];
+  const subcategories = formData.category
+    ? [...new Set(
+        stockItems
+          .filter((item) => item.itemCategory === formData.category)
+          .map((item) => item.itemSubcategory)
+      )]
+    : [];
+
+  const filteredItems = stockItems.filter(
+    (item) =>
+      item.itemCategory === formData.category &&
+      item.itemSubcategory === formData.subcategory
+  );
+
 
   return (
     <div className="temp-issue-root">
-      <Box
-        className="temp-issue-box"
-        sx={{
-          backgroundColor: "#111C44",
-          padding: "2rem",
-          borderRadius: "12px",
-          boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-        }}
-      >
-        <Typography
-          variant="h5"
-          mb={3}
-          fontWeight="bold"
-          textAlign="center"
-          color="white"
-        >
-          Temporary Issue Form
+      <Box className="temp-issue-box">
+        <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+          Temporary Request Form
         </Typography>
 
         <form onSubmit={handleSubmit} className="mui-form">
           <TextField
-            label="Sl No"
-            name="slNo"
-            value={formData.slNo}
-            onChange={handleChange}
-            required
-            fullWidth
-          />
-          <TextField
-            label="PEN No"
             name="PENNo"
+            label="PEN No"
             value={formData.PENNo}
-            onChange={handleChange}
-            required
+            disabled
             fullWidth
           />
           <TextField
-            label="Date of Issue"
-            type="date"
-            name="dateOfissue"
-            value={formData.dateOfissue}
-            onChange={handleChange}
-            required
-            fullWidth
-          />
-          <TextField
-            label="Name"
             name="name"
+            label="Name"
             value={formData.name}
-            onChange={handleChange}
-            required
+            disabled
             fullWidth
           />
+
+          {formFields.map((field) => (
+            <TextField
+              key={field.name}
+              name={field.name}
+              label={field.label}
+              type={field.type || "text"}
+              value={formData[field.name]}
+              onChange={handleChange}
+              required={field.required}
+              multiline={field.multiline || false}
+              rows={field.rows || undefined}
+              fullWidth
+            />
+          ))}
+
           <FormControl fullWidth required>
             <InputLabel id="office-label">Office / Company</InputLabel>
             <Select
               labelId="office-label"
-              id="office"
               name="toWhom"
               value={formData.toWhom}
               onChange={handleChange}
               label="Office / Company"
             >
-              {officeOptions.map((label) => (
-                <MenuItem key={label} value={label}>
-                  {label}
-                </MenuItem>
+              {offices?.map((label) => (
+                <MenuItem key={label} value={label}>{label}</MenuItem>
               ))}
             </Select>
           </FormControl>
-          <TextField
-            label="Mobile"
-            name="mobile"
-            type="number"
-            value={formData.mobile}
-            onChange={handleChange}
-            required
-            fullWidth
-          />
-          <TextField
-            label="Quantity"
-            type="number"
-            name="qty"
-            inputProps={{ min: 1 }}
-            value={formData.qty}
-            onChange={handleChange}
-            required
-            fullWidth
-          />
-          <TextField
-            label="Item Description"
-            name="itemDescription"
-            value={formData.itemDescription}
-            onChange={handleChange}
-            fullWidth
-            required
-            multiline
-            rows={4}
-            sx={{
-              "& .MuiInputBase-root": {
-                height: "auto",
-                padding: "1px",
-              },
-            }}
-          />
-          <TextField
-            label="Purpose"
-            name="purpose"
-            value={formData.purpose}
-            onChange={handleChange}
-            fullWidth
-            required
-            multiline
-            rows={4}
-            sx={{
-              mt: -4,
-              "& .MuiInputBase-root": {
-                height: "auto",
-                padding: "1px",
-              },
-            }}
-          />
-          <Box display="flex" justifyContent="flex-end" mt={0.7} mr={-0.05}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              sx={{
-                borderRadius: 2,
-                px: 5,
-                py: 0,
-                fontWeight: "bold",
-              }}
+          
+          <FormControl fullWidth required>
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              label="Category"
             >
+              {categories.map((cat) => (
+                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth required>
+            <InputLabel id="subcategory-label">Subcategory</InputLabel>
+            <Select
+              labelId="subcategory-label"
+              name="subcategory"
+              value={formData.subcategory}
+              onChange={handleChange}
+              label="Subcategory"
+              disabled={!formData.category}
+            >
+              {subcategories.map((sub) => (
+                <MenuItem key={sub} value={sub}>{sub}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth required>
+            <InputLabel id="item-label">Select Item</InputLabel>
+            <Select
+              labelId="item-label"
+              name="itemId"
+              value={formData.itemId}
+              onChange={handleChange}
+              label="Select Item"
+              disabled={!formData.subcategory}
+            >
+              {stockLoading ? (
+                <MenuItem disabled>Loading...</MenuItem>
+              ) : stockError ? (
+                <MenuItem disabled>Error loading items</MenuItem>
+              ) : (
+                filteredItems.map((item) => (
+                  <MenuItem key={item._id} value={item._id}>
+                    {item.itemName} ({item.serialNumber})
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+          </FormControl>
+          {selectedItem && (
+                <Typography variant="body2" color="textSecondary" mt={1}>
+                  Unit: {selectedItem.unit}
+                </Typography>
+              )}
+
+
+          <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Button variant="contained" type="submit" disabled={!formData.itemId || !formData.qty || !formData.toWhom}>
               Submit
             </Button>
           </Box>
@@ -202,4 +253,4 @@ const Temp = () => {
   );
 };
 
-export default Temp;
+export default UserTemp;

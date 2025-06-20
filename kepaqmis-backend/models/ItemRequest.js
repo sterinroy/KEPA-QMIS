@@ -5,11 +5,7 @@ const itemRequestSchema = new mongoose.Schema({
     pen: { type: String },
     name: { type: String },
   },
-  item: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "StockItem",
-    required: true
-  },
+  item: { type: mongoose.Schema.Types.ObjectId, ref: "StockItem", required: true },
   requestedQty: { type: Number, required: true },
   unit: { type: String },
   temporary: { type: Boolean, default: false },
@@ -18,10 +14,15 @@ const itemRequestSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected", "returned"],
     default: "pending"
   },
+  remarks: { type: String },
+  dateOfrequest: { type: Date },
+  toWhom: { type: String },
+  mobile: { type: String },
+  slNo: { type: String },
   issuedFrom: [{
     stockItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'StockItem' },
     deductedQty: Number
-}],
+  }],
   approvedBy: {
     pen: { type: String },
     name: { type: String }

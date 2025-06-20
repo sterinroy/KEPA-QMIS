@@ -2,18 +2,23 @@ const express = require("express");
 const router = express.Router();
 
 const ItemRequest = require("../models/ItemRequest");
-const ReturnItem = require("../models/ReturnItem");
 const StockItem = require("../models/StockItem");
 
 router.post("/item-requests", async (req, res) => {
-  const { itemId, quantity, unit, temporary, user } = req.body;
+  const { itemId, quantity, unit, temporary, user, extra } = req.body;
+
   try {
     const request = new ItemRequest({
       item: itemId,
       requestedQty: quantity,
       unit,
       temporary,
-      requestedBy: user
+      requestedBy: user,
+      remarks: ` ${extra.purpose || ""}`,
+      dateOfrequest: extra.dateOfrequest,
+      toWhom: extra.toWhom,
+      slNo: extra.slNo,
+      mobile: extra.mobile
     });
     await request.save();
     res.status(201).json(request);
@@ -21,6 +26,7 @@ router.post("/item-requests", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 router.post("/item-requests/:id/approve", async (req, res) => {
   const { pen, name, approvedQty } = req.body;
