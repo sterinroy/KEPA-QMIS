@@ -234,7 +234,7 @@ const filteredItems = (stocks || []).filter(
             </Select>
           </FormControl>
           {selectedItem && (
-                <Typography variant="body2" color="textSecondary" mt={1}>
+                <Typography variant="body2" color="white" mt={-6} marginLeft={4}>
                   Unit: {selectedItem.unit}
                 </Typography>
               )}
