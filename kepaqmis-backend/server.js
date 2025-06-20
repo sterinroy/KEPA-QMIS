@@ -28,13 +28,11 @@ app.use('/api/itemCategoryRoutes', itemCategoryRoutes);
 app.use('/api/itemRequestRoutes', ItemRequestRoutes);
 app.use('/api/userRoute', userRoute);
 
-// Catch-all for unmatched routes
 app.use((req, res, next) => {
   console.log(`⚠️  Unmatched route: ${req.method} ${req.originalUrl}`);
   res.status(404).send('Route not found');
 });
 
-// MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

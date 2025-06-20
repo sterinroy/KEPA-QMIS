@@ -224,5 +224,4 @@ router.get("/stockitems", async (req, res) => {
 });
 
 
-// 🔹 7. Issue Item to User
 module.exports = router;

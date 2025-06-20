@@ -12,9 +12,8 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-import Login from "../pages/Login";
 
-const Sidebar = ({ navItems, onNavItemClick }) => {
+const Sidebar = ({ navItems }) => {
   const location = useLocation();
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
@@ -53,7 +52,6 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
       setOpenModal(false);
     } catch (error) {
       console.error("Logout failed:", error);
-      // Optionally, you can show an error message to the user
     }
   };
 
@@ -66,8 +64,6 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
       if (item.modal) {
         setOpenModal(true);
       } else {
-        // onNavItemClick(item.component);
-        // location.pathname = item.path;
         navigate(item.path);
       }
     };

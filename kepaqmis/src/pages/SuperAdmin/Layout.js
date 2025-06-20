@@ -49,6 +49,30 @@ function Layout() {
       icon: <DescriptionIcon className="icon" />,
       component: <StockItemView />,
     },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
+    },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
+    },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
+    },
+    {
+      label: "Stock Items",
+      path:"/SuperAdmin/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
+    },
   ];
   const handleNavItemClick = (component) => {
     setActiveComponent(component);
