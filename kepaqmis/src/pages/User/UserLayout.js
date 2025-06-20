@@ -6,10 +6,10 @@ import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
 import UserDashboard from "./UserDashboard";
-import SendRequest from "./UserIndent";
-import ManageRequest from "./UserManageRequest";
-import Temp from "./UserTemp";
-import Return from "./UserReturn";
+import UserIndent from "./UserIndent";
+import UserManageRequest from "./UserManageRequest";
+import UserTemp from "./UserTemp";
+import UserReturn from "./UserReturn";
 import { Send } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
 
@@ -28,29 +28,29 @@ function UserLayout() {
     },
     {
       label: "Indent Generation",
-      path: "/SendRequest",
+      path: "/UserIndent",
       icon: <DescriptionIcon className="icon" />,
-      component: <SendRequest />,
+      component: <UserIndent/>,
     },
     {
       label: "Manage Requests",
-      path: "/ManageRequest",
+      path: "/UserManageRequest",
       icon: <GroupIcon className="icon" />,
-      component: <ManageRequest />,
+      component: <UserManageRequest />,
     },
   
     {
       label: "Temporary Stock",
-      path: "/Temp",
+      path: "/UserTemp",
       icon: <Send className="icon" />,
-      component: <Temp />,
+      component: <UserTemp />,
     },
 
     {
       label: "Return",
-      path: "/Return",
+      path: "/UserReturn",
       icon: <HistoryIcon className="icon" />,
-      component: <Return />,
+      component: <UserReturn />,
     }
 
 
