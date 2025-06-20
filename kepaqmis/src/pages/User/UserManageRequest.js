@@ -13,7 +13,10 @@ const columns = [
     field: "IndentBill",
     headerName: "IndentBill",
     flex: 1,
-    renderCell: (params) => (
+    renderCell: (params) => 
+      params.row.istemporary ? (  
+        <span style={{ color: "gray" }}>N/A</span>
+      ) : (
       <button onClick={() => alert(`Exporting ${params.row.item}`)}>
         IndentBill
       </button>
@@ -50,6 +53,7 @@ const UserManageRequest = () => {
           subcategory: entry.item?.itemSubCategory || "N/A",
           quantity: `${entry.requestedQty} ${entry.unit || ""}`,
           status: entry.status,
+          istemporary: entry.temporary,
         }));
 
         setRows(formattedRows);

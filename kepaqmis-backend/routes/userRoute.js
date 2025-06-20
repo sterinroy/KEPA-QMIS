@@ -3,15 +3,14 @@ const router = express.Router();
 
 const ItemRequest = require("../models/ItemRequest");
 
-// GET /my-issued-items/:pen
 router.get('/my-issued-items/:pen', async (req, res) => {
   try {
     const userPen = req.params.pen;
 
     const issuedItems = await ItemRequest.find({
       "requestedBy.pen": userPen,
-      status: "approved",
-      temporary: false
+      // status: "approved",
+      // temporary: false
     }).populate("item");
 
     res.status(200).json(issuedItems);
