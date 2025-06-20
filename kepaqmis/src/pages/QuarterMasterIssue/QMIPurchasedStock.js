@@ -54,7 +54,7 @@ const QMIPurchasedStock = () => {
     },
     { name: "qty", label: "Quantity", type: "number", required: true },
     {
-      name: "Unit",
+      name: "unit",
       label: "Unit",
       type: "select",
       options: ["Nos", "Litre", "Kilogram", "Meter"],
@@ -134,7 +134,7 @@ const QMIPurchasedStock = () => {
     const today = new Date().toISOString().split("T")[0];
     if (!formData.dateOfPurchased)
       setFormData((prev) => ({ ...prev, dateOfPurchased: today }));
-  }, []);
+  }, [formData.dateOfPurchased]);
 
   // Handle form changes
   const handleChange = (e) => {
@@ -181,9 +181,17 @@ const QMIPurchasedStock = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
+
     setTimeout(() => {
-      setShowConfirmModal(true);
-      setStatus("idle");
+      if (Math.random() > 0.2) {
+        // Success
+        setShowConfirmModal(true);
+        setStatus("succeeded");
+      } else {
+        // Failure
+        setError("Failed to submit form. Please try again.");
+        setStatus("failed");
+      }
     }, 500);
   };
 
@@ -317,6 +325,13 @@ const QMIPurchasedStock = () => {
     }
   };
 
+  // Helper function to format keys
+  const formatKey = (key) => {
+    return key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (char) => char.toUpperCase());
+  };
+
   return (
     <>
       <Box className="purchase-issue-box">
@@ -349,7 +364,13 @@ const QMIPurchasedStock = () => {
 
             if (field.name === "itemSubCategory") {
               return (
-                <Box key={field.name} display="flex" gap={2} alignItems="center" mb={2}>
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
                   <FormControl fullWidth required sx={inputStyles}>
                     <InputLabel>Sub Category</InputLabel>
                     <Select
@@ -382,8 +403,9 @@ const QMIPurchasedStock = () => {
                         onChange={(e) => setCustomInputValue(e.target.value)}
                         size="small"
                         sx={{
-                          ...inputStyles,
                           width: "calc(100% - 140px)",
+                          input: { color: "white" },
+                          label: { color: "white" },
                         }}
                       />
                       <Button
@@ -429,16 +451,43 @@ const QMIPurchasedStock = () => {
 
       {/* Confirm Modal */}
       {showConfirmModal && (
-        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
             <Typography variant="h6" gutterBottom>
               Do you want to add more items under the same QM No.?
             </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleAddMoreYes}
+                sx={{ mr: 2 }}
+              >
                 Yes
               </Button>
-              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddMoreNo}
+              >
                 No
               </Button>
             </Box>
@@ -448,24 +497,68 @@ const QMIPurchasedStock = () => {
 
       {/* Preview Modal */}
       {showPreviewModal && (
-        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%" textAlign="center">
-            <Typography variant="h6" gutterBottom>Confirm Submission</Typography>
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="500px"
+            width="100%"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Confirm Submission
+            </Typography>
             <Box mb={2}>
               {Object.entries(formData).map(([key, value]) => {
                 if (!value) return null;
-                const label = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+
+                // Hide warranty fields unless warranty is Yes
+                if (
+                  (key === "warrantyPeriod" || key === "warrantyType") &&
+                  formData.warranty !== "Yes"
+                ) {
+                  return null;
+                }
+
+                const formattedKey = formatKey(key);
+
                 return (
-                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
-                    <Typography fontWeight="bold">{label}:</Typography>
+                  <Box
+                    key={key}
+                    display="flex"
+                    justifyContent="space-between"
+                    mb={1}
+                  >
+                    <Typography fontWeight="bold">{formattedKey}:</Typography>
                     <Typography>{value}</Typography>
                   </Box>
                 );
               })}
             </Box>
             <Box display="flex" justifyContent="flex-end">
-              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>Cancel</Button>
-              <Button variant="contained" color="primary" onClick={handleFinalSubmit}>Confirm Submit</Button>
+              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFinalSubmit}
+              >
+                Confirm Submit
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -473,11 +566,36 @@ const QMIPurchasedStock = () => {
 
       {/* PDF Modal */}
       {showPdfModal && (
-        <Box position="fixed" top="0" left="0" width="100%" height="100%" bgcolor="rgba(0,0,0,0.6)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
-          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
-            <Typography variant="h6" gutterBottom>Would you like to generate a PDF?</Typography>
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bgcolor="rgba(0,0,0,0.6)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bgcolor="#fff"
+            p={4}
+            borderRadius={2}
+            boxShadow={3}
+            maxWidth="400px"
+            textAlign="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Would you like to generate a PDF?
+            </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="primary" onClick={generateAndDownloadPDF} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndDownloadPDF}
+                sx={{ mr: 2 }}
+              >
                 Yes, Download PDF
               </Button>
               <Button

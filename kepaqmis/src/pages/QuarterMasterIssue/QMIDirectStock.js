@@ -211,6 +211,7 @@ const QMIDirectStock = () => {
   const handleAddNewSubCategory = () => {
     const trimmed = customInputValue.trim();
     if (!trimmed || customSubCategories.includes(trimmed)) return;
+
     setCustomSubCategories((prev) => [...prev, trimmed]);
     setFormData((prev) => ({ ...prev, itemSubCategory: trimmed }));
     setCustomInputValue("");
@@ -218,6 +219,19 @@ const QMIDirectStock = () => {
   };
 
   // === Submit Handler ===
+  const validateForm = () => {
+    const invalidFields = fieldConfig.filter((field) => {
+      const value = formData[field.name];
+      return field.required && (!value || value === "");
+    });
+
+    if (invalidFields.length > 0) {
+      setError("Please fill all required fields.");
+      setStatus("failed");
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -260,7 +274,12 @@ const QMIDirectStock = () => {
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value && key !== "warrantyPeriod" && key !== "warrantyType") {
-        doc.text(`${key}: ${value}`, 20, y);
+        function formatLabel(key) {
+          return key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (c) => c.toUpperCase());
+        }
+        doc.text(`${formatLabel(key)}: ${value}`, 20, y);
         y += 10;
       }
     });
@@ -286,6 +305,10 @@ const QMIDirectStock = () => {
     setCustomFromValue("");
     setCustomInputValue("");
     setStatus("idle");
+    setError("");
+    setSuccessMessage("");
+    setShowPreviewModal(false);
+    setShowPdfModal(false);
   };
 
   // === Render Field Component ===

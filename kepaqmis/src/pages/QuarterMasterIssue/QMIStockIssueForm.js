@@ -166,7 +166,7 @@ const QMIStockIssueForm = () => {
     const today = new Date().toISOString().split("T")[0];
     if (!formData.dateOfIssue)
       setFormData((prev) => ({ ...prev, dateOfIssue: today }));
-  }, []);
+  }, [formData.dateOfIssue]);
 
   // Handle form changes
   const handleChange = (e) => {
@@ -206,9 +206,18 @@ const QMIStockIssueForm = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
+
+    // Simulate API call
     setTimeout(() => {
-      setShowConfirmModal(true);
-      setStatus("idle");
+      if (Math.random() > 0.2) {
+        // Success
+        setShowConfirmModal(true);
+        setStatus("succeeded");
+      } else {
+        // Failure
+        setError("Failed to submit form. Please try again.");
+        setStatus("failed");
+      }
     }, 500);
   };
 
@@ -257,8 +266,11 @@ const QMIStockIssueForm = () => {
   const resetForm = () => {
     setFormData(getInitialFormData());
     setCustomSubCategories([]);
+    setCustomToOptions([]);
     setShowCustomInput(false);
+    setShowCustomToInput(false);
     setCustomInputValue("");
+    setCustomToInputValue("");
     setStatus("idle");
   };
 
@@ -420,15 +432,22 @@ const QMIStockIssueForm = () => {
                       onChange={handleSubCategoryChange}
                       sx={{ color: "white" }}
                     >
-                      {allSubCategories.map((cat) => (
+                      {/* Default + Custom Options */}
+                      {customSubCategories.map((cat) => (
                         <MenuItem key={cat} value={cat}>
                           {cat}
                         </MenuItem>
                       ))}
+                      <MenuItem key="+ Add New" value="+ Add New">
+                        + Add New
+                      </MenuItem>
+
+                      {/* Delete Options (hidden from selection view) */}
                       {customSubCategories.map((cat) => (
                         <MenuItem
                           key={`CUSTOM_DELETE_${cat}`}
                           value={`CUSTOM_DELETE_${cat}`}
+                          sx={{ display: "none" }}
                         >
                           {cat} ❌
                         </MenuItem>
@@ -494,6 +513,10 @@ const QMIStockIssueForm = () => {
                           const trimmed = customToInputValue.trim();
                           if (!trimmed || allToOptions.includes(trimmed))
                             return;
+                          setCustomToOptions((prev) => [...prev, trimmed]);
+                          setFormData((prev) => ({ ...prev, toWhom: trimmed }));
+                          setCustomToInputValue("");
+                          setShowCustomToInput(false);
                           setCustomToOptions((prev) => [...prev, trimmed]);
                           setFormData((prev) => ({ ...prev, toWhom: trimmed }));
                           setCustomToInputValue("");
