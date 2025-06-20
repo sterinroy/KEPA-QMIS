@@ -209,7 +209,11 @@ button:hover {
 .MuiDataGrid-virtualScrollerContent {
   max-height: none !important;
 }
-
+.MuiDataGrid-columnHeaderTitle {
+  color: #111C44 !important;
+  font-weight: 550 !important;
+  font-family: "DM Sans", sans-serif !important;
+}
 /* Testing shit */
  .MuiButtonBase-root {
  color: #ffffff;
