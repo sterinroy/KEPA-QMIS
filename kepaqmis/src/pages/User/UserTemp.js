@@ -110,23 +110,21 @@ const UserTemp = () => {
       required: true
     }
   ];
-  const selectedItem = stockItems?.find(item => item._id === formData.itemId);
+  const categories = [...new Set((stockItems || []).map((item) => item.itemCategory))];
 
+const subcategories = formData.category
+  ? [...new Set(
+      (stockItems || [])
+        .filter((item) => item.itemCategory === formData.category)
+        .map((item) => item.itemSubcategory)
+    )]
+  : [];
 
-  const categories = [...new Set(stockItems.map((item) => item.itemCategory))];
-  const subcategories = formData.category
-    ? [...new Set(
-        stockItems
-          .filter((item) => item.itemCategory === formData.category)
-          .map((item) => item.itemSubcategory)
-      )]
-    : [];
-
-  const filteredItems = stockItems.filter(
-    (item) =>
-      item.itemCategory === formData.category &&
-      item.itemSubcategory === formData.subcategory
-  );
+const filteredItems = (stockItems || []).filter(
+  (item) =>
+    item.itemCategory === formData.category &&
+    item.itemSubcategory === formData.subcategory
+);
 
 
 
