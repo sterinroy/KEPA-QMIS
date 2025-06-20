@@ -33,7 +33,7 @@ const Login = () => {
           navigate("/QuarterMasterACQM");
           break;
         case "User":
-          navigate("/UserDashboard");
+          navigate("/User/UserDashboard");
           break;
         case "SuperAdmin":
           navigate("/SuperAdmin/SuperAdminDashboard");

@@ -34,7 +34,7 @@ function UserLayout() {
     },
     {
       label: "Manage Requests",
-      path: "/User/ManageRequest",
+      path: "/User/UserManageRequest",
       icon: <GroupIcon className="icon" />,
       component: <UserManageRequest />,
     },
