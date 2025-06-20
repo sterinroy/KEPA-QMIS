@@ -95,7 +95,6 @@ const UserTemp = () => {
       alert("Error: " + err.message);
     }
   };
-  const selectedItem = stockItems.find(item => item._id === formData.itemId);
 
 
   const formFields = [
@@ -126,6 +125,8 @@ const UserTemp = () => {
       item.itemCategory === formData.category &&
       item.itemSubcategory === formData.subcategory
   );
+
+  const selectedItem = stockItems.find(item => item._id === formData.itemId);
 
 
   return (
