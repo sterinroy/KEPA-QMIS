@@ -110,6 +110,8 @@ const UserTemp = () => {
       required: true
     }
   ];
+  const selectedItem = stockItems.find(item => item._id === formData.itemId);
+
 
   const categories = [...new Set(stockItems.map((item) => item.itemCategory))];
   const subcategories = formData.category
@@ -126,7 +128,6 @@ const UserTemp = () => {
       item.itemSubcategory === formData.subcategory
   );
 
-  const selectedItem = stockItems.find(item => item._id === formData.itemId);
 
 
   return (
