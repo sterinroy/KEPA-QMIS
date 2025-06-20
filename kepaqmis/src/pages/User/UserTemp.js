@@ -33,7 +33,7 @@ const UserTemp = () => {
   });
 
   const { offices } = useSelector((state) => state.office);
-  const { stockItems, loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
+  const { stocks=[], loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
 
 
   useEffect(() => {
@@ -99,31 +99,34 @@ const UserTemp = () => {
 
   const formFields = [
     { name: "slNo", label: "Sl No", type: "text", required: true },
-    { name: "dateOfrequest", label: "Date of Issue", type: "date", required: true },
+    { name: "dateOfrequest", label: "Date of Request", type: "date", required: true },
     { name: "mobile", label: "Mobile", type: "number", required: true },
     { name: "qty", label: "Quantity", type: "number", required: true },
     {
       name: "purpose",
       label: "Purpose",
       multiline: true,
-      rows: 3,
+      rows: 2,
       required: true
     }
   ];
-  const categories = [...new Set((stockItems || []).map((item) => item.itemCategory))];
+
+const selectedItem = stocks?.find((item) => item._id === formData.itemId);
+
+const categories = [...new Set((stocks || []).map((item) => item.itemCategory))];
 
 const subcategories = formData.category
   ? [...new Set(
-      (stockItems || [])
+      (stocks || [])
         .filter((item) => item.itemCategory === formData.category)
-        .map((item) => item.itemSubcategory)
+        .map((item) => item.itemSubCategory)
     )]
   : [];
 
-const filteredItems = (stockItems || []).filter(
+const filteredItems = (stocks || []).filter(
   (item) =>
     item.itemCategory === formData.category &&
-    item.itemSubcategory === formData.subcategory
+    item.itemSubCategory === formData.subcategory
 );
 
 
@@ -136,33 +139,28 @@ const filteredItems = (stockItems || []).filter(
         </Typography>
 
         <form onSubmit={handleSubmit} className="mui-form">
-          <TextField
-            name="PENNo"
-            label="PEN No"
-            value={formData.PENNo}
-            disabled
-            fullWidth
-          />
-          <TextField
-            name="name"
-            label="Name"
-            value={formData.name}
-            disabled
-            fullWidth
-          />
 
           {formFields.map((field) => (
             <TextField
               key={field.name}
               name={field.name}
               label={field.label}
-              type={field.type || "text"}
               value={formData[field.name]}
               onChange={handleChange}
               required={field.required}
               multiline={field.multiline || false}
+              type={!field.multiline ? (field.type || "text"): undefined}
               rows={field.rows || undefined}
               fullWidth
+              sx={field.name === "purpose" ? {
+                "& .MuiInputBase-root": { 
+                  minHeight: "80px",
+                  alignitems: "flex-start",
+                },
+                "& textarea": { 
+                  padding: "6px" 
+                }
+                } : {}}
             />
           ))}
 
@@ -243,7 +241,7 @@ const filteredItems = (stockItems || []).filter(
 
 
           <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Button variant="contained" type="submit" disabled={!formData.itemId || !formData.qty || !formData.toWhom}>
+            <Button variant="contained" type="submit" >
               Submit
             </Button>
           </Box>
