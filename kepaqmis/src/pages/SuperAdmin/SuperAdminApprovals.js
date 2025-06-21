@@ -8,7 +8,6 @@ import {
 } from "../../redux/actions/superAdminActions";
 import "./SuperAdmin.css";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box } from '@mui/material';
 
 const SuperAdminApprovals = () => {
   const dispatch = useDispatch();
@@ -23,23 +22,13 @@ const SuperAdminApprovals = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "pen", headerName: "PEN", flex: 1, headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',},
-    { field: "name", headerName: "Name", flex: 1, headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',},
-    { field: "phone", headerName: "Phone", flex: 1, headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',},
+    { field: "pen", headerName: "PEN", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "phone", headerName: "Phone", flex: 1 },
     {
-      // field: "role",
-      // headerName: "Role",
-      // flex: 1.5, -> This was commented out in the original code
-
       field: "role",
       headerName: "Role",
-      flex: 1.5,
-      headerClassName: 'super-app-theme--header',
-      headerAlign: 'center',
-      align: 'center',
+      flex: 1,
       renderCell: (params) => {
         if (params.row.role === "QuarterMaster") {
           return (
@@ -61,31 +50,16 @@ const SuperAdminApprovals = () => {
       field: "actions",
       headerName: "Actions",
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'super-app-theme--header',
-      // Use Box to center the buttons
       renderCell: (params) => (
-        <
-        Box sx={{ 
-          display: "flex", 
-          gap: 1, 
-          justifyContent: 'center',
-          alignItems: 'center', // Add this to center vertically
-          width: '100%',
-          height: '100%' // Add this to take full height of the cell
-        }}>
-          <button className="approve-button1"
+        <>
+          <button
             onClick={() => handleApprove(params.id, params.row.role)}
+            style={{ marginRight: 10 }}
           >
             Approve
           </button>
-          <button className="reject-button1" 
-          onClick={() => handleReject(params.id)}
-          >
-            Reject
-          </button>
-        </Box>
+          <button onClick={() => handleReject(params.id)}>Reject</button>
+        </>
       ),
     },
   ];
@@ -123,8 +97,8 @@ const SuperAdminApprovals = () => {
   };
 
   return (
-    <div className="super-admin-approvals" style={{width: "100%" }}>
-      <div className="super-admin-header" >
+    <div style={{width: "100%" }}>
+      <div>
         <h2>Pending Approvals</h2>
       </div>
       <div style={{ height: 550}}>
@@ -139,20 +113,10 @@ const SuperAdminApprovals = () => {
           rows={rows}
           columns={columns}
           pageSize={10}
+          autoHeight
           rowsPerPageOptions={[10, 25, 50]}
           disableRowSelectionOnClick
-          className="approval-grid"
           showToolbar
-  
-          sx={{
-              width: "100%",
-              border: "none",
-              borderColor: "#060118",
-              borderRadius: "11px",
-              backgroundColor: "#1B254B",
-              height: "100%",
-            
-          }}
           />
       )}
       </div>

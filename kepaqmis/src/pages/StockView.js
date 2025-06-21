@@ -12,59 +12,47 @@ const StockItemView = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "itemName", headerName: "Item Name", headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
-    { field: "itemCategory", headerName: "Category", headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
-    { field: "itemSubCategory", headerName: "Subcategory", headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
-    { field: "quantity", headerName: "Qty", flex: 0.5,headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
-    { field: "unit", headerName: "Unit", flex: 0.5,headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
-    { field: "Qmno", headerName: "QM No", headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header' },
+    { field: "itemName", headerName: "Item Name", flex: 1 },
+    { field: "itemCategory", headerName: "Category", flex: 1 },
+    { field: "itemSubCategory", headerName: "Subcategory", flex: 1 },
+    { field: "quantity", headerName: "Qty", flex: 0.5 },
+    { field: "unit", headerName: "Unit", flex: 0.5 },
+    { field: "Qmno", headerName: "QM No", flex: 1 },
     {
       field: "modelInfo",
       headerName: "Model",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
       valueGetter: (params) =>
   `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim()
     },
     {
       field: "invoiceDate",
       headerName: "Invoice Date",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
       renderCell: (params) =>
         params.value ? new Date(params.value).toLocaleDateString() : "-",
     },
     {
       field: "dateOfIssue",
       headerName: "Issue Date",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
       renderCell: (params) =>
         params.value ? new Date(params.value).toLocaleDateString() : "-",
     },
     {
       field: "issuedfrom",
       headerName: "Issued From",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
     },
     {
       field: "toWhom",
       headerName: "To Whom",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
     },
     {
       field: "enteredBy",
       headerName: "Entered By",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
       valueGetter: (params) =>
   params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
     ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
@@ -73,8 +61,7 @@ const StockItemView = () => {
     {
       field: "barcodeImage",
       headerName: "Barcode",
-      headerAlign: 'center',
-      align: 'center', headerClassName: 'super-app-theme--header',
+      flex: 1,
       renderCell: (params) =>
         params.value ? (
           <img src={params.value} alt="Barcode" style={{ width: 60 }} />
@@ -90,11 +77,11 @@ const StockItemView = () => {
   }));
 
   return (
-    <div className="super-admin-approvals" style={{ width: "100%" }}>
-      <div className="super-admin-header">
+    <div style={{ width: "100%" }}>
+      <div>
         <h2>Stock Items</h2>
       </div>
-      <div style={{ height: 550 }}> 
+      <div style={{ height: 600 }}> 
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -108,22 +95,7 @@ const StockItemView = () => {
           pageSize={10}
           rowsPerPageOptions={[10, 25, 50]}
           disableRowSelectionOnClick
-          className="approval-grid"
           showToolbar
-          horizontalScroll
-  
-          sx={{
-              width: "100%",
-              // "& .MuiDataGrid-virtualScroller": {
-              //     overflowX: "hidden",
-              // },
-              border: "none",
-              borderColor: "#060118",
-              borderRadius: "11px",
-              backgroundColor: "#1B254B",
-              height: "100%",
-              overflowX: "scroll",
-          }}
         />
       )}
       </div> 
