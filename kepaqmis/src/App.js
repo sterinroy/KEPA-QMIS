@@ -13,7 +13,7 @@ import Layout from "./pages/SuperAdmin/Layout";
 import StockItemView from "./pages/StockView";
 import QMPDashboard from "./pages/QuarterMasterPurchase/QMPDashboard";
 import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
-import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder";
+import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder/QMPOrder.js";
 import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
 import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
 import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
@@ -38,9 +38,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/StockItemView" element={<StockItemView />} />
 
-
-        
-        <Route 
+        <Route
           path="/Admin"
           element={
             <ProtectedRoute allowedRoles={["Admin"]}>
@@ -129,7 +127,7 @@ function App() {
           <Route path="SuperAdminApprovals" element={<SuperAdminApprovals />} />
           <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
           <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
-          <Route path="StockItemView" element={<StockItemView />} /> 
+          <Route path="StockItemView" element={<StockItemView />} />
         </Route>
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
