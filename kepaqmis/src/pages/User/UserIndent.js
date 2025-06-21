@@ -1,283 +1,253 @@
-import React, { useState } from 'react';
-// import Barcode from 'react-barcode';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import QMIDGenerator from '../../components/QMIDGenerator'; // Assuming this generates unique QMID
+import React, { useState, useEffect } from "react";
 import {
-  TextField,
-  Button,
-  Typography,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Grid,
+  TextField, Button, Typography, Box, FormControl,
+  InputLabel, Select, MenuItem, Grid
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchOffices } from "../../redux/actions/officeActions";
+import { fetchStockItems } from "../../redux/actions/stockActions";
 import "./User.css";
-import { CenterFocusStrong, WidthFull, WidthNormal } from '@mui/icons-material';
 
 const UserIndent = () => {
-  const formFields = [
-    {
-      name: "OfficeNo",
-      label: "Office No",
-      type: "text",
-      required: true,
-      
-    },
-    {
-      name: "date",
-      label: "Date",
-      type: "date",
-      required: true,
-      value: new Date().toISOString().split("T")[0],
-      
-    },
-    {
-      name: "qtyinhand",
-      label: "Qty in Hand",
-      type: "number",
-      required: true,
-    },
-    {
-      name: "unitsinhand",
-      label: "Unit in Hand",
-      type: "text",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const getInitialFormData = () => {
-    const data = {};
-    formFields.forEach(field => {
-      data[field.name] = field.value || "";
-    });
-    return data;
-  };
+  const pen = localStorage.getItem("pen") || "";
+  const name = localStorage.getItem("name") || "";
 
-  const [formData, setFormData] = useState(getInitialFormData());
+  const { offices } = useSelector((state) => state.office);
+  const { stocks = [], loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
 
-  const [rows, setRows] = useState([
-    { item: '', subCategory: '', qty: 1, unit: '' }
-  ]);
-
-  const [subCategories, setSubCategories] = useState({
-    Electronics: ["Mobile", "Laptop", "Tablet"],
-    Furniture: ["Chair", "Table", "Cabinet"],
-    Stationery: ["Pen", "Notebook", "Marker"],
-    Tools: ["Hammer", "Screwdriver", "Wrench"],
-    Weapons: ["Pistol", "Rifle", "Shotgun"],
+  const [formData, setFormData] = useState({
+    PENNo: pen,
+    name: name,
+    toWhom: "",
+    dateOfrequest: new Date().toISOString().split("T")[0],
   });
 
-  const [qmid, setQmid] = useState('');
+  const [items, setItems] = useState([
+    { category: "", subcategory: "", itemId: "", qty: 1 }
+  ]);
+
+  useEffect(() => {
+    dispatch(fetchOffices());
+    dispatch(fetchStockItems());
+  }, [dispatch]);
+
+  const formFields = [
+    { name: "dateOfrequest", label: "Date of Request", type: "date", required: true },
+  ];
 
   const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleRowChange = (idx, e) => {
+  const handleItemChange = (index, e) => {
     const { name, value } = e.target;
-    setRows(prev =>
-      prev.map((r, i) =>
-        i === idx
-          ? { ...r, [name]: value, ...(name === 'item' && { subCategory: '' }) }
-          : r
+    setItems(prev =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              [name]: value,
+              ...(name === "category" && { subcategory: "", itemId: "" }),
+              ...(name === "subcategory" && { itemId: "" })
+            }
+          : item
       )
     );
   };
 
-  const addRow = () =>
-    setRows(prev => [...prev, { item: '', subCategory: '', qty: 1, unit: '' }]);
-
-  const removeRow = (idx) =>
-    setRows(prev => prev.filter((_, i) => i !== idx));
-
-  const handleAddSubCategory = (idx) => {
-    const category = rows[idx].item;
-    if (!category) return alert("Please select an item/category first.");
-    const newSub = prompt(`Enter new sub-category for "${category}":`);
-    if (newSub && !subCategories[category]?.includes(newSub)) {
-      setSubCategories(prev => ({
-        ...prev,
-        [category]: [...(prev[category] || []), newSub]
-      }));
-      setRows(prev =>
-        prev.map((r, i) => (i === idx ? { ...r, subCategory: newSub } : r))
-      );
-    }
+  const addItem = () => {
+    setItems(prev => [...prev, { category: "", subcategory: "", itemId: "", qty: 1 }]);
   };
 
-  const generatePDF = async (qmid) => {
-    const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(16);
-    pdf.text('KEPA QMIS - Request Details', 105, 20, { align: 'center' });
-    pdf.setFontSize(12);
-    let y = 40;
-
-    pdf.text(`Office No: ${formData.OfficeNo}`, 20, y); y += 10;
-    pdf.text(`Date: ${formData.date}`, 20, y); y += 10;
-    pdf.text(`Qty in Hand: ${formData.qtyinhand}`, 20, y); y +=15;
-    pdf.text(`Unit in Hand: ${formData.unitsinhand}`, 20, y); y += 15;
-
-    rows.forEach((r, i) => {
-      pdf.text(`Item ${i + 1}: ${r.item} / ${r.subCategory}`, 20, y); y += 7;
-      pdf.text(`Qty: ${r.qty} | Unit: ${r.unit}`, 30, y); y += 10;
-    });
-
-    pdf.save(`KEPA-Request-${formData.OfficeNo}.pdf`);
+  const removeItem = (index) => {
+    setItems(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newQMID = QMIDGenerator(); 
-    setQmid(newQMID); 
-    await generatePDF(newQMID);
+  e.preventDefault();
+
+  try {
+    for (const item of items) {
+      const selected = stocks.find(s => s._id === item.itemId);
+      const payload = {
+        itemId: item.itemId,
+        quantity: item.qty,
+        unit: selected?.unit,
+        temporary: false,
+        user: {
+          pen: formData.PENNo,
+          name: formData.name,
+        },
+        extra: {
+          toWhom: formData.toWhom,
+          dateOfrequest: formData.dateOfrequest,
+          slNo: item.slNo || "",   // optional, handle missing
+          mobile: item.mobile || "" // optional, handle missing
+        },
+      };
+
+      const res = await fetch("/api/itemRequestRoutes/item-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to submit");
+    }
+
+      alert("All items submitted successfully.");
+      navigate("/User/UserIndent");
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
   };
 
+  const categories = [...new Set(stocks.map((item) => item.itemCategory))];
+
+  const getSubcategories = (category) =>
+    [...new Set(stocks.filter(i => i.itemCategory === category).map(i => i.itemSubCategory))];
+
+  const getFilteredItems = (cat, subcat) =>
+    stocks.filter(i => i.itemCategory === cat && i.itemSubCategory === subcat);
+
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <div style={{  alignContent: "center" }}>
-        <div className="send-box">
-          <Box
-            className="send-form"
-            sx={{
-              padding: "2rem",
-              borderRadius: "12px",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-              backgroundColor: "#111C44",
-            }}
-          >
-            <Typography
-              variant="h5"
-              mb={3}
-              fontWeight="bold"
-              textAlign="center"
-              color="white"
+    <div className="temp-issue-root">
+      <Box className="temp-issue-box">
+        <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+          Permanent Indent Request
+        </Typography>
+
+        <form onSubmit={handleSubmit} className="mui-form">
+
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel>Office / Company</InputLabel>
+            <Select
+              name="toWhom"
+              value={formData.toWhom}
+              onChange={handleFormChange}
+              label="Office / Company"
             >
-              Indent Generation
-            </Typography>
-
-            <form onSubmit={handleSubmit} className="intend-form">
-
-              {/* Form Fields */}
-              <Box display="flex" gap={2} flexWrap="wrap" mb={2}>
-                {formFields.map((field) => (
-                  <TextField
-                    key={field.name}
-                    name={field.name}
-                    label={field.label}
-                    type={field.type}
-                    value={formData[field.name]}
-                    onChange={handleFormChange}
-                    required={field.required}
-                  
-                    InputLabelProps={field.type === 'date' ? { shrink: true } : undefined}
-                    sx={{ maxWidth: "426px" }}
-                  />
-                ))}
-              </Box>
-
-              {/* Dynamic Rows */}
-              {rows.map((r, idx) => (
-                <Box key={idx} mb={3} p={2} border="1px solid #ccc" borderRadius={2}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
-                      <FormControl fullWidth required>
-                        <InputLabel>Category</InputLabel>
-                        <Select className='cat'
-                          name="item"
-                          value={r.item}
-                          onChange={(e) => handleRowChange(idx, e)}
-                        >
-                          <MenuItem value="">Select Category</MenuItem>
-                          {Object.keys(subCategories).map(cat => (
-                            <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={3}>
-                      <FormControl fullWidth required>
-                        <InputLabel>Sub-Category</InputLabel>
-                        <Select className='sub-cat'
-                          name="subCategory"
-                          value={r.subCategory}
-                          onChange={(e) => handleRowChange(idx, e)}
-                          disabled={!r.item}
-                        >
-                          <MenuItem value="">Select Sub-Category</MenuItem>
-                          {r.item && subCategories[r.item]?.map(sub => (
-                            <MenuItem key={sub} value={sub}>{sub}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                      <TextField
-                        label="Qty"
-                        name="qty"
-                        type="number"
-                        inputProps={{ min: 1 }}
-                        value={r.qty}
-                        onChange={(e) => handleRowChange(idx, e)}
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                      <FormControl fullWidth required>
-                        <InputLabel>Unit</InputLabel>
-                        <Select className='unit-cat'
-                          name="unit"
-                          value={r.unit}
-                          onChange={(e) => handleRowChange(idx, e)}
-                        >
-                          <MenuItem value="">Select Unit</MenuItem>
-                          {["Number", "Liter", "Kilogram", "Meter"].map(unit => (
-                            <MenuItem key={unit} value={unit}>{unit}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={1}>
-                      {rows.length > 1 && (
-                        <Button color="error" onClick={() => removeRow(idx)}>Remove</Button>
-                      )}
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                      <Button variant="outlined" onClick={() => handleAddSubCategory(idx)}>
-                        + Add Sub-Category
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Box>
+              {offices.map((label) => (
+                <MenuItem key={label} value={label}>{label}</MenuItem>
               ))}
+            </Select>
+          </FormControl>
 
-              <Button variant="outlined" onClick={addRow}>+ Add Another Item</Button>
-              <Box mt={3}>
-                <Button className="submit-button" variant="contained" type="submit">
-                  Submit & Print
-                </Button>
+          {formFields.map((field) => (
+            <TextField
+              key={field.name}
+              name={field.name}
+              label={field.label}
+              value={formData[field.name]}
+              onChange={handleFormChange}
+              type={field.type}
+              required={field.required}
+              fullWidth
+              InputLabelProps={field.type === "date" ? { shrink: true } : {}}
+              sx={{ mb: 2 }}
+            />
+          ))}
+
+          {items.map((item, index) => {
+            const selected = stocks.find(i => i._id === item.itemId);
+            return (
+              <Box key={index} border="1px solid #ccc" borderRadius={2} p={2} mb={2}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={3}>
+                    <FormControl fullWidth required>
+                      <InputLabel>Category</InputLabel>
+                      <Select
+                        name="category"
+                        value={item.category}
+                        onChange={(e) => handleItemChange(index, e)}
+                      >
+                        {categories.map((cat) => (
+                          <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <FormControl fullWidth required>
+                      <InputLabel>Subcategory</InputLabel>
+                      <Select
+                        name="subcategory"
+                        value={item.subcategory}
+                        onChange={(e) => handleItemChange(index, e)}
+                        disabled={!item.category}
+                      >
+                        {getSubcategories(item.category).map((sub) => (
+                          <MenuItem key={sub} value={sub}>{sub}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <FormControl fullWidth required>
+                      <InputLabel>Select Item</InputLabel>
+                      <Select
+                        name="itemId"
+                        value={item.itemId}
+                        onChange={(e) => handleItemChange(index, e)}
+                        disabled={!item.subcategory}
+                      >
+                        {getFilteredItems(item.category, item.subcategory).map((stockItem) => (
+                          <MenuItem key={stockItem._id} value={stockItem._id}>
+                            {stockItem.itemName} ({stockItem.serialNumber})
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12} md={2}>
+                    <TextField
+                      label="Qty"
+                      name="qty"
+                      type="number"
+                      inputProps={{ min: 1 }}
+                      value={item.qty}
+                      onChange={(e) => handleItemChange(index, e)}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={1}>
+                    {items.length > 1 && (
+                      <Button color="error" onClick={() => removeItem(index)}>
+                        Remove
+                      </Button>
+                    )}
+                  </Grid>
+                </Grid>
+                {selected && (
+                  <Typography variant="body2" color="white" mt={1}>
+                    Unit: {selected.unit}
+                  </Typography>
+                )}
               </Box>
+            );
+          })}
 
-              {/* Optional Barcode */}
-              {/* {qmid && (
-                <Box sx={{ visibility: 'hidden', position: 'fixed' }}>
-                  <Barcode value={qmid} format="CODE128" />
-                </Box>
-              )} */}
+          <Button variant="outlined" onClick={addItem} sx={{ mb: 2 }}>
+            + Add Another Item
+          </Button>
 
-            </form>
+          <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Button variant="contained" type="submit">
+              Submit Indent
+            </Button>
           </Box>
-        </div>
-      </div>
+        </form>
+      </Box>
     </div>
   );
 };
