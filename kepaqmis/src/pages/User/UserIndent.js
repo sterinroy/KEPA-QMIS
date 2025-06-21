@@ -84,9 +84,7 @@ const UserIndent = () => {
         },
         extra: {
           toWhom: formData.toWhom,
-          dateOfrequest: formData.dateOfrequest,
-          slNo: item.slNo || "",   // optional, handle missing
-          mobile: item.mobile || "" // optional, handle missing
+          dateOfrequest: formData.dateOfrequest
         },
       };
 
@@ -119,7 +117,7 @@ const UserIndent = () => {
     <div className="temp-issue-root">
       <Box className="temp-issue-box">
         <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
-          Permanent Indent Request
+          Indent Request
         </Typography>
 
         <form onSubmit={handleSubmit} className="mui-form">
