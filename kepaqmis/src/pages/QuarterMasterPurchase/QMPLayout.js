@@ -1,8 +1,8 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Outlet } from "react-router-dom";
 import QMPDashboard from "./QMPDashboard";
-import QMPOrder from "./QMPOrder";
+import QMPOrder from "./QMPOrder/QMPOrder";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Main from "../../components/Main";
