@@ -10,18 +10,25 @@ const columns = [
   { field: "quantity", headerName: "Quantity", flex: 1 },
   { field: "status", headerName: "Status", flex: 1 },
   {
-    field: "IndentBill",
-    headerName: "IndentBill",
-    flex: 1,
-    renderCell: (params) => 
-      params.row.istemporary ? (  
-        <span style={{ color: "gray" }}>N/A</span>
-      ) : (
-      <button onClick={() => alert(`Exporting ${params.row.item}`)}>
-        IndentBill
-      </button>
-    ),
-  },
+  field: "IndentBill",
+  renderCell: (params) => (
+    <button onClick={() => {
+      const urlParams = new URLSearchParams({
+        stationNo: params.row.stationNo,
+        officeNo: params.row.officeNo,
+        storeNo: params.row.storeNo,
+        subCategory: params.row.subCategory,
+        indentFor: JSON.stringify(params.row.indentFor),
+        qty: JSON.stringify(params.row.qty),
+        date: params.row.date,
+        nameAndDesignation: params.row.nameAndDesignation,
+      }).toString();
+      window.open(`/indent-bill?${urlParams}`, "_blank");
+    }}>
+      IndentBill
+    </button>
+  ),
+},
 ];
 
 const UserManageRequest = () => {

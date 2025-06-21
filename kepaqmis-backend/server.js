@@ -8,6 +8,7 @@ const itemCategoryRoutes = require('./routes/itemCategoryRoutes');
 const ItemRequestRoutes = require('./routes/itemRequestRoutes');
 const userRoute = require('./routes/userRoute'); 
 const officeRoutes = require('./routes/officeRoutes'); 
+const indentBillRoutes = require('./routes/indentBillRoutes'); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,8 @@ app.use('/api/itemCategoryRoutes', itemCategoryRoutes);
 app.use('/api/itemRequestRoutes', ItemRequestRoutes);
 app.use('/api/userRoute', userRoute);
 app.use('/api/officeRoutes', officeRoutes);
+app.use("/api/indent-bills", require("./routes/indentBillRoutes"));
+
 
 app.use((req, res, next) => {
   console.log(`⚠️  Unmatched route: ${req.method} ${req.originalUrl}`);
