@@ -5,10 +5,47 @@ body, html {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+
+
+/* === Main Content === */
+.main {
+  margin-left: 250px;
+  margin-top: 70px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: calc(100vh - 70px);
+  /* box-shadow: 0 0 0 2px #f0f0ff inset; */
+  border-bottom-left-radius: 50px;
+  flex-grow: 1;
+}
+
+
+/* === Table Styling === */
 h2 {
   font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #1f2937;
+  /* margin-bottom: 1.5rem; */
+  color: #fefefe;
+}
+
+/* === Buttons === */
+/* button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #060118;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color:#fcfcfc;
+  background-color: #3e55b2;
+
+} */
+
+button:hover {
+  opacity: 0.9;
+  background-color:#111C44;
 }
 
 
@@ -27,7 +64,160 @@ h2 {
 .logout-btn:hover {
   background-color: #c0392b;
 }
-/* .logout-icon {
-  color: white;
-  margin-right: 8px;
+
+/*============== SuperAdmin Approval alfahm ========= */
+
+/* .superadmin-approval .MuiDataGrid-root {
+  border: none !important;
+} --- i have to see what this myr is */ 
+
+.super-admin-header {
+  margin-top: -35px;
+  border-bottom: 1px solid rgba(246, 243, 243, 0.1) !important;
+  text-align: center;
+  padding: 20px;
+  
+  margin-bottom: 20px;
+}
+
+.approve-button1 {
+  padding: 10px 20px;
+  background-color: #3e55b2;
+  border-radius: 18px;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+.reject-button1 {
+  padding: 10px 20px;
+  background-color: #af0000;
+  color: #ffffff;
+  border-radius: 20px;
+  border:none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+.reject-button1:hover {
+  background-color: #630000;
+}
+
+/* Manage Users */
+
+/* .super-admin-user{
+  display: flex;
+  align-items: flex-start;
+  align-items: center;
 } */
+.super-admin-header-manage-user{
+  margin-top: -25px;
+  border-bottom: 1px solid rgba(246, 243, 243, 0.1) !important;
+  text-align: center; 
+  padding: 20px; 
+  margin-bottom: 20px;
+}
+.super-admin-add-user {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  height: 20px;
+}
+
+.super-admin-add-user-button {
+  
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px
+}
+.super-admin-add-user-button:hover {
+  background-color: #111C44;
+  color: #111C44;
+}
+/*==============  grid css peri peri ========= */
+
+.approval-grid {
+  background-color: #111C44 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  border-radius: 12px !important;
+}
+
+ .MuiDataGrid-root {
+  border: none !important;
+}
+
+.MuiDataGrid-cell {
+  color: #ccc !important;
+  border-color: transparent !important;
+  padding: 10px !important;
+  background-color: #1B254B !important;
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 15px !important;
+}
+
+.MuiDataGrid-columnHeaders {
+  
+  border-bottom: 5px solid rgba(255, 255, 255, 0.1) !important;
+  /* color: #111C44 !important; */
+  background-color: #111C44 !important;
+  border-color: #111C44 !important;
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+}
+.MuiDataGrid-columnHeaderTitle {
+  color: #111C44 !important;
+  font-weight: 50 !important;
+  font-family: "DM Sans", sans-serif !important;
+}
+.MuiDataGrid-footerContainer {
+  background-color: #1B254B !important;
+  color: #ccc !important;
+  border-color: #A3AED0 !important;
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 14px !important;
+}
+.MuiDataGrid-row:hover {
+  background-color: #1B254B !important;
+}
+
+.MuiTablePagination-root {
+  color: #ccc !important;
+}
+
+.MuiTablePagination-root .MuiSelect-select {
+  color: #ccc !important;
+}
+
+.MuiDataGrid-virtualScroller {
+  
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.MuiDataGrid-virtualScrollerContent {
+  max-height: none !important;
+}
+.MuiDataGrid-columnHeaderTitle {
+  color: #111C44 !important;
+  font-weight: 550 !important;
+  font-family: "DM Sans", sans-serif !important;
+}
+/* Testing shit */
+ .MuiButtonBase-root {
+ color: #ffffff;
+}
+ .MuiSvgIcon-root {
+  color: #ffffff;
+}

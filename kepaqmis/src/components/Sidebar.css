@@ -123,6 +123,9 @@ div.nav-item:hover,
 div.nav-item.active {
   background: linear-gradient(90deg, #7551ff);
   color: white !important;
+  /* border-radius: 13px;
+  width: 250px; */
+  /* the lab had no round borders bro */
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(117, 81, 255, 0.5);
 }
@@ -144,7 +147,7 @@ div.nav-item:focus-visible {
 
 div.logo {
   width: 80px; /* Set the width of the container to match the image */
-  height: 160px;
+  height: 80px;
   border-radius: 12px;
   box-shadow:
     0 0 8px rgba(0, 0, 0, 0.15),
@@ -176,9 +179,9 @@ main.main {
   margin-top: 0px;
   margin-bottom: 0px;
   padding: 20px;
-  background: linear-gradient(to left, #ffffff 10%, grey 100%);
-  /* box-shadow: inset 0 0 0 2px #f0f0ff; */
-
+  /* background: linear-gradient(to left, #ffffff 10%, grey 100%);
+  box-shadow: inset 0 0 0 2px #f0f0ff; */
+  background-color: #0C1227;
   display: flex;
   justify-content: center;
   align-items: center;
