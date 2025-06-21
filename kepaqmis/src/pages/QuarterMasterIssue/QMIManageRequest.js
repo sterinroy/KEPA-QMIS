@@ -100,8 +100,8 @@ const QMIManageRequest = () => {
       minWidth: 80,
       sortable: true,
       valueGetter: (params) => {
-        const qtyStr = params.row?.qty;
-        return qtyStr ? parseInt(qtyStr) || 0 : 0;
+        const quantityStr = params.row?.quantity;
+        return quantityStr ? parseInt(quantityStr) || 0 : 0;
       },
       sortComparator: (v1, v2) => v1 - v2,
     },

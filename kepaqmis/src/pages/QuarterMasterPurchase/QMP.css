@@ -184,7 +184,7 @@ Root container and page background body,
 }
 
 /* Reduce space specifically below Quantity field */
-.mui-form .MuiTextField-root[name="qty"] {
+.mui-form .MuiTextField-root[name="quantity"] {
   margin-bottom: 8px;
 }
 

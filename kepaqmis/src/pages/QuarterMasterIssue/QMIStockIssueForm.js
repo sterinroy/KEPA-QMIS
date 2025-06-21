@@ -48,7 +48,7 @@ const QMIStockIssueForm = () => {
       type: "select",
       required: true,
     },
-    { name: "qty", label: "Quantity", type: "number", required: true },
+    { name: "quantity", label: "Quantity", type: "number", required: true },
     {
       name: "unit",
       label: "Unit",
@@ -79,19 +79,13 @@ const QMIStockIssueForm = () => {
   const [formData, setFormData] = useState(getInitialFormData());
 
   // === Subcategory Logic for itemSubCategory ===
-  // const defaultSubCategories = ["Sanitization", "Stationary", "Others"];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
+
   const allSubCategories = [...customSubCategories, "+ Add New"];
 
-  // === Modal & Status States ===
-  const [status, setStatus] = useState("");
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const [showPdfModal, setShowPdfModal] = useState(false);
+  // === ToWhom Options Logic ===
   const defaultToOptions = [
     "AC I Wing",
     "AC II Wing",
@@ -150,10 +144,19 @@ const QMIStockIssueForm = () => {
     "Vishranthi",
     "Wet Canteen",
   ];
+
   const [customToOptions, setCustomToOptions] = useState([]);
   const [showCustomToInput, setShowCustomToInput] = useState(false);
   const [customToInputValue, setCustomToInputValue] = useState("");
   const allToOptions = [...defaultToOptions, ...customToOptions, "+ Add New"];
+
+  // === Modal & Status States ===
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
   const inputStyles = {
     input: { color: "white" },
@@ -177,7 +180,6 @@ const QMIStockIssueForm = () => {
   // === Subcategory Handlers ===
   const handleSubCategoryChange = (e) => {
     const value = e.target.value;
-
     if (value === "+ Add New") {
       setShowCustomInput(true);
       setFormData((prev) => ({ ...prev, itemSubCategory: "" }));
@@ -206,15 +208,11 @@ const QMIStockIssueForm = () => {
     setStatus("loading");
     setError("");
     setSuccessMessage("");
-
-    // Simulate API call
     setTimeout(() => {
       if (Math.random() > 0.2) {
-        // Success
         setShowConfirmModal(true);
         setStatus("succeeded");
       } else {
-        // Failure
         setError("Failed to submit form. Please try again.");
         setStatus("failed");
       }
@@ -249,18 +247,16 @@ const QMIStockIssueForm = () => {
     doc.text(`Stock Issue`, 20, 20);
     doc.setFontSize(12);
     let y = 30;
-
     Object.entries(formData).forEach(([key, value]) => {
       if (value) {
         doc.text(`${key}: ${value}`, 20, y);
         y += 10;
       }
     });
-
     doc.save("Stock_Issue.pdf");
     setShowPdfModal(false);
     setSuccessMessage("Form submitted successfully!");
-    resetForm(); // Reset after download
+    resetForm();
   };
 
   const resetForm = () => {
@@ -415,86 +411,21 @@ const QMIStockIssueForm = () => {
           {fieldConfig.map((field, index) => {
             if (field.condition && !field.condition(formData)) return null;
 
-            if (field.name === "itemSubCategory") {
+            const renderedField = renderField(field);
+
+            if (field.name === "toWhom") {
               return (
                 <Box
                   key={field.name}
                   display="flex"
-                  gap={2}
+                  gap={1}
                   alignItems="center"
-                  mb={2}
+                  flexWrap="wrap"
                 >
-                  <FormControl fullWidth sx={inputStyles}>
-                    <InputLabel>Sub Category</InputLabel>
-                    <Select
-                      name="itemSubCategory"
-                      value={formData.itemSubCategory || ""}
-                      onChange={handleSubCategoryChange}
-                      sx={{ color: "white" }}
-                    >
-                      {/* Default + Custom Options */}
-                      {customSubCategories.map((cat) => (
-                        <MenuItem key={cat} value={cat}>
-                          {cat}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key="+ Add New" value="+ Add New">
-                        + Add New
-                      </MenuItem>
+                  {renderedField}
 
-                      {/* Delete Options (hidden from selection view) */}
-                      {customSubCategories.map((cat) => (
-                        <MenuItem
-                          key={`CUSTOM_DELETE_${cat}`}
-                          value={`CUSTOM_DELETE_${cat}`}
-                          sx={{ display: "none" }}
-                        >
-                          {cat} ❌
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  {/* Show Custom Input Inline */}
-                  {showCustomInput && (
-                    <>
-                      <TextField
-                        label="Enter New Sub Category"
-                        value={customInputValue}
-                        onChange={(e) => setCustomInputValue(e.target.value)}
-                        size="small"
-                        sx={{
-                          width: "calc(100% - 140px)",
-                          input: { color: "white" },
-                          label: { color: "white" },
-                        }}
-                      />
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleAddNewSubCategory}
-                        sx={{ height: "40px" }}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              );
-            }
-            if (field.name === "toWhom") {
-              return (
-                <React.Fragment key={field.name}>
-                  {renderField(field)}
-                  {/* Show Custom Input Inline for To (Office / Company) */}
                   {showCustomToInput && (
-                    <Box
-                      display="flex"
-                      gap={1}
-                      ml={2}
-                      alignItems="center"
-                      mt={1}
-                    >
+                    <Box display="flex" gap={1} alignItems="center">
                       <TextField
                         label="Enter New Office/Company"
                         value={customToInputValue}
@@ -514,11 +445,10 @@ const QMIStockIssueForm = () => {
                           if (!trimmed || allToOptions.includes(trimmed))
                             return;
                           setCustomToOptions((prev) => [...prev, trimmed]);
-                          setFormData((prev) => ({ ...prev, toWhom: trimmed }));
-                          setCustomToInputValue("");
-                          setShowCustomToInput(false);
-                          setCustomToOptions((prev) => [...prev, trimmed]);
-                          setFormData((prev) => ({ ...prev, toWhom: trimmed }));
+                          setFormData((prev) => ({
+                            ...prev,
+                            toWhom: trimmed,
+                          }));
                           setCustomToInputValue("");
                           setShowCustomToInput(false);
                         }}
@@ -532,14 +462,75 @@ const QMIStockIssueForm = () => {
                       </Button>
                     </Box>
                   )}
-                </React.Fragment>
+                </Box>
               );
             }
 
-            if (field.fields) {
-              return field.fields.map((f) => renderField(f));
+            if (field.name === "itemSubCategory") {
+              return (
+                <Box
+                  key={field.name}
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  mb={2}
+                >
+                  <FormControl fullWidth sx={inputStyles}>
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      name="itemSubCategory"
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleSubCategoryChange}
+                      sx={{ color: "white" }}
+                    >
+                      {customSubCategories.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          {cat}
+                        </MenuItem>
+                      ))}
+                      <MenuItem key="+ Add New" value="+ Add New">
+                        + Add New
+                      </MenuItem>
+                      {customSubCategories.map((cat) => (
+                        <MenuItem
+                          key={`CUSTOM_DELETE_${cat}`}
+                          value={`CUSTOM_DELETE_${cat}`}
+                          sx={{ display: "none" }}
+                        >
+                          {cat} ❌
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {showCustomInput && (
+                    <Box display="flex" gap={1} mt={1}>
+                      <TextField
+                        label="Enter New Sub Category"
+                        value={customInputValue}
+                        onChange={(e) => setCustomInputValue(e.target.value)}
+                        size="small"
+                        sx={{
+                          width: 200,
+                          input: { color: "white" },
+                          label: { color: "white" },
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAddNewSubCategory}
+                        sx={{ height: "40px" }}
+                      >
+                        Add
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+              );
             }
-            return renderField(field);
+
+            return renderedField;
           })}
 
           {/* Submit Button */}

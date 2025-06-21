@@ -114,18 +114,18 @@ const QMIDirectStock = () => {
   ];
 
   // === itemSubCategory Dropdown Logic ===
-  const defaultSubCategories = [
-    "Printers",
-    "Inks",
-    "Consumables",
-    "Stationery",
-    "Electronics",
-  ];
+  // const defaultSubCategories = [
+  //   "Printers",
+  //   "Inks",
+  //   "Consumables",
+  //   "Stationery",
+  //   "Electronics",
+  // ];
   const [customSubCategories, setCustomSubCategories] = useState([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
   const allSubCategories = [
-    ...defaultSubCategories,
+    // ...defaultSubCategories,
     ...customSubCategories,
     "+ Add New",
   ];

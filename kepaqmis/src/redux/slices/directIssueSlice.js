@@ -23,7 +23,7 @@ const initialState = {
   model: "",
   modelNo: "",
   serialNumber: "",
-  qty: "",
+  quantity: "",
   unit: "",
   fromChiefDistrictOrOther: "",
   indentNo: "",

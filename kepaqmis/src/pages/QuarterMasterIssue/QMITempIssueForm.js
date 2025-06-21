@@ -40,7 +40,7 @@ const QMITempIssueForm = () => {
       type: "select",
       required: true,
     },
-    { name: "qty", label: "Quantity", type: "number", required: true },
+    { name: "quantity", label: "Quantity", type: "number", required: true },
     {
       name: "unit",
       label: "Unit",

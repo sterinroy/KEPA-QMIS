@@ -15,7 +15,7 @@ const StockItemView = () => {
     { field: "itemName", headerName: "Item Name", flex: 1 },
     { field: "itemCategory", headerName: "Category", flex: 1 },
     { field: "itemSubCategory", headerName: "Subcategory", flex: 1 },
-    { field: "quantity", headerName: "Qty", flex: 0.5 },
+    { field: "quantity", headerName: "quantity", flex: 0.5 },
     { field: "unit", headerName: "Unit", flex: 0.5 },
     { field: "Qmno", headerName: "QM No", flex: 1 },
     {

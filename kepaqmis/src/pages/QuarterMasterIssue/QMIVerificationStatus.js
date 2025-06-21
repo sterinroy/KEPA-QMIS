@@ -1,66 +1,81 @@
 import React, { useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  Box,
+  Typography,
+  Button,
+  Alert,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid"; // ✅ Only one DataGrid import needed
 import QMIVerificationForm from "./QMIVerificationForm";
-
+// Unified sample data combining all possible fields
 const initialPendingItems = [
   {
     id: 1,
     orderNo: "ORD1001",
     supplyOrderNo: "SUP1001",
     invoiceDate: "2025-04-01",
-    from: "ABC Supplier",
-    to: "HQ Office",
+    fromWhomPurchased: "ABC Supplier",
+    toWhom: "HQ Office",
     dateOfVerification: "2025-04-05",
     billInvoiceNo: "INV1001",
     amount: "₹5000",
-    item: "Printer",
-    make: "",
-    model: "",
-    modelNo: "",
-    serialNo: "",
+    itemName: "Printer",
+    make: "HP",
+    model: "LaserJet",
+    modelNo: "1234",
+    serialNumber: "SN123456789",
     itemCategory: "Electronics",
     itemSubCategory: "Printers",
     quantity: "2",
     unit: "Nos",
-    perishable: "No",
-    Qmno: "",
-    dateOfPurchased: "",
-    invoiceNumber: "",
     warranty: "No",
     warrantyPeriod: "",
     warrantyType: "",
-    perishable: "",
+    perishable: "No",
+    Qmno: "QM1001",
+    dateOfIssue: "2025-04-02",
+    indentNo: "IND1001",
+    purchaseOrderNo: "",
+    typeOfFund: "",
+    status: "Pending", // ✅ New Field Added
   },
   {
     id: 2,
     orderNo: "ORD1002",
     supplyOrderNo: "SUP1002",
     invoiceDate: "2025-04-02",
-    from: "XYZ Supplier",
-    to: "Branch Office",
+    fromWhomPurchased: "XYZ Supplier",
+    toWhom: "Branch Office",
     dateOfVerification: "2025-04-06",
     billInvoiceNo: "INV1002",
     amount: "₹3000",
-    item: "Ink",
+    itemName: "Ink",
     make: "",
     model: "",
     modelNo: "",
-    serialNo: "",
+    serialNumber: "",
     itemCategory: "Stationery",
     itemSubCategory: "Consumables",
     quantity: "10",
     unit: "Nos",
-    perishable: "Yes",
-    Qmno: "",
-    dateOfPurchased: "",
-    invoiceNumber: "",
     warranty: "Yes",
-    warrantyPeriod: "",
-    warrantyType: "",
-    perishable: "",
+    warrantyPeriod: "12",
+    warrantyType: "On-Site",
+    perishable: "Yes",
+    Qmno: "QM1002",
+    dateOfIssue: "",
+    indentNo: "",
+    purchaseOrderNo: "PO1002",
+    typeOfFund: "General Fund",
+    status: "Pending", // ✅ New Field Added
   },
 ];
+
+const safeValueGetter = (params, field) => {
+  if (!params.row) return null;
+  const value = params.row[field];
+  return value ? value : null;
+};
 
 const QMIVerificationStatus = () => {
   const [pendingItems, setPendingItems] = useState(initialPendingItems);
@@ -80,206 +95,153 @@ const QMIVerificationStatus = () => {
   const handleFormSubmit = (formData) => {
     console.log("Submitted:", formData);
     setPendingItems((prev) =>
-      prev.filter((item) => item.orderNo !== formData.orderNo)
+      prev.map((item) =>
+        item.orderNo === formData.orderNo
+          ? { ...item, status: "Approved" }
+          : item
+      )
     );
     setShowForm(false);
   };
 
+  const handleVerified = (id) => {
+    setPendingItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, status: "Approved" } : item
+      )
+    );
+  };
+
   const columns = [
-    {
-      field: "orderNo",
-      headerName: "Order No.",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "supplyOrderNo",
-      headerName: "Supply Order No.",
-      minWidth: 130,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
+    { field: "orderNo", headerName: "Order No.", minWidth: 120 },
+    { field: "supplyOrderNo", headerName: "Supply Order No.", minWidth: 130 },
     {
       field: "invoiceDate",
       headerName: "Date Of Invoice",
       minWidth: 110,
-      sortable: true,
       type: "date",
-      valueGetter: (params) => {
-        const dateStr = params.row?.invoiceDate;
-        return dateStr ? new Date(dateStr) : null;
-      },
+      valueGetter: (params) =>
+        safeValueGetter(params, "invoiceDate")
+          ? new Date(safeValueGetter(params, "invoiceDate"))
+          : null,
     },
-    {
-      field: "fromWhomPurchased",
-      headerName: "Supplier Name",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "toWhom",
-      headerName: "To (Office/ Company)",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
+    { field: "fromWhomPurchased", headerName: "Supplier Name", minWidth: 120 },
+    { field: "toWhom", headerName: "To (Office/Company)", minWidth: 120 },
     {
       field: "dateOfVerification",
       headerName: "Date Of Verification",
       minWidth: 130,
-      sortable: true,
       type: "date",
-      valueGetter: (params) => {
-        const dateStr = params.row?.dateOfVerification;
-        return dateStr ? new Date(dateStr) : null;
-      },
+      valueGetter: (params) =>
+        safeValueGetter(params, "dateOfVerification")
+          ? new Date(safeValueGetter(params, "dateOfVerification"))
+          : null,
     },
-    {
-      field: "billInvoiceNo",
-      headerName: "Bill Invoice No.",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
+    { field: "billInvoiceNo", headerName: "Bill Invoice No.", minWidth: 120 },
     {
       field: "amount",
       headerName: "Amount",
       minWidth: 100,
-      sortable: true,
-      valueGetter: (params) => {
-        const amountStr = params.row?.amount;
-        return amountStr
-          ? parseFloat(amountStr.replace(/[^\d.-]/g, "")) || 0
-          : 0;
-      },
+      valueGetter: (params) =>
+        parseFloat(
+          safeValueGetter(params, "amount")?.replace(/[^\d.-]/g, "") || 0
+        ),
       sortComparator: (v1, v2) => v1 - v2,
     },
+    { field: "itemName", headerName: "Item Name", minWidth: 120 },
+    { field: "make", headerName: "Make / Brand", minWidth: 120 },
+    { field: "model", headerName: "Model", minWidth: 120 },
+    { field: "modelNo", headerName: "Model No", minWidth: 120 },
     {
-      field: "itemName",
-      headerName: "Item Name",
+      field: "serialNumber",
+      headerName: "Serial/Product No",
       minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
     },
-    {
-      field: "make",
-      headerName: "Make/ Brand",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "model",
-      headerName: "Model Name",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "modelNo",
-      headerName: "Model No",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "serialNo",
-      headerName: "Serial/ Product No",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "itemCategory",
-      headerName: "Item Category",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "itemSubCategory",
-      headerName: "Sub Category",
-      minWidth: 120,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
+    { field: "itemCategory", headerName: "Item Category", minWidth: 120 },
+    { field: "itemSubCategory", headerName: "Sub Category", minWidth: 120 },
     {
       field: "quantity",
       headerName: "Quantity",
       minWidth: 80,
-      sortable: true,
-      valueGetter: (params) => {
-        const quantityStr = params.row?.quantity;
-        return quantityStr ? parseInt(quantityStr) || 0 : 0;
-      },
+      valueGetter: (params) =>
+        parseInt(safeValueGetter(params, "quantity")) || 0,
       sortComparator: (v1, v2) => v1 - v2,
     },
+    { field: "unit", headerName: "Unit", minWidth: 80 },
+    { field: "warranty", headerName: "Warranty", minWidth: 80 },
+    { field: "warrantyPeriod", headerName: "Warranty Period", minWidth: 100 },
+    { field: "warrantyType", headerName: "Warranty Type", minWidth: 100 },
+    { field: "perishable", headerName: "Perishable", minWidth: 100 },
+    { field: "Qmno", headerName: "QM No.", minWidth: 100 },
     {
-      field: "unit",
-      headerName: "Unit",
-      minWidth: 80,
-      sortable: true,
-      valueGetter: (params) => params.row?.unit || "",
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+      field: "dateOfIssue",
+      headerName: "Date Of Issue",
+      minWidth: 110,
+      type: "date",
+      valueGetter: (params) =>
+        safeValueGetter(params, "dateOfIssue")
+          ? new Date(safeValueGetter(params, "dateOfIssue"))
+          : null,
     },
+    { field: "indentNo", headerName: "Indent No.", minWidth: 100 },
     {
-      field: "warranty",
-      headerName: "Warranty",
-      minWidth: 80,
-      sortable: true,
-      valueGetter: (params) => params.row?.warranty || "",
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+      field: "purchaseOrderNo",
+      headerName: "Purchase Order No.",
+      minWidth: 120,
     },
+    { field: "typeOfFund", headerName: "Type Of Fund", minWidth: 120 },
     {
-      field: "warrantyPeriod",
-      headerName: "Warranty Period",
-      minWidth: 100,
-      sortable: true,
-      valueGetter: (params) => params.row?.warrantyPeriod || "",
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "warrantyType",
-      headerName: "Warranty Type",
-      minWidth: 100,
-      sortable: true,
-      valueGetter: (params) => params.row?.warrantyType || "",
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
-    },
-    {
-      field: "perishable",
-      headerName: "Perishable",
-      minWidth: 100,
-      sortable: true,
-      sortComparator: (v1, v2) => (v1 || "").localeCompare(v2 || ""),
+      field: "status",
+      headerName: "Verification Status",
+      minWidth: 120,
+      renderCell: (params) => (
+        <Box
+          sx={{
+            fontWeight: "bold",
+            color:
+              params.row.status === "Approved"
+                ? "green"
+                : params.row.status === "Pending"
+                ? "orange"
+                : "black",
+          }}
+        >
+          {params.row.status}
+        </Box>
+      ),
     },
     {
       field: "actions",
       headerName: "Action",
       width: 90,
       sortable: false,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="warning"
-          size="small"
-          onClick={() => handlePendingClick(params.row)}
-        >
-          Pending
-        </Button>
-      ),
+      renderCell: (params) =>
+        params.row.status !== "Approved" ? (
+          <Button
+            variant="contained"
+            color="warning"
+            size="small"
+            onClick={() => handlePendingClick(params.row)}
+          >
+            Pending
+          </Button>
+        ) : (
+          <Typography color="green">Approved</Typography>
+        ),
     },
   ];
 
   return (
     <Box sx={{ width: "100%", padding: 3 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom color="white">
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        gutterBottom
+        color="white"
+      >
         Verification Status
       </Typography>
 
-      {/* Scrollable Table Container */}
       <Box sx={{ mb: 2 }}>
         <Box sx={{ maxWidth: "100%" }}>
           <DataGrid
@@ -289,14 +251,9 @@ const QMIVerificationStatus = () => {
             rowsPerPageOptions={[5, 10]}
             disableRowSelectionOnClick
             autoHeight
-            getRowId={(row) => row.id} // Ensure MUI can find the ID
-            getRowHeight={() => "auto"}
-            columnResizeMode="on"
-            sortingMode="client"
+            getRowId={(row) => row.id}
             initialState={{
-              sorting: {
-                sortModel: [{ field: "invoiceDate", sort: "desc" }],
-              },
+              sorting: [{ field: "invoiceDate", sort: "desc" }],
             }}
             sx={{
               "& .MuiDataGrid-cell": {
@@ -305,7 +262,6 @@ const QMIVerificationStatus = () => {
               },
               "& .MuiDataGrid-columnHeaderTitle": {
                 whiteSpace: "normal",
-                lineHeight: "1.2rem",
               },
             }}
           />
@@ -317,32 +273,8 @@ const QMIVerificationStatus = () => {
         <QMIVerificationForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
-          prefillData={{
-            orderNo: currentItem.orderNo || "",
-            supplyOrderNo: currentItem.supplyOrderNo || "",
-            invoiceDate: currentItem.invoiceDate || "",
-            fromWhomPurchased: currentItem.fromWhomPurchased || "",
-            toWhom: currentItem.toWhom || "",
-            dateOfVerification: currentItem.dateOfVerification || "",
-            billInvoiceNo: currentItem.billInvoiceNo || "",
-            amount: currentItem.amount || "",
-            item: currentItem.item || "",
-            make: currentItem.make || "",
-            model: currentItem.model || "",
-            modelNo: currentItem.modelNo || "",
-            serialNo: currentItem.serialNo || "",
-            itemCategory: currentItem.itemCategory || "",
-            itemSubCategory: currentItem.itemSubCategory || "",
-            quantity: currentItem.quantity || "",
-            unit: currentItem.unit || "",
-            perishable: currentItem.perishable || "",
-            Qmno: currentItem.Qmno || "",
-            dateOfPurchased: currentItem.dateOfPurchased || "",
-            invoiceNumber: currentItem.invoiceNumber || "",
-            warranty: currentItem.warranty || "",
-            warrantyType: currentItem.warrantyType || "",
-            warrantyPeriod: currentItem.warrantyPeriod || "",
-          }}
+          prefillData={currentItem}
+          onVerified={handleVerified}
         />
       )}
     </Box>
