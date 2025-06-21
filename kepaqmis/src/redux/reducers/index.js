@@ -6,6 +6,7 @@ import qmpurchaseReducer from "./qmpurchaseReducer";
 import qmissueReducer from "./qmissueReducer";
 import categoryReducer from "./categoryReducer";
 import officeReducer from "./officeReducer";
+import indentBillReducer from "./indentBillReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   qmissue: qmissueReducer,
   category: categoryReducer,
   office: officeReducer,
+  indentBill: indentBillReducer,
 });
 
 export default rootReducer;

@@ -9,6 +9,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import categoryReducer from "./reducers/categoryReducer";
 import officeReducer from "./reducers/officeReducer";
+import indentBillReducer from "./reducers/indentBillReducer";
 
 const authPersistConfig = {
   key: "auth",
@@ -48,6 +49,7 @@ export const store = configureStore({
     qmissue: persistedQMIssueReducer,
     category: categoryReducer,
     office: officeReducer,
+    indentBill: indentBillReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
