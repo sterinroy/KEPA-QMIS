@@ -12,13 +12,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/user/:pen", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const bills = await IndentBill.find({ "createdBy.pen": req.params.pen });
-    res.json(bills);
+    const bill = await IndentBill.findById(req.params.id);
+    if (!bill) return res.status(404).json({ error: "Indent Bill not found" });
+    res.json(bill);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch indent bills" });
+    res.status(500).json({ error: "Error fetching Indent Bill" });
   }
 });
+
+
+
 
 module.exports = router;

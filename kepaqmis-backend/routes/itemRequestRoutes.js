@@ -140,6 +140,22 @@ router.post("/item-requests/:id/reject", async (req, res) => {
   }
 });
 
+router.patch("/item-requests/:id", async (req, res) => {
+  try {
+    const { indentBillId } = req.body;
+    const request = await ItemRequest.findById(req.params.id);
+    if (!request) return res.status(404).json({ error: "Request not found" });
+
+    request.indentBillId = indentBillId;
+    await request.save();
+
+    res.status(200).json({ message: "Indent bill linked", request });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 
 

@@ -5,7 +5,7 @@ import {
   CREATE_INDENT_BILL_REQUEST,
   CREATE_INDENT_BILL_SUCCESS,
   CREATE_INDENT_BILL_FAIL,
-} from "../types/indentBillTypes";
+} from "../actions/actionTypes";
 
 export const fetchIndentBills = (pen) => async (dispatch) => {
   try {

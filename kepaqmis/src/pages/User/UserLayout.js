@@ -15,7 +15,7 @@ import { Outlet } from "react-router-dom";
 
 
 function UserLayout() {
-  const [activeComponent, setActiveComponent] = useState(
+  const [setActiveComponent] = useState(
     <UserDashboard />
   );
 

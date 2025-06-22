@@ -17,7 +17,7 @@ const UserIndent = () => {
   const name = localStorage.getItem("name") || "";
 
   const { offices } = useSelector((state) => state.office);
-  const { stocks = [], loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
+  const { stocks = [] } = useSelector((state) => state.stock);
 
   const [formData, setFormData] = useState({
     PENNo: pen,
@@ -241,7 +241,7 @@ const UserIndent = () => {
 
           <Box display="flex" justifyContent="flex-end" mt={2}>
             <Button variant="contained" type="submit">
-              Submit Indent
+              Submit Indent Request
             </Button>
           </Box>
         </form>

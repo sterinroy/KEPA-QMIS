@@ -3,32 +3,35 @@ import { DataGrid } from "@mui/x-data-grid";
 import "./User.css";
 
 const columns = [
-  { field: "date", headerName: "Date", flex: 1},
+  {
+    field: "date",
+    headerName: "Date",
+    flex: 1,
+    renderCell: (params) => {
+      const date = new Date(params.value);
+      return date.toString() === "Invalid Date"
+        ? "N/A"
+        : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth()+1).toString().padStart(2, "0")}-${date.getFullYear()}`;
+    },
+  },
   { field: "item", headerName: "Item", flex: 1 },
   { field: "category", headerName: "Category", flex: 1 },
   { field: "subcategory", headerName: "Subcategory", flex: 1 },
   { field: "quantity", headerName: "Quantity", flex: 1 },
   { field: "status", headerName: "Status", flex: 1 },
   {
-  field: "IndentBill",
-  renderCell: (params) => (
-    <button onClick={() => {
-      const urlParams = new URLSearchParams({
-        stationNo: params.row.stationNo,
-        officeNo: params.row.officeNo,
-        storeNo: params.row.storeNo,
-        subCategory: params.row.subCategory,
-        indentFor: JSON.stringify(params.row.indentFor),
-        qty: JSON.stringify(params.row.qty),
-        date: params.row.date,
-        nameAndDesignation: params.row.nameAndDesignation,
-      }).toString();
-      window.open(`/indent-bill?${urlParams}`, "_blank");
-    }}>
-      IndentBill
-    </button>
-  ),
-},
+    field: "IndentBill",
+    headerName: "IndentBill",
+    flex: 1,
+    renderCell: (params) => 
+      params.row.istemporary ? (  
+        <span style={{ color: "gray" }}>N/A</span>
+      ) : (
+      <button onClick={() => alert(`Exporting ${params.row.item}`)}>
+        IndentBill
+      </button>
+    ),
+  },
 ];
 
 const UserManageRequest = () => {
@@ -49,20 +52,18 @@ const UserManageRequest = () => {
         }
 
         const data = await response.json();
-
+        console.log("Fetched Data:", data);
         const formattedRows = data.map((entry, index) => ({
           id: entry._id || index,
-          date: entry.approvedDate
-            ? new Date(entry.approvedDate).toLocaleDateString()
-            : "N/A",
+          date: entry.dateOfrequest,
           item: entry.item?.itemName || "N/A",
           category: entry.item?.itemCategory || "N/A",
           subcategory: entry.item?.itemSubCategory || "N/A",
           quantity: `${entry.requestedQty} ${entry.unit || ""}`,
           status: entry.status,
           istemporary: entry.temporary,
+          indentBillId: entry.indentBillId || null,
         }));
-
         setRows(formattedRows);
         setLoading(false);
       } catch (err) {

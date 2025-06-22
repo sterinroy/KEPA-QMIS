@@ -28,7 +28,12 @@ const itemRequestSchema = new mongoose.Schema({
     name: { type: String }
   },
   approvedDate: { type: Date },
-  returnDate: { type: Date }
+  returnDate: { type: Date },
+  indentBillId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "IndentBill",
+}
+
 });
 
 module.exports = mongoose.model("ItemRequest", itemRequestSchema);
