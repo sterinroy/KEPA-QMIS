@@ -67,9 +67,25 @@ const UserIndent = () => {
     setItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  const openIndentBill=() => {
+    const indentData = {
+      stationNo: formData.toWhom ,
+      officeNo: formData.toWhom,
+      storeNo: formData.toWhom,
+      indentFor: JSON.stringify(rows.map((row,index) => `${index + 1}. ${row.itemName} (${row.subCategory})`)),
+      subCategory: JSON.stringify(rows.map(row => row.subCategory).join(', ')),
+      date: formData.dateOfrequest,
+      nameAndDesignation: `${formData.name}`,
+      qty: JSON.stringify(rows.map(row => row.qty).join(', ')),
+    };
+    const queryString = new URLSearchParams(indentData).toString();
+    const url = `/IndentBill?${queryString}`;
+    window.open(url, "_blank");
+    return true;
+  };
+
   const handleSubmit = async (e) => {
   e.preventDefault();
-
   try {
     for (const item of items) {
       const selected = stocks.find(s => s._id === item.itemId);
@@ -103,6 +119,8 @@ const UserIndent = () => {
     } catch (err) {
       alert("Error: " + err.message);
     }
+
+    openIndentBill();
   };
 
   const categories = [...new Set(stocks.map((item) => item.itemCategory))];
