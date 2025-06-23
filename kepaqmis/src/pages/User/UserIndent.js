@@ -173,6 +173,15 @@ const UserIndent = () => {
             />
           ))}
 
+          <Box
+          sx={{
+            maxHeight: "400px",
+            overflowY: "auto",
+            width: "100%",
+            mb:2,
+            pr: 2,
+          }}
+          >
           {items.map((item, index) => {
             const selected = stocks.find(i => i._id === item.itemId);
             return (
@@ -260,7 +269,7 @@ const UserIndent = () => {
           <Button variant="outlined" onClick={addItem} sx={{ mb: 2 }}>
             + Add Another Item
           </Button>
-
+          </Box>  
           <Box display="flex" justifyContent="flex-end" mt={2}>
             <Button variant="contained" type="submit">
               Submit Indent Request
