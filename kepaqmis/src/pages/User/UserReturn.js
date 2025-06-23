@@ -15,16 +15,20 @@ const formFields = [
     name: "dateOfReturn",
     label: "Date of Return",
     type: "date",
+    required: true,
   },
   {
     name: "quantity",
     label: "Quantity",
     type: "number",
+    required: true,
   },
   {
     name: "reason",
     label: "Why Return",
-    type: "text",
+    multiline: true,
+    rows: 2,
+    required: true,
   },
 ];
 
@@ -144,16 +148,23 @@ const UserReturn = () => {
             <TextField
               key={field.name}
               name={field.name}
-              type={field.type}
               label={field.label}
               value={formData[field.name]}
               onChange={handleChange}
-              InputLabelProps={field.type === "date" ? { shrink: true } : {}}
-              required
+              required={field.required}
+              multiline={field.multiline || false}
+              type={!field.multiline ? (field.type || "text"): undefined}
+              rows={field.rows || undefined}
               fullWidth
-              multiline={field.name === "reason"}
-              rows={field.name === "reason" ? 3 : 1}
-              sx={{ mb: 2 }}
+              sx={field.name === "reason" ? {
+                "& .MuiInputBase-root": { 
+                  minHeight: "80px",
+                  alignitems: "flex-start",
+                },
+                "& textarea": { 
+                  padding: "6px" 
+                }
+                } : {mb: 2}}
             />
           ))}
 
