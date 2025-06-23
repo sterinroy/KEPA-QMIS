@@ -67,25 +67,9 @@ const UserIndent = () => {
     setItems(prev => prev.filter((_, i) => i !== index));
   };
 
-  const openIndentBill=() => {
-    const indentData = {
-      stationNo: formData.toWhom ,
-      officeNo: formData.toWhom,
-      storeNo: formData.toWhom,
-      indentFor: JSON.stringify(rows.map((row,index) => `${index + 1}. ${row.itemName} (${row.subCategory})`)),
-      subCategory: JSON.stringify(rows.map(row => row.subCategory).join(', ')),
-      date: formData.dateOfrequest,
-      nameAndDesignation: `${formData.name}`,
-      qty: JSON.stringify(rows.map(row => row.qty).join(', ')),
-    };
-    const queryString = new URLSearchParams(indentData).toString();
-    const url = `/IndentBill?${queryString}`;
-    window.open(url, "_blank");
-    return true;
-  };
-
   const handleSubmit = async (e) => {
   e.preventDefault();
+
   try {
     for (const item of items) {
       const selected = stocks.find(s => s._id === item.itemId);
@@ -115,12 +99,11 @@ const UserIndent = () => {
     }
 
       alert("All items submitted successfully.");
+      openIndentBill();
       navigate("/User/UserIndent");
     } catch (err) {
       alert("Error: " + err.message);
     }
-
-    openIndentBill();
   };
 
   const categories = [...new Set(stocks.map((item) => item.itemCategory))];
@@ -130,6 +113,27 @@ const UserIndent = () => {
 
   const getFilteredItems = (cat, subcat) =>
     stocks.filter(i => i.itemCategory === cat && i.itemSubCategory === subcat);
+
+  const openIndentBill = () => {
+  const indentData = {
+    stationNo: formData.toWhom,
+    officeNo: formData.toWhom,
+    storeNo: formData.toWhom,
+    indentFor: JSON.stringify(items.map((row, index) => `${index + 1}. ${row.category} - ${row.subcategory}`)),
+    subCategory: items.map(row => row.subcategory).join(', '),
+    qty: JSON.stringify(items.map(row => `${row.qty} ${stocks.find(s => s._id === row.itemId)?.unit || ''}`)),
+    date: formData.dateOfrequest,
+    nameAndDesignation: formData.name,
+    createdBy: {
+      pen: formData.PENNo,
+      name: formData.name
+    }
+  };
+
+  const queryString = new URLSearchParams(indentData).toString();
+  window.open(`/Indent?${queryString}`, "_blank");
+};
+
 
   return (
     <div className="temp-issue-root">
