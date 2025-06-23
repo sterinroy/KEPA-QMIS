@@ -119,7 +119,7 @@ const UserIndent = () => {
     stationNo: formData.toWhom,
     officeNo: formData.toWhom,
     storeNo: formData.toWhom,
-    indentFor: JSON.stringify(items.map((row, index) => `${index + 1}. ${row.category} - ${row.subcategory}`)),
+    indentFor: JSON.stringify(items.map((row) => ` ${row.category} - ${row.subcategory}`)),
     subCategory: items.map(row => row.subcategory).join(', '),
     qty: JSON.stringify(items.map(row => `${row.qty} ${stocks.find(s => s._id === row.itemId)?.unit || ''}`)),
     date: formData.dateOfrequest,
