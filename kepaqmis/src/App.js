@@ -28,6 +28,7 @@ import UserManageRequest from "./pages/User/UserManageRequest";
 import UserReturn from "./pages/User/UserReturn";
 import UserTemp from "./pages/User/UserTemp";
 import UserReview from "./pages/User/UserReview";
+import Indent from "./components/Indent";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/StockItemView" element={<StockItemView />} />
+        <Route path="/Indent" element={<Indent />} />
 
         <Route
           path="/Admin"
