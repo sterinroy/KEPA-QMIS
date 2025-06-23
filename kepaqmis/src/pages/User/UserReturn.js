@@ -21,6 +21,11 @@ const formFields = [
     label: "Quantity",
     type: "number",
   },
+  {
+    name: "reason",
+    label: "Why Return",
+    type: "text",
+  },
 ];
 
 const pen = localStorage.getItem("pen") || "";
@@ -31,6 +36,7 @@ const UserReturn = () => {
     itemId: "",
     dateOfReturn: new Date().toISOString().split("T")[0],
     quantity: "",
+    reason: "",
   });
 
   const [issuedItems, setIssuedItems] = useState([]);
@@ -145,6 +151,9 @@ const UserReturn = () => {
               InputLabelProps={field.type === "date" ? { shrink: true } : {}}
               required
               fullWidth
+              multiline={field.name === "reason"}
+              rows={field.name === "reason" ? 3 : 1}
+              sx={{ mb: 2 }}
             />
           ))}
 
