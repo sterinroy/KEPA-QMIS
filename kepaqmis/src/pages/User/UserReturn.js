@@ -9,7 +9,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { Navigate,useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 const formFields = [
   {
@@ -97,19 +97,12 @@ const UserReturn = () => {
 
       if (res.ok) {
         alert("Return request submitted successfully!");
-        // alert("Please take a printout of the return request for your records.");
-        console.log("Return request data:", {
-          itemId: formData.itemId,
+        navigate('/lars-print', {state : {
           item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
           quantity: formData.quantity,
-          date: formData.dateOfReturn,
-          reason: formData.reason});
-      navigate('/lars-print', {state : {
-        item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
-        quantity: formData.quantity,
-        reason: formData.reason,
-        date: formData.dateOfReturn
-      }});
+          reason: formData.reason,
+          date: formData.dateOfReturn
+        }});
 
         setFormData({
           itemId: "",

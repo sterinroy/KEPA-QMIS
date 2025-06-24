@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { fetchOffices } from "../../redux/actions/officeActions";
 import { fetchStockItems } from "../../redux/actions/stockActions";
 import "./User.css";
+import { createIndentBill } from "../../redux/actions/indentBillActions"; // adjust path if needed
+
 
 const UserIndent = () => {
   const dispatch = useDispatch();
@@ -71,6 +73,8 @@ const UserIndent = () => {
   e.preventDefault();
 
   try {
+    // Step 1: Submit all item requests
+    const requestIds = [];
     for (const item of items) {
       const selected = stocks.find(s => s._id === item.itemId);
       const payload = {
@@ -96,15 +100,55 @@ const UserIndent = () => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to submit");
+
+      requestIds.push(data._id); // Optional: in case you want to reference
     }
 
-      alert("All items submitted successfully.");
-      openIndentBill();
-      navigate("/User/UserIndent");
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  };
+    // Step 2: Create the IndentBill using Redux
+    const indentData = {
+      stationNo: formData.toWhom,
+      officeNo: formData.toWhom,
+      storeNo: formData.toWhom,
+      indentFor: items.map((row) => `${row.category} - ${row.subcategory}`),
+      subCategory: items.map(row => row.subcategory).join(', '),
+      qty: items.map(row => `${row.qty} ${stocks.find(s => s._id === row.itemId)?.unit || ''}`),
+      date: formData.dateOfrequest,
+      nameAndDesignation: formData.name,
+      createdBy: {
+        pen: formData.PENNo,
+        name: formData.name
+      }
+    };
+
+    const res = await fetch("/api/indent-bills", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(indentData),
+    });
+
+    const bill = await res.json();
+    if (!res.ok) throw new Error(bill.error || "Failed to create indent bill");
+
+    const billId = bill._id;
+
+    await fetch(`/api/indent-bills/link-bill-to-requests`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pen: formData.PENNo,
+        dateOfrequest: formData.dateOfrequest,
+        indentBillId: billId,
+      }),
+    });
+
+    alert("All items and bill submitted successfully.");
+    window.open(`/Indent?id=${billId}`, "_blank");
+    navigate("/User/UserIndent");
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+};
+
 
   const categories = [...new Set(stocks.map((item) => item.itemCategory))];
 

@@ -21,16 +21,22 @@ const columns = [
   { field: "status", headerName: "Status", flex: 1 },
   {
     field: "IndentBill",
-    headerName: "IndentBill",
+    headerName: "Indent Bill",
     flex: 1,
-    renderCell: (params) => 
-      params.row.istemporary ? (  
-        <span style={{ color: "gray" }}>N/A</span>
+    renderCell: (params) => {
+      if (params.row.istemporary) return <span style={{ color: "gray" }}>N/A</span>;
+      return params.row.indentBillId ? (
+        <a
+          href={`/Indent?id=${params.row.indentBillId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Bill
+        </a>
       ) : (
-      <button onClick={() => alert(`Exporting ${params.row.item}`)}>
-        IndentBill
-      </button>
-    ),
+        <span style={{ color: "gray" }}>N/A</span>
+      );
+    },
   },
 ];
 

@@ -58,34 +58,16 @@ router.post("/qm/verify-return/:id", async (req, res) => {
 
   try {
     const itemRequest = await ItemRequest.findById(id).populate("item");
-
     if (!itemRequest || itemRequest.status !== "returned") {
       return res.status(400).json({ error: "Invalid return request" });
     }
-
     itemRequest.technicalReportRequired = technicalReportRequired;
     if (technicalReportRequired) {
       itemRequest.technicalWing = technicalWing;
       itemRequest.technicalReportNo = technicalReportNo;
     }
-
     itemRequest.returnCategory = returnCategory;
-
     await itemRequest.save();
-
-    // Optionally store in ReturnItem model too
-    const returnEntry = new ReturnItem({
-      user: itemRequest.requestedBy,
-      stockItemId: itemRequest.item._id,
-      quantity: itemRequest.requestedQty,
-      category: returnCategory,
-      returnDate: itemRequest.returnDate,
-      processedBy,
-      processedAt: new Date(),
-    });
-
-    await returnEntry.save();
-
     res.json({ message: "Item return processed successfully" });
   } catch (error) {
     console.error("Verification error:", error);
