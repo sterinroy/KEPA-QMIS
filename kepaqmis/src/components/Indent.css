@@ -70,6 +70,8 @@ th {
 
 .blank-row td {
   height: 340px;
+  vertical-align: top;
+  padding: 6px;
 }
 
 .vertical-text {
