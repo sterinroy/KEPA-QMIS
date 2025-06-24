@@ -32,7 +32,15 @@ const itemRequestSchema = new mongoose.Schema({
   indentBillId: {
   type: mongoose.Schema.Types.ObjectId,
   ref: "IndentBill",
+},
+technicalReportRequired: { type: Boolean, default: false },
+technicalWing: { type: String },
+technicalReportNo: { type: String },
+returnCategory: {
+  type: String,
+  enum: ["Damaged", "Repairable", "Reusable"],
 }
+
 
 });
 
