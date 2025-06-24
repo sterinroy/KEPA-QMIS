@@ -8,6 +8,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import UndoIcon from '@mui/icons-material/Undo';
+import RestoreIcon from '@mui/icons-material/Restore';
 import Main from "../../components/Main";
 import { Box, Modal, Button, Typography } from "@mui/material";
 
@@ -44,6 +45,11 @@ function QMILayout() {
       label: "Stock Issue Form",
       path: "/QuarterMasterIssue/QMIStockIssueForm",
       icon: <DescriptionIcon className="icon" />,
+    },
+    {
+      label: "Return Requests",
+      path: "/QuarterMasterIssue/QMIReturnsRequestsTable",
+      icon: <RestoreIcon className="icon" />,
     },
     {
       label: "Temporary Issue Form",

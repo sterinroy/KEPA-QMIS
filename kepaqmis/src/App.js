@@ -26,6 +26,7 @@ import QMITempIssueForm from "./pages/QuarterMasterIssue/QMITempIssueForm";
 import QMIStockIssueForm from "./pages/QuarterMasterIssue/QMIStockIssueForm";
 import QMITempIssueReturn from "./pages/QuarterMasterIssue/QMITempIssueReturn";
 import QMIManageRequest from "./pages/QuarterMasterIssue/QMIManageRequest";
+import QMIReturnsRequestsTable from "./pages/QuarterMasterIssue/QMIReturnsRequestsTable";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
 import QMPEntries from "./pages/QuarterMasterPurchase/QMPEntries";
@@ -105,7 +106,12 @@ function App() {
             path="QMIManageRequest"
             element={<QMIManageRequest />}
           />
+          <Route
+            path="QMIReturnsRequestsTable"
+            element={< QMIReturnsRequestsTable/>}
+          />
         </Route>
+        
         {/* <Route
           path="/QuarterMasterACQM"
           element={
