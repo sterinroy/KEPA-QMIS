@@ -9,6 +9,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import { Navigate } from "react-router-dom";
 
 const formFields = [
   {
@@ -96,31 +97,7 @@ const UserReturn = () => {
         alert("Return request submitted successfully!");
         const selectedItem = issuedItems.find((item) => item._id === formData.itemId);
 
-      const printData = {
-        penNo: pen,
-        name: name,
-        items: [
-          {
-            name: selectedItem?.item?.itemName || "-",
-            quantity: formData.quantity,
-            reason: formData.reason,
-          },
-        ],
-      };
-
-      // Open LARSPrint in new tab with passed state
-      const printWindow = window.open(
-        `/lars-print`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-      // Delay state transfer to ensure window loads
-      setTimeout(() => {
-        if (printWindow) {
-          printWindow.postMessage(printData, window.location.origin);
-        }
-      }, 500);
+      Navigate('/lars-print', {state : formData});
 
         setFormData({
           itemId: "",

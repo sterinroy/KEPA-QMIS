@@ -1,60 +1,48 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import "./LARSPrint.css";
 
 const LARSPrint = () => {
+  const location = useLocation();
+  const today = new Date().toISOString().split("T")[0];
+
+const data = {
+  ...location.state,                    // ✅ Keep passed items, penNo, etc.
+  orderNo: "",                          // 🔒 Force blank
+  officeNo: "",                         // 🔒 Force blank
+  date: today,                          // 🔒 Force today’s date
+  district: "Thrissur",                 // 🔒 Fixed
+  circle: "KEPA ",              // 🔒 Fixed
+};
+
   const pdfRef = useRef();
-  const [data, setData] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Receive data from parent tab
-    const handleMessage = (event) => {
-      if (event.origin !== window.location.origin) return;
-      const today = new Date().toISOString().split("T")[0];
-      const finalData = {
-        ...event.data,
-        orderNo: "",
-        officeNo: "",
-        date: today,
-        district: "Thrissur",
-        circle: "KEPA",
-      };
-      setData(finalData);
-    };
-
-    window.addEventListener("message", handleMessage, false);
-
-    return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  useEffect(() => {
-    if (data) {
-      setTimeout(() => {
-        html2pdf()
-          .from(pdfRef.current)
-          .set({
-            margin: 0.0001,
-            filename: `LARS_KPF81_${data.penNo || "return"}.pdf`,
-            image: { type: "jpeg", quality: 1 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
-          })
-          .save();
-      }, 800);
-    }
-  }, [data]);
-
-  if (!data) return <p style={{ color: "white" }}>Waiting for data...</p>;
+  const handleDownload = () => {
+    const element = pdfRef.current;
+    html2pdf()
+      .from(element)
+      .set({
+        margin: 0.0001,
+        filename: `LARS_KPF81_${data.penNo || "return"}.pdf`,
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+      })
+      .save();
+  };
 
   return (
     <div className="lars-print-wrapper">
-      {/* <div className="download-section">
+      <div className="download-section">
         <button onClick={handleDownload} className="download-button">
           Download as PDF
         </button>
-      </div> */}
+      </div>
 
       <div className="kpf81-layout" ref={pdfRef}>
         <div className="three-columns">
