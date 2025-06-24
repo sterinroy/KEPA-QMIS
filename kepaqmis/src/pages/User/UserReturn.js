@@ -35,7 +35,6 @@ const formFields = [
 
 const pen = localStorage.getItem("pen") || "";
 const name = localStorage.getItem("name") || "";
-const navigate = useNavigate();
 
 const UserReturn = () => {
   const [formData, setFormData] = useState({
@@ -46,6 +45,8 @@ const UserReturn = () => {
   });
 
   const [issuedItems, setIssuedItems] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (pen) {
