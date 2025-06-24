@@ -129,7 +129,7 @@ const UserIndent = () => {
     const bill = await res.json();
     if (!res.ok) throw new Error(bill.error || "Failed to create indent bill");
 
-    const billId = bill._id;
+    const billId = bill.bill?._id;
 
     await fetch(`/api/indent-bills/link-bill-to-requests`, {
       method: "PUT",

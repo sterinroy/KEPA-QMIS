@@ -3,30 +3,35 @@ import html2pdf from "html2pdf.js";
 import { useSearchParams } from "react-router-dom";
 import "./Indent.css";
 
+
 const Indent = () => {
   const [params] = useSearchParams();
   const [loading, setLoading] = useState(true);
-  const [bill, setBill] = useState(null);
+  const [indentData, setIndentData] = useState(null);
+  const id = params.get("id");
 
-  const billId = params.get("billId");
 
   useEffect(() => {
-    if (!billId) return;
+  if (!id) {
+    console.error("No bill ID provided");
+    setLoading(false);
+    return;
+  }
 
-    const fetchBill = async () => {
-      try {
-        const res = await fetch(`/api/indent-bills/${billId}`);
-        const data = await res.json();
-        setBill(data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch bill", err);
-        setLoading(false);
-      }
-    };
-
-    fetchBill();
-  }, [billId]);
+  const fetchIndent = async () => {
+    try {
+      const res = await fetch(`/api/indent-bills/${id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to fetch indent bill");
+      setIndentData(data);
+    } catch (err) {
+      console.error("Error loading indent bill:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchIndent();
+}, [id]);
 
   const handleDownloadPDF = () => {
     const element = document.getElementById("indent-bill");
@@ -43,10 +48,9 @@ const Indent = () => {
   };
 
   if (loading) return <p>Loading Indent Bill...</p>;
-  if (!bill) return <p>Error: No bill found</p>;
+  if (!indentData) return <div style={{ color: "black" }}>No Indent Bill Found</div>;
 
-  const { stationNo, officeNo, storeNo, indentFor, subCategory, qty, date, nameAndDesignation } = bill;
-
+  const { stationNo, officeNo, storeNo, indentFor, subCategory, qty, date, nameAndDesignation } = indentData;
 
   return (
     <div style={{ backgroundColor: "#fff" }}>
@@ -80,7 +84,8 @@ const Indent = () => {
             <br />
             Indent for:
             <br />
-            {indentFor.map((item, index) => (
+            {Array.isArray(indentFor) &&
+            indentFor.map((item, index) => (
               <div key={index}>{`${index + 1}. ${item}`}</div>
             ))}
           </div>
@@ -95,7 +100,8 @@ const Indent = () => {
             <br />
             Indent for:
             <br />
-            {indentFor.map((item, index) => (
+            {Array.isArray(indentFor) &&
+            indentFor.map((item, index) => (
               <div key={index}>{`${index + 1}. ${item}`}</div>
             ))}
             <br />
@@ -154,12 +160,14 @@ const Indent = () => {
               <tbody>
                 <tr className="blank-row">
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {indentFor.map((item, index) => (
+                    {Array.isArray(indentFor) &&
+                    indentFor.map((item, index) => (
                       <div key={index}>{`${index + 1}. ${item}`}</div>
                     ))}
                   </td>
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {qty.map((qty, index) => (
+                    {Array.isArray(indentFor) &&
+                    qty.map((qty, index) => (
                       <div key={index}>{qty}</div>
                     ))}
                   </td>
