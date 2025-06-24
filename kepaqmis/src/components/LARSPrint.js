@@ -50,11 +50,11 @@ const LARSPrint = () => {
 
   return (
     <div className="lars-print-wrapper">
-      <div className="download-section">
+      {/* <div className="download-section">
         <button onClick={handleDownload} className="download-button">
           Download as PDF
         </button>
-      </div>
+      </div> */}
 
       <div className="kpf81-layout" ref={pdfRef}>
         <div className="three-columns">
