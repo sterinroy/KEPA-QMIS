@@ -97,9 +97,10 @@ const UserReturn = () => {
 
       if (res.ok) {
         alert("Return request submitted successfully!");
-        
+        // alert("Please take a printout of the return request for your records.");
         console.log("Return request data:", {
           itemId: formData.itemId,
+          itemname : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
           quantity: formData.quantity,
           dateOfReturn: formData.dateOfReturn,
           reason: formData.reason});
