@@ -103,7 +103,12 @@ const UserReturn = () => {
           quantity: formData.quantity,
           dateOfReturn: formData.dateOfReturn,
           reason: formData.reason});
-      navigate('/lars-print', {state : formData});
+      navigate('/lars-print', {state : {
+        itemname : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+        quantity: formData.quantity,
+        reason: formData.reason,
+        dateOfReturn: formData.dateOfReturn
+      }});
 
         setFormData({
           itemId: "",
