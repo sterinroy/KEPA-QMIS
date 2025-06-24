@@ -16,6 +16,12 @@ aside.sidebar {
   align-items: center;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
   color: white;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none; 
 }
 
 .sidebar-title {
@@ -66,30 +72,25 @@ div.nav-item {
   width: 100%;
 }
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin: 10px 0;
-  cursor: pointer;
-}
-
 .nav-menu {
   width: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0px;
   color: white;
   padding: 10px 15px;
   border-radius: 8px;
   margin: 10px 0;
   cursor: pointer;
+}
+
+.nav-menu::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item:hover,
@@ -143,7 +144,7 @@ div.nav-item:focus-visible {
 
 div.logo {
   width: 80px; /* Set the width of the container to match the image */
-  height: 80px;
+  height: 160px;
   border-radius: 12px;
   box-shadow:
     0 0 8px rgba(0, 0, 0, 0.15),
@@ -161,7 +162,7 @@ div.logo {
   height: 80px;
   object-fit: contain;
   /* margin-left: 20px; */
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 nav.nav-menu {
@@ -176,7 +177,8 @@ main.main {
   margin-bottom: 0px;
   padding: 20px;
   background: #0C1227;
-  box-shadow: inset 0 0 0 2px #f0f0ff;
+  /* box-shadow: inset 0 0 0 2px #f0f0ff; */
+  box-shadow: inset 0 0 0 2px black;
   color: white;
   display: flex;
   justify-content: center;

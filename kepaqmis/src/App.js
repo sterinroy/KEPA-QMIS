@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
 import Register from "./pages/Register"; // Ensure this is imported
-import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import UserDashboard from "./pages/UserDashboard";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
@@ -28,6 +27,7 @@ import QMAPurchase from "./pages/QuarterMaster/QMAPurchase"
 import QMACategories from "./pages/QuarterMaster/QMACategories";
 import QMAPurchaseOverview from "./pages/QuarterMaster/QMAPurchaseOverview";
 import QMAIssueOverview from "./pages/QuarterMaster/QMAIssueOverview";
+
 function App() {
   return (
     <Router>
@@ -90,6 +90,7 @@ function App() {
           <Route path="QMPEntries" element={<QMPEntries />} />
           <Route path="QMPOrder" element={<QMPOrder />} />
           <Route path="QMAIssueOverview" element={<QMAIssueOverview />}/>
+           <Route path="StockItemView" element={<StockItemView />}/>
 
         </Route>
         <Route
