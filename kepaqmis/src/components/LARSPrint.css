@@ -109,12 +109,13 @@
   margin-top: 10px;
 }
 .inner-table td {
-  padding: 10px;
-  min-height: 180px;
   vertical-align: top;
   white-space: pre-line;
   font-size: 14px;
-  line-height: 35;
+  line-height: 1.2;
+  height:485px;
+  overflow: hidden;
+  padding-top: 4px;
 }
 .col2 .inner-table tbody tr {
   height: 483px;

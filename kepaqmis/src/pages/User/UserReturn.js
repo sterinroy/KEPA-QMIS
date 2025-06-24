@@ -100,15 +100,15 @@ const UserReturn = () => {
         // alert("Please take a printout of the return request for your records.");
         console.log("Return request data:", {
           itemId: formData.itemId,
-          itemname : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+          item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
           quantity: formData.quantity,
-          dateOfReturn: formData.dateOfReturn,
+          date: formData.dateOfReturn,
           reason: formData.reason});
       navigate('/lars-print', {state : {
-        itemname : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+        item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
         quantity: formData.quantity,
         reason: formData.reason,
-        dateOfReturn: formData.dateOfReturn
+        date: formData.dateOfReturn
       }});
 
         setFormData({
