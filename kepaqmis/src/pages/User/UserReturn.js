@@ -9,7 +9,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { Navigate } from "react-router-dom";
+import { Navigate,useNavigate } from "react-router-dom";
 
 const formFields = [
   {
@@ -35,6 +35,7 @@ const formFields = [
 
 const pen = localStorage.getItem("pen") || "";
 const name = localStorage.getItem("name") || "";
+const navigate = useNavigate();
 
 const UserReturn = () => {
   const [formData, setFormData] = useState({
@@ -95,9 +96,13 @@ const UserReturn = () => {
 
       if (res.ok) {
         alert("Return request submitted successfully!");
-        const selectedItem = issuedItems.find((item) => item._id === formData.itemId);
-
-      Navigate('/lars-print', {state : formData});
+        
+        console.log("Return request data:", {
+          itemId: formData.itemId,
+          quantity: formData.quantity,
+          dateOfReturn: formData.dateOfReturn,
+          reason: formData.reason});
+      navigate('/lars-print', {state : formData});
 
         setFormData({
           itemId: "",
