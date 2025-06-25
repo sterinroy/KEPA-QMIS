@@ -11,7 +11,9 @@ const columns = [
       const date = new Date(params.value);
       return date.toString() === "Invalid Date"
         ? "N/A"
-        : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth()+1).toString().padStart(2, "0")}-${date.getFullYear()}`;
+        : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date.getFullYear()}`;
     },
   },
   { field: "item", headerName: "Item", flex: 1 },
@@ -24,7 +26,8 @@ const columns = [
     headerName: "Indent Bill",
     flex: 1,
     renderCell: (params) => {
-      if (params.row.istemporary) return <span style={{ color: "gray" }}>N/A</span>;
+      if (params.row.istemporary)
+        return <span style={{ color: "gray" }}>N/A</span>;
       return params.row.indentBillId ? (
         <a
           href={`/Indent?id=${params.row.indentBillId}`}
@@ -58,7 +61,6 @@ const UserManageRequest = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Data:", data);
         const formattedRows = data.map((entry, index) => ({
           id: entry._id || index,
           date: entry.dateOfrequest,
@@ -82,27 +84,27 @@ const UserManageRequest = () => {
   }, [pen]);
 
   return (
-    <div style={{ width: "100%" }}>
-      <div>
+    <div className="manage-request-root">
+      <div className="manage-request-container">
         <h2>Manage Requests</h2>
-      </div>
-      <div style={{ height: 550 }}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : rows.length === 0 ? (
-          <p>No Requests available.</p>
-        ) : (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            disableRowSelectionOnClick
-            showToolbar
-          />
-        )}
+        <div style={{ height: 550 }}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : rows.length === 0 ? (
+            <p style={{ color: "white" }}>No Requests available.</p>
+          ) : (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              disableRowSelectionOnClick
+              showToolbar
+            />
+          )}
+        </div>
       </div>
     </div>
   );
