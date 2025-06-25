@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchOffices } from "../../redux/actions/officeActions";
 import { fetchStockItems } from "../../redux/actions/stockActions";
 import "./User.css";
-import { createIndentBill } from "../../redux/actions/indentBillActions"; // adjust path if needed
 
 const UserIndent = () => {
   const dispatch = useDispatch();
@@ -87,7 +86,6 @@ const UserIndent = () => {
     e.preventDefault();
 
     try {
-      // Step 1: Submit all item requests
       const requestIds = [];
       for (const item of items) {
         const selected = stocks.find((s) => s._id === item.itemId);
@@ -115,10 +113,9 @@ const UserIndent = () => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to submit");
 
-        requestIds.push(data._id); // Optional: in case you want to reference
+        requestIds.push(data._id); 
       }
 
-      // Step 2: Create the IndentBill using Redux
       const indentData = {
         stationNo: formData.toWhom,
         officeNo: formData.toWhom,
@@ -130,10 +127,10 @@ const UserIndent = () => {
             `${row.qty} ${stocks.find((s) => s._id === row.itemId)?.unit || ""}`
         ),
         date: formData.dateOfrequest,
-        item: items.map(
-        (row) =>
-          stocks.find((s) => s._id === row.itemId)?.itemName || "N/A"
-      ),
+        item: items.map((row) =>{
+          const match=stocks.find((s)=>s._id===row.itemId);
+          return match?.itemName || "N/A";
+        }),
         nameAndDesignation: formData.name,
         createdBy: {
           pen: formData.PENNo,
