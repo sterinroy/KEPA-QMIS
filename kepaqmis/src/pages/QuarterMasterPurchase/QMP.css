@@ -1,138 +1,39 @@
-Root container and page background body,
-/* html,
-.container {
-  background-color: #0c1227 !important;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: Arial, sans-serif;
-  overflow-y: auto;
-} */
-
-.form {
-  margin-bottom: 2px;
-  margin-top: 20px;
-}
-
-/* Form container */
-
-.qouta-button {
-  background-color: #1976d2 !important; /* example: primary blue */
-  color: white !important;
-}
-.quota-button:hover {
-  background-color: #030d44 !important; /* darker blue on hover */
-}
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #9c27b0 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #6d1b7b !important; /* darker purple on hover */
-}
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #070085 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #26235d !important; /* darker purple on hover */
-}
-
-.direct-issue-box {
+.purchase-order-box {
   background-color: #111c44 !important;
   color: black;
-  margin-left: 11px;
-  margin-top: 115px;
+  margin-left: 12px;
+  margin-top: 50px;
+  margin-right: 50px;
   margin-bottom: 20px;
-  padding: 2rem;
+  padding: 30px 40px 20px 40px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 1300px;
+  max-width: 1150px;
   box-sizing: border-box;
-  padding: 30px 40px 20px 40px;
-  min-height: 550px;
 }
 
-.direct-issue-root {
-  min-height: 100vh;
+.form{
   background-color: #0c1227;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* aligns top */
-  padding: 10px 20px 40px 20px; /* top, right, bottom, left */
-  overflow-y: auto; /* allow scroll if content overflows */
-  box-sizing: border-box;
 }
 
-.request-issue-box {
-  background-color: #111c44 !important;
-  color: black;
-  margin-left: 11px;
-  margin-top: 320px !important;
-  margin-bottom: 20px;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+.qmp-form-entry-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 24px; /* spacing between columns */
   width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 20px 40px;
-  min-height: 550px;
-}
-
-.request-issue-root {
-  min-height: 100vh;
-  background-color: #0c1227;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* aligns top */
-  padding: 80px 20px 40px 20px; /* top, right, bottom, left */
-  overflow-y: auto; /* allow scroll if content overflows */
-  box-sizing: border-box;
-}
-
-.temp-issue-box {
-  background-color: #0c1227;
-  color: black;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1100px;
-  box-sizing: border-box;
-  padding: 30px 40px 50px 40px;
-  min-height: 550px;
-}
-
-.temp-issue-root {
-  max-height: 670px;
-  background-color: #0c1227;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 15px;
-}
-/* Title */
-.form-title {
-  color: #000000;
-  text-align: center;
-  margin-bottom: 24px;
-  font-weight: 700;
-  font-size: 1.5rem;
+  margin-bottom: 30px;
+  padding: 16px;
+  background-color: #111c44; /* optional dark background for each entry block */
+  border-radius: 8px;
 }
 
 /* Grid layout for form */
 .mui-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 24px 48px;
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 24px 48px !important;
+ width: 100%;
 }
 
 .mui-form > * {
@@ -193,12 +94,6 @@ Root container and page background body,
   margin-top: -8px;
 }
 
-/*Request*/
-.return-request-container h2,
-.return-request-container p {
-  color: white;
-  margin-left: 18px;
-}
 
 .MuiToggleButton-root {
   background-color: #0c1227 !important;
@@ -219,4 +114,12 @@ Root container and page background body,
 
 .MuiToggleButton-root.Mui-selected:hover {
   background-color: #1565c0 !important;
+}
+
+.form {
+  height: 100vh;               /* Or a fixed height like 600px */
+  overflow-y: auto;            /* Enable vertical scroll */
+  display: block;
+  padding: 1rem;
+  box-sizing: border-box;
 }

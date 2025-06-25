@@ -107,6 +107,7 @@ const QMIDirectForm = () => {
     setShowConfirmModal(false);
     setSuccessMessage("Ready to add another item with the same indent.");
     setStatus("succeeded");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleAddMoreNo = () => {
@@ -170,6 +171,8 @@ const QMIDirectForm = () => {
     setSuccessMessage("Form submitted successfully!");
     setStatus("succeeded");
     setShowPdfModal(false);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const renderFormFields = () => {

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Grid,
   TextField,
   Button,
@@ -9,6 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import "../QMP.css";
 
 const QMPFormEntry = ({
   entry,
@@ -20,18 +22,19 @@ const QMPFormEntry = ({
   setAnchorElSub,
 }) => {
   const formFields = [
-    { name: "supplyOrderNo", label: "Supply-Order Number", type: "text" },
+    { name: "supplyOrderNo", label: "Supply - Order No.", type: "text" },
     { name: "invoiceDate", label: "Invoice Date", type: "date" },
     { name: "itemName", label: "Item Name", type: "text" },
     { name: "quantity", label: "Quantity", type: "number" },
-    { name: "fromWhomPurchased", label: "From Whom?", type: "text" },
-    { name: "toWhom", label: "To Whom?", type: "text" },
+    { name: "fromWhomPurchased", label: "Supplier Name", type: "text" },
+    { name: "toWhom", label: "To (Company/ Office)", type: "text" },
     { name: "verifyDate", label: "Date of Verifying", type: "date" },
     { name: "billInvoiceNo", label: "Bill Invoice No", type: "text" },
   ];
 
   return (
-    <>
+    <Box className="qmp-form-entry-container">
+      {/* Render static text fields */}
       {formFields.map((field, idx) => (
         <Grid item xs={12} sm={4} key={idx}>
           <TextField
@@ -51,6 +54,7 @@ const QMPFormEntry = ({
         </Grid>
       ))}
 
+      {/* Category Select */}
       <Grid item xs={12} sm={4}>
         <FormControl fullWidth>
           <InputLabel>Category</InputLabel>
@@ -74,6 +78,7 @@ const QMPFormEntry = ({
         </FormControl>
       </Grid>
 
+      {/* Subcategory Select */}
       <Grid item xs={12} sm={4}>
         <FormControl fullWidth>
           <InputLabel>Subcategory</InputLabel>
@@ -101,6 +106,7 @@ const QMPFormEntry = ({
         </FormControl>
       </Grid>
 
+      {/* Amount Type Select */}
       <Grid item xs={12} sm={4}>
         <FormControl fullWidth>
           <InputLabel>Amount Type</InputLabel>
@@ -116,6 +122,7 @@ const QMPFormEntry = ({
         </FormControl>
       </Grid>
 
+      {/* Conditional Cash Amount Field */}
       {entry.amountType === "Cash" && (
         <Grid item xs={12} sm={4}>
           <TextField
@@ -135,6 +142,7 @@ const QMPFormEntry = ({
         </Grid>
       )}
 
+      {/* Conditional Credit Status Field */}
       {entry.amountType === "Credit" && (
         <Grid item xs={12} sm={4}>
           <FormControl fullWidth>
@@ -152,6 +160,7 @@ const QMPFormEntry = ({
         </Grid>
       )}
 
+      {/* Remove Entry Button */}
       <Grid item xs={12} sm={4}>
         <Button
           variant="outlined"
@@ -169,7 +178,7 @@ const QMPFormEntry = ({
           Remove Entry
         </Button>
       </Grid>
-    </>
+    </Box>
   );
 };
 
