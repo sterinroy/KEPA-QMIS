@@ -27,7 +27,6 @@ import UserIndent from "./pages/User/UserIndent";
 import UserManageRequest from "./pages/User/UserManageRequest";
 import UserReturn from "./pages/User/UserReturn";
 import UserTemp from "./pages/User/UserTemp";
-import UserReview from "./pages/User/UserReview";
 import Indent from "./components/Indent";
 import LARSPrint from "./components/LARSPrint";
 import Proceedings from "./components/proceedings.js";
@@ -116,7 +115,6 @@ function App() {
           <Route path="UserManageRequest" element={<UserManageRequest />} />
           <Route path="UserReturn" element={<UserReturn />} />
           <Route path="UserTemp" element={<UserTemp />} />
-          <Route path="UserReview" element={<UserReview />} />
         </Route>
 
 
