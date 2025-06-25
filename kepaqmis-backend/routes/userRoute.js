@@ -46,6 +46,38 @@ router.post("/my-issued-items/:id/permanent-return", async (req, res) => {
   }
 });
 
+//this is to get the list
+router.get("/returns/pending-verification", async (req, res) => {
+  try {
+    const pendingReturns = await ItemRequest.find({
+      status: "returned",
+      returnCategory: { $exists: false }
+    }).populate("item");
+
+    res.status(200).json(pendingReturns);
+  } catch (err) {
+    console.error("Error fetching pending return verifications:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//this is to view all items which is permantly returned
+router.get("/returns/permanent-verified", async (req, res) => {
+  try {
+    const verifiedReturns = await ItemRequest.find({
+      status: "returned",
+      returnCategory: { $in: ["Reusable", "Damaged", "Repairable"] }
+    }).populate("item");
+
+    res.status(200).json(verifiedReturns);
+  } catch (err) {
+    console.error("Error fetching verified returned items:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
 router.post("/qm/verify-return/:id", async (req, res) => {
   const { id } = req.params;
   const {
