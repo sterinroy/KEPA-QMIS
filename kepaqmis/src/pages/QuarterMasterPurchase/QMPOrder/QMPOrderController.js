@@ -132,14 +132,14 @@ export const useQMPOrderController = () => {
 
     setTimeout(() => {
     navigate("/proceedings", { state: {
-      item: entry.itemName,
-    qty: entry.quantity,
+      item: formData.itemName,
+    qty: formData.quantity,
     quantityUnit: "Nos", // or from category/unit if you store it
-    amount: entry.amountDetails.cashAmount || "0", // or use a calculated price
-    dateOfPurchased: entry.invoiceDate,
-    verificationDate: entry.verifyDate,
-    invoiceNumber: entry.billInvoiceNo,
-    purchasingParty: entry.fromWhomPurchased,
+    amount: formData.amountDetails.cashAmount || "0", // or use a calculated price
+    dateOfPurchased: formData.invoiceDate,
+    verificationDate: formData.verifyDate,
+    invoiceNumber: formData.billInvoiceNo,
+    purchasingParty: formData.fromWhomPurchased,
     purchaseOrderNo: formData.orderNo,
     } });
   }, 500);
