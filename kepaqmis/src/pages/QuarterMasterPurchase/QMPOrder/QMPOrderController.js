@@ -6,9 +6,13 @@ import {
   addSubcategory,
 } from "../../../redux/actions/categoryActions";
 import { submitQMPurchase } from "../../../redux/actions/qmpurchaseActions";
+import {useNavigate } from "react-router-dom";
+
 
 export const useQMPOrderController = () => {
   const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
 
   const { loading, successMessage, errorMessage } = useSelector(
     (state) => state.qmpurchase
