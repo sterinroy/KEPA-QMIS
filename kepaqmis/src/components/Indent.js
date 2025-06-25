@@ -76,11 +76,11 @@ const Indent = () => {
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {stationNo}
+            Station No.
             <br />
-            Office No. {officeNo}
+            Office No. 
             <br />
-            Store No. {storeNo}
+            Store No. 
             <br />
             Indent for:
             <br />
@@ -92,11 +92,11 @@ const Indent = () => {
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {stationNo}
+            Station No. 
             <br />
-            Office No. {officeNo}
+            Office No. 
             <br />
-            Store No. {storeNo}
+            Store No. 
             <br />
             Indent for:
             <br />
@@ -112,11 +112,11 @@ const Indent = () => {
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {stationNo}
+            Station No. 
             <br />
-            Office No. {officeNo}
+            Office No. 
             <br />
-            Store No. {storeNo}
+            Store No. 
             <br />
             Articles of {subCategory}
             <br />
@@ -125,11 +125,11 @@ const Indent = () => {
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {stationNo}
+            Station No. 
             <br />
-            Office No. {officeNo}
+            Office No. 
             <br />
-            Store No. {storeNo}
+            Store No. 
             <br />
             Articles of {subCategory}
             <br />
@@ -160,14 +160,14 @@ const Indent = () => {
               <tbody>
                 <tr className="blank-row">
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {Array.isArray(indentFor) &&
-                    indentFor.map((item, index) => (
+                    {Array.isArray(indentData.item) &&
+                    indentData.item.map((item, index) => (
                       <div key={index}>{`${index + 1}. ${item}`}</div>
                     ))}
                   </td>
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {Array.isArray(indentFor) &&
-                    qty.map((qty, index) => (
+                    {Array.isArray(indentData.qty) &&
+                    indentData.qty.map((qty, index) => (
                       <div key={index}>{qty}</div>
                     ))}
                   </td>

@@ -123,13 +123,17 @@ const UserIndent = () => {
         stationNo: formData.toWhom,
         officeNo: formData.toWhom,
         storeNo: formData.toWhom,
-        indentFor: items.map((row) => `${row.category} - ${row.subcategory}`),
+        indentFor: items.map((row) => `${row.category}`),
         subCategory: items.map((row) => row.subcategory).join(", "),
         qty: items.map(
           (row) =>
             `${row.qty} ${stocks.find((s) => s._id === row.itemId)?.unit || ""}`
         ),
         date: formData.dateOfrequest,
+        item: items.map(
+        (row) =>
+          stocks.find((s) => s._id === row.itemId)?.itemName || "N/A"
+      ),
         nameAndDesignation: formData.name,
         createdBy: {
           pen: formData.PENNo,
@@ -188,7 +192,7 @@ const UserIndent = () => {
       officeNo: formData.toWhom,
       storeNo: formData.toWhom,
       indentFor: JSON.stringify(
-        items.map((row) => ` ${row.category} - ${row.subcategory}`)
+        items.map((row) => ` ${row.category}`)
       ),
       subCategory: items.map((row) => row.subcategory).join(", "),
       qty: JSON.stringify(
@@ -198,6 +202,9 @@ const UserIndent = () => {
         )
       ),
       date: formData.dateOfrequest,
+      item: JSON.stringify(
+        items.map((row)=>`${row.itemName}`)
+      ),
       nameAndDesignation: formData.name,
       createdBy: {
         pen: formData.PENNo,

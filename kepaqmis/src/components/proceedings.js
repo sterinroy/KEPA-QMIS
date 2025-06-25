@@ -52,7 +52,6 @@ const Proceedings = () => {
           <span className="date">{common.dateOfPurchased}</span>
         </p>
 
-        <p className="center bold">12/5544/8855</p>
 
         <p><strong>Chairman:</strong> Asst. Director (MT) KEPA</p>
         <p><strong>Members:</strong></p>
@@ -115,6 +114,7 @@ const Proceedings = () => {
           <li>SI (Indoor Wing)_________________________________________________</li>
           <li>SI (QM STORE)_________________________________________________</li>
           <li>JS General Branch_______________________________________________</li>
+          <li>______________________________________________________________</li>
         </ol>
 
         <p className="center bold">Quality and Qty Verified</p>
