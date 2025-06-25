@@ -130,10 +130,34 @@ export const useQMPOrderController = () => {
     };
     dispatch(submitQMPurchase(data));
 
-    setTimeout(() => {
-    navigate("/proceedings", { state: { entries: formData.entries } });
-  }, 500);
+    const handleSubmit = () => {
+  const data = {
+    orderNo: formData.orderNo,
+    entries: formData.entries,
   };
+
+  dispatch(submitQMPurchase(data));
+
+  // Prepare mapped entries for Proceedings
+  const mappedEntries = formData.entries.map((entry) => ({
+    item: entry.itemName,
+    qty: entry.quantity,
+    quantityUnit: "Nos", // or from category/unit if you store it
+    amount: entry.amountDetails.cashAmount || "0", // or use a calculated price
+    dateOfPurchased: entry.invoiceDate,
+    verificationDate: entry.verifyDate,
+    invoiceNumber: entry.billInvoiceNo,
+    purchasingParty: entry.fromWhomPurchased,
+    purchaseOrderNo: formData.orderNo,
+  }));
+
+  // Navigate to proceedings after a slight delay
+  setTimeout(() => {
+    navigate("/proceedings", { state: { entries: mappedEntries } });
+  }, 500);
+};
+  };
+
 
   const handleAddCategory = () => {
     dispatch(addCategory(newCategory));
