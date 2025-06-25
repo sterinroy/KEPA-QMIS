@@ -261,6 +261,7 @@ const UserIndent = () => {
               width: "100%",
               mb: 2,
               pr: 2,
+              gridColumn: '1 / -1'
             }}
           >
             <Grid container spacing={2}>
@@ -273,7 +274,7 @@ const UserIndent = () => {
                   borderRadius={2}
                   p={2}
                   mb={2}
-                  sx={{ width:"100%"}}
+                  sx={{ width:"100%",gridColumn: '1 / -1'}}
                 >
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={4}>
@@ -367,7 +368,7 @@ const UserIndent = () => {
               + Add Another Item
             </Button>
           </Box>
-          <Box display="flex" justifyContent="flex-end" mt={4} sx={{ minWidth: "120",maxWidth:"120", height:40}}>
+          <Box display="flex" justifyContent="flex-end" mt={4} sx={{ minWidth: "120",maxWidth:"120", height:40,gridColumn: '1 / -1'}}>
             <Button
               variant="contained"
               type="submit"

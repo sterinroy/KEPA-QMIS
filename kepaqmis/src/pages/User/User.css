@@ -49,15 +49,10 @@
 }
 
 /* Grid layout for form */
-/* .mui-form {
+.mui-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 24px 48px;
-} */
-.mui-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 .mui-form > * {
   min-height: 60px;
