@@ -124,8 +124,11 @@ export const useQMPOrderController = () => {
       orderNo: formData.orderNo,
       entries: formData.entries,
     };
-    console.log("Form Data:", data);
     dispatch(submitQMPurchase(data));
+
+    setTimeout(() => {
+    navigate("/proceedings", { state: { entries: formData.entries } });
+  }, 500);
   };
 
   const handleAddCategory = () => {

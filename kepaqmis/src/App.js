@@ -30,6 +30,7 @@ import UserTemp from "./pages/User/UserTemp";
 import UserReview from "./pages/User/UserReview";
 import Indent from "./components/Indent";
 import LARSPrint from "./components/LARSPrint";
+import Proceedings from "./components/proceedings.js";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/StockItemView" element={<StockItemView />} />
         <Route path="/Indent" element={<Indent />} />
         <Route path="/lars-print" element={<LARSPrint />} />
+        <Route path="/proceedings" element={<Proceedings />} />
 
         <Route
           path="/Admin"
