@@ -17,6 +17,9 @@ import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
 import SuperAdminLogs from "./pages/SuperAdmin/SuperAdminLogs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./pages/SuperAdmin/Layout";
+import Proceedings  from "./pages/QuarterMaster/Issue/proceedings";
+import BailTicket from "./pages/QuarterMaster/Issue/BailTicket";
+
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/proceedings" element={<Proceedings />} />
+        <Route path="/BailTicket" element ={<BailTicket />} />
+
 
         <Route
           path="/AdminDashboard"

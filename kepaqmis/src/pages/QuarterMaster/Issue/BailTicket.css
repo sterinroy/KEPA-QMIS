@@ -1,0 +1,95 @@
+/* BailTicket.css */
+
+.bail-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f8f8f8;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.pdf-content {
+  width: 210mm;
+  height: 297mm;
+  margin: auto;
+  background: white;
+  padding: 20mm;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #000;
+}
+
+.ticket-copy {
+  height: 48%;
+  border-bottom: 1px dashed #000;
+  padding-bottom: 10px;
+}
+
+.top-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #000;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+}
+
+.from-to-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.from, .to {
+  width: 48%;
+}
+
+.box.small {
+  border: 1px solid #000;
+  padding: 4px 8px;
+  margin-top: 4px;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.indent-line {
+  margin: 10px 0;
+}
+
+.ticket-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.ticket-table th, .ticket-table td {
+  border: 1px solid #000;
+  padding: 4px 8px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.signature {
+  text-align: right;
+  font-size: 14px;
+}
+
+.download-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.download-button button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-button button:hover {
+  background-color: #388e3c;
+}

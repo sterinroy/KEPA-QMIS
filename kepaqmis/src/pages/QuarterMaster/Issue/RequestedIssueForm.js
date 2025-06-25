@@ -1,3 +1,4 @@
+// RequestedIssueForm.js
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -8,10 +9,9 @@ import {
   FormControl,
   InputLabel,
   Typography,
-  CircularProgress,
   Alert,
 } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
 import './Issue.css';
 
 const RequestedIssueForm = () => {
@@ -32,15 +32,20 @@ const RequestedIssueForm = () => {
     typeOfFund: '',
     amount: '',
     perishableType: '',
+    purchasingParty: '',
+    invoiceNumber: '',
+    verificationDate: '',
   });
 
+  const [entries, setEntries] = useState([]);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
-  // Set today's date on load
+  const navigate = useNavigate();
+
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
     setFormData((prev) => ({
@@ -59,11 +64,9 @@ const RequestedIssueForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setStatus('loading');
     setError('');
     setSuccessMessage('');
-
     setTimeout(() => {
       setShowConfirmModal(true);
       setStatus('idle');
@@ -71,11 +74,10 @@ const RequestedIssueForm = () => {
   };
 
   const handleAddMoreYes = () => {
+    setEntries((prev) => [...prev, formData]);
     const today = new Date().toISOString().split('T')[0];
-
     setFormData((prev) => ({
       ...prev,
-      qmNo: prev.qmNo, // Keep QM/SL No.
       dateOfPurchased: today,
       item: '',
       category: '',
@@ -91,25 +93,25 @@ const RequestedIssueForm = () => {
       typeOfFund: '',
       amount: '',
       perishableType: '',
+      purchasingParty: '',
+      invoiceNumber: '',
+      verificationDate: '',
     }));
-
     setShowConfirmModal(false);
-    setSuccessMessage('Ready to add another item with the same QM/ SL No.');
+    setSuccessMessage('Item added. Ready to add another.');
     setStatus('succeeded');
   };
 
   const handleAddMoreNo = () => {
+    setEntries((prev) => [...prev, formData]);
     setShowConfirmModal(false);
     setShowPreviewModal(true);
   };
 
   const handleFinalSubmit = () => {
-    console.log('Form Data Submitted:', formData);
-
-    const today = new Date().toISOString().split('T')[0];
     setFormData({
       qmNo: '',
-      dateOfPurchased: today,
+      dateOfPurchased: new Date().toISOString().split('T')[0],
       item: '',
       category: '',
       subCategory: '',
@@ -124,12 +126,30 @@ const RequestedIssueForm = () => {
       typeOfFund: '',
       amount: '',
       perishableType: '',
+      purchasingParty: '',
+      invoiceNumber: '',
+      verificationDate: '',
     });
-
-    setShowPreviewModal(false);
     setSuccessMessage('Form submitted successfully!');
+    setShowPreviewModal(false);
     setStatus('succeeded');
   };
+
+  const handleProceedings = () => {
+    if (entries.length === 0) {
+      alert('Please submit at least one item before proceeding.');
+      return;
+    }
+    navigate('/proceedings', { state: { entries } });
+  };
+  const handleBailTicket = () => {
+  if (entries.length === 0) {
+    alert('Please submit at least one item before generating the Bail Ticket.');
+    return;
+  }
+  navigate('/BailTicket', { state: { entries } });
+};
+
 
   const labelMap = {
     qmNo: 'QM No.',
@@ -148,180 +168,53 @@ const RequestedIssueForm = () => {
     typeOfFund: 'Type Of Fund',
     amount: 'Amount',
     perishableType: 'Is Perishable',
+    purchasingParty: 'Purchasing Party',
+    invoiceNumber: 'Invoice Number',
+    verificationDate: 'Tentative date',
   };
 
   return (
     <>
       <Box className="request-issue-box">
-        <Typography
-          variant="h5"
-          mb={2}
-          fontWeight="bold"
-          textAlign="center"
-          color="white"
-        >
+        <Typography variant="h5" mb={2} fontWeight="bold" textAlign="center" color="white">
           Requested Issue Form
         </Typography>
 
-        {/* Show success or error alerts */}
-        {status === 'failed' && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-        {status === 'succeeded' && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {successMessage}
-          </Alert>
-        )}
+        {status === 'failed' && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {status === 'succeeded' && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
 
         <form onSubmit={handleSubmit} className="mui-form">
-          <TextField
-            label="QM No."
-            name="qmNo"
-            value={formData.qmNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Date of Purchased"
-            type="date"
-            name="dateOfPurchased"
-            value={formData.dateOfPurchased}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Item"
-            name="item"
-            value={formData.item}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Sub Category"
-            name="subCategory"
-            value={formData.subCategory}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Make/ Brand"
-            name="make"
-            value={formData.make}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Model"
-            name="model"
-            value={formData.model}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Model No"
-            name="modelNo"
-            value={formData.modelNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Product No/ Serial No"
-            name="productNo"
-            value={formData.productNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Quantity"
-            type="number"
-            name="qty"
-            value={formData.qty}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <FormControl
-            fullWidth
-            sx={{
-              label: { color: 'white' },
-              svg: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          >
+          {Object.entries(labelMap).map(([name, label]) => {
+            if (name === 'quantityUnit' || name === 'perishableType') return null;
+            const isDate = name === 'dateOfPurchased' || name === 'verificationDate';
+            return (
+              <TextField
+                key={name}
+                label={label}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                type={isDate ? 'date' : 'text'}
+                InputLabelProps={isDate ? { shrink: true } : {}}
+                required
+                fullWidth
+                sx={{
+                  input: { color: 'white' },
+                  label: { color: 'white' },
+                  fieldset: { borderColor: 'white' },
+                  mb: 1,
+                }}
+              />
+            );
+          })}
+
+          <FormControl fullWidth sx={{ mb: 1, fieldset: { borderColor: 'white' } }}>
             <InputLabel sx={{ color: 'white' }}>Quantity Unit</InputLabel>
             <Select
               name="quantityUnit"
               value={formData.quantityUnit}
               onChange={handleChange}
+              required
               sx={{ color: 'white' }}
             >
               <MenuItem value="kg">Kilogram</MenuItem>
@@ -330,74 +223,14 @@ const RequestedIssueForm = () => {
               <MenuItem value="meter">Meter</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            label="Purchase Order No"
-            name="purchaseOrderNo"
-            value={formData.purchaseOrderNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Request No"
-            name="reqNo"
-            value={formData.reqNo}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Type Of Fund"
-            name="typeOfFund"
-            value={formData.typeOfFund}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
-          <TextField
-            label="Amount"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            required
-            fullWidth
-            sx={{
-              input: { color: 'white' },
-              label: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          />
 
-          {/* ✅ Is Perishable Dropdown */}
-          <FormControl
-            fullWidth
-            required
-            sx={{
-              label: { color: 'white' },
-              svg: { color: 'white' },
-              fieldset: { borderColor: 'white' },
-            }}
-          >
+          <FormControl fullWidth sx={{ mb: 2, fieldset: { borderColor: 'white' } }}>
             <InputLabel sx={{ color: 'white' }}>Is Perishable</InputLabel>
             <Select
               name="perishableType"
               value={formData.perishableType}
               onChange={handleChange}
+              required
               sx={{ color: 'white' }}
             >
               <MenuItem value="Yes">Yes</MenuItem>
@@ -405,7 +238,7 @@ const RequestedIssueForm = () => {
             </Select>
           </FormControl>
 
-          <Box display="flex" justifyContent="flex-end" mt={2} ml={77}>
+          <Box display="flex" justifyContent="flex-end">
             <Button
               variant="contained"
               color="primary"
@@ -417,9 +250,27 @@ const RequestedIssueForm = () => {
             </Button>
           </Box>
         </form>
+
+        <Box display="flex" justifyContent="center" mt={4}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleProceedings}
+            sx={{ borderRadius: 2, px: 8.3, py: 0, fontWeight: 'bold' }}
+          >
+            Verification Board Proceedings
+          </Button>
+           <Button
+    variant="contained"
+    color="success"
+    onClick={handleBailTicket}
+    sx={{ borderRadius: 2, px: 4, py: 0, fontWeight: 'bold' }}
+  >
+    Generate Bail Ticket
+  </Button>
+        </Box>
       </Box>
 
-      {/* 🧨 Modal: Confirm Add More Items */}
       {showConfirmModal && (
         <Box
           position="fixed"
@@ -433,31 +284,15 @@ const RequestedIssueForm = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="400px"
-            textAlign="center"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="400px" textAlign="center">
             <Typography variant="h6" gutterBottom>
               Do you want to add more items under the same QM/ SL No.?
             </Typography>
             <Box mt={2}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleAddMoreYes}
-                sx={{ mr: 2 }}
-              >
+              <Button variant="contained" color="success" onClick={handleAddMoreYes} sx={{ mr: 2 }}>
                 Yes
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleAddMoreNo}
-              >
+              <Button variant="outlined" color="secondary" onClick={handleAddMoreNo}>
                 No
               </Button>
             </Box>
@@ -465,7 +300,6 @@ const RequestedIssueForm = () => {
         </Box>
       )}
 
-      {/* 🧾 Modal: Preview Before Submit */}
       {showPreviewModal && (
         <Box
           position="fixed"
@@ -479,29 +313,25 @@ const RequestedIssueForm = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="500px"
-            width="100%"
-          >
+          <Box bgcolor="#fff" p={4} borderRadius={2} boxShadow={3} maxWidth="500px" width="100%">
             <Typography variant="h6" gutterBottom textAlign="center">
-              Confirm Submission
+              Preview Entries
             </Typography>
-            <Box mb={2}>
-              {Object.entries(formData).map(([key, value]) => {
-                if (!value) return null;
-                const label = labelMap[key] || key;
-                return (
-                  <Box key={key} display="flex" justifyContent="space-between" mb={1}>
-                    <Typography fontWeight="bold">{label}:</Typography>
-                    <Typography>{value}</Typography>
-                  </Box>
-                );
-              })}
-            </Box>
+            {entries.map((entry, index) => (
+              <Box key={index} mb={2}>
+                <Typography fontWeight="bold" mb={1}>Item {index + 1}</Typography>
+                {Object.entries(entry).map(([key, value]) => {
+                  if (!value) return null;
+                  const label = labelMap[key] || key;
+                  return (
+                    <Box key={key} display="flex" justifyContent="space-between" mb={0.5}>
+                      <Typography fontWeight="bold">{label}:</Typography>
+                      <Typography>{value}</Typography>
+                    </Box>
+                  );
+                })}
+              </Box>
+            ))}
             <Box display="flex" justifyContent="flex-end">
               <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
                 Cancel
