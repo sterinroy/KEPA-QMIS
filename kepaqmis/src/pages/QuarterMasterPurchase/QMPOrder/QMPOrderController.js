@@ -130,18 +130,24 @@ export const useQMPOrderController = () => {
     };
     dispatch(submitQMPurchase(data));
 
+
+    if (!formData.entries || formData.entries.length === 0) return;
+
+
+    const mappedEntries = formData.entries.map((entry) => ({
+  item: entry.itemName,
+  qty: entry.quantity,
+  quantityUnit: "Nos", // Update if needed
+  amount: entry.amountDetails?.cashAmount || "0",
+  dateOfPurchased: entry.invoiceDate,
+  verificationDate: entry.verifyDate,
+  invoiceNumber: entry.billInvoiceNo,
+  purchasingParty: entry.fromWhomPurchased,
+  purchaseOrderNo: formData.orderNo,
+}));
+
     setTimeout(() => {
-    navigate("/proceedings", { state: {
-      item: formData.itemName,
-    qty: formData.quantity,
-    quantityUnit: "Nos", // or from category/unit if you store it
-    amount: formData.amountDetails.cashAmount || "0", // or use a calculated price
-    dateOfPurchased: formData.invoiceDate,
-    verificationDate: formData.verifyDate,
-    invoiceNumber: formData.billInvoiceNo,
-    purchasingParty: formData.fromWhomPurchased,
-    purchaseOrderNo: formData.orderNo,
-    } });
+   navigate("/proceedings", { state: { entries: mappedEntries } });
   }, 500);
   };
 
