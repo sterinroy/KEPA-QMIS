@@ -258,11 +258,12 @@ const UserIndent = () => {
             sx={{
               maxHeight: "400px",
               overflowY: "auto",
-              width: "120%",
+              width: "100%",
               mb: 2,
               pr: 2,
             }}
           >
+            <Grid container spacing={2}>
             {items.map((item, index) => {
               const selected = stocks.find((i) => i._id === item.itemId);
               return (
@@ -272,10 +273,11 @@ const UserIndent = () => {
                   borderRadius={2}
                   p={2}
                   mb={2}
+                  sx={{ width:"100%"}}
                 >
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required>
+                      <FormControl fullWidth required sx={{minWidth:200}}>
                         <InputLabel>Category</InputLabel>
                         <Select
                           name="category"
@@ -292,7 +294,7 @@ const UserIndent = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required>
+                      <FormControl fullWidth required sx={{minWidth:200}}>
                         <InputLabel>Subcategory</InputLabel>
                         <Select
                           name="subcategory"
@@ -310,7 +312,7 @@ const UserIndent = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required>
+                      <FormControl fullWidth required sx={{minWidth:200}}>
                         <InputLabel>Select Item</InputLabel>
                         <Select
                           name="itemId"
@@ -359,17 +361,18 @@ const UserIndent = () => {
                 </Box>
               );
             })}
+            </Grid>
 
             <Button variant="outlined" onClick={addItem} sx={{ mb: 1 }}>
               + Add Another Item
             </Button>
           </Box>
-          <Box display="flex" justifyContent="flex-start" mt={40} ml={-15}>
+          <Box display="flex" justifyContent="flex-end" mt={4} sx={{ minWidth: "120",maxWidth:"120", height:40}}>
             <Button
               variant="contained"
               type="submit"
               size="small"
-              sx={{ minWidth: "120" }}
+              
             >
               Submit Indent Request
             </Button>
