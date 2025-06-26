@@ -21,6 +21,7 @@ const Sidebar = ({ navItems }) => {
   const [pen, setPen] = useState("");
 
   const user = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   const handleKeyDown = (e, callback) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -34,6 +35,7 @@ const Sidebar = ({ navItems }) => {
       setPen(user.pen);
     }
   }, [user]);
+  if (!auth.isAuthenticated) return null;
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -44,11 +46,13 @@ const Sidebar = ({ navItems }) => {
   };
   const confirmLogout = () => {
     try {
-      dispatch(logout());
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("pen");
-      navigate("/login", { replace: true });
+      dispatch(logout()); // assume this sets isAuthenticated to false
+      localStorage.clear();
+
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 50); // short delay to allow state update
+
       setOpenModal(false);
     } catch (error) {
       console.error("Logout failed:", error);
@@ -126,7 +130,7 @@ const Sidebar = ({ navItems }) => {
           </Button>
           <Button onClick={confirmLogout} className="dialog-button-yes">
             Yes
-          </Button> 
+          </Button>
         </DialogActions>
       </Dialog>
     </>
