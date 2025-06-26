@@ -88,6 +88,7 @@ function App() {
           <Route path="QMIEntries" element={<QMIEntries />} />
           <Route path="QMIDirectForm" element={<QMIDirectForm />} />
           <Route path="QMIManageRequest" element={<QMIManageRequest />} />
+          <Route path="UserTemp" element={<UserTemp />} />
         </Route>
 
         <Route

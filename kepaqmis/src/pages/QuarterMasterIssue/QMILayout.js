@@ -8,6 +8,8 @@ import Main from "../../components/Main";
 import QMIEntries from "./QMIEntries";
 import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
+import UserTemp from "./UserTemp";
+
 
 function QMILayout() {
   const [setActiveComponent] = useState(<QMIDashboard />);
@@ -36,6 +38,12 @@ function QMILayout() {
       path: "/QuarterMasterIssue/QMIManageRequest",
       icon: <PendingActionsIcon className="icon" />,
       component: <QMIManageRequest />,
+    },
+    {
+      label: "Temporary Stock",
+      path: "/QuarterMasterIssue/UserTemp",
+      icon: <Send className="icon" />,
+      component: <UserTemp />,
     },
   ];
   const handleNavItemClick = (component) => {
