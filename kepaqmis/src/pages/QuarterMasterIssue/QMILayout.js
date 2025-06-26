@@ -9,6 +9,9 @@ import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
 import UserTemp from "../User/UserTemp";
 import { Send } from "@mui/icons-material";
+import QMIReturn from "./QMIReturn";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+
 
 
 
@@ -39,6 +42,12 @@ function QMILayout() {
       path: "/QuarterMasterIssue/UserTemp",
       icon: <Send className="icon" />,
       component: <UserTemp />,
+    },
+    {
+      label: "Return Stock",
+      path: "/QuarterMasterIssue/QMIReturn",
+      icon: <AssignmentReturnIcon className="icon" />,
+      component: <QMIReturn />,
     },
   ];
   const handleNavItemClick = (component) => {

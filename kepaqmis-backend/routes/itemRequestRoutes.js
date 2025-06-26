@@ -148,6 +148,31 @@ router.patch("/item-requests/:id", async (req, res) => {
   }
 });
 
+// Mark repaired item as reintegrated
+router.post("/qm/readd-to-stock/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const request = await ItemRequest.findById(id).populate("item");
+    if (!request || request.returnCategory !== "Repairable") {
+      return res.status(400).json({ error: "Invalid item" });
+    }
+
+    const stock = await StockItem.findById(request.item._id);
+    if (stock) {
+      stock.quantity += request.quantity;
+      await stock.save();
+    }
+
+    request.status = "reintegrated";
+    await request.save();
+
+    res.json({ message: "Item readded to stock successfully" });
+  } catch (err) {
+    console.error("Reintegration error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 
