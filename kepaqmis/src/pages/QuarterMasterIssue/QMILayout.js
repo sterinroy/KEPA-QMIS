@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar";
-import {  Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import QMIDashboard from "./QMIDashboard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Main from "../../components/Main";
 import QMIEntries from "./QMIEntries";
 import QMIDirectForm from "./QMIDirectForm";
+import QMIManageRequest from "./QMIManageRequest";
 
 function QMILayout() {
   const [setActiveComponent] = useState(<QMIDashboard />);
@@ -28,6 +30,12 @@ function QMILayout() {
       path: "/QuarterMasterIssue/QMIDirectForm",
       icon: <DashboardIcon className="icon" />,
       component: <QMIDirectForm />,
+    },
+    {
+      label: "Manage Requests",
+      path: "/QuarterMasterIssue/QMIManageRequest",
+      icon: <PendingActionsIcon className="icon" />,
+      component: <QMIManageRequest />,
     },
   ];
   const handleNavItemClick = (component) => {

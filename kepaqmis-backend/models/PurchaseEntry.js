@@ -4,6 +4,7 @@ const purchaseEntrySchema = new mongoose.Schema({
   orderNo: { type: String, required: true },
   supplyOrderNo: { type: String },
   invoiceDate: { type: Date, required: true },
+  verifyDate: { type: Date, required: true },
   itemName: { type: String, required: true },
   itemCategory: { type: String, required: true },
   itemSubCategory: { type: String },

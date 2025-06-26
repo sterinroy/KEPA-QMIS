@@ -1,5 +1,6 @@
-Root container and page background
-body, html, .container {
+Root container and page background body,
+html,
+.container {
   background-color: #fdfdfd !important;
   margin: 0;
   padding: 0;
@@ -11,13 +12,12 @@ body, html, .container {
 /* Form container */
 
 .qouta-button {
-  background-color: #1976d2 !important;  /* example: primary blue */
-  color: white !important;;
+  background-color: #1976d2 !important; /* example: primary blue */
+  color: white !important;
 }
 .quota-button:hover {
   background-color: #030d44 !important; /* darker blue on hover */
 }
-
 
 /* Style for Direct Entry button */
 .direct-button {
@@ -40,7 +40,7 @@ body, html, .container {
 }
 
 .direct-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
   margin-left: 11px;
   margin-top: 135px;
@@ -57,7 +57,7 @@ body, html, .container {
 
 .direct-issue-root {
   min-height: 100vh;
-  background-color: #0C1227;
+  background-color: #0c1227;
   display: flex;
   justify-content: center;
   align-items: flex-start; /* aligns top */
@@ -67,7 +67,7 @@ body, html, .container {
 }
 
 .request-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
   margin-top: 200px;
   margin-left: 11px;
@@ -83,7 +83,7 @@ body, html, .container {
 
 .request-issue-root {
   min-height: 100vh;
-  background-color: #0C1227;
+  background-color: #0c1227;
   display: flex;
   justify-content: center;
   align-items: flex-start; /* aligns top */
@@ -92,7 +92,7 @@ body, html, .container {
 }
 
 .temp-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
   margin-top: 30px;
   margin-left: 11px;
@@ -108,7 +108,7 @@ body, html, .container {
 
 .temp-issue-root {
   min-height: 100vh;
-  background-color: #0C1227;
+  background-color: #0c1227;
   display: flex;
   justify-content: center;
   align-items: flex-start; /* aligns top */
@@ -138,7 +138,7 @@ body, html, .container {
 /* Inputs */
 .mui-form .MuiInputBase-root {
   height: 50px;
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: white !important;
   border-radius: 6px;
   font-weight: normal;
@@ -163,12 +163,10 @@ body, html, .container {
   border-width: 2px;
 }
 
-
 .mui-form .MuiSelect-root {
   height: 50px;
   border-radius: 6px;
 }
-
 
 /* Input field spacing */
 .mui-form .MuiTextField-root,
@@ -198,11 +196,10 @@ body, html, .container {
   margin-left: 18px;
 }
 
-
 .MuiToggleButton-root {
-  background-color: #0C1227 !important;
+  background-color: #0c1227 !important;
   color: white !important;
-    border: 1px solid white !important;
+  border: 1px solid white !important;
 
   box-shadow: white !important;
 }
@@ -220,10 +217,9 @@ body, html, .container {
   background-color: #1565c0 !important;
 }
 
-
 /* Verify Form */
 .verify-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
   margin-top: 170px;
   margin-left: 9px;
