@@ -96,7 +96,7 @@ const UserTemp = () => {
       if (!res.ok) throw new Error(data.error || "Submission failed");
 
       alert("Request submitted successfully");
-      navigate("/User/UserTemp", { state: formData });
+      navigate("/QuarterMasterIssue/UserTemp", { state: formData });
     } catch (err) {
       alert("Error: " + err.message);
     }
