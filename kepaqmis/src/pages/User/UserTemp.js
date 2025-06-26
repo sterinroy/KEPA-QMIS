@@ -23,19 +23,23 @@ const UserTemp = () => {
   const pen = localStorage.getItem("pen") || "";
   const name = localStorage.getItem("name") || "";
 
-  const [formData, setFormData] = useState({
-    slNo: "",
-    PENNo: pen,
-    name: name,
-    toWhom: "",
-    dateOfrequest: new Date().toISOString().split("T")[0],
-    mobile: "",
-    itemId: "",
-    category: "",
-    subcategory: "",
-    purpose: "",
-    qty: 1,
-  });
+  const initialFormData = {
+  slNo: "",
+  PENNo: pen,
+  name: name,
+  toWhom: "",
+  dateOfrequest: new Date().toISOString().split("T")[0],
+  mobile: "",
+  itemId: "",
+  category: "",
+  subcategory: "",
+  purpose: "",
+  qty: 1,
+};
+
+
+  const [formData, setFormData] = useState(initialFormData);
+
 
   const { offices } = useSelector((state) => state.office);
   const {
@@ -96,7 +100,12 @@ const UserTemp = () => {
       if (!res.ok) throw new Error(data.error || "Submission failed");
 
       alert("Request submitted successfully");
-      navigate("/QuarterMasterIssue/UserTemp", { state: formData });
+      setFormData({
+        ...initialFormData,
+        PENNo: pen,
+        name: name,
+        dateOfrequest: new Date().toISOString().split("T")[0],
+      });
     } catch (err) {
       alert("Error: " + err.message);
     }
