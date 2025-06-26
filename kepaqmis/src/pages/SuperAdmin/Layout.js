@@ -12,7 +12,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
 import StockItemView from "../StockView";
 import EditDocumentIcon from "@mui/icons-material/EditDocument";
-import SAEdit from "./pages/SuperAdmin/SAEdit.js";
+import SAEdit from "./SAEdit.js";
 
 
 function Layout() {
