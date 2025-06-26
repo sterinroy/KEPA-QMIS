@@ -12,6 +12,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
 import StockItemView from "../StockView";
 import EditDocumentIcon from "@mui/icons-material/EditDocument";
+import SAEdit from "./pages/SuperAdmin/SAEdit.js";
 
 
 function Layout() {
@@ -54,7 +55,7 @@ function Layout() {
       label: "Edit/Add",
       path:"/SuperAdmin/SAEdit",
       icon: <EditDocumentIcon className="icon" />,
-      component: <StockItemView />,
+      component: <SAEdit />,
     },
   ];
   const handleNavItemClick = (component) => {
