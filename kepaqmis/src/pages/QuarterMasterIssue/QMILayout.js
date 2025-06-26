@@ -8,7 +8,7 @@ import Main from "../../components/Main";
 import QMIEntries from "./QMIEntries";
 import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
-import UserTemp from "./UserTemp";
+import UserTemp from "../User/UserTemp";
 
 
 function QMILayout() {
