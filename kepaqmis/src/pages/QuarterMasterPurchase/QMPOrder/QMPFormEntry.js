@@ -87,11 +87,11 @@ const QMPFormEntry = ({
                 {cat.name}
               </MenuItem>
             ))}
-            <MenuItem value="" onClick={(e) => setAnchorEl(e.currentTarget)}>
+            {/* <MenuItem value="" onClick={(e) => setAnchorEl(e.currentTarget)}>
               <em>
                 <AddIcon fontSize="small" /> Add Category
               </em>
-            </MenuItem>
+            </MenuItem> */}
           </Select>
         </FormControl>
       </Grid>

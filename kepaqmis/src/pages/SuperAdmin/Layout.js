@@ -11,6 +11,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
 import StockItemView from "../StockView";
+import EditDocumentIcon from "@mui/icons-material/EditDocument";
 
 
 function Layout() {
@@ -52,7 +53,7 @@ function Layout() {
     {
       label: "Edit/Add",
       path:"/SuperAdmin/SAEdit",
-      icon: <DescriptionIcon className="icon" />,
+      icon: <EditDocumentIcon className="icon" />,
       component: <StockItemView />,
     },
   ];
