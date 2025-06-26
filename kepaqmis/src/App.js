@@ -30,6 +30,8 @@ import UserTemp from "./pages/User/UserTemp";
 import Indent from "./components/Indent";
 import LARSPrint from "./components/LARSPrint";
 import Proceedings from "./components/proceedings.js";
+import SAEdit from "./pages/SuperAdmin/SAEdit.js";
+import SACategories from "./pages/SuperAdmin/SACategories.js";
 
 function App() {
   return (
@@ -132,6 +134,8 @@ function App() {
           <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
           <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
           <Route path="StockItemView" element={<StockItemView />} />
+          <Route path="SAEdit" element={<SAEdit />} />
+          <Route path="SACategories" element={<SACategories />} />
         </Route>
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>

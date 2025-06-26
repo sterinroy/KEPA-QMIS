@@ -51,7 +51,7 @@ function Layout() {
     },
     {
       label: "Edit/Add",
-      path:"/SuperAdmin/SALayout",
+      path:"/SuperAdmin/SAEdit",
       icon: <DescriptionIcon className="icon" />,
       component: <StockItemView />,
     },
