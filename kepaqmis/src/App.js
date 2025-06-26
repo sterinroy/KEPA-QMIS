@@ -32,6 +32,7 @@ import LARSPrint from "./components/LARSPrint";
 import Proceedings from "./components/proceedings.js";
 import SAEdit from "./pages/SuperAdmin/SAEdit.js";
 import SACategories from "./pages/SuperAdmin/SACategories.js";
+import SAOffices from "./pages/SuperAdmin/SAOffices.js";
 
 function App() {
   return (
@@ -136,6 +137,7 @@ function App() {
           <Route path="StockItemView" element={<StockItemView />} />
           <Route path="SAEdit" element={<SAEdit />} />
           <Route path="SACategories" element={<SACategories />} />
+          <Route path="SAOffices" element={<SAOffices />} />
         </Route>
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>
