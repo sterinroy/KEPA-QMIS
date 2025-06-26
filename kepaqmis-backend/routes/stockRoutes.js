@@ -35,9 +35,99 @@ router.get("/purchase/entries", async (req, res) => {
 });
 
 //  3. Verification QM: Approve & Add to Stock
+// router.post("/purchase/approve/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const {
+//       orderNo,
+
+//       supplyOrderNo,
+//       invoiceDate,
+//       itemCategory,
+//       itemSubCategory,
+//       verifyDate,
+//       amountType,
+//       amountDetails,
+//       fromWhomPurchased,
+//       toWhom,
+//       itemName,
+//       billInvoiceNo,
+
+//       Qmno,
+//       status,
+//       quantity,
+//       unit,
+//       make,
+//       model,
+//       modelNo,
+//       perishable,
+//       serialNumber,
+//       verifiedBy,
+//     } = req.body;
+
+//     const entry = await PurchaseEntry.findById(id);
+//     if (!entry || entry.status !== "Pending") {
+//       return res
+//         .status(404)
+//         .json({ message: "Invalid or already verified entry." });
+//     }
+
+//     const stockItem = new StockItem({
+//       sourceType: "purchase",
+//       orderNo: orderNo || entry.orderNo,
+//       supplyOrderNo: supplyOrderNo || entry.supplyOrderNo,
+//       invoiceDate: invoiceDate || entry.invoiceDate,
+//       itemCategory: entry.itemCategory || itemCategory,
+//       itemSubCategory: entry.itemSubCategory || itemSubCategory,
+//       verifyDate: verifyDate || entry.verifyDate,
+//       amountType: amountType || entry.amountType,
+//       amountDetails: amountDetails || entry.amountDetails,
+
+//       fromWhomPurchased: fromWhomPurchased || entry.fromWhomPurchased,
+//       toWhom: toWhom || entry.toWhom,
+//       itemName: entry.itemName || itemName,
+//       billInvoiceNo: billInvoiceNo || entry.billInvoiceNo,
+//       Qmno,
+//       status,
+//       quantity: entry.quantity || quantity,
+//       unit: entry.unit || unit,
+//       make,
+//       model,
+//       modelNo,
+//       perishable,
+//       // enteredBy: entry.enteredBy,
+//       serialNumber,
+//       // dateOfVerification: new Date(),
+//       verifiedBy: verifiedBy ? { pen: verifiedBy } : entry.verifiedBy,
+//       // dateOfPurchase: entry.invoiceDate,
+//       purchaseEntryId: entry._id,
+//     });
+//     console.log("albert", req.body);
+//     console.log("hi", stockItem);
+
+//     await stockItem.save();
+//     entry.status = "Verified";
+//     await entry.save();
+
+//     res
+//       .status(200)
+//       .json({ message: "Purchase approved and added to stock.", stockItem });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 router.post("/purchase/approve/:id", async (req, res) => {
+  const totalStockItems = await StockItem.countDocuments();
+  const nextStockItemNo = totalStockItems + 1;
   try {
     const { id } = req.params;
+    const pendingPurchase = await PurchaseEntry.findById(id);
+    if (!pendingPurchase || pendingPurchase.status !== "Pending") {
+      return res
+        .status(404)
+        .json({ message: "Invalid or already verified entry." });
+    }
+
     const {
       orderNo,
       invoiceDate,
@@ -52,6 +142,8 @@ router.post("/purchase/approve/:id", async (req, res) => {
       itemSubCategory,
       quantity,
       unit,
+      warranty,
+      typeofFund,
       make,
       model,
       modelNo,
@@ -84,6 +176,8 @@ router.post("/purchase/approve/:id", async (req, res) => {
       itemSubCategory: entry.itemSubCategory || itemSubCategory,
       quantity: entry.quantity || quantity,
       unit: entry.unit || unit,
+      warranty,
+      typeofFund,
       make,
       model,
       modelNo,
@@ -91,20 +185,38 @@ router.post("/purchase/approve/:id", async (req, res) => {
       enteredBy: entry.enteredBy,
       serialNumber,
       dateOfVerification: new Date(),
-      verifiedBy,
+      verifiedBy:
+        typeof verifiedBy === "string"
+          ? { pen: verifiedBy }
+          : verifiedBy || entry.verifiedBy,
       dateOfPurchase: entry.invoiceDate,
       purchaseEntryId: entry._id,
       amountType: amountType || entry.amountType,
       amountDetails: amountDetails || entry.amountDetails,
     });
 
-    await stockItem.save();
-    entry.status = "Verified";
-    await entry.save();
+    console.log("🔸 Incoming approval request body:", req.body);
+    console.log("🔸 Params ID:", req.params.id);
+
+    try {
+      await stockItem.save();
+    } catch (saveErr) {
+      console.error("❌ Error saving stock item:", saveErr);
+      return res.status(500).json({ error: saveErr.message });
+    }
+
+    console.log("1", entry.status);
+    await PurchaseEntry.findByIdAndUpdate(entry.id, { status: "Verified" });
+
+    console.log("2", entry.status);
 
     res
       .status(200)
-      .json({ message: "Purchase approved and added to stock.", stockItem });
+      .json({
+        message: "Purchase approved and added to stock.",
+        stockItem,
+        nextStockItemNo,
+      });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -230,7 +342,6 @@ router.post("/stock/direct-issue", async (req, res) => {
   }
 });
 
-
 // 🔹 6. Get Stock Items
 router.get("/stockitems", async (req, res) => {
   try {
@@ -240,6 +351,5 @@ router.get("/stockitems", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 module.exports = router;

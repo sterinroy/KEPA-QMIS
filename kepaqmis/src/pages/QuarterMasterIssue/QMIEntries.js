@@ -16,8 +16,9 @@ const QMIEntries = () => {
 
   const columns = [
     { field: "orderNo", headerName: "Order No", flex: 1 },
-    { field: "itemName", headerName: "Item Name", flex: 1 },
-    { field: "quantity", headerName: "Quantity", flex: 1 },
+    { field: "supplyOrderNo", headerName: "Supply Order No", flex: 1 },
+    { field: "itemCategory", headerName: "Item Category", flex: 1 },
+    { field: "itemSubCategory", headerName: "Item Sub Category", flex: 1 },
     { field: "status", headerName: "Status", flex: 1 },
     { field: "amountType", headerName: "Amount-Type", flex: 1 },
     {
@@ -38,8 +39,9 @@ const QMIEntries = () => {
   const rows = entries.map((entry, index) => ({
     id: entry._id || index, // Use _id if available, otherwise use index
     orderNo: entry.orderNo,
-    itemName: entry.itemName,
-    quantity: entry.quantity,
+    supplyOrderNo: entry.supplyOrderNo,
+    itemCategory: entry.itemCategory,
+    itemSubCategory: entry.itemSubCategory,
     status: entry.status,
     amountType: entry.amountType,
     amountDetails: entry.amountDetails || {},

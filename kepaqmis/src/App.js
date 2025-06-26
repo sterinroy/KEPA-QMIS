@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; 
+import Register from "./pages/Register";
 import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
@@ -16,6 +16,7 @@ import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
 import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder/QMPOrder.js";
 import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
 import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
+import QMIManageRequest from "./pages/QuarterMasterIssue/QMIManageRequest/QMIManageRequest";
 import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
@@ -53,8 +54,6 @@ function App() {
           <Route path="StockItemView" element={<StockItemView />} />
         </Route>
 
-
-
         <Route
           path="/QuarterMasterPurchase"
           element={
@@ -69,8 +68,6 @@ function App() {
           <Route path="QMPEntries" element={<QMPEntries />} />
         </Route>
 
-
-
         <Route
           path="/QuarterMasterIssue"
           element={
@@ -83,9 +80,8 @@ function App() {
           <Route path="QMIDashboard" element={<QMIDashboard />} />
           <Route path="QMIEntries" element={<QMIEntries />} />
           <Route path="QMIDirectForm" element={<QMIDirectForm />} />
+          <Route path="QMIManageRequest" element={<QMIManageRequest />} />
         </Route>
-
-
 
         <Route
           path="/QuarterMasterACQM"
@@ -95,8 +91,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-
 
         <Route
           path="/User"
@@ -114,7 +108,6 @@ function App() {
           <Route path="UserTemp" element={<UserTemp />} />
           <Route path="UserReview" element={<UserReview />} />
         </Route>
-
 
         <Route
           path="/SuperAdmin"
