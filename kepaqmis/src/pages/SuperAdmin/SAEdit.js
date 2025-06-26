@@ -8,45 +8,37 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  Assignment,
-  Schedule,
-  Reply,
-  PlaylistAdd,
+  Category,
+  Business,
+  DynamicForm,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-const UserDashboard = () => {
+const SAEdit = () => {
   const navigate = useNavigate();
 
   const cardData = [
     {
-      title: "Submit Indent Request",
-      description: "Submit permanent indent requests for items.",
-      icon: <PlaylistAdd sx={{ fontSize: 48, color: "#F06292" }} />,
-      buttonText: "Submit Indent",
-      route: "/User/UserIndent",
+      title: "Edit Categories",
+      description: "Manage item categories and subcategories.",
+      icon: <Category sx={{ fontSize: 48, color: "#4FC3F7" }} />,
+      buttonText: "Manage Categories",
+      route: "/SuperAdmin/SACategories",
     },
     {
-      title: "Manage Requests",
-      description: "View and track all your submitted requests.",
-      icon: <Assignment sx={{ fontSize: 48, color: "#4FC3F7" }} />,
-      buttonText: "Go to Requests",
-      route: "/User/UserManageRequest",
+      title: "Edit Offices",
+      description: "Manage office/company information for transactions.",
+      icon: <Business sx={{ fontSize: 48, color: "#81C784" }} />,
+      buttonText: "Manage Offices",
+      route: "/SuperAdmin/SAOffices",
     },
-    {
-      title: "Temporary Request",
-      description: "Submit a new temporary item request.",
-      icon: <Schedule sx={{ fontSize: 48, color: "#81C784" }} />,
-      buttonText: "New Temp Request",
-      route: "/User/UserTemp",
-    },
-    {
-      title: "Return Issued Item",
-      description: "Submit return request for issued items.",
-      icon: <Reply sx={{ fontSize: 48, color: "#FFB74D" }} />,
-      buttonText: "Return Item",
-      route: "/User/UserReturn",
-    },
+    // {
+    //   title: "Configure Forms",
+    //   description: "Create or update form structures dynamically.",
+    //   icon: <DynamicForm sx={{ fontSize: 48, color: "#F06292" }} />,
+    //   buttonText: "Configure Forms",
+    //   route: "/SuperAdmin/SAFormEditor",
+    // },
   ];
 
   return (
@@ -65,12 +57,12 @@ const UserDashboard = () => {
         mb={10}
         mt={10}
       >
-        Welcome to User Dashboard
+        Edit Panel
       </Typography>
 
       <Grid container spacing={6} justifyContent="center">
         {cardData.map((card, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={6}  key={index}>
+          <Grid item xs={12} sm={6} md={4} lg={6} key={index}>
             <Card
               sx={{
                 backgroundColor: "#212B55",
@@ -121,4 +113,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default SAEdit;

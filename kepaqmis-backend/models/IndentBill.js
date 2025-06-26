@@ -13,6 +13,7 @@ const IndentBillSchema = new mongoose.Schema({
     pen: String,
     name: String,
   },
+  item: [String],
 }, { timestamps: true });
 
 module.exports = mongoose.model("IndentBill", IndentBillSchema);

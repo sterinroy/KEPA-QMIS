@@ -9,17 +9,27 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import {useNavigate } from "react-router-dom";
 
 const formFields = [
   {
     name: "dateOfReturn",
     label: "Date of Return",
     type: "date",
+    required: true,
   },
   {
     name: "quantity",
     label: "Quantity",
     type: "number",
+    required: true,
+  },
+  {
+    name: "reason",
+    label: "Why Return",
+    multiline: true,
+    rows: 2,
+    required: true,
   },
 ];
 
@@ -31,9 +41,12 @@ const UserReturn = () => {
     itemId: "",
     dateOfReturn: new Date().toISOString().split("T")[0],
     quantity: "",
+    reason: "",
   });
 
   const [issuedItems, setIssuedItems] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (pen) {
@@ -84,6 +97,13 @@ const UserReturn = () => {
 
       if (res.ok) {
         alert("Return request submitted successfully!");
+        navigate('/lars-print', {state : {
+          item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+          quantity: formData.quantity,
+          reason: formData.reason,
+          date: formData.dateOfReturn
+        }});
+
         setFormData({
           itemId: "",
           quantity: "",
@@ -138,13 +158,23 @@ const UserReturn = () => {
             <TextField
               key={field.name}
               name={field.name}
-              type={field.type}
               label={field.label}
               value={formData[field.name]}
               onChange={handleChange}
-              InputLabelProps={field.type === "date" ? { shrink: true } : {}}
-              required
+              required={field.required}
+              multiline={field.multiline || false}
+              type={!field.multiline ? (field.type || "text"): undefined}
+              rows={field.rows || undefined}
               fullWidth
+              sx={field.name === "reason" ? {
+                "& .MuiInputBase-root": { 
+                  minHeight: "80px",
+                  alignitems: "flex-start",
+                },
+                "& textarea": { 
+                  padding: "6px" 
+                }
+                } : {mb: 2}}
             />
           ))}
 

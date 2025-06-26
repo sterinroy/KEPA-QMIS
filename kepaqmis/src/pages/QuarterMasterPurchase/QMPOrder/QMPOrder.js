@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+
 import {
   Box,
   Typography,
@@ -7,6 +8,11 @@ import {
   Alert,
   Popover,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
 import { useQMPOrderController } from "./QMPOrderController";
 import QMPFormEntry from "./QMPFormEntry";
@@ -15,19 +21,22 @@ import "../QMP.css";
 const QMPOrder = () => {
   const controller = useQMPOrderController();
 
+  // State for dialog visibility
+  const [openDialog, setOpenDialog] = useState(false);
+
+  // Function to handle opening the dialog
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  // Function to handle closing the dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <div className="form">
-      <Box
-        className="direct-issue-box"
-        sx={{
-          maxWidth: "800px",
-          margin: "0 auto",
-          padding: "20px",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
+      <Box className="purchase-order-box">
         <Typography
           variant="h5"
           mb={2}
@@ -35,7 +44,7 @@ const QMPOrder = () => {
           textAlign="center"
           color="white"
         >
-          QM-Purchase Order Form
+          QM - Purchase Order Form
         </Typography>
 
         <form className="mui-form">
@@ -74,6 +83,7 @@ const QMPOrder = () => {
                 handleRemoveEntry={controller.handleRemoveEntry}
                 setAnchorEl={controller.setAnchorEl}
                 setAnchorElSub={controller.setAnchorElSub}
+                offices={controller.offices}
               />
             ))}
 
@@ -99,7 +109,10 @@ const QMPOrder = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={controller.handleSubmit}
+                onClick={() => {
+                  controller.handleSubmit();
+                  handleOpenDialog(); // Open dialog after submission
+                }}
                 sx={{
                   borderRadius: "20px",
                   px: 4,
@@ -113,15 +126,33 @@ const QMPOrder = () => {
               </Button>
             </Grid>
           </Grid>
-
-          {controller.loading && <Alert severity="info">Submitting...</Alert>}
-          {controller.successMessage && (
-            <Alert severity="success">{controller.successMessage}</Alert>
-          )}
-          {controller.errorMessage && (
-            <Alert severity="error">{controller.errorMessage}</Alert>
-          )}
         </form>
+
+        {/* Dialog for Success/Error Messages */}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+        >
+          <DialogTitle id="dialog-title">Message</DialogTitle>
+          <DialogContent>
+            {controller.loading && (
+              <Alert severity="info">Submitting...</Alert>
+            )}
+            {controller.successMessage && (
+              <Alert severity="success">{controller.successMessage}</Alert>
+            )}
+            {controller.errorMessage && (
+              <Alert severity="error">{controller.errorMessage}</Alert>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {/* Category Popover */}
         <Popover

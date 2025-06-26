@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {
-  TextField, Button, Typography, Box, FormControl,
-  InputLabel, Select, MenuItem
+  TextField,
+  Button,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOffices } from "../../redux/actions/officeActions";
-import { fetchStockItems } from "../../redux/actions/stockActions"; 
+import { fetchStockItems } from "../../redux/actions/stockActions";
 
 import "./User.css";
 
@@ -16,7 +22,6 @@ const UserTemp = () => {
 
   const pen = localStorage.getItem("pen") || "";
   const name = localStorage.getItem("name") || "";
-
 
   const [formData, setFormData] = useState({
     slNo: "",
@@ -33,8 +38,11 @@ const UserTemp = () => {
   });
 
   const { offices } = useSelector((state) => state.office);
-  const { stocks=[], loading: stockLoading, error: stockError } = useSelector((state) => state.stock);
-
+  const {
+    stocks = [],
+    loading: stockLoading,
+    error: stockError,
+  } = useSelector((state) => state.stock);
 
   useEffect(() => {
     dispatch(fetchOffices());
@@ -47,17 +55,15 @@ const UserTemp = () => {
       setFormData((prev) => ({
         ...prev,
         subcategory: "",
-        itemId: ""
+        itemId: "",
       }));
     } else if (e.target.name === "subcategory") {
       setFormData((prev) => ({
         ...prev,
-        itemId: ""
+        itemId: "",
       }));
     }
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,15 +75,15 @@ const UserTemp = () => {
         temporary: true,
         user: {
           pen: formData.PENNo,
-          name: formData.name
+          name: formData.name,
         },
         extra: {
           slNo: formData.slNo,
           toWhom: formData.toWhom,
           mobile: formData.mobile,
           dateOfrequest: formData.dateOfrequest,
-          purpose: formData.purpose
-        }
+          purpose: formData.purpose,
+        },
       };
 
       const res = await fetch("/api/itemRequestRoutes/item-requests", {
@@ -96,10 +102,14 @@ const UserTemp = () => {
     }
   };
 
-
   const formFields = [
     { name: "slNo", label: "Sl No", type: "text", required: true },
-    { name: "dateOfrequest", label: "Date of Request", type: "date", required: true },
+    {
+      name: "dateOfrequest",
+      label: "Date of Request",
+      type: "date",
+      required: true,
+    },
     { name: "mobile", label: "Mobile", type: "number", required: true },
     { name: "qty", label: "Quantity", type: "number", required: true },
     {
@@ -107,39 +117,46 @@ const UserTemp = () => {
       label: "Purpose",
       multiline: true,
       rows: 2,
-      required: true
-    }
+      required: true,
+    },
   ];
 
-const selectedItem = stocks?.find((item) => item._id === formData.itemId);
+  const selectedItem = stocks?.find((item) => item._id === formData.itemId);
 
-const categories = [...new Set((stocks || []).map((item) => item.itemCategory))];
+  const categories = [
+    ...new Set((stocks || []).map((item) => item.itemCategory)),
+  ];
 
-const subcategories = formData.category
-  ? [...new Set(
-      (stocks || [])
-        .filter((item) => item.itemCategory === formData.category)
-        .map((item) => item.itemSubCategory)
-    )]
-  : [];
+  const subcategories = formData.category
+    ? [
+        ...new Set(
+          (stocks || [])
+            .filter((item) => item.itemCategory === formData.category)
+            .map((item) => item.itemSubCategory)
+        ),
+      ]
+    : [];
 
-const filteredItems = (stocks || []).filter(
-  (item) =>
-    item.itemCategory === formData.category &&
-    item.itemSubCategory === formData.subcategory
-);
-
-
+  const filteredItems = (stocks || []).filter(
+    (item) =>
+      item.itemCategory === formData.category &&
+      item.itemSubCategory === formData.subcategory
+  );
 
   return (
     <div className="temp-issue-root">
       <Box className="temp-issue-box">
-        <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+        <Typography
+          variant="h5"
+          mb={3}
+          fontWeight="bold"
+          textAlign="center"
+          color="white"
+        >
           Temporary Request Form
         </Typography>
 
         <form onSubmit={handleSubmit} className="mui-form">
-
           {formFields.map((field) => (
             <TextField
               key={field.name}
@@ -149,18 +166,22 @@ const filteredItems = (stocks || []).filter(
               onChange={handleChange}
               required={field.required}
               multiline={field.multiline || false}
-              type={!field.multiline ? (field.type || "text"): undefined}
+              type={!field.multiline ? field.type || "text" : undefined}
               rows={field.rows || undefined}
               fullWidth
-              sx={field.name === "purpose" ? {
-                "& .MuiInputBase-root": { 
-                  minHeight: "80px",
-                  alignitems: "flex-start",
-                },
-                "& textarea": { 
-                  padding: "6px" 
-                }
-                } : {}}
+              sx={
+                field.name === "purpose"
+                  ? {
+                      "& .MuiInputBase-root": {
+                        minHeight: "80px",
+                        alignitems: "flex-start",
+                      },
+                      "& textarea": {
+                        padding: "6px",
+                      },
+                    }
+                  : {}
+              }
             />
           ))}
 
@@ -174,11 +195,13 @@ const filteredItems = (stocks || []).filter(
               label="Office / Company"
             >
               {offices?.map((label) => (
-                <MenuItem key={label} value={label}>{label}</MenuItem>
+                <MenuItem key={label} value={label}>
+                  {label}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
-          
+
           <FormControl fullWidth required>
             <InputLabel id="category-label">Category</InputLabel>
             <Select
@@ -189,7 +212,9 @@ const filteredItems = (stocks || []).filter(
               label="Category"
             >
               {categories.map((cat) => (
-                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -205,7 +230,9 @@ const filteredItems = (stocks || []).filter(
               disabled={!formData.category}
             >
               {subcategories.map((sub) => (
-                <MenuItem key={sub} value={sub}>{sub}</MenuItem>
+                <MenuItem key={sub} value={sub}>
+                  {sub}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -234,15 +261,22 @@ const filteredItems = (stocks || []).filter(
             </Select>
           </FormControl>
           <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Button variant="contained" type="submit" >
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{
+                width: "150px", // Set a fixed width
+                height: "45px",
+              }}
+            >
               Submit
             </Button>
           </Box>
           {selectedItem && (
-                <Typography variant="body2" color="white" mt={-6} marginLeft={4}>
-                  Unit: {selectedItem.unit}
-                </Typography>
-              )}
+            <Typography variant="body2" color="white" mt={-6} marginLeft={4}>
+              Unit: {selectedItem.unit}
+            </Typography>
+          )}
         </form>
       </Box>
     </div>

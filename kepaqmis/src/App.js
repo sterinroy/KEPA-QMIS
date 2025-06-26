@@ -28,8 +28,12 @@ import UserIndent from "./pages/User/UserIndent";
 import UserManageRequest from "./pages/User/UserManageRequest";
 import UserReturn from "./pages/User/UserReturn";
 import UserTemp from "./pages/User/UserTemp";
-import UserReview from "./pages/User/UserReview";
 import Indent from "./components/Indent";
+import LARSPrint from "./components/LARSPrint";
+import Proceedings from "./components/proceedings.js";
+import SAEdit from "./pages/SuperAdmin/SAEdit.js";
+import SACategories from "./pages/SuperAdmin/SACategories.js";
+import SAOffices from "./pages/SuperAdmin/SAOffices.js";
 
 function App() {
   return (
@@ -40,6 +44,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/StockItemView" element={<StockItemView />} />
         <Route path="/Indent" element={<Indent />} />
+        <Route path="/lars-print" element={<LARSPrint />} />
+        <Route path="/proceedings" element={<Proceedings />} />
 
         <Route
           path="/Admin"
@@ -106,7 +112,6 @@ function App() {
           <Route path="UserManageRequest" element={<UserManageRequest />} />
           <Route path="UserReturn" element={<UserReturn />} />
           <Route path="UserTemp" element={<UserTemp />} />
-          <Route path="UserReview" element={<UserReview />} />
         </Route>
 
         <Route
@@ -123,6 +128,9 @@ function App() {
           <Route path="SuperAdminUsers" element={<SuperAdminUsers />} />
           <Route path="SuperAdminLogs" element={<SuperAdminLogs />} />
           <Route path="StockItemView" element={<StockItemView />} />
+          <Route path="SAEdit" element={<SAEdit />} />
+          <Route path="SACategories" element={<SACategories />} />
+          <Route path="SAOffices" element={<SAOffices />} />
         </Route>
         <Route path="/unauthorized" element={<h1>403 - Unauthorized</h1>} />
       </Routes>

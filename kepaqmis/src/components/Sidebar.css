@@ -64,6 +64,13 @@ div.nav-item {
   height: 48px;
   box-sizing: border-box;
   width: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit browsers */
+div.nav-item::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers */
 }
 
 .nav-item {

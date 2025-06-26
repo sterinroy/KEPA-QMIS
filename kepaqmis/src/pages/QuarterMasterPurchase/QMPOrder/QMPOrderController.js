@@ -6,14 +6,20 @@ import {
   addSubcategory,
 } from "../../../redux/actions/categoryActions";
 import { submitQMPurchase } from "../../../redux/actions/qmpurchaseActions";
+import {useNavigate } from "react-router-dom";
+import { fetchOffices } from "../../../redux/actions/officeActions";
+
 
 export const useQMPOrderController = () => {
   const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
 
   const { loading, successMessage, errorMessage } = useSelector(
     (state) => state.qmpurchase
   );
   const { categories } = useSelector((state) => state.category);
+  const { offices } = useSelector((state) => state.office);
 
   const [formData, setFormData] = useState({
     orderNo: "",
@@ -51,6 +57,7 @@ export const useQMPOrderController = () => {
       })),
     }));
     dispatch(fetchCategories());
+    dispatch(fetchOffices());
   }, [dispatch]);
 
   const handleChange = (e, index) => {
@@ -124,8 +131,27 @@ export const useQMPOrderController = () => {
       orderNo: formData.orderNo,
       entries: formData.entries,
     };
-    console.log("Form Data:", data);
     dispatch(submitQMPurchase(data));
+
+
+    if (!formData.entries || formData.entries.length === 0) return;
+
+
+    const mappedEntries = formData.entries.map((entry) => ({
+  item: entry.itemName,
+  qty: entry.quantity,
+  quantityUnit: "Nos", // Update if needed
+  amount: entry.amountDetails?.cashAmount || "0",
+  dateOfPurchased: entry.invoiceDate,
+  verificationDate: entry.verifyDate,
+  invoiceNumber: entry.billInvoiceNo,
+  purchasingParty: entry.fromWhomPurchased,
+  purchaseOrderNo: formData.orderNo,
+}));
+
+    setTimeout(() => {
+   navigate("/proceedings", { state: { entries: mappedEntries } });
+  }, 500);
   };
 
   const handleAddCategory = () => {
@@ -168,6 +194,7 @@ export const useQMPOrderController = () => {
     anchorEl,
     setAnchorEl,
     anchorElSub,
+    offices,
     setAnchorElSub,
     newCategory,
     setNewCategory,

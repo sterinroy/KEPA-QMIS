@@ -1,56 +1,56 @@
 import React, { useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
+import { useSearchParams } from "react-router-dom";
 import "./Indent.css";
 
+
 const Indent = () => {
-  const [indentData, setIndentData] = useState({
-    stationNo: "N/A",
-    officeNo: "N/A",
-    storeNo: "N/A",
-    indentFor: [],
-    subCategory: "N/A",
-    qty: [],
-    date: "N/A",
-    nameAndDesignation: "N/A",
-  });
+  const [params] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [indentData, setIndentData] = useState(null);
+  const id = params.get("id");
+
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+  if (!id) {
+    console.error("No bill ID provided");
+    setLoading(false);
+    return;
+  }
 
-    // Parse JSON arrays safely
-    let indentForList = [];
-    let qtyList = [];
+  const fetchIndent = async () => {
     try {
-      indentForList = JSON.parse(params.get("indentFor")) || [];
-      qtyList = JSON.parse(params.get("qty")) || [];
-    } catch (e) {
-      indentForList = [params.get("indentFor") || "N/A"];
-      qtyList = [params.get("qty") || "N/A"];
+      const res = await fetch(`/api/indent-bills/${id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to fetch indent bill");
+      setIndentData(data);
+    } catch (err) {
+      console.error("Error loading indent bill:", err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setIndentData({
-      stationNo: params.get("stationNo") || "N/A",
-      officeNo: params.get("officeNo") || "N/A",
-      storeNo: params.get("storeNo") || "N/A",
-      indentFor: indentForList,
-      subCategory: params.get("subCategory") || "N/A",
-      qty: qtyList,
-      date: params.get("date") || "N/A",
-      nameAndDesignation: params.get("nameAndDesignation") || "N/A",
-    });
-  }, []);
+  };
+  fetchIndent();
+}, [id]);
 
   const handleDownloadPDF = () => {
     const element = document.getElementById("indent-bill");
-    const opt = {
-      margin: 5,
-      filename: "Indent_Bill.pdf",
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: { scale: 3, useCORS: true, allowTaint: true },
-      jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-    };
-    html2pdf().set(opt).from(element).save();
+    html2pdf()
+      .set({
+        margin: 5,
+        filename: "Indent_Bill.pdf",
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { scale: 3 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+      })
+      .from(element)
+      .save();
   };
+
+  if (loading) return <p>Loading Indent Bill...</p>;
+  if (!indentData) return <div style={{ color: "black" }}>No Indent Bill Found</div>;
+
+  const { stationNo, officeNo, storeNo, indentFor, subCategory, qty, date, nameAndDesignation } = indentData;
 
   return (
     <div style={{ backgroundColor: "#fff" }}>
@@ -76,62 +76,64 @@ const Indent = () => {
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {indentData.stationNo}
+            Station No.
             <br />
-            Office No. {indentData.officeNo}
+            Office No. 
             <br />
-            Store No. {indentData.storeNo}
+            Store No. 
             <br />
             Indent for:
             <br />
-            {indentData.indentFor.map((item, index) => (
+            {Array.isArray(indentFor) &&
+            indentFor.map((item, index) => (
               <div key={index}>{`${index + 1}. ${item}`}</div>
             ))}
           </div>
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {indentData.stationNo}
+            Station No. 
             <br />
-            Office No. {indentData.officeNo}
+            Office No. 
             <br />
-            Store No. {indentData.storeNo}
+            Store No. 
             <br />
             Indent for:
             <br />
-            {indentData.indentFor.map((item, index) => (
+            {Array.isArray(indentFor) &&
+            indentFor.map((item, index) => (
               <div key={index}>{`${index + 1}. ${item}`}</div>
             ))}
             <br />
-            From {indentData.nameAndDesignation} Stn. or Office
+            From {nameAndDesignation} Stn. or Office
             <br />
-            On {indentData.date}
+            On {date}
           </div>
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {indentData.stationNo}
+            Station No. 
             <br />
-            Office No. {indentData.officeNo}
+            Office No. 
             <br />
-            Store No. {indentData.storeNo}
+            Store No. 
             <br />
-            Articles of {indentData.subCategory}
+            Articles of {subCategory}
             <br />
-            Sanctioned and sent to {indentData.nameAndDesignation}
+            Sanctioned and sent to {nameAndDesignation}
           </div>
           <div className="box">
             K. P. F. No. 62
             <br />
-            Station No. {indentData.stationNo}
+            Station No. 
             <br />
-            Office No. {indentData.officeNo}
+            Office No. 
             <br />
-            Store No. {indentData.storeNo}
+            Store No. 
             <br />
-            Articles of {indentData.subCategory}
+            Articles of {subCategory}
             <br />
-            Received from {indentData.nameAndDesignation}
+            Received from {nameAndDesignation}
           </div>
         </div>
 
@@ -158,23 +160,25 @@ const Indent = () => {
               <tbody>
                 <tr className="blank-row">
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {indentData.indentFor.map((item, index) => (
+                    {Array.isArray(indentData.item) &&
+                    indentData.item.map((item, index) => (
                       <div key={index}>{`${index + 1}. ${item}`}</div>
                     ))}
                   </td>
                   <td style={{ textAlign: "left", whiteSpace: "pre-line" }}>
-                    {indentData.qty.map((qty, index) => (
+                    {Array.isArray(indentData.qty) &&
+                    indentData.qty.map((qty, index) => (
                       <div key={index}>{qty}</div>
                     ))}
                   </td>
                 </tr>
                 <tr>
                   <td colSpan={2} style={{ textAlign: "left", padding: "9px", lineHeight: 1 }}>
-                    Date: {indentData.date}
+                    Date: {date}
                     <br />
                     Sign
                     <br />
-                    Name, Desig. of Officer: {indentData.nameAndDesignation}
+                    Name, Desig. of Officer: {nameAndDesignation}
                   </td>
                 </tr>
               </tbody>
