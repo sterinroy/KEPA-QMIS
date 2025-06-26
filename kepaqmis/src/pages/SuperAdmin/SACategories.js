@@ -25,6 +25,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../../redux/actions/categoryActions";
+import "./SuperAdmin.css"
 
 const SACategories = () => {
   const dispatch = useDispatch();
@@ -122,7 +123,7 @@ const SACategories = () => {
   }));
 
   return (
-    <div className="p-4" style={{ width: "100%", backgroundColor: "#0C1227", zIndex: 1 }}>
+    <div className="p-4" style={{ width: "100%", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Item Categories</h2>
         <Button variant="contained" onClick={() => setOpenDialog(true)}>

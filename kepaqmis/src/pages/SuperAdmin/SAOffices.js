@@ -24,6 +24,7 @@ import {
   addOffice,
   deleteOffice,
 } from "../../redux/actions/officeActions";
+import "./SuperAdmin.css"
 
 const SAOffices = () => {
   const dispatch = useDispatch();
@@ -88,9 +89,9 @@ const SAOffices = () => {
   ];
 
   return (
-    <Box className="p-4" sx={{ width: "100%", backgroundColor: "#0C1227", zIndex: 1 }}>
+    <Box className="p-4" sx={{ width: "100%", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-white">Offices/Companies</h2>
+        <h2 >Offices/Companies</h2>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -116,14 +117,6 @@ const SAOffices = () => {
             rowsPerPageOptions={[5, 10]}
             disableRowSelectionOnClick
             showToolbar
-            sx={{
-              color: "white",
-              backgroundColor: "#1C2E4A",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1A1A40",
-                fontWeight: "bold",
-              },
-            }}
           />
         )}
       </div>

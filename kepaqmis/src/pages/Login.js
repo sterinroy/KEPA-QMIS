@@ -42,7 +42,7 @@ const Login = () => {
           alert("Unknown role.");
       }
     }
-  }, [auth, navigate]);
+  }, [auth.isAuthenticated,auth.role, navigate]);
 
   const handleLogin = () => {
     dispatch(login(pen, password));
