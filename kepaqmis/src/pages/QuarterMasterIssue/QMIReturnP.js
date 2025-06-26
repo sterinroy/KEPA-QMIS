@@ -33,7 +33,7 @@ const QMIReturnP = () => {
 
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  const { user } = useSelector((state) => state.auth); // assuming QM info here
+  const { user } = useSelector((state) => state.auth); 
 
   useEffect(() => {
     const fetchReturns = async () => {

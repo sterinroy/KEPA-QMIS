@@ -27,7 +27,7 @@ const QMIReturnT = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const res = await fetch(`/api/itemRoutes/my-issued-items/${user.pen}`);
+        const res = await fetch(`/api/userRoute/my-issued-items/${user.pen}`);
         const data = await res.json();
         const temporaryItems = data.filter((item) => item.temporary && item.status === "approved");
         setItems(temporaryItems);
@@ -48,7 +48,7 @@ const QMIReturnT = () => {
 
   const handleReturnSubmit = async () => {
     try {
-      const res = await fetch(`/api/itemRoutes/item-requests/${selectedItem._id}/return`, {
+      const res = await fetch(`/api/itemRequestRoutes/item-requests/${selectedItem._id}/return`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
