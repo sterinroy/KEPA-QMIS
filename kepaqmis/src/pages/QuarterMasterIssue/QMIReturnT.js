@@ -12,7 +12,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
 
 const QMIReturnT = () => {
   const [items, setItems] = useState([]);
@@ -22,12 +21,15 @@ const QMIReturnT = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  const { user } = useSelector((state) => state.auth); // assumes redux has pen and name
+  // ✅ Get PEN number from localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const pen = storedUser?.pen;
 
   useEffect(() => {
     const fetchItems = async () => {
+      if (!pen) return;
       try {
-        const res = await fetch(`/api/userRoute/my-issued-items/${user.pen}`);
+        const res = await fetch(`/api/userRoute/my-issued-items/${pen}`);
         const data = await res.json();
         const temporaryItems = data.filter((item) => item.temporary && item.status === "approved");
         setItems(temporaryItems);
@@ -38,7 +40,7 @@ const QMIReturnT = () => {
       }
     };
     fetchItems();
-  }, [user.pen]);
+  }, [pen]);
 
   const handleOpenDialog = (item) => {
     setSelectedItem(item);
@@ -64,16 +66,33 @@ const QMIReturnT = () => {
     }
   };
 
+  // ✅ Prepare DataGrid rows
+  const rows = items.map((item) => ({
+    id: item._id,
+    itemName: item?.item?.itemName || "Unnamed",
+    quantity: item?.quantity || 0,
+    dateOfIssue: item?.dateOfIssue || "",
+    fullItem: item, // keep original item in case needed in action
+  }));
+
   const columns = [
-    { field: "itemName", headerName: "Item", flex: 1, valueGetter: (params) => params.row.item?.itemName },
-    { field: "quantity", headerName: "Qty Issued", width: 130, valueGetter: (params) => params.row.quantity },
-    { field: "dateOfIssue", headerName: "Issued On", width: 180, valueGetter: (params) => new Date(params.row.dateOfIssue).toLocaleDateString() },
+    { field: "itemName", headerName: "Item", flex: 1 },
+    { field: "quantity", headerName: "Qty Issued", width: 130 },
+    {
+      field: "dateOfIssue",
+      headerName: "Issued On",
+      width: 180,
+      valueGetter: (params) =>
+        params.row.dateOfIssue ? new Date(params.row.dateOfIssue).toLocaleDateString() : "",
+    },
     {
       field: "action",
       headerName: "Return",
       width: 130,
       renderCell: (params) => (
-        <Button variant="outlined" onClick={() => handleOpenDialog(params.row)}>Return</Button>
+        <Button variant="outlined" onClick={() => handleOpenDialog(params.row.fullItem)}>
+          Return
+        </Button>
       ),
     },
   ];
@@ -83,11 +102,13 @@ const QMIReturnT = () => {
       <h2>Temporary Issued Items</h2>
 
       {loading ? (
-        <Box display="flex" justifyContent="center"><CircularProgress /></Box>
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
       ) : (
         <Box mt={2} style={{ height: 500 }}>
           <DataGrid
-            rows={items.map((item) => ({ ...item, id: item._id }))}
+            rows={rows}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[5, 10]}
@@ -111,7 +132,9 @@ const QMIReturnT = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleReturnSubmit}>Submit</Button>
+          <Button variant="contained" onClick={handleReturnSubmit}>
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -121,7 +144,9 @@ const QMIReturnT = () => {
         onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity={snackbar.severity} variant="filled">{snackbar.message}</Alert>
+        <Alert severity={snackbar.severity} variant="filled">
+          {snackbar.message}
+        </Alert>
       </Snackbar>
     </Box>
   );
