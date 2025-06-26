@@ -5,7 +5,6 @@ import QMIDashboard from "./QMIDashboard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Main from "../../components/Main";
-import QMIEntries from "./QMIEntries";
 import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
 import UserTemp from "../User/UserTemp";
@@ -22,12 +21,6 @@ function QMILayout() {
       path: "/QuarterMasterIssue/QMIDashboard",
       icon: <DashboardIcon className="icon" />,
       component: <QMIDashboard />,
-    },
-    {
-      label: "Entries",
-      path: "/QuarterMasterIssue/QMIEntries",
-      icon: <DashboardIcon className="icon" />,
-      component: <QMIEntries />,
     },
     {
       label: "Direct Issue",
