@@ -83,6 +83,7 @@ const QMPOrder = () => {
                 handleRemoveEntry={controller.handleRemoveEntry}
                 setAnchorEl={controller.setAnchorEl}
                 setAnchorElSub={controller.setAnchorElSub}
+                offices={controller.offices}
               />
             ))}
 

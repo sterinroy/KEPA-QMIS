@@ -20,6 +20,7 @@ const QMPFormEntry = ({
   handleRemoveEntry,
   setAnchorEl,
   setAnchorElSub,
+  offices,
 }) => {
   const formFields = [
     { name: "supplyOrderNo", label: "Supply - Order No.", type: "text" },
@@ -27,7 +28,6 @@ const QMPFormEntry = ({
     { name: "itemName", label: "Item Name", type: "text" },
     { name: "quantity", label: "Quantity", type: "number" },
     { name: "fromWhomPurchased", label: "Supplier Name", type: "text" },
-    { name: "toWhom", label: "To (Company/ Office)", type: "text" },
     { name: "verifyDate", label: "Date of Verifying", type: "date" },
     { name: "billInvoiceNo", label: "Bill Invoice No", type: "text" },
   ];
@@ -53,6 +53,24 @@ const QMPFormEntry = ({
           />
         </Grid>
       ))}
+
+      <Grid item xs={12} sm={4}>
+      <FormControl fullWidth>
+        <InputLabel>To (Company/Office)</InputLabel>
+        <Select
+          name="toWhom"
+          value={entry.toWhom}
+          onChange={(e) => handleChange(e, index)}
+          label="To (Company/Office)"
+        >
+          {offices.map((office, i) => (
+            <MenuItem key={i} value={office}>
+              {office}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
       {/* Category Select */}
       <Grid item xs={12} sm={4}>

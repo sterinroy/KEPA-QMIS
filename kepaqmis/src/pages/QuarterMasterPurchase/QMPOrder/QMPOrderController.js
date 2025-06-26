@@ -7,6 +7,7 @@ import {
 } from "../../../redux/actions/categoryActions";
 import { submitQMPurchase } from "../../../redux/actions/qmpurchaseActions";
 import {useNavigate } from "react-router-dom";
+import { fetchOffices } from "../../../redux/actions/officeActions";
 
 
 export const useQMPOrderController = () => {
@@ -18,6 +19,7 @@ export const useQMPOrderController = () => {
     (state) => state.qmpurchase
   );
   const { categories } = useSelector((state) => state.category);
+  const { offices } = useSelector((state) => state.office);
 
   const [formData, setFormData] = useState({
     orderNo: "",
@@ -55,6 +57,7 @@ export const useQMPOrderController = () => {
       })),
     }));
     dispatch(fetchCategories());
+    dispatch(fetchOffices());
   }, [dispatch]);
 
   const handleChange = (e, index) => {
