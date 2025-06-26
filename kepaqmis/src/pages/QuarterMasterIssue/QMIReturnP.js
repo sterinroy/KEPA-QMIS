@@ -38,7 +38,7 @@ const QMIReturnP = () => {
   useEffect(() => {
     const fetchReturns = async () => {
       try {
-        const res = await fetch("/api/itemRoutes/returns/pending-verification");
+        const res = await fetch("/api/userRoute/returns/pending-verification");
         const data = await res.json();
         setReturns(data);
       } catch (err) {
@@ -69,7 +69,7 @@ const QMIReturnP = () => {
     }
 
     try {
-      const res = await fetch(`/api/itemRoutes/qm/verify-return/${selected._id}`, {
+      const res = await fetch(`/api/userRoute/qm/verify-return/${selected._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
