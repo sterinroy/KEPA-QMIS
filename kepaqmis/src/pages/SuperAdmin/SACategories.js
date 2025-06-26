@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./QMA.css";
+import "./SuperAdmin.css";
 import {
   DataGrid,
   GridActionsCellItem,
