@@ -72,6 +72,7 @@ function App() {
           <Route path="QMPDashboard" element={<QMPDashboard />} />
           <Route path="QMPOrder" element={<QMPOrder />} />
           <Route path="QMPEntries" element={<QMPEntries />} />
+          <Route path="StockItemView" element={<StockItemView />} />
         </Route>
 
         <Route
