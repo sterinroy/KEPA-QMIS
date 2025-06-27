@@ -174,8 +174,4 @@ router.post("/qm/readd-to-stock/:id", async (req, res) => {
   }
 });
 
-
-
-
-
 module.exports = router;
