@@ -9,6 +9,7 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
+  TextField
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -18,6 +19,8 @@ const QMReturnT = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [returnQty, setReturnQty] = useState(0);
+
 
   useEffect(() => {
     const fetchIssuedItems = async () => {
@@ -42,6 +45,7 @@ const QMReturnT = () => {
       const res = await fetch(`/api/itemRequestRoutes/item-requests/${selectedItem._id}/return`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ returnQty }),
       });
 
       if (!res.ok) throw new Error("Return approval failed");
@@ -54,6 +58,13 @@ const QMReturnT = () => {
       setSnackbar({ open: true, message: "Failed to approve return", severity: "error" });
     }
   };
+
+  const handleDialogClose = () => {
+  setOpenDialog(false);
+  setSelectedItem(null);
+  setReturnQty(0);
+};
+
 
   const rows = items.map((item) => ({
     id: item._id,
@@ -86,6 +97,7 @@ const QMReturnT = () => {
           variant="outlined"
           onClick={() => {
             setSelectedItem(params.row.fullItem);
+            setReturnQty(params.row.quantity);
             setOpenDialog(true);
           }}
         >
@@ -118,14 +130,37 @@ const QMReturnT = () => {
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="xs">
         <DialogTitle>Confirm Return</DialogTitle>
-        <DialogContent>Are you sure this temporary item has been returned?</DialogContent>
+        <DialogContent>
+          <Box display="flex" flexDirection="column" gap={2} mt={1}>
+            <div>
+              How many items are being returned?
+            </div>
+            <TextField
+              label="Return Quantity"
+              type="number"
+              value={returnQty}
+              onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
+              error={returnQty <= 0 || returnQty > (selectedItem?.quantity || 0)}
+              helperText={
+                returnQty <= 0
+                  ? "Quantity must be greater than 0"
+                  : returnQty > (selectedItem?.quantity || 0)
+                  ? "Cannot return more than issued"
+                  : ""
+              }
+              inputProps={{ min: 1, max: selectedItem?.quantity || 1 }}
+              fullWidth
+            />
+          </Box>
+        </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button onClick={handleDialogClose}>Cancel</Button>
           <Button variant="contained" onClick={handleApproveReturn}>
             Approve
           </Button>
         </DialogActions>
       </Dialog>
+
 
       <Snackbar
         open={snackbar.open}
