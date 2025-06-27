@@ -5,9 +5,15 @@ import QMIDashboard from "./QMIDashboard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Main from "../../components/Main";
-import QMIEntries from "./QMIEntries";
 import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
+import UserTemp from "../User/UserTemp";
+import { Send } from "@mui/icons-material";
+import QMIReturn from "./QMIReturn";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+
+
+
 
 function QMILayout() {
   const [setActiveComponent] = useState(<QMIDashboard />);
@@ -20,12 +26,6 @@ function QMILayout() {
       component: <QMIDashboard />,
     },
     {
-      label: "Entries",
-      path: "/QuarterMasterIssue/QMIEntries",
-      icon: <DashboardIcon className="icon" />,
-      component: <QMIEntries />,
-    },
-    {
       label: "Direct Issue",
       path: "/QuarterMasterIssue/QMIDirectForm",
       icon: <DashboardIcon className="icon" />,
@@ -36,6 +36,18 @@ function QMILayout() {
       path: "/QuarterMasterIssue/QMIManageRequest",
       icon: <PendingActionsIcon className="icon" />,
       component: <QMIManageRequest />,
+    },
+    {
+      label: "Temporary Stock",
+      path: "/QuarterMasterIssue/UserTemp",
+      icon: <Send className="icon" />,
+      component: <UserTemp />,
+    },
+    {
+      label: "Return Stock",
+      path: "/QuarterMasterIssue/QMIReturn",
+      icon: <AssignmentReturnIcon className="icon" />,
+      component: <QMIReturn />,
     },
   ];
   const handleNavItemClick = (component) => {

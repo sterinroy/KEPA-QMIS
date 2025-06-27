@@ -21,7 +21,8 @@ const itemRequestSchema = new mongoose.Schema({
   slNo: { type: String },
   issuedFrom: [{
     stockItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'StockItem' },
-    deductedQty: Number
+    deductedQty: Number,
+    returnedQty: { type: Number, default: 0 }
   }],
   approvedBy: {
     pen: { type: String },

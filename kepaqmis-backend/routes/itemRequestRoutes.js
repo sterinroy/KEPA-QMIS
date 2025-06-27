@@ -18,7 +18,7 @@ router.post("/item-requests", async (req, res) => {
       dateOfrequest: extra.dateOfrequest,
       toWhom: extra.toWhom,
       slNo: extra.slNo,
-      mobile: extra.mobile
+      mobile: extra.mobile,
     });
     await request.save();
     res.status(201).json(request);
@@ -27,6 +27,15 @@ router.post("/item-requests", async (req, res) => {
   }
 });
 
+
+router.get("/item-requests/pending", async (req, res) => {
+  try {
+    const pendingRequests = await ItemRequest.find({ status: "pending" }).populate("item");
+    res.status(200).json(pendingRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.post("/item-requests/:id/approve", async (req, res) => {
   const { pen, name, approvedQty } = req.body;
@@ -41,8 +50,8 @@ router.post("/item-requests/:id/approve", async (req, res) => {
 
     const stockSources = await StockItem.find({
       itemName: itemName,
-      quantity: { $gt: 0 }
-    }).sort({ dateOfPurchase: 1 }); 
+      quantity: { $gt: 0 },
+    }).sort({ dateOfPurchase: 1 });
 
     if (!stockSources.length) {
       return res.status(400).json({ error: "No stock available for item." });
@@ -50,7 +59,9 @@ router.post("/item-requests/:id/approve", async (req, res) => {
 
     let totalAvailable = stockSources.reduce((sum, s) => sum + s.quantity, 0);
     if (qtyToFulfill > totalAvailable) {
-      return res.status(400).json({ error: "Requested quantity exceeds total available stock." });
+      return res
+        .status(400)
+        .json({ error: "Requested quantity exceeds total available stock." });
     }
 
     const issueLog = [];
@@ -77,48 +88,71 @@ router.post("/item-requests/:id/approve", async (req, res) => {
     request.approvedDate = new Date();
     await request.save();
 
-    res.status(200).json({ message: "Request approved and issued", request, issueLog });
-
+    res
+      .status(200)
+      .json({ message: "Request approved and issued", request, issueLog });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-
 router.post("/item-requests/:id/return", async (req, res) => {
   try {
+    const { returnQty } = req.body;
+
     const request = await ItemRequest.findById(req.params.id).populate("issuedFrom.stockItemId");
 
     if (!request || !request.temporary || request.status !== "approved") {
       return res.status(400).json({ error: "Invalid return action" });
     }
 
+    let remainingReturnQty = returnQty;
+
     for (const issued of request.issuedFrom) {
+      if (remainingReturnQty <= 0) break;
+
       const stock = await StockItem.findById(issued.stockItemId);
-      if (stock) {
-        stock.quantity += issued.deductedQty;
-        await stock.save();
-      }
+      if (!stock) continue;
+
+      const alreadyReturned = issued.returnedQty || 0;
+      const maxCanReturn = issued.deductedQty - alreadyReturned;
+
+      if (maxCanReturn <= 0) continue;
+
+      const returnNow = Math.min(remainingReturnQty, maxCanReturn);
+      stock.quantity += returnNow;
+      await stock.save();
+
+      issued.returnedQty = alreadyReturned + returnNow;
+      remainingReturnQty -= returnNow;
     }
 
-    request.status = "returned";
     request.returnDate = new Date();
+
+    const allReturned = request.issuedFrom.every(
+      (issued) => (issued.returnedQty || 0) >= issued.deductedQty
+    );
+    if (allReturned) {
+      request.status = "returned";
+    }
+
     await request.save();
 
-    res.status(200).json({ message: "Item returned successfully", request });
+    res.status(200).json({ message: "Return processed successfully", request });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-
-
+//qm rejects the user request
 router.post("/item-requests/:id/reject", async (req, res) => {
-  const { pen, name } = req.body; 
+  const { pen, name } = req.body;
   try {
     const request = await ItemRequest.findById(req.params.id);
     if (!request || request.status !== "pending") {
-      return res.status(400).json({ error: "Invalid or already processed request" });
+      return res
+        .status(400)
+        .json({ error: "Invalid or already processed request" });
     }
 
     request.status = "rejected";
@@ -148,9 +182,30 @@ router.patch("/item-requests/:id", async (req, res) => {
   }
 });
 
+// Mark repaired item as reintegrated
+router.post("/qm/readd-to-stock/:id", async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const request = await ItemRequest.findById(id).populate("item");
+    if (!request || request.returnCategory !== "Repairable") {
+      return res.status(400).json({ error: "Invalid item" });
+    }
 
+    const stock = await StockItem.findById(request.item._id);
+    if (stock) {
+      stock.quantity += request.quantity;
+      await stock.save();
+    }
 
+    request.status = "reintegrated";
+    await request.save();
 
+    res.json({ message: "Item readded to stock successfully" });
+  } catch (err) {
+    console.error("Reintegration error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
