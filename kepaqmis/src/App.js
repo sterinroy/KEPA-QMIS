@@ -34,6 +34,9 @@ import Proceedings from "./components/proceedings.js";
 import SAEdit from "./pages/SuperAdmin/SAEdit.js";
 import SACategories from "./pages/SuperAdmin/SACategories.js";
 import SAOffices from "./pages/SuperAdmin/SAOffices.js";
+import QMIReturn from "./pages/QuarterMasterIssue/QMIReturn.js";
+import QMIReturnP from "./pages/QuarterMasterIssue/QMIReturnP.js";
+import QMIReturnT from "./pages/QuarterMasterIssue/QMIReturnT.js";
 
 function App() {
   return (
@@ -88,6 +91,10 @@ function App() {
           <Route path="QMIEntries" element={<QMIEntries />} />
           <Route path="QMIDirectForm" element={<QMIDirectForm />} />
           <Route path="QMIManageRequest" element={<QMIManageRequest />} />
+          <Route path="UserTemp" element={<UserTemp />} />
+          <Route path="QMIReturn" element={<QMIReturn />} />
+          <Route path="QMIReturnP" element={<QMIReturnP />} />
+          <Route path="QMIReturnT" element={<QMIReturnT />} />
         </Route>
 
         <Route
