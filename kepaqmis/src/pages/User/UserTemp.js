@@ -42,13 +42,21 @@ const UserTemp = () => {
 
 
   const [formData, setFormData] = useState(initialFormData);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  
+  // const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success",
+  open: false,
+  message: "",
+  severity: "success",
+});
+
+  const openSnackbar = (message, severity = "success") => {
+  setSnackbar({
+    open: true,
+    message,
+    severity,
   });
+};
+
 
   const { offices } = useSelector((state) => state.office);
   const {
@@ -107,11 +115,7 @@ const UserTemp = () => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Submission failed");
-      setSnackbar({
-        open: true,
-        message: "Request submitted successfully",
-        severity: "success",
-      });
+        openSnackbar("Request submitted successfully", "success");
       // alert("Request submitted successfully");
       setFormData({
         ...initialFormData,
@@ -120,11 +124,7 @@ const UserTemp = () => {
         dateOfrequest: new Date().toISOString().split("T")[0],
       });
     } catch (err) {
-        setSnackbar({
-        open: true,
-        message: "Error: " + err.message,
-        severity: "error",
-      });
+        openSnackbar("Error: " + err.message, "error");
       // alert("Error: " + err.message);
     }
   };
@@ -306,21 +306,21 @@ const UserTemp = () => {
           )}
         </form>
       </Box>
-            <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
+         <Snackbar
+          open={snackbar.open}
+          autoHideDuration={4000}
           onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
-          severity={snackbar.severity}
-          variant="filled"
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+            severity={snackbar.severity}
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
     </div>
   );
 };

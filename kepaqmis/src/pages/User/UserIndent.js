@@ -20,7 +20,13 @@ import "./User.css";
 const UserIndent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const [redirectId, setRedirectId] = useState(null); 
   const pen = localStorage.getItem("pen") || "";
   const name = localStorage.getItem("name") || "";
 
@@ -37,6 +43,8 @@ const UserIndent = () => {
   const [items, setItems] = useState([
     { category: "", subcategory: "", itemId: "", qty: 1 },
   ]);
+
+
 
   useEffect(() => {
     dispatch(fetchOffices());
@@ -160,22 +168,30 @@ const UserIndent = () => {
           indentBillId: billId,
         }),
       });
-      
+      setFormData({
+        PENNo: pen,
+        name: name,
+        toWhom: "",
+        dateOfrequest: new Date().toISOString().split("T")[0],
+      }); // ⬅️ Added
+
+      setItems([
+        { category: "", subcategory: "", itemId: "", qty: 1 },
+      ]); // ⬅️ Added
       setOpenSnackbar({
         open: true,
         message: "All items and bill submitted successfully.",
         severity: "success",
       });
-      // alert("All items and bill submitted successfully.");
-      window.open(`/Indent?id=${billId}`, "_blank");
-      navigate("/User/UserIndent");
+      setRedirectId(billId); 
+
     } catch (err) {
        setOpenSnackbar({
         open: true,
         message: "Error: " + err.message,
         severity: "error",
       });
-      alert("Error: " + err.message);
+      // alert("Error: " + err.message);
     }
   };
 
@@ -395,25 +411,30 @@ const UserIndent = () => {
           </Box>
         </form>
       </Box>
-       <Snackbar
+             {/* Snackbar with redirect logic */}
+      <Snackbar
         open={openSnackbar.open}
-        autoHideDuration={4000}
-        onClose={() =>
-          setOpenSnackbar((prev) => ({
-            ...prev,
-            open: false,
-          }))
-        }
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={3000}
+        onClose={() => {
+          setOpenSnackbar((prev) => ({ ...prev, open: false }));
+          if (redirectId) {
+            window.open(`/Indent?id=${redirectId}`, "_blank");
+            navigate("/User/UserIndent");
+            setRedirectId(null);
+          }
+        }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           severity={openSnackbar.severity}
-          onClose={() =>
-            setOpenSnackbar((prev) => ({
-              ...prev,
-              open: false,
-            }))
-          }
+          onClose={() => {
+            setOpenSnackbar((prev) => ({ ...prev, open: false }));
+            if (redirectId) {
+              window.open(`/Indent?id=${redirectId}`, "_blank");
+              navigate("/User/UserIndent");
+              setRedirectId(null);
+            }
+          }}
           variant="filled"
           sx={{ width: "100%" }}
         >

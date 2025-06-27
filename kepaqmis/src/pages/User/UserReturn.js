@@ -48,12 +48,16 @@ const UserReturn = () => {
 
   const [issuedItems, setIssuedItems] = useState([]);
   const navigate = useNavigate();
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
+  const openSnackbar = (message, severity = "success") => {
+    setSnackbar({ open: true, message, severity });
+  };
   useEffect(() => {
     if (pen) {
       fetchIssuedItems(pen);
@@ -70,12 +74,12 @@ const UserReturn = () => {
       setIssuedItems(approvedItems);
     } else {
       console.error("Unexpected response:", data);
-      setSnackbar({ open: true, message: "Failed to fetch issued items", severity: "error" });
+       openSnackbar("Failed to fetch issued items", "error");
       // alert("Failed to fetch issued items.");
     }
   } catch (error) {
     console.error("Error fetching issued items:", error);
-     setSnackbar({ open: true, message: "Something went wrong while fetching issued items.", severity: "error" });
+     openSnackbar("Something went wrong while fetching items", "error");
     // alert("Something went wrong while fetching issued items.");
   }
 };
@@ -89,12 +93,10 @@ const UserReturn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.itemId) {
- // return alert("Please select an item");
-      setSnackbar({ open: true, message: "Please select an item", severity: "warning" });
+      // return alert("Please select an item");
+      openSnackbar("Please select an item", "warning");
       return;
     }
-     
-
     try {
       const res = await fetch(`/api/userRoute/my-issued-items/${formData.itemId}/permanent-return`, {
         method: "POST",
@@ -109,14 +111,24 @@ const UserReturn = () => {
       const result = await res.json();
 
       if (res.ok) {
-        setSnackbar({ open: true, message: "Return request submitted successfully!", severity: "success" });
+        openSnackbar("Return request submitted successfully!", "success");
+                setTimeout(() => {
+          navigate('/lars-print', {
+            state: {
+              item: issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+              quantity: formData.quantity,
+              reason: formData.reason,
+              date: formData.dateOfReturn
+            }
+          });
+        }, 1500);
         // alert("Return request submitted successfully!");
-        navigate('/lars-print', {state : {
-          item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
-          quantity: formData.quantity,
-          reason: formData.reason,
-          date: formData.dateOfReturn
-        }});
+        // navigate('/lars-print', {state : {
+        //   item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
+        //   quantity: formData.quantity,
+        //   reason: formData.reason,
+        //   date: formData.dateOfReturn
+        // }});
 
         setFormData({
           itemId: "",
@@ -124,12 +136,12 @@ const UserReturn = () => {
           dateOfReturn: new Date().toISOString().split("T")[0],
         });
       } else {
-        setSnackbar({ open: true, message: result.error || "Error submitting return", severity: "error" });
+        openSnackbar(result.error || "Error submitting return", "error");
         // alert(result.error || "Error submitting return");
       }
     } catch (error) {
       console.error("Error submitting return:", error);
-      setSnackbar({ open: true, message: "Failed to submit return", severity: "error" });
+      openSnackbar("Failed to submit return", "error");
       // alert("Failed to submit return");
     }
   };
@@ -206,11 +218,12 @@ const UserReturn = () => {
           </Box>
         </form>
       </Box>
-        <Snackbar
+            {/* Snackbar component */}
+      <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
         onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
