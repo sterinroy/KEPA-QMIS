@@ -91,7 +91,7 @@ const SuperAdminUsers = () => {
           message: "Failed to add user.",
           severity: "error",
         });
-      // alert("Failed to add user: " + err.message);
+    
     }
   } else {
         setSnackbar({
@@ -99,7 +99,7 @@ const SuperAdminUsers = () => {
         message: "Please fill in all fields.",
         severity: "warning",
       });
-    // alert("Please fill in all fields.");
+   
   }
 };
 
