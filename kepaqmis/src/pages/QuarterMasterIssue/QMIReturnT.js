@@ -24,8 +24,9 @@ const QMReturnT = () => {
       try {
         const res = await fetch("/api/userRoute/returns/pending-verification"); // only approved temporary items
         const data = await res.json();
-        const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
-        setItems(temporaryApproved);
+        // const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
+        setItems(data);
+        console.log(data);
       } catch (err) {
         console.error("Error fetching approved items:", err);
       } finally {
@@ -69,8 +70,12 @@ const QMReturnT = () => {
       field: "dateOfIssue",
       headerName: "Issued On",
       width: 160,
-      valueGetter: (params) =>
-        params.row.dateOfIssue ? new Date(params.row.dateOfIssue).toLocaleDateString() : "",
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return date.toString() === "Invalid Date"
+          ? "N/A"
+          : date.toLocaleString();
+      },
     },
     {
       field: "action",
@@ -91,6 +96,7 @@ const QMReturnT = () => {
   ];
 
   return (
+    <div style={{ width: "100%" }}>
     <Box p={3}>
       <h2>Temporary Return Approvals (QM)</h2>
 
@@ -132,6 +138,7 @@ const QMReturnT = () => {
         </Alert>
       </Snackbar>
     </Box>
+    </div>
   );
 };
 
