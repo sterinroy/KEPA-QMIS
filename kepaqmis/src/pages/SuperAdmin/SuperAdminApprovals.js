@@ -8,7 +8,7 @@ import {
 } from "../../redux/actions/superAdminActions";
 import "./SuperAdmin.css";
 import { DataGrid } from "@mui/x-data-grid";
-
+import { Snackbar, Alert } from "@mui/material";
 const SuperAdminApprovals = () => {
   const dispatch = useDispatch();
   const { pendingUsers, loading, error } = useSelector(
@@ -16,7 +16,11 @@ const SuperAdminApprovals = () => {
   );
 
   const [selectedRoles, setSelectedRoles] = useState({});
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   useEffect(() => {
     dispatch(fetchPendingUsers());
   }, [dispatch]);
@@ -76,19 +80,34 @@ const SuperAdminApprovals = () => {
   const handleApprove = (id, role) => {
     if (role === "QuarterMaster") {
       if (!selectedRoles[id]) {
-        alert("Please select a specific QuarterMaster role");
+        setSnackbar({
+          open: true,
+          message: "Please select a specific QuarterMaster role",
+          severity: "warning",
+        });
+        // alert("Please select a specific QuarterMaster role");
         return;
       }
       dispatch(approveUser(id, selectedRoles[id]));
       dispatch(fetchUsers());
     } else {
       dispatch(approveUser(id, role));
+      setSnackbar({
+      open: true,
+      message: "User approved successfully",
+      severity: "success",
+    });
       dispatch(fetchUsers());
     }
   };
 
   const handleReject = (id) => {
     dispatch(rejectUser(id));
+      setSnackbar({
+      open: true,
+      message: "User rejected successfully",
+      severity: "info",
+    });
     dispatch(fetchUsers());
   };
 
@@ -120,6 +139,23 @@ const SuperAdminApprovals = () => {
           />
       )}
       </div>
+      
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

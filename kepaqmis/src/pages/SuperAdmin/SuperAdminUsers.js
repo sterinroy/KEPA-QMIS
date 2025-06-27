@@ -13,6 +13,8 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { register } from "../../redux/actions/authActions";
 import { DataGrid} from "@mui/x-data-grid";
@@ -21,6 +23,11 @@ const SuperAdminUsers = () => {
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector((state) => state.superAdmin);
   const [open, setOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [newUser, setNewUser] = useState({
     pen: "",
     name: "",
@@ -36,6 +43,11 @@ const SuperAdminUsers = () => {
   const handleDelete = (id) => {
     dispatch(deleteUser(id));
     dispatch(fetchUsers());
+        setSnackbar({
+        open: true,
+        message: "User deleted successfully.",
+        severity: "info",
+      });
   };
 
   const handleChange = (e) => {
@@ -66,12 +78,28 @@ const SuperAdminUsers = () => {
   ) {
     try {
       await dispatch(register(newUser.pen, newUser.name, newUser.phone, newUser.password, newUser.role));
+      dispatch(fetchUsers());  
+      setSnackbar({
+          open: true,
+          message: "User added successfully.",
+          severity: "success",
+        });
       handleCloseDialog();
     } catch (err) {
-      alert("Failed to add user: " + err.message);
+        setSnackbar({
+          open: true,
+          message: "Failed to add user.",
+          severity: "error",
+        });
+      // alert("Failed to add user: " + err.message);
     }
   } else {
-    alert("Please fill in all fields.");
+        setSnackbar({
+        open: true,
+        message: "Please fill in all fields.",
+        severity: "warning",
+      });
+    // alert("Please fill in all fields.");
   }
 };
 
@@ -199,6 +227,23 @@ const rows = users.map(user => ({
           />
       )}
       </div>
+      
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
