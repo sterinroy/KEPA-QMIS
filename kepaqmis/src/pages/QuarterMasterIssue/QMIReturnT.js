@@ -69,23 +69,25 @@ const QMReturnT = () => {
   const rows = items.map((item) => ({
     id: item._id,
     itemName: item?.item?.itemName || "Unnamed",
-    quantity: item?.quantity || 0,
-    dateOfIssue: item?.dateOfIssue || "",
+    requestedQty: item?.requestedQty || 0,
+    returnDate: item?.returnDate || "",
     fullItem: item,
   }));
 
   const columns = [
     { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "quantity", headerName: "Qty", flex:1},
+    { field: "requestedQty", headerName: "requested Quantity", flex:1},
     {
-      field: "dateOfIssue",
-      headerName: "Issued On",
+      field: "returnDate",
+      headerName: "Return Date",
       flex:1,
       renderCell: (params) => {
         const date = new Date(params.value);
         return date.toString() === "Invalid Date"
           ? "N/A"
-          : date.toLocaleString();
+          : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
+              .toString()
+              .padStart(2, "0")}-${date.getFullYear()}`;
       },
     },
     {
