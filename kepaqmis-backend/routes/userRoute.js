@@ -3,7 +3,6 @@ const router = express.Router();
 
 const ItemRequest = require("../models/ItemRequest");
 
-//view user requsts by pen no
 router.get('/my-issued-items/:pen', async (req, res) => {
   try {
     const userPen = req.params.pen;
@@ -12,7 +11,7 @@ router.get('/my-issued-items/:pen', async (req, res) => {
       "requestedBy.pen": userPen,
       // status: "approved",
       // temporary: false
-    }).populate("item");
+    }).populate("item").lean();
 
     res.status(200).json(issuedItems);
   } catch (err) {
@@ -53,14 +52,7 @@ router.get("/returns/pending-verification", async (req, res) => {
     const pendingReturns = await ItemRequest.find({
       status: "pending",
       // returnCategory: { $exists: false }
-    }).populate({
-      path: "item",
-      populate: [
-        { path: "officeId", model: "Office" },
-        { path: "categoryId", model: "ItemCategory" },
-        { path: "subcategoryId", model: "SubCategory" }
-      ]
-    });
+    }).populate("item");
 
     res.status(200).json(pendingReturns);
   } catch (err) {
