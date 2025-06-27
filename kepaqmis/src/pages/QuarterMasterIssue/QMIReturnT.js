@@ -25,7 +25,7 @@ const QMReturnT = () => {
   useEffect(() => {
     const fetchIssuedItems = async () => {
       try {
-        const res = await fetch("/api/userRoute/returns/pending-verification"); // only approved temporary items
+        const res = await fetch("/api/userRoute/returns/pending-verification"); 
         const data = await res.json();
         // const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
         setItems(data);
@@ -66,17 +66,39 @@ const QMReturnT = () => {
 };
 
 
-  const rows = items.map((item) => ({
-    id: item._id,
-    itemName: item?.item?.itemName || "Unnamed",
-    requestedQty: item?.requestedQty || 0,
-    returnDate: item?.returnDate || "",
-    fullItem: item,
-  }));
+  const rows = items.map((item) => {
+    const totalIssued = item.issuedFrom?.reduce((sum, i) => sum + i.deductedQty, 0) || 0;
+    const totalReturned = item.issuedFrom?.reduce((sum, i) => sum + (i.returnedQty || 0), 0);
+    const remainingQty = totalIssued - totalReturned;
+
+    return {
+      id: item._id,
+      slNo: item.slNo || "-",
+      mobile: item.mobile || "-",
+      purpose: item.remarks || "-",
+      office: item.item?.officeId?.name || "-",
+      company: item.item?.company || "-",
+      category: item.item?.categoryId?.name || "-",
+      subcategory: item.item?.subcategoryId?.name || "-",
+      itemName: item.item?.itemName || "Unnamed",
+      requestedQty: totalIssued,
+      remainingQty,
+      returnDate: item.returnDate || "",
+      fullItem: item,
+    };
+  });
 
   const columns = [
+    { field: "slNo", headerName: "Sl No", flex: 1 },
+    { field: "mobile", headerName: "Mobile", flex: 1 },
+    { field: "purpose", headerName: "Purpose", flex: 1 },
+    { field: "office", headerName: "Office", flex: 1 },
+    { field: "company", headerName: "Company", flex: 1 },
+    { field: "category", headerName: "Category", flex: 1 },
+    { field: "subcategory", headerName: "Subcategory", flex: 1 },
     { field: "itemName", headerName: "Item", flex: 1 },
     { field: "requestedQty", headerName: "requested Quantity", flex:1},
+    { field: "remainingQty", headerName: "Remaining to Return", flex: 1 },
     {
       field: "returnDate",
       headerName: "Return Date",
@@ -99,7 +121,7 @@ const QMReturnT = () => {
           variant="outlined"
           onClick={() => {
             setSelectedItem(params.row.fullItem);
-            setReturnQty(params.row.quantity);
+            setReturnQty(params.row.remainingQty);
             setOpenDialog(true);
           }}
         >
@@ -142,15 +164,32 @@ const QMReturnT = () => {
               type="number"
               value={returnQty}
               onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
-              error={returnQty <= 0 || returnQty > (selectedItem?.quantity || 0)}
+              error={
+                returnQty <= 0 || returnQty > (
+                  selectedItem?.issuedFrom.reduce(
+                    (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
+                    0
+                  ) || 0
+                )
+              }
               helperText={
                 returnQty <= 0
                   ? "Quantity must be greater than 0"
-                  : returnQty > (selectedItem?.quantity || 0)
-                  ? "Cannot return more than issued"
+                  : returnQty >
+                    (selectedItem?.issuedFrom.reduce(
+                      (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
+                      0
+                    ) || 0)
+                  ? "Cannot return more than remaining"
                   : ""
               }
-              inputProps={{ min: 1, max: selectedItem?.quantity || 1 }}
+              inputProps={{
+                min: 1,
+                max: selectedItem?.issuedFrom.reduce(
+                  (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
+                  0
+                ) || 1,
+              }}
               fullWidth
             />
           </Box>
