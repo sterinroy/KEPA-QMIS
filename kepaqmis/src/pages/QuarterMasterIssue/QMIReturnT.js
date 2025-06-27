@@ -65,11 +65,11 @@ const QMReturnT = () => {
 
   const columns = [
     { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "quantity", headerName: "Qty", width: 120 },
+    { field: "quantity", headerName: "Qty", flex:1},
     {
       field: "dateOfIssue",
       headerName: "Issued On",
-      width: 160,
+      flex:1,
       renderCell: (params) => {
         const date = new Date(params.value);
         return date.toString() === "Invalid Date"
@@ -80,7 +80,7 @@ const QMReturnT = () => {
     {
       field: "action",
       headerName: "Return",
-      width: 150,
+      flex:1,
       renderCell: (params) => (
         <Button
           variant="outlined"
