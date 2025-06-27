@@ -81,7 +81,7 @@ const QMReturnT = () => {
       category: item.item?.itemCategory || "-",
       subcategory: item.item?.itemSubCategory || "-",
       itemName: item.item?.itemName || "Unnamed",
-      requestedQty: totalIssued,
+      requestedQty: item.requestedQty || 0,
       remainingQty,
       returnDate: item.returnDate || "",
       fullItem: item,
