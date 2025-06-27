@@ -210,13 +210,11 @@ router.post("/purchase/approve/:id", async (req, res) => {
 
     console.log("2", entry.status);
 
-    res
-      .status(200)
-      .json({
-        message: "Purchase approved and added to stock.",
-        stockItem,
-        nextStockItemNo,
-      });
+    res.status(200).json({
+      message: "Purchase approved and added to stock.",
+      stockItem,
+      nextStockItemNo,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -297,7 +295,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       itemSubCategory,
       quantity,
       unit,
-      issuedBy,
+      issuedfrom,
       make,
       model,
       modelNo,
@@ -305,21 +303,24 @@ router.post("/stock/direct-issue", async (req, res) => {
       serialNumber,
       indentNo,
       perishable,
+      fromWhomPurchased,
       dateOfVerification,
       dateOfPurchase,
       dateOfIssue,
       verifiedBy,
+      warranty,
     } = req.body;
 
     const stockItem = new StockItem({
       sourceType: "direct-issue",
       Qmno,
+      fromWhomPurchased,
       itemName,
       itemCategory,
       itemSubCategory,
       quantity,
       unit,
-      issuedBy,
+      issuedfrom,
       make,
       model,
       modelNo,
@@ -327,6 +328,7 @@ router.post("/stock/direct-issue", async (req, res) => {
       serialNumber,
       perishable,
       indentNo,
+      warranty,
       dateOfPurchase: dateOfPurchase ? new Date(dateOfPurchase) : new Date(),
       dateOfIssue: dateOfIssue ? new Date(dateOfIssue) : new Date(),
       dateOfVerification: dateOfVerification
@@ -334,6 +336,7 @@ router.post("/stock/direct-issue", async (req, res) => {
         : new Date(),
       verifiedBy,
     });
+    console.log("ali", stockItem);
 
     await stockItem.save();
     res.status(201).json({ message: "Requested issue item added.", stockItem });
