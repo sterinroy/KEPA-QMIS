@@ -50,9 +50,16 @@ router.post("/my-issued-items/:id/permanent-return", async (req, res) => {
 router.get("/returns/pending-verification", async (req, res) => {
   try {
     const pendingReturns = await ItemRequest.find({
-      status: "returned",
-      returnCategory: { $exists: false }
-    }).populate("item");
+      status: "pending",
+      // returnCategory: { $exists: false }
+    }).populate({
+      path: "item",
+      populate: [
+        { path: "officeId", model: "Office" },
+        { path: "categoryId", model: "ItemCategory" },
+        { path: "subcategoryId", model: "SubCategory" }
+      ]
+    });
 
     res.status(200).json(pendingReturns);
   } catch (err) {
