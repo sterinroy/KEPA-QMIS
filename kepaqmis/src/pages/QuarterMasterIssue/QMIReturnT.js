@@ -6,92 +6,85 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Snackbar,
   Alert,
   CircularProgress,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
-const QMIReturnT = () => {
+const QMReturnT = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [reason, setReason] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  // ✅ Get PEN number from localStorage
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const pen = storedUser?.pen;
-
   useEffect(() => {
-    const fetchItems = async () => {
-      if (!pen) return;
+    const fetchIssuedItems = async () => {
       try {
-        const res = await fetch(`/api/userRoute/my-issued-items/${pen}`);
+        const res = await fetch("/api/itemRequestRoutes/returns/pending-verification"); // only approved temporary items
         const data = await res.json();
-        const temporaryItems = data.filter((item) => item.temporary && item.status === "approved");
-        setItems(temporaryItems);
+        const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
+        setItems(temporaryApproved);
       } catch (err) {
-        console.error("Error fetching issued items:", err);
+        console.error("Error fetching approved items:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchItems();
-  }, [pen]);
 
-  const handleOpenDialog = (item) => {
-    setSelectedItem(item);
-    setReason("");
-    setOpenDialog(true);
-  };
+    fetchIssuedItems();
+  }, []);
 
-  const handleReturnSubmit = async () => {
+  const handleApproveReturn = async () => {
     try {
       const res = await fetch(`/api/itemRequestRoutes/item-requests/${selectedItem._id}/return`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
 
-      if (!res.ok) throw new Error("Return failed");
+      if (!res.ok) throw new Error("Return approval failed");
 
-      setSnackbar({ open: true, message: "Temporary item returned", severity: "success" });
-      setOpenDialog(false);
+      setSnackbar({ open: true, message: "Return approved and stock updated", severity: "success" });
       setItems((prev) => prev.filter((i) => i._id !== selectedItem._id));
-    } catch (error) {
-      console.error("Return failed:", error);
-      setSnackbar({ open: true, message: "Return failed", severity: "error" });
+      setOpenDialog(false);
+    } catch (err) {
+      console.error("Error approving return:", err);
+      setSnackbar({ open: true, message: "Failed to approve return", severity: "error" });
     }
   };
 
-  // ✅ Prepare DataGrid rows
   const rows = items.map((item) => ({
     id: item._id,
     itemName: item?.item?.itemName || "Unnamed",
     quantity: item?.quantity || 0,
     dateOfIssue: item?.dateOfIssue || "",
-    fullItem: item, // keep original item in case needed in action
+    fullItem: item,
   }));
 
   const columns = [
     { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "quantity", headerName: "Qty Issued", width: 130 },
+    { field: "quantity", headerName: "Qty", width: 120 },
     {
       field: "dateOfIssue",
       headerName: "Issued On",
-      width: 180,
+      width: 160,
       valueGetter: (params) =>
         params.row.dateOfIssue ? new Date(params.row.dateOfIssue).toLocaleDateString() : "",
     },
     {
       field: "action",
       headerName: "Return",
-      width: 130,
+      width: 150,
       renderCell: (params) => (
-        <Button variant="outlined" onClick={() => handleOpenDialog(params.row.fullItem)}>
-          Return
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setSelectedItem(params.row.fullItem);
+            setOpenDialog(true);
+          }}
+        >
+          Approve Return
         </Button>
       ),
     },
@@ -99,7 +92,7 @@ const QMIReturnT = () => {
 
   return (
     <Box p={3}>
-      <h2>Temporary Issued Items</h2>
+      <h2>Temporary Return Approvals (QM)</h2>
 
       {loading ? (
         <Box display="flex" justifyContent="center">
@@ -117,23 +110,13 @@ const QMIReturnT = () => {
         </Box>
       )}
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Confirm Temporary Return</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Reason for Return (optional)"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            fullWidth
-            multiline
-            rows={3}
-            margin="dense"
-          />
-        </DialogContent>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="xs">
+        <DialogTitle>Confirm Return</DialogTitle>
+        <DialogContent>Are you sure this temporary item has been returned?</DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleReturnSubmit}>
-            Submit
+          <Button variant="contained" onClick={handleApproveReturn}>
+            Approve
           </Button>
         </DialogActions>
       </Dialog>
@@ -152,4 +135,4 @@ const QMIReturnT = () => {
   );
 };
 
-export default QMIReturnT;
+export default QMReturnT;
