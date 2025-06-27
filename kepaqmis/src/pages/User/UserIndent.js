@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from '@mui/material';
 import { fetchOffices } from "../../redux/actions/officeActions";
 import { fetchStockItems } from "../../redux/actions/stockActions";
 import "./User.css";
@@ -19,7 +20,7 @@ import "./User.css";
 const UserIndent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const pen = localStorage.getItem("pen") || "";
   const name = localStorage.getItem("name") || "";
 
@@ -159,11 +160,21 @@ const UserIndent = () => {
           indentBillId: billId,
         }),
       });
-
-      alert("All items and bill submitted successfully.");
+      
+      setOpenSnackbar({
+        open: true,
+        message: "All items and bill submitted successfully.",
+        severity: "success",
+      });
+      // alert("All items and bill submitted successfully.");
       window.open(`/Indent?id=${billId}`, "_blank");
       navigate("/User/UserIndent");
     } catch (err) {
+       setOpenSnackbar({
+        open: true,
+        message: "Error: " + err.message,
+        severity: "error",
+      });
       alert("Error: " + err.message);
     }
   };
@@ -384,6 +395,31 @@ const UserIndent = () => {
           </Box>
         </form>
       </Box>
+       <Snackbar
+        open={openSnackbar.open}
+        autoHideDuration={4000}
+        onClose={() =>
+          setOpenSnackbar((prev) => ({
+            ...prev,
+            open: false,
+          }))
+        }
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity={openSnackbar.severity}
+          onClose={() =>
+            setOpenSnackbar((prev) => ({
+              ...prev,
+              open: false,
+            }))
+          }
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {openSnackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

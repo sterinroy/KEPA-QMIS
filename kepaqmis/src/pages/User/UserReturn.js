@@ -8,6 +8,8 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {useNavigate } from "react-router-dom";
 
@@ -46,7 +48,11 @@ const UserReturn = () => {
 
   const [issuedItems, setIssuedItems] = useState([]);
   const navigate = useNavigate();
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     if (pen) {
@@ -64,11 +70,13 @@ const UserReturn = () => {
       setIssuedItems(approvedItems);
     } else {
       console.error("Unexpected response:", data);
-      alert("Failed to fetch issued items.");
+      setSnackbar({ open: true, message: "Failed to fetch issued items", severity: "error" });
+      // alert("Failed to fetch issued items.");
     }
   } catch (error) {
     console.error("Error fetching issued items:", error);
-    alert("Something went wrong while fetching issued items.");
+     setSnackbar({ open: true, message: "Something went wrong while fetching issued items.", severity: "error" });
+    // alert("Something went wrong while fetching issued items.");
   }
 };
 
@@ -80,7 +88,12 @@ const UserReturn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.itemId) return alert("Please select an item");
+    if (!formData.itemId) {
+ // return alert("Please select an item");
+      setSnackbar({ open: true, message: "Please select an item", severity: "warning" });
+      return;
+    }
+     
 
     try {
       const res = await fetch(`/api/userRoute/my-issued-items/${formData.itemId}/permanent-return`, {
@@ -96,7 +109,8 @@ const UserReturn = () => {
       const result = await res.json();
 
       if (res.ok) {
-        alert("Return request submitted successfully!");
+        setSnackbar({ open: true, message: "Return request submitted successfully!", severity: "success" });
+        // alert("Return request submitted successfully!");
         navigate('/lars-print', {state : {
           item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
           quantity: formData.quantity,
@@ -110,11 +124,13 @@ const UserReturn = () => {
           dateOfReturn: new Date().toISOString().split("T")[0],
         });
       } else {
-        alert(result.error || "Error submitting return");
+        setSnackbar({ open: true, message: result.error || "Error submitting return", severity: "error" });
+        // alert(result.error || "Error submitting return");
       }
     } catch (error) {
       console.error("Error submitting return:", error);
-      alert("Failed to submit return");
+      setSnackbar({ open: true, message: "Failed to submit return", severity: "error" });
+      // alert("Failed to submit return");
     }
   };
 
@@ -190,6 +206,20 @@ const UserReturn = () => {
           </Box>
         </form>
       </Box>
+        <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
