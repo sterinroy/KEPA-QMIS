@@ -27,16 +27,16 @@ const SuperAdminLogs = () => {
           ? "N/A"
           : date.toLocaleString();
       },
-    }
+    },
   ];
 
   // Convert logs to rows with an `id` field
   const rows = logs
-  .filter((log) => log && log.timestamp) // skip broken entries
-  .map((log, index) => ({
-    id: log._id || index,
-    ...log,
-  }));
+    .filter((log) => log && log.timestamp) // skip broken entries
+    .map((log, index) => ({
+      id: log._id || index,
+      ...log,
+    }));
 
   return (
     <div style={{ width: "100%" }}>
@@ -44,22 +44,35 @@ const SuperAdminLogs = () => {
         <h2>Login/Logout Logs</h2>
       </div>
       <div style={{ height: 550 }}>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : rows.length === 0 ? (
-        <p>No logs available.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-        />
-      )}
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : rows.length === 0 ? (
+          <p>No logs available.</p>
+        ) : (
+          <div className="log-info">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

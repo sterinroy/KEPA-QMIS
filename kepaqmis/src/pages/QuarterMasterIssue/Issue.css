@@ -1,7 +1,8 @@
-Root container and page background body,
-html,
+.main.main{
+  margin-left: 320px;
+}
 .container {
-  background-color: #fdfdfd !important;
+  background-color: #111c44 !important;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -43,7 +44,7 @@ html,
   background-color: #111c44 !important;
   color: black;
   margin-left: 11px;
-  margin-top: 135px;
+  margin-top: 155px;
   margin-bottom: 20px;
   padding: 2rem;
   border-radius: 20px;
@@ -231,4 +232,246 @@ html,
   box-sizing: border-box;
   padding: 30px 40px 20px 40px;
   min-height: 550px;
+}
+
+.qmi-manage-request-container {
+  background-color: #0c1227; /* Dark theme background */
+  min-height: 100vh;
+  margin-top: -25px;
+  margin-left: -30px;
+  margin-bottom: 5px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.qmi-manage-request-container .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-manage-request-container .MuiDataGrid-columnHeaders {
+  background-color: #1976d2;
+  color: black;
+}
+
+.qmi-manage-request-container .MuiDataGrid-cell {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.qmi-manage-request-container .orange-button {
+  background-color: #FF9800; 
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.approve-request {
+  background-color: #111c44;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.approve-request .MuiTextField-root,
+.approve-request .MuiFormControl-root {
+  background-color: #0c1227;
+  border-radius: 6px;
+}
+
+.approve-request .MuiOutlinedInput-root {
+  color: white;
+  background-color: #0c1227;
+}
+
+.approve-request .MuiInputLabel-root {
+  color: #bbbbff;
+}
+
+.approve-request .MuiOutlinedInput-notchedOutline {
+  border-color: #555;
+}
+
+.approve-request .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #8888ff;
+}
+
+.approve-request .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1e90ff;
+}
+
+.approve-request .MuiSelect-select {
+  background-color: #0c1227;
+  color: white;
+}
+
+.approve-request .MuiMenuItem-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.approve-request .MuiMenuItem-root:hover {
+  background-color: #1e2a47;
+}
+
+.approve-request .MuiTypography-root {
+  color: white;
+}
+
+/* Style the pagination footer */
+.qmi-manage-request-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.qmi-manage-request-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-spacer {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-actions button {
+  color: white !important;
+}
+.qmi-manage-request-container .MuiTablePagination-actions {
+  color: white; 
+}
+.qmi-manage-request-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select {
+  color: white !important;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+
+.qmi-issue-table-section {
+  height: 600px;
+  width: 1200px;
+  margin-right: 10px;
+  margin-top: -20px;
+}
+
+.qmi-issue-page-container {
+  background-color: #0c1227; /* Dark theme background */
+  min-height: 100vh;
+  margin-left: -30px;
+  margin-bottom: 5px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.qmi-issue-page-container .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-issue-page-container .MuiDataGrid-columnHeaders {
+  background-color: #1976d2;
+  color: black;
+}
+
+.qmi-issue-page-container .MuiDataGrid-cell {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.qmi-issue-page-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-spacer {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-actions button {
+  color: white !important;
+}
+.qmi-issue-page-container .MuiTablePagination-actions {
+  color: white; 
+}
+.qmi-issue-page-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
 }

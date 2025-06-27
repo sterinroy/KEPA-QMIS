@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./SuperAdmin.css";
-import {
-  DataGrid,
-  GridActionsCellItem,
-  GridToolbar,
-} from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import {
   Button,
   Dialog,
@@ -25,7 +21,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../../redux/actions/categoryActions";
-import "./SuperAdmin.css"
+import "./SuperAdmin.css";
 
 const SACategories = () => {
   const dispatch = useDispatch();
@@ -36,7 +32,11 @@ const SACategories = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoryName, setCategoryName] = useState("");
   const [subcategory, setSubcategory] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -53,14 +53,32 @@ const SACategories = () => {
     if (!categoryName.trim()) return;
     try {
       if (editMode && selectedCategory) {
-        await dispatch(updateCategory(selectedCategory.name, categoryName.trim(), subcategory.trim()));
-        setSnackbar({ open: true, message: "Updated successfully", severity: "success" });
+        await dispatch(
+          updateCategory(
+            selectedCategory.name,
+            categoryName.trim(),
+            subcategory.trim()
+          )
+        );
+        setSnackbar({
+          open: true,
+          message: "Updated successfully",
+          severity: "success",
+        });
       } else {
         await dispatch(addCategory(categoryName.trim(), subcategory.trim()));
-        setSnackbar({ open: true, message: "Category added", severity: "success" });
+        setSnackbar({
+          open: true,
+          message: "Category added",
+          severity: "success",
+        });
       }
     } catch {
-      setSnackbar({ open: true, message: "Operation failed", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: "Operation failed",
+        severity: "error",
+      });
     } finally {
       resetForm();
       setOpenDialog(false);
@@ -76,12 +94,18 @@ const SACategories = () => {
   };
 
   const handleDeleteClick = async (row) => {
-    const confirmed = window.confirm(`Are you sure you want to delete category "${row.name}"?`);
+    const confirmed = window.confirm(
+      `Are you sure you want to delete category "${row.name}"?`
+    );
     if (!confirmed) return;
 
     try {
       await dispatch(deleteCategory(row.name));
-      setSnackbar({ open: true, message: "Deleted successfully", severity: "info" });
+      setSnackbar({
+        open: true,
+        message: "Deleted successfully",
+        severity: "info",
+      });
     } catch {
       setSnackbar({ open: true, message: "Delete failed", severity: "error" });
     }
@@ -95,7 +119,7 @@ const SACategories = () => {
       headerName: "Subcategories",
       flex: 2,
       renderCell: (params) =>
-        params.value?.length > 0 ? params.value.join(", ") : "—"
+        params.value?.length > 0 ? params.value.join(", ") : "—",
     },
     {
       field: "actions",
@@ -126,9 +150,11 @@ const SACategories = () => {
     <div className="p-4" style={{ width: "100%", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Item Categories</h2>
-        <Button variant="contained" onClick={() => setOpenDialog(true)}>
-          Add Category
-        </Button>
+        <div className="add-category-button">
+          <Button variant="contained" onClick={() => setOpenDialog(true)}>
+            Add Category
+          </Button>
+        </div>
       </div>
 
       <div style={{ height: 600, width: "100%" }}>
@@ -139,19 +165,42 @@ const SACategories = () => {
         ) : error ? (
           <p>Error: {error}</p>
         ) : (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }}
-            pageSize={10}
-            rowsPerPageOptions={[5, 10]}
-            disableRowSelectionOnClick
-          />
+          <div className="add-category">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
         )}
       </div>
 
-      <Dialog open={openDialog} onClose={() => { setOpenDialog(false); resetForm(); }} fullWidth maxWidth="sm">
-        <DialogTitle>{editMode ? "Edit Category" : "Add New Category"}</DialogTitle>
+      <Dialog
+        open={openDialog}
+        onClose={() => {
+          setOpenDialog(false);
+          resetForm();
+        }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          {editMode ? "Edit Category" : "Add New Category"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             label="Category Name"
@@ -170,7 +219,14 @@ const SACategories = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setOpenDialog(false); resetForm(); }}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setOpenDialog(false);
+              resetForm();
+            }}
+          >
+            Cancel
+          </Button>
           <Button variant="contained" onClick={handleAddOrUpdate}>
             {editMode ? "Update" : "Add"}
           </Button>

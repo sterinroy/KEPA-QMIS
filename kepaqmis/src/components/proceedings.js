@@ -120,7 +120,7 @@ const Proceedings = () => {
         <p className="center bold">Quality and Qty Verified</p>
       </div>
 
-      <button onClick={handleDownload} className="download-btn">Download as PDF</button>
+      <button onClick={handleDownload} className="download-bottom-btn">Download as PDF</button>
     </div>
   );
 };

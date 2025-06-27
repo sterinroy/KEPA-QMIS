@@ -11,6 +11,7 @@ import { Box, Typography, Dialog, Popover } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import ApproveDialog from "./ApproveDialog";
 import AddCategoryPopover from "./AddCategoryPopover";
+import "../Issue.css";
 
 const QMIManageRequest = () => {
   const dispatch = useDispatch();
@@ -38,8 +39,8 @@ const QMIManageRequest = () => {
         type === "checkbox"
           ? e.target.checked
           : name === "quantity"
-            ? parseInt(value, 10) || 0
-            : value,
+          ? parseInt(value, 10) || 0
+          : value,
     }));
   };
 
@@ -85,12 +86,16 @@ const QMIManageRequest = () => {
       sortable: false,
       renderCell: (params) => (
         <button
+          className="orange-button"
           onClick={async () => {
             const entry = params.row;
             const res = await fetch("/api/stockRoutes/stockitems");
             const items = await res.json();
             const nextNumber = (items.length || 0) + 1;
-            const formattedQmno = `KEPA/${String(nextNumber).padStart(2, "0")}/${new Date().getFullYear()}`;
+            const formattedQmno = `KEPA/${String(nextNumber).padStart(
+              2,
+              "0"
+            )}/${new Date().getFullYear()}`;
             const isCash = entry.amountType === "Cash";
             const amountDetails = isCash
               ? { cashAmount: entry.amountDetails?.cashAmount || "" }
@@ -125,46 +130,66 @@ const QMIManageRequest = () => {
         overflowY: "auto",
       }}
     >
-      <Typography variant="h5" fontWeight="bold" gutterBottom color="white">
-        Manage Requests
-      </Typography>
-      <Box sx={{ maxWidth: "100%", height: "550px" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
+      <Box
+        className="qmi-manage-request-container"
+        sx={{ width: "100%", height: "100%", overflowY: "auto" }}
+      >
+        <Typography variant="h5" fontWeight="bold" gutterBottom color="white">
+          Manage Requests
+        </Typography>
+        <Box sx={{ maxWidth: "100%", height: "550px" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns.map((col) => ({
+              ...col,
+              align: "center",
+              headerAlign: "center",
+            }))}
+            pageSize={10}
+            rowsPerPageOptions={[10, 25, 50]}
+            disableRowSelectionOnClick
+            sx={{
+              "& .MuiDataGrid-cell": {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1976d2",
+                color: "black",
+              },
+            }}
+          />
+        </Box>
+
+        <ApproveDialog
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          entry={selectedEntry}
+          formData={formData}
+          setFormData={setFormData}
+        />
+
+        <AddCategoryPopover
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          onAdd={handleAddCategory}
+          label="Category"
+        />
+
+        <AddCategoryPopover
+          anchorEl={anchorElSub}
+          open={Boolean(anchorElSub)}
+          onClose={() => setAnchorElSub(null)}
+          value={newSubcategory}
+          onChange={(e) => setNewSubcategory(e.target.value)}
+          onAdd={handleAddSubcategory}
+          label="SubCategory"
         />
       </Box>
-
-      <ApproveDialog
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        entry={selectedEntry}
-        formData={formData}
-        setFormData={setFormData}
-      />
-
-      <AddCategoryPopover
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-        value={newCategory}
-        onChange={(e) => setNewCategory(e.target.value)}
-        onAdd={handleAddCategory}
-        label="Category"
-      />
-
-      <AddCategoryPopover
-        anchorEl={anchorElSub}
-        open={Boolean(anchorElSub)}
-        onClose={() => setAnchorElSub(null)}
-        value={newSubcategory}
-        onChange={(e) => setNewSubcategory(e.target.value)}
-        onAdd={handleAddSubcategory}
-        label="SubCategory"
-      />
     </Box>
   );
 };

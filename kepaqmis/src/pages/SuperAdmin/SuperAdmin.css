@@ -31,3 +31,510 @@ h2 {
   color: white;
   margin-right: 8px;
 } */
+
+.manage-user {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -15px;
+  margin-right: 40px;
+  margin-bottom: 90px;
+}
+
+.manage-user .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.manage-user .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.manage-user .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.manage-user .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.manage-user .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.manage-user .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.manage-user .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.manage-user .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.manage-user .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.manage-user .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.manage-user .MuiTablePagination-select {
+  color: white;
+}
+
+.manage-user .MuiTablePagination-spacer {
+  color: white;
+}
+
+.manage-user .MuiTablePagination-actions button {
+  color: white !important;
+}
+.manage-user .MuiTablePagination-actions {
+  color: white; 
+}
+.manage-user .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.manage-user .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user .MuiTablePagination-select {
+  color: white !important;
+}
+
+.manage-user .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.manage-user .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.manage-user .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.manage-user  .MuiButtonBase-root {
+ color: #ffffff;
+}
+
+.add-user-button {
+  margin-bottom: 16px;
+  margin-left: -8px;
+  display: flex;
+  justify-content: flex-start; /* or flex-end / center depending on alignment */
+}
+
+.add-user-button .MuiButton-root {
+  background-color: #1976d2; /* default MUI primary blue */
+  color: white;
+}
+
+/* Optional hover effect */
+.add-user-button .MuiButton-root:hover {
+  background-color: #1565c0;
+}
+
+.log-info {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -15px;
+  margin-right: 40px;
+  margin-bottom: 30px;
+}
+
+.log-info .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.log-info .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.log-info .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.log-info .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.log-info .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.log-info .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.log-info .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.log-info .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.log-info .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.log-info .MuiTablePagination-root {
+  color: white;
+}
+
+.log-info .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.log-info .MuiTablePagination-select {
+  color: white;
+}
+
+.log-info .MuiTablePagination-spacer {
+  color: white;
+}
+
+.log-info .MuiTablePagination-actions button {
+  color: white !important;
+}
+.log-info .MuiTablePagination-actions {
+  color: white; 
+}
+.log-info .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.log-info .MuiTablePagination-root {
+  color: white;
+}
+
+.log-info .MuiTablePagination-select {
+  color: white !important;
+}
+
+.log-info .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.log-info .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.log-info .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.log-info  .MuiButtonBase-root {
+ color: #ffffff;
+}
+
+.add-category {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -10px;
+  margin-right: 60px;
+  margin-bottom: 30px;
+}
+
+.add-category .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.add-category .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.add-category .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.add-category .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.add-category .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.add-category .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.add-category .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.add-category .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.add-category .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.add-category .MuiTablePagination-root {
+  color: white;
+}
+
+.add-category .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.add-category .MuiTablePagination-select {
+  color: white;
+}
+
+.add-category .MuiTablePagination-spacer {
+  color: white;
+}
+
+.add-category .MuiTablePagination-actions button {
+  color: white !important;
+}
+.add-category .MuiTablePagination-actions {
+  color: white; 
+}
+.add-category .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.add-category .MuiTablePagination-root {
+  color: white;
+}
+
+.add-category .MuiTablePagination-select {
+  color: white !important;
+}
+
+.add-category .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.add-category .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.add-category .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.add-category  .MuiButtonBase-root {
+ color: #ffffff;
+}
+
+.add-category-button{
+  margin-left: -7px;
+  margin-bottom: 10px;
+}
+
+.add-office {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -10px;
+  margin-right: 60px;
+  margin-bottom: 30px;
+}
+
+.add-office .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.add-office .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.add-office .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.add-office .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.add-office .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.add-office .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.add-office .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.add-office .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.add-office .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.add-office .MuiTablePagination-root {
+  color: white;
+}
+
+.add-office .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.add-office .MuiTablePagination-select {
+  color: white;
+}
+
+.add-office .MuiTablePagination-spacer {
+  color: white;
+}
+
+.add-office .MuiTablePagination-actions button {
+  color: white !important;
+}
+.add-office .MuiTablePagination-actions {
+  color: white; 
+}
+.add-office .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.add-office .MuiTablePagination-root {
+  color: white;
+}
+
+.add-office .MuiTablePagination-select {
+  color: white !important;
+}
+
+.add-office .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.add-office .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.add-office .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.add-office  .MuiButtonBase-root {
+ color: #ffffff;
+}
+
+.add-office-button{
+  margin-left: -7px;
+  margin-bottom: 10px;
+}

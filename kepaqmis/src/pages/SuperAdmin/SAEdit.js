@@ -20,6 +20,7 @@ const SAEdit = () => {
   const cardData = [
     {
       title: "Edit Categories",
+      mt:"30px",
       description: "Manage item categories and subcategories.",
       icon: <Category sx={{ fontSize: 48, color: "#4FC3F7" }} />,
       buttonText: "Manage Categories",
@@ -32,20 +33,16 @@ const SAEdit = () => {
       buttonText: "Manage Offices",
       route: "/SuperAdmin/SAOffices",
     },
-    // {
-    //   title: "Configure Forms",
-    //   description: "Create or update form structures dynamically.",
-    //   icon: <DynamicForm sx={{ fontSize: 48, color: "#F06292" }} />,
-    //   buttonText: "Configure Forms",
-    //   route: "/SuperAdmin/SAFormEditor",
-    // },
   ];
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(to right, #1A1A40, #1C2E4A)",
+        width:"1200px",
+        background: "#111c44",
+        ml: "-20px",
+        mb:"-20px",
         p: 5,
       }}
     >

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchQMIssueEntries } from "../../redux/actions/qmissueActions";
 import { DataGrid } from "@mui/x-data-grid";
+import "./QMP.css";
 
 const QMPEntries = () => {
   const dispatch = useDispatch();
@@ -46,9 +47,9 @@ const QMPEntries = () => {
   }));
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="qm-issue-entries-container" style={{ width: "100%" }}>
       <div>
-        <h2>QMIssue Entries</h2>
+        <h2 style={{ color: "white" }}>QM Purchase Entries</h2>
       </div>
       <div style={{ height: 600 }}>
         {loading ? (
@@ -58,14 +59,27 @@ const QMPEntries = () => {
         ) : entries.length === 0 ? (
           <p>No QMIssue entries.</p>
         ) : (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            disableRowSelectionOnClick
-            showToolbar
-          />
+          <div className="table-wrapper">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
         )}
       </div>
     </div>

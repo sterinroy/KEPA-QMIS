@@ -82,7 +82,10 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
         <DialogTitle>Approve Request</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box
+            className="approve-request"
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          >
             <TextField
               label="Order No"
               name="orderNo"
@@ -153,7 +156,6 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
               onChange={handleInputChange}
               fullWidth
             />
-
             <FormControl>
               <RadioGroup
                 row
@@ -166,12 +168,25 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
                   control={<Radio />}
                   label="Cash"
                   disabled={formData.amountType === "Credit"}
+                  sx={{
+                    "& .MuiFormControlLabel-label.Mui-disabled": {
+                      color: "white",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#bbbbff !important",
+                    },
+                  }}
                 />
                 <FormControlLabel
                   value="Credit"
                   control={<Radio />}
                   label="Credit"
                   disabled={formData.amountType === "Cash"}
+                  sx={{
+                    "& .MuiFormControlLabel-label.Mui-disabled": {
+                      color: "white",
+                    },
+                  }}
                 />
               </RadioGroup>
             </FormControl>
@@ -197,14 +212,14 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
             )}
 
             <TextField
-              label="From Whom Purchased"
+              label="Supplier Name"
               name="fromWhomPurchased"
               value={formData.fromWhomPurchased}
               onChange={handleInputChange}
               fullWidth
             />
             <TextField
-              label="To Whom"
+              label="To (Office/ Company)"
               name="toWhom"
               value={formData.toWhom}
               onChange={handleInputChange}
@@ -225,7 +240,7 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
               fullWidth
             />
             <TextField
-              label="Make"
+              label="Make/ Brand"
               name="make"
               value={formData.make}
               onChange={handleInputChange}
@@ -239,7 +254,7 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
               fullWidth
             />
             <TextField
-              label="Model No"
+              label="Model No."
               name="modelNo"
               value={formData.modelNo}
               onChange={handleInputChange}
@@ -258,7 +273,7 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
             />
 
             <TextField
-              label="Serial Number"
+              label="Serial No."
               name="serialNumber"
               value={formData.serialNumber}
               onChange={handleInputChange}
@@ -279,7 +294,7 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
               fullWidth
             />
             <TextField
-              label="Warranty (months)"
+              label="Warranty (In Months)"
               name="warranty"
               value={formData.warranty}
               onChange={handleInputChange}
@@ -301,11 +316,24 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
             </FormControl>
 
             <TextField
-              label="QM Number"
+              label="QM No."
               name="Qmno"
               value={formData.Qmno}
               disabled
               fullWidth
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  color: "#bbbbff !important",
+                  WebkitTextFillColor: "white !important",
+                  opacity: 1,
+                },
+                "& .MuiInputLabel-root.Mui-disabled": {
+                  color: "#bbbbff !important",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#bbbbff !important",
+                },
+              }}
             />
           </Box>
         </DialogContent>

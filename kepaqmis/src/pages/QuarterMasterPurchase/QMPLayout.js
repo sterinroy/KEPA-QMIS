@@ -5,6 +5,7 @@ import QMPDashboard from "./QMPDashboard";
 import QMPOrder from "./QMPOrder/QMPOrder";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import Main from "../../components/Main";
 import QMPEntries from "./QMPEntries";
 
@@ -27,7 +28,7 @@ function QMPLayout() {
     {
       label: "Entries",
       path: "/QuarterMasterPurchase/QMPEntries",
-      icon: <LocalShippingIcon className="icon" />,
+      icon: <AssignmentIcon className="icon" />,
       component: <QMPEntries />,
     },
   ];

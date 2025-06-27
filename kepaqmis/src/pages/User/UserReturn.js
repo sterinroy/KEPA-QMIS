@@ -9,7 +9,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const formFields = [
   {
@@ -26,7 +26,7 @@ const formFields = [
   },
   {
     name: "reason",
-    label: "Why Return",
+    label: "Reason For Return",
     multiline: true,
     rows: 2,
     required: true,
@@ -47,7 +47,6 @@ const UserReturn = () => {
   const [issuedItems, setIssuedItems] = useState([]);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (pen) {
       fetchIssuedItems(pen);
@@ -55,23 +54,22 @@ const UserReturn = () => {
   }, []);
 
   const fetchIssuedItems = async (pen) => {
-  try {
-    const res = await fetch(`/api/userRoute/my-issued-items/${pen}`);
-    const data = await res.json();
-    if (Array.isArray(data)) {
-      const approvedItems = data.filter(item => item.status === "approved");
-      // console.log("Approved Items:", approvedItems);
-      setIssuedItems(approvedItems);
-    } else {
-      console.error("Unexpected response:", data);
-      alert("Failed to fetch issued items.");
+    try {
+      const res = await fetch(`/api/userRoute/my-issued-items/${pen}`);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        const approvedItems = data.filter((item) => item.status === "approved");
+        // console.log("Approved Items:", approvedItems);
+        setIssuedItems(approvedItems);
+      } else {
+        console.error("Unexpected response:", data);
+        alert("Failed to fetch issued items.");
+      }
+    } catch (error) {
+      console.error("Error fetching issued items:", error);
+      alert("Something went wrong while fetching issued items.");
     }
-  } catch (error) {
-    console.error("Error fetching issued items:", error);
-    alert("Something went wrong while fetching issued items.");
-  }
-};
-
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,26 +81,33 @@ const UserReturn = () => {
     if (!formData.itemId) return alert("Please select an item");
 
     try {
-      const res = await fetch(`/api/userRoute/my-issued-items/${formData.itemId}/permanent-return`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          penNo: pen,
-          name: name,
-        }),
-      });
+      const res = await fetch(
+        `/api/userRoute/my-issued-items/${formData.itemId}/permanent-return`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...formData,
+            penNo: pen,
+            name: name,
+          }),
+        }
+      );
 
       const result = await res.json();
 
       if (res.ok) {
         alert("Return request submitted successfully!");
-        navigate('/lars-print', {state : {
-          item : issuedItems.find(item => item._id === formData.itemId)?.item?.itemName || "Unknown Item",
-          quantity: formData.quantity,
-          reason: formData.reason,
-          date: formData.dateOfReturn
-        }});
+        navigate("/lars-print", {
+          state: {
+            item:
+              issuedItems.find((item) => item._id === formData.itemId)?.item
+                ?.itemName || "Unknown Item",
+            quantity: formData.quantity,
+            reason: formData.reason,
+            date: formData.dateOfReturn,
+          },
+        });
 
         setFormData({
           itemId: "",
@@ -119,7 +124,17 @@ const UserReturn = () => {
   };
 
   return (
-    <div className="mui-form" style={{ display: "flex", height: "100vh", justifyContent: "center", alignItems: "center" }}>
+    <div
+      className="mui-form"
+      style={{
+        display: "flex",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#0C1227",
+        marginRight: "70px", // Set the background color for the entire page
+      }}
+    >
       <Box
         className="return-form"
         sx={{
@@ -130,7 +145,13 @@ const UserReturn = () => {
           width: "400px",
         }}
       >
-        <Typography variant="h5" mb={3} fontWeight="bold" textAlign="center" color="white">
+        <Typography
+          variant="h5"
+          mb={3}
+          fontWeight="bold"
+          textAlign="center"
+          color="white"
+        >
           Return Request Form
         </Typography>
 
@@ -148,9 +169,10 @@ const UserReturn = () => {
             >
               {issuedItems.map((req) => (
                 <MenuItem key={req._id} value={req._id}>
-                  {req.item?.itemName || "Unnamed"} - {req.item?.itemCategory || "N/A"} / {req.item?.itemSubCategory || "N/A"}
+                  {req.item?.itemName || "Unnamed"} -{" "}
+                  {req.item?.itemCategory || "N/A"} /{" "}
+                  {req.item?.itemSubCategory || "N/A"}
                 </MenuItem>
-
               ))}
             </Select>
           </FormControl>
@@ -163,18 +185,22 @@ const UserReturn = () => {
               onChange={handleChange}
               required={field.required}
               multiline={field.multiline || false}
-              type={!field.multiline ? (field.type || "text"): undefined}
+              type={!field.multiline ? field.type || "text" : undefined}
               rows={field.rows || undefined}
               fullWidth
-              sx={field.name === "reason" ? {
-                "& .MuiInputBase-root": { 
-                  minHeight: "80px",
-                  alignitems: "flex-start",
-                },
-                "& textarea": { 
-                  padding: "6px" 
-                }
-                } : {mb: 2}}
+              sx={
+                field.name === "reason"
+                  ? {
+                      "& .MuiInputBase-root": {
+                        minHeight: "80px",
+                        alignitems: "flex-start",
+                      },
+                      "& textarea": {
+                        padding: "6px",
+                      },
+                    }
+                  : { mb: 2 }
+              }
             />
           ))}
 

@@ -11,11 +11,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import {
-  DataGrid,
-  GridToolbar,
-  GridActionsCellItem,
-} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +20,7 @@ import {
   addOffice,
   deleteOffice,
 } from "../../redux/actions/officeActions";
-import "./SuperAdmin.css"
+import "./SuperAdmin.css";
 
 const SAOffices = () => {
   const dispatch = useDispatch();
@@ -32,7 +28,11 @@ const SAOffices = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [officeName, setOfficeName] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     dispatch(fetchOffices());
@@ -55,7 +55,9 @@ const SAOffices = () => {
   };
 
   const handleDeleteClick = async (name) => {
-    const confirmed = window.confirm(`Are you sure you want to delete office "${name}"?`);
+    const confirmed = window.confirm(
+      `Are you sure you want to delete office "${name}"?`
+    );
     if (!confirmed) return;
 
     try {
@@ -91,14 +93,16 @@ const SAOffices = () => {
   return (
     <Box className="p-4" sx={{ width: "100%", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
-        <h2 >Offices/Companies</h2>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => setOpenDialog(true)}
-        >
-          Add Office
-        </Button>
+        <h2>Offices/Companies</h2>
+        <div className="add-office-button">
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setOpenDialog(true)}
+          >
+            Add Office
+          </Button>
+        </div>
       </div>
 
       <div style={{ height: 600, width: "100%" }}>
@@ -109,19 +113,39 @@ const SAOffices = () => {
         ) : error ? (
           <p>Error: {error}</p>
         ) : (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }}
-            pageSize={10}
-            rowsPerPageOptions={[5, 10]}
-            disableRowSelectionOnClick
-            showToolbar
-          />
+          <div className="add-office">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
         )}
       </div>
 
-      <Dialog open={openDialog} onClose={() => { setOpenDialog(false); resetForm(); }} fullWidth maxWidth="sm">
+      <Dialog
+        open={openDialog}
+        onClose={() => {
+          setOpenDialog(false);
+          resetForm();
+        }}
+        fullWidth
+        maxWidth="sm"
+      >
         <DialogTitle>Add New Office</DialogTitle>
         <DialogContent>
           <TextField
@@ -134,7 +158,14 @@ const SAOffices = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setOpenDialog(false); resetForm(); }}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setOpenDialog(false);
+              resetForm();
+            }}
+          >
+            Cancel
+          </Button>
           <Button variant="contained" onClick={handleAddOffice}>
             Add
           </Button>

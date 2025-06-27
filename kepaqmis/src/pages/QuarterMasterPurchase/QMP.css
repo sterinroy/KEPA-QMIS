@@ -2,9 +2,9 @@
   background-color: #111c44 !important;
   color: black;
   margin-left: 12px;
-  margin-top: 50px;
+  margin-top: 30px;
   margin-right: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   padding: 30px 40px 20px 40px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -13,8 +13,23 @@
   box-sizing: border-box;
 }
 
-.form{
+.form {
   background-color: #0c1227;
+  /* margin-top: 10px; */
+  margin-right: 60px;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 1rem;
+  box-sizing: border-box;
+
+  /* Optional: Hide scrollbar visually while keeping scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.form::-webkit-scrollbar {
+  display: none;
 }
 
 .qmp-form-entry-container {
@@ -22,6 +37,8 @@
   grid-template-columns: repeat(2, 1fr); /* 2 columns */
   gap: 24px; /* spacing between columns */
   width: 100%;
+  margin-top: 5px;
+  margin-right: 50px;
   margin-bottom: 30px;
   padding: 16px;
   background-color: #111c44; /* optional dark background for each entry block */
@@ -122,4 +139,137 @@
   display: block;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+.qm-issue-entries-container {
+  padding: 20px;
+  background-color: #0c1227;
+  margin-top: 10px;
+  margin-right: 55px;
+  margin-bottom: 55px;
+  /* margin-left: 0px; */
+  /* border-radius: 8px; */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qm-issue-entries-container h2 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.table-wrapper {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44; /* Background behind the grid if any */
+}
+
+.table-wrapper .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.table-wrapper .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.table-wrapper .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.table-wrapper .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.table-wrapper .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.table-wrapper .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.table-wrapper .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.table-wrapper .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.table-wrapper .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.table-wrapper .MuiTablePagination-root {
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-select {
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-spacer {
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-actions button {
+  color: white !important;
+}
+.table-wrapper .MuiTablePagination-actions {
+  color: white; 
+}
+.table-wrapper .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-root {
+  color: white;
+}
+
+.table-wrapper .MuiTablePagination-select {
+  color: white !important;
+}
+
+.table-wrapper .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.table-wrapper .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.table-wrapper .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.table-wrapper  .MuiButtonBase-root {
+ color: #ffffff;
 }

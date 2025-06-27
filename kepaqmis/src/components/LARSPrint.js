@@ -39,7 +39,7 @@ const data = {
   return (
     <div className="lars-print-wrapper">
       <div className="download-section">
-        <button onClick={handleDownload} className="download-button">
+        <button onClick={handleDownload} className="download-button" mt>
           Download as PDF
         </button>
       </div>

@@ -48,11 +48,11 @@ const QMIEntries = () => {
   }));
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="qmi-issue-page-container">
       <div>
-        <h2>QMIssue Entries</h2>
+        <h2 style={{ color: "white" }}>QMIssue Entries</h2>
       </div>
-      <div style={{ height: 600 }}>
+      <div className="qmi-issue-table-section">
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -62,11 +62,25 @@ const QMIEntries = () => {
         ) : (
           <DataGrid
             rows={rows}
-            columns={columns}
+            columns={columns.map((col) => ({
+              ...col,
+              align: "center",
+              headerAlign: "center",
+            }))}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             disableRowSelectionOnClick
-            showToolbar
+            sx={{
+              "& .MuiDataGrid-cell": {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1976d2",
+                color: "black",
+              },
+            }}
           />
         )}
       </div>

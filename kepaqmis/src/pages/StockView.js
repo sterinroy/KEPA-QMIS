@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStockItems } from "../redux/actions/stockActions";
 import { DataGrid } from "@mui/x-data-grid";
+import "../App.css";
 
 const StockItemView = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const StockItemView = () => {
       headerName: "Model",
       flex: 1,
       valueGetter: (params) =>
-  `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim()
+        `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim(),
     },
     {
       field: "invoiceDate",
@@ -46,7 +47,7 @@ const StockItemView = () => {
     },
     {
       field: "toWhom",
-      headerName: "To Whom",
+      headerName: "To (Office/ Company)",
       flex: 1,
     },
     {
@@ -54,9 +55,9 @@ const StockItemView = () => {
       headerName: "Entered By",
       flex: 1,
       valueGetter: (params) =>
-  params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
-    ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
-    : "-",
+        params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
+          ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
+          : "-",
     },
     {
       field: "barcodeImage",
@@ -81,24 +82,37 @@ const StockItemView = () => {
       <div>
         <h2>Stock Items</h2>
       </div>
-      <div style={{ height: 600 }}> 
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : rows.length === 0 ? (
-        <p>No stock items available.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-        />
-      )}
-      </div> 
+      <div style={{ height: 600 }}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : rows.length === 0 ? (
+          <p>No stock items available.</p>
+        ) : (
+          <div className="stock-items">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
