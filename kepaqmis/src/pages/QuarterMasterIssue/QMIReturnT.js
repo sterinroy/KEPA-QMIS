@@ -22,7 +22,7 @@ const QMReturnT = () => {
   useEffect(() => {
     const fetchIssuedItems = async () => {
       try {
-        const res = await fetch("/api/itemRequestRoutes/returns/pending-verification"); // only approved temporary items
+        const res = await fetch("/api/userRoute/returns/pending-verification"); // only approved temporary items
         const data = await res.json();
         const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
         setItems(temporaryApproved);
