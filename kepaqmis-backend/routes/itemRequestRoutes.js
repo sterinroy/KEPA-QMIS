@@ -28,6 +28,15 @@ router.post("/item-requests", async (req, res) => {
 });
 
 
+router.get("/item-requests/pending", async (req, res) => {
+  try {
+    const pendingRequests = await ItemRequest.find({ status: "pending" }).populate("item");
+    res.status(200).json(pendingRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post("/item-requests/:id/approve", async (req, res) => {
   const { pen, name, approvedQty } = req.body;
 
