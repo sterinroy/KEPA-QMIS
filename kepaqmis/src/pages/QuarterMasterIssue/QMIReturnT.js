@@ -23,22 +23,21 @@ const QMReturnT = () => {
 
 
   useEffect(() => {
-    const fetchIssuedItems = async () => {
-      try {
-        const res = await fetch("/api/userRoute/returns/pending-verification"); 
-        const data = await res.json();
-        // const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
-        setItems(data);
-        console.log(data);
-      } catch (err) {
-        console.error("Error fetching approved items:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  fetchIssuedItems();
+}, []);
 
-    fetchIssuedItems();
-  }, []);
+const fetchIssuedItems = async () => {
+  try {
+    const res = await fetch("/api/userRoute/returns/pending-verification"); 
+    const data = await res.json();
+    setItems(data);
+  } catch (err) {
+    console.error("Error fetching approved items:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleApproveReturn = async () => {
     try {
@@ -51,7 +50,7 @@ const QMReturnT = () => {
       if (!res.ok) throw new Error("Return approval failed");
 
       setSnackbar({ open: true, message: "Return approved and stock updated", severity: "success" });
-      setItems((prev) => prev.filter((i) => i._id !== selectedItem._id));
+      await fetchIssuedItems();
       setOpenDialog(false);
     } catch (err) {
       console.error("Error approving return:", err);
@@ -163,15 +162,18 @@ const QMReturnT = () => {
               value={returnQty}
               onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
               error={
-                returnQty <= 0 || returnQty > (
-                  selectedItem?.issuedFrom.reduce(
+                isNaN(returnQty) ||
+                returnQty <= 0 ||
+                returnQty >
+                  (selectedItem?.issuedFrom.reduce(
                     (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
                     0
-                  ) || 0
-                )
+                  ) || 0)
               }
               helperText={
-                returnQty <= 0
+                isNaN(returnQty)
+                  ? "Enter a valid number"
+                  : returnQty <= 0
                   ? "Quantity must be greater than 0"
                   : returnQty >
                     (selectedItem?.issuedFrom.reduce(
