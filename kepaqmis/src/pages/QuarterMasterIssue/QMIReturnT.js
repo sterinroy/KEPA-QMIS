@@ -76,14 +76,13 @@ const QMReturnT = () => {
       slNo: item.slNo || "-",
       mobile: item.mobile || "-",
       purpose: item.remarks || "-",
-      office: item.item?.toWhom || "-",
-      company: item.item?.fromWhomPurchased || "-",
+      office: item.toWhom || "-",
       category: item.item?.itemCategory || "-",
       subcategory: item.item?.itemSubCategory || "-",
       itemName: item.item?.itemName || "Unnamed",
       requestedQty: item.requestedQty || 0,
       remainingQty,
-      returnDate: item.returnDate || "",
+      dateOfrequest: item.dateOfrequest || "",
       fullItem: item,
     };
   });
@@ -93,15 +92,14 @@ const QMReturnT = () => {
     { field: "mobile", headerName: "Mobile", flex: 1 },
     { field: "purpose", headerName: "Purpose", flex: 1 },
     { field: "office", headerName: "Office", flex: 1 },
-    { field: "company", headerName: "Company", flex: 1 },
     { field: "category", headerName: "Category", flex: 1 },
     { field: "subcategory", headerName: "Subcategory", flex: 1 },
     { field: "itemName", headerName: "Item", flex: 1 },
     { field: "requestedQty", headerName: "requested Quantity", flex:1},
     { field: "remainingQty", headerName: "Remaining to Return", flex: 1 },
     {
-      field: "returnDate",
-      headerName: "Return Date",
+      field: "dateOfrequest",
+      headerName: "Date of request",
       flex:1,
       renderCell: (params) => {
         const date = new Date(params.value);
