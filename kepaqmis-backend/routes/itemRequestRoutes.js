@@ -144,6 +144,16 @@ router.post("/item-requests/:id/return", async (req, res) => {
   }
 });
 
+router.delete("/item-requests/:id", async (req, res) => {
+  try {
+    await ItemRequest.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Return request deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 //qm rejects the user request
 router.post("/item-requests/:id/reject", async (req, res) => {
   const { pen, name } = req.body;

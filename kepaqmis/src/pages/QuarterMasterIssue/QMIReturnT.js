@@ -38,6 +38,20 @@ const fetchIssuedItems = async () => {
   }
 };
 
+const handleDeleteReturn = async (id) => {
+  try {
+    const res = await fetch(`/api/itemRequestRoutes/item-requests/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete");
+    setSnackbar({ open: true, message: "Return deleted", severity: "info" });
+    await fetchIssuedItems();
+  } catch (err) {
+    setSnackbar({ open: true, message: "Error deleting", severity: "error" });
+  }
+};
+
+
 
   const handleApproveReturn = async () => {
     try {
@@ -65,68 +79,68 @@ const fetchIssuedItems = async () => {
 };
 
 
-  const rows = items.map((item) => {
-    const totalIssued = item.issuedFrom?.reduce((sum, i) => sum + i.deductedQty, 0) || 0;
-    const totalReturned = item.issuedFrom?.reduce((sum, i) => sum + (i.returnedQty || 0), 0);
-    const remainingQty = totalIssued - totalReturned;
-
-    return {
-      id: item._id,
-      slNo: item.slNo || "-",
-      mobile: item.mobile || "-",
-      purpose: item.remarks || "-",
-      office: item.toWhom || "-",
-      category: item.item?.itemCategory || "-",
-      subcategory: item.item?.itemSubCategory || "-",
-      itemName: item.item?.itemName || "Unnamed",
-      requestedQty: item.requestedQty || 0,
-      remainingQty,
-      dateOfrequest: item.dateOfrequest || "",
-      fullItem: item,
-    };
-  });
+  const rows = items.map((item) => ({
+  id: item._id,
+  slNo: item.slNo || "-",
+  mobile: item.mobile || "-",
+  purpose: item.remarks || "-",
+  office: item.toWhom || "-",
+  category: item.item?.itemCategory || "-",
+  subcategory: item.item?.itemSubCategory || "-",
+  itemName: item.item?.itemName || "Unnamed",
+  requestedQty: item.requestedQty || 0,
+  dateOfrequest: item.dateOfrequest || "",
+  fullItem: item,
+}));
 
   const columns = [
-    { field: "slNo", headerName: "Sl No", flex: 1 },
-    { field: "mobile", headerName: "Mobile", flex: 1 },
-    { field: "purpose", headerName: "Purpose", flex: 1 },
-    { field: "office", headerName: "Office", flex: 1 },
-    { field: "category", headerName: "Category", flex: 1 },
-    { field: "subcategory", headerName: "Subcategory", flex: 1 },
-    { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "requestedQty", headerName: "requested Quantity", flex:1},
-    { field: "remainingQty", headerName: "Remaining to Return", flex: 1 },
-    {
-      field: "dateOfrequest",
-      headerName: "Date of request",
-      flex:1,
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        return date.toString() === "Invalid Date"
-          ? "N/A"
-          : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}-${date.getFullYear()}`;
-      },
+  { field: "slNo", headerName: "Sl No", flex: 1 },
+  { field: "mobile", headerName: "Mobile", flex: 1 },
+  { field: "purpose", headerName: "Purpose", flex: 1 },
+  { field: "office", headerName: "Office", flex: 1 },
+  { field: "category", headerName: "Category", flex: 1 },
+  { field: "subcategory", headerName: "Subcategory", flex: 1 },
+  { field: "itemName", headerName: "Item", flex: 1 },
+  { field: "requestedQty", headerName: "Approved Qty", flex: 1 },
+  {
+    field: "dateOfrequest",
+    headerName: "Date of request",
+    flex: 1,
+    renderCell: (params) => {
+      const date = new Date(params.value);
+      return isNaN(date) ? "N/A" : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getFullYear()}`;
     },
-    {
-      field: "action",
-      headerName: "Return",
-      flex:1,
-      renderCell: (params) => (
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    flex: 1.5,
+    renderCell: (params) => (
+      <Box display="flex" gap={1}>
         <Button
-          variant="outlined"
+          variant="contained"
+          size="small"
           onClick={() => {
             setSelectedItem(params.row.fullItem);
-            setReturnQty(params.row.remainingQty);
+            setReturnQty(params.row.requestedQty);
             setOpenDialog(true);
           }}
         >
-          Approve Return
+          Approve
         </Button>
-      ),
-    },
-  ];
+        <Button
+          variant="outlined"
+          color="error"
+          size="small"
+          onClick={() => handleDeleteReturn(params.row.fullItem._id)}
+        >
+          Delete
+        </Button>
+      </Box>
+    ),
+  },
+];
+
 
   return (
     <div style={{ width: "100%" }}>
@@ -150,47 +164,20 @@ const fetchIssuedItems = async () => {
       )}
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Confirm Return</DialogTitle>
+        <DialogTitle>Approve Return</DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} mt={1}>
-            <div>
-              How many items are being returned?
-            </div>
+            <div>Return quantity to approve:</div>
             <TextField
               label="Return Quantity"
               type="number"
               value={returnQty}
               onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
-              error={
-                isNaN(returnQty) ||
-                returnQty <= 0 ||
-                returnQty >
-                  (selectedItem?.issuedFrom.reduce(
-                    (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
-                    0
-                  ) || 0)
-              }
-              helperText={
-                isNaN(returnQty)
-                  ? "Enter a valid number"
-                  : returnQty <= 0
-                  ? "Quantity must be greater than 0"
-                  : returnQty >
-                    (selectedItem?.issuedFrom.reduce(
-                      (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
-                      0
-                    ) || 0)
-                  ? "Cannot return more than remaining"
-                  : ""
-              }
+              fullWidth
               inputProps={{
                 min: 1,
-                max: selectedItem?.issuedFrom.reduce(
-                  (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
-                  0
-                ) || 1,
+                max: selectedItem?.requestedQty || 1,
               }}
-              fullWidth
             />
           </Box>
         </DialogContent>
