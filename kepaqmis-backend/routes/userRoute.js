@@ -50,7 +50,7 @@ router.post("/my-issued-items/:id/permanent-return", async (req, res) => {
 router.get("/returns/pending-verification", async (req, res) => {
   try {
     const pendingReturns = await ItemRequest.find({
-      status: "pending",
+      status: "approved",
       // returnCategory: { $exists: false }
     }).populate("item");
 
