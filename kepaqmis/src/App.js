@@ -39,7 +39,7 @@ import QMIReturnP from "./pages/QuarterMasterIssue/QMIReturnP.js";
 import QMIReturnT from "./pages/QuarterMasterIssue/QMIReturnT.js";
 import QMIStockEntryForm from "./pages/QuarterMasterIssue/QMIStockEntryForm.js";
 import QMIPurchase from "./pages/QuarterMasterIssue/QMIPurchase.js";
-import QMIStockEntryForm from "./pages/QuarterMasterIssue/QMIStockEntryForm.js";
+import QMStockEntry from "./pages/QuarterMasterIssue/QMStockEntry.js";
 
 function App() {
   return (
