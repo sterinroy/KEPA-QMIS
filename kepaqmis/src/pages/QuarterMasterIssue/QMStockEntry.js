@@ -14,7 +14,7 @@ const QMStockEntries = () => {
       description: "Add items directly issued by the government.",
       icon: <LocalShipping sx={{ fontSize: 48, color: "#FFD54F" }} />,
       buttonText: "Go to Direct Issue",
-      route: "/QuarterMasterIssue/QMIDirectIssue",
+      route: "/QuarterMasterIssue/QMIDirectForm",
     },
     {
       title: "Purchase Entry",
@@ -28,7 +28,7 @@ const QMStockEntries = () => {
       description: "View and manage current stock items.",
       icon: <AddBox sx={{ fontSize: 48, color: "#BA68C8" }} />,
       buttonText: "View Stock Entries",
-      route: "/QuarterMasterIssue/StockEntryForm",
+      route: "/QuarterMasterIssue/QMIStockEntryForm",
     },
   ];
 

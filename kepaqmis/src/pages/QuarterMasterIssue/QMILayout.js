@@ -24,7 +24,7 @@ function QMILayout() {
       component: <QMIDashboard />,
     },
     {
-      label: "Direct Issue",
+      label: "Stock Entry",
       path: "/QuarterMasterIssue/QMStockEntry",
       icon: <DashboardIcon className="icon" />,
       component: <QMStockEntry />,
