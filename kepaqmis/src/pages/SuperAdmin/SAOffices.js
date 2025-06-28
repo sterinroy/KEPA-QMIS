@@ -75,7 +75,7 @@ const SAOffices = () => {
 
   const columns = [
     { field: "id", headerName: "ID", width: 80 },
-    { field: "name", headerName: "Office Name", flex: 1 },
+    { field: "name", headerName: "Office/ Comapny Name", flex: 1 },
     {
       field: "actions",
       type: "actions",
@@ -100,7 +100,7 @@ const SAOffices = () => {
             startIcon={<AddIcon />}
             onClick={() => setOpenDialog(true)}
           >
-            Add Office
+            Add Office/ Company
           </Button>
         </div>
       </div>
@@ -146,10 +146,10 @@ const SAOffices = () => {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Add New Office</DialogTitle>
+        <DialogTitle>Add New Office/ Comapny</DialogTitle>
         <DialogContent>
           <TextField
-            label="Office Name"
+            label="Office/ Company Name"
             value={officeName}
             onChange={(e) => setOfficeName(e.target.value)}
             fullWidth

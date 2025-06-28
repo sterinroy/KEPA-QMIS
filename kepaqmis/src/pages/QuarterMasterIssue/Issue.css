@@ -44,8 +44,9 @@
   background-color: #111c44 !important;
   color: black;
   margin-left: 11px;
-  margin-top: 155px;
-  margin-bottom: 20px;
+  margin-top: 1050px;
+  margin-right: 40px;
+  margin-bottom: 30px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -56,8 +57,64 @@
   min-height: 550px;
 }
 
+
+/* Inputs */
+.direct-issue-box .MuiInputBase-root {
+  height: 50px;
+  background-color: #111c44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.direct-issue-box .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.direct-issue-box .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.direct-issue-box .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.direct-issue-box .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+.direct-issue-box .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+/* Input field spacing */
+.direct-issue-box .MuiTextField-root,
+.direct-issue-box .MuiFormControl-root {
+  width: 100%;
+}
+
+.direct-issue-box .MuiInputBase-input,
+.direct-issue-box .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.direct-issue-box .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.direct-issue-box .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
 .direct-issue-root {
   min-height: 100vh;
+  margin-left: -20px;
   background-color: #0c1227;
   display: flex;
   justify-content: center;
@@ -109,6 +166,9 @@
 
 .temp-issue-root {
   min-height: 100vh;
+  margin-top: -40px;
+  margin-left: -20px;
+  margin-right: 50px;
   background-color: #0c1227;
   display: flex;
   justify-content: center;
@@ -474,4 +534,12 @@
 
 .qmi-issue-page-container .MuiTablePagination-select:hover {
   background-color: #1e2a47;
+}
+
+.return-management-container {
+  width: 100%;
+  margin-left: -20px;
+  min-height: 100vh;
+  background: #111c44;
+  padding: 40px 20px;
 }

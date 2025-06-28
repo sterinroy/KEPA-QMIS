@@ -1,7 +1,5 @@
-// Refactored QMIDirectStock.js with Redux-powered Category/Subcategory dropdowns
 import React, { useState, useEffect } from "react";
 import {
-  Box,
   TextField,
   Select,
   MenuItem,
@@ -101,7 +99,6 @@ const QMIDirectForm = () => {
         { name: "verifiedByPen", label: "Pen", type: "text", required: true },
       ],
     },
-
     {
       name: "dateOfPurchase",
       label: "Date Of Purchase",
@@ -154,16 +151,14 @@ const QMIDirectForm = () => {
     setError("");
     setSuccessMessage("");
     console.log("Submitted formData:", formData);
-
     let invalidField = null;
-
     const invalid = fieldConfig.some((field) => {
       if (
         field.name &&
         field.required &&
         !formData[field.name]?.toString().trim()
       ) {
-        invalidField = field.name; // ✅ assign here
+        invalidField = field.name;
         return true;
       }
       if (field.fields && field.condition?.(formData)) {
@@ -171,28 +166,25 @@ const QMIDirectForm = () => {
           (f) => f.required && !formData[f.name]?.toString().trim()
         );
         if (innerInvalid) {
-          invalidField = innerInvalid.name; // ✅ assign here
+          invalidField = innerInvalid.name;
           return true;
         }
       }
       return false;
     });
-
     if (invalid) {
       console.error("Missing or invalid field:", invalidField);
       setError("Please fill all required fields.");
       setStatus("failed");
       return;
     }
-
-    setConfirmOpen(true); // 👉 Open confirmation dialog
+    setConfirmOpen(true); // Open confirmation dialog
   };
 
   const submitConfirmed = async () => {
     setConfirmOpen(false);
     setStatus("loading");
     console.log("Submitting formData:", formData);
-
     const payload = {
       ...formData,
       enteredBy: {
@@ -245,94 +237,9 @@ const QMIDirectForm = () => {
     setNewSubcategory("");
   };
 
-  return (
-    <Box maxWidth="600px" mx="auto" mt={124} px={2}>
-      <Typography variant="h5" textAlign="center" gutterBottom>
-        Direct Issued Stock Entry Form
-      </Typography>
-
-      {status === "failed" && <Alert severity="error">{error}</Alert>}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
-
-      <form onSubmit={handleSubmit}>
-        {fieldConfig.map((field) => {
-          if (field.condition && !field.condition(formData)) return null;
-          if (field.fields) return field.fields.map((f) => renderField(f));
-          if (field.name === "itemCategory") {
-            return (
-              <FormControl fullWidth margin="normal" key="itemCategory">
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={formData.itemCategory || ""}
-                  onChange={handleCategoryChange}
-                  name="itemCategory"
-                  label="Category"
-                >
-                  {categories.map((cat) => (
-                    <MenuItem key={cat.name} value={cat.name}>
-                      {cat.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            );
-          }
-
-          if (field.name === "itemSubCategory") {
-            const selectedCategory = categories.find(
-              (cat) => cat.name === formData.itemCategory
-            );
-            return (
-              <FormControl fullWidth margin="normal" key="itemSubCategory">
-                <InputLabel>Sub Category</InputLabel>
-                <Select
-                  value={formData.itemSubCategory || ""}
-                  onChange={handleChange}
-                  name="itemSubCategory"
-                  label="Sub Category"
-                >
-                  {selectedCategory?.subcategories?.map((sub) => (
-                    <MenuItem key={sub} value={sub}>
-                      {sub}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            );
-          }
-
-          return renderField(field);
-        })}
-
-        <Box mt={2} textAlign="right">
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={status === "loading"}
-          >
-            {status === "loading" ? "Submitting..." : "Submit"}
-          </Button>
-        </Box>
-        <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-          <DialogTitle>Confirm Submission</DialogTitle>
-          <DialogContent>
-            <Typography>Are you sure you want to issue this item?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmOpen(false)}>No</Button>
-            <Button onClick={submitConfirmed} variant="contained">
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </form>
-    </Box>
-  );
-
-  function renderField(field) {
+  const renderField = (field) => {
     const value = formData[field.name];
     if (!field.name) return null;
-
     if (
       field.type === "text" ||
       field.type === "number" ||
@@ -353,7 +260,6 @@ const QMIDirectForm = () => {
         />
       );
     }
-
     if (field.type === "select") {
       return (
         <FormControl
@@ -384,7 +290,97 @@ const QMIDirectForm = () => {
         </FormControl>
       );
     }
-  }
+  };
+
+  return (
+    <div className="direct-issue-root">
+      <div className="direct-issue-box">
+        <Typography
+          variant="h5"
+          textAlign="center"
+          gutterBottom
+          style={{ color: "white", fontWeight: "bold" }}
+        >
+          Direct Issued Stock Entry Form
+        </Typography>
+
+        {status === "failed" && <Alert severity="error">{error}</Alert>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
+
+        <form onSubmit={handleSubmit}>
+          {fieldConfig.map((field) => {
+            if (field.condition && !field.condition(formData)) return null;
+            if (field.fields) return field.fields.map((f) => renderField(f));
+            if (field.name === "itemCategory") {
+              return (
+                <FormControl fullWidth margin="normal" key="itemCategory">
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    value={formData.itemCategory || ""}
+                    onChange={handleCategoryChange}
+                    name="itemCategory"
+                    label="Category"
+                  >
+                    {categories.map((cat) => (
+                      <MenuItem key={cat.name} value={cat.name}>
+                        {cat.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              );
+            }
+            if (field.name === "itemSubCategory") {
+              const selectedCategory = categories.find(
+                (cat) => cat.name === formData.itemCategory
+              );
+              return (
+                <FormControl fullWidth margin="normal" key="itemSubCategory">
+                  <InputLabel>Sub Category</InputLabel>
+                  <Select
+                    value={formData.itemSubCategory || ""}
+                    onChange={handleChange}
+                    name="itemSubCategory"
+                    label="Sub Category"
+                  >
+                    {selectedCategory?.subcategories?.map((sub) => (
+                      <MenuItem key={sub} value={sub}>
+                        {sub}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              );
+            }
+            return renderField(field);
+          })}
+
+          <div style={{ marginTop: "16px", textAlign: "right" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
+
+          <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+            <DialogTitle>Confirm Submission</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to issue this item?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setConfirmOpen(false)}>No</Button>
+              <Button onClick={submitConfirmed} variant="contained">
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default QMIDirectForm;

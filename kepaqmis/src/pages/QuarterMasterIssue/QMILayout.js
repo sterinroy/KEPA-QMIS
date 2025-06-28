@@ -11,6 +11,7 @@ import UserTemp from "../User/UserTemp";
 import { Send } from "@mui/icons-material";
 import QMIReturn from "./QMIReturn";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 
 
@@ -26,9 +27,9 @@ function QMILayout() {
       component: <QMIDashboard />,
     },
     {
-      label: "Direct Issue",
+      label: "Direct Issue Entry Form",
       path: "/QuarterMasterIssue/QMIDirectForm",
-      icon: <DashboardIcon className="icon" />,
+      icon: <AssignmentIcon className="icon" />,
       component: <QMIDirectForm />,
     },
     {
@@ -44,7 +45,7 @@ function QMILayout() {
       component: <UserTemp />,
     },
     {
-      label: "Return Stock",
+      label: "Stock Returns",
       path: "/QuarterMasterIssue/QMIReturn",
       icon: <AssignmentReturnIcon className="icon" />,
       component: <QMIReturn />,

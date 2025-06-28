@@ -9,23 +9,27 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
-  TextField
+  TextField,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import "./TempIssue.css";
 
 const QMReturnT = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [returnQty, setReturnQty] = useState(0);
-
 
   useEffect(() => {
     const fetchIssuedItems = async () => {
       try {
-        const res = await fetch("/api/userRoute/returns/pending-verification"); 
+        const res = await fetch("/api/userRoute/returns/pending-verification");
         const data = await res.json();
         // const temporaryApproved = data.filter((item) => item.temporary && item.status === "approved");
         setItems(data);
@@ -42,33 +46,47 @@ const QMReturnT = () => {
 
   const handleApproveReturn = async () => {
     try {
-      const res = await fetch(`/api/itemRequestRoutes/item-requests/${selectedItem._id}/return`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ returnQty }),
-      });
+      const res = await fetch(
+        `/api/itemRequestRoutes/item-requests/${selectedItem._id}/return`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ returnQty }),
+        }
+      );
 
       if (!res.ok) throw new Error("Return approval failed");
 
-      setSnackbar({ open: true, message: "Return approved and stock updated", severity: "success" });
+      setSnackbar({
+        open: true,
+        message: "Return approved and stock updated",
+        severity: "success",
+      });
       setItems((prev) => prev.filter((i) => i._id !== selectedItem._id));
       setOpenDialog(false);
     } catch (err) {
       console.error("Error approving return:", err);
-      setSnackbar({ open: true, message: "Failed to approve return", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: "Failed to approve return",
+        severity: "error",
+      });
     }
   };
 
   const handleDialogClose = () => {
-  setOpenDialog(false);
-  setSelectedItem(null);
-  setReturnQty(0);
-};
-
+    setOpenDialog(false);
+    setSelectedItem(null);
+    setReturnQty(0);
+  };
 
   const rows = items.map((item) => {
-    const totalIssued = item.issuedFrom?.reduce((sum, i) => sum + i.deductedQty, 0) || 0;
-    const totalReturned = item.issuedFrom?.reduce((sum, i) => sum + (i.returnedQty || 0), 0);
+    const totalIssued =
+      item.issuedFrom?.reduce((sum, i) => sum + i.deductedQty, 0) || 0;
+    const totalReturned = item.issuedFrom?.reduce(
+      (sum, i) => sum + (i.returnedQty || 0),
+      0
+    );
     const remainingQty = totalIssued - totalReturned;
 
     return {
@@ -89,25 +107,27 @@ const QMReturnT = () => {
   });
 
   const columns = [
-    { field: "slNo", headerName: "Sl No", flex: 1 },
-    { field: "mobile", headerName: "Mobile", flex: 1 },
-    { field: "purpose", headerName: "Purpose", flex: 1 },
-    { field: "office", headerName: "Office", flex: 1 },
-    { field: "company", headerName: "Company", flex: 1 },
-    { field: "category", headerName: "Category", flex: 1 },
-    { field: "subcategory", headerName: "Subcategory", flex: 1 },
-    { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "requestedQty", headerName: "requested Quantity", flex:1},
-    { field: "remainingQty", headerName: "Remaining to Return", flex: 1 },
+    { field: "slNo", headerName: "Sl No", minWidth: 50, },
+    { field: "mobile", headerName: "Mobile", minWidth: 130, },
+    { field: "purpose", headerName: "Purpose", minWidth: 120, },
+    { field: "office", headerName: "Office", minWidth: 100, },
+    { field: "company", headerName: "Company", minWidth: 120, },
+    { field: "itemName", headerName: "Item", minWidth: 120, },
+    { field: "category", headerName: "Category", minWidth: 120, },
+    { field: "subcategory", headerName: "Sub Category", minWidth: 140, },
+    { field: "requestedQty", headerName: "Requested Quantity", minWidth: 190, },
+    { field: "remainingQty", headerName: "Remaining To Return", minWidth: 190, },
     {
       field: "returnDate",
       headerName: "Return Date",
-      flex:1,
+      minWidth: 150,
       renderCell: (params) => {
         const date = new Date(params.value);
         return date.toString() === "Invalid Date"
           ? "N/A"
-          : `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
+          : `${date.getDate().toString().padStart(2, "0")}-${(
+              date.getMonth() + 1
+            )
               .toString()
               .padStart(2, "0")}-${date.getFullYear()}`;
       },
@@ -115,7 +135,7 @@ const QMReturnT = () => {
     {
       field: "action",
       headerName: "Return",
-      flex:1,
+      minWidth: 120,
       renderCell: (params) => (
         <Button
           variant="outlined"
@@ -133,87 +153,108 @@ const QMReturnT = () => {
 
   return (
     <div style={{ width: "100%" }}>
-    <Box p={3}>
-      <h2>Temporary Return Approvals (QM)</h2>
+      <Box p={3}>
+        <h2>Temporary Return Approvals (QM)</h2>
 
-      {loading ? (
-        <Box display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box mt={2} style={{ height: 500 }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[5, 10]}
-            disableRowSelectionOnClick
-          />
-        </Box>
-      )}
-
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Confirm Return</DialogTitle>
-        <DialogContent>
-          <Box display="flex" flexDirection="column" gap={2} mt={1}>
-            <div>
-              How many items are being returned?
+        {loading ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box mt={2}>
+            <div className="temp-return-table">
+              <DataGrid
+                columnResizeMode="on"
+                rows={rows}
+                columns={columns.map((col) => ({
+                  ...col,
+                  align: "center",
+                  headerAlign: "center",
+                }))}
+                pageSize={10}
+                rowsPerPageOptions={[10, 25, 50]}
+                disableRowSelectionOnClick
+                sx={{
+                  "& .MuiDataGrid-cell": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: "#1976d2",
+                    color: "black",
+                  },
+                }}
+              />
             </div>
-            <TextField
-              label="Return Quantity"
-              type="number"
-              value={returnQty}
-              onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
-              error={
-                returnQty <= 0 || returnQty > (
-                  selectedItem?.issuedFrom.reduce(
-                    (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
-                    0
-                  ) || 0
-                )
-              }
-              helperText={
-                returnQty <= 0
-                  ? "Quantity must be greater than 0"
-                  : returnQty >
+          </Box>
+        )}
+
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          fullWidth
+          maxWidth="xs"
+        >
+          <DialogTitle>Confirm Return</DialogTitle>
+          <DialogContent>
+            <Box display="flex" flexDirection="column" gap={2} mt={1}>
+              <div>How many items are being returned?</div>
+              <TextField
+                label="Return Quantity"
+                type="number"
+                value={returnQty}
+                onChange={(e) => setReturnQty(parseInt(e.target.value) || 0)}
+                error={
+                  returnQty <= 0 ||
+                  returnQty >
                     (selectedItem?.issuedFrom.reduce(
                       (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
                       0
                     ) || 0)
-                  ? "Cannot return more than remaining"
-                  : ""
-              }
-              inputProps={{
-                min: 1,
-                max: selectedItem?.issuedFrom.reduce(
-                  (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
-                  0
-                ) || 1,
-              }}
-              fullWidth
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleApproveReturn}>
-            Approve
-          </Button>
-        </DialogActions>
-      </Dialog>
+                }
+                helperText={
+                  returnQty <= 0
+                    ? "Quantity must be greater than 0"
+                    : returnQty >
+                      (selectedItem?.issuedFrom.reduce(
+                        (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
+                        0
+                      ) || 0)
+                    ? "Cannot return more than remaining"
+                    : ""
+                }
+                inputProps={{
+                  min: 1,
+                  max:
+                    selectedItem?.issuedFrom.reduce(
+                      (sum, i) => sum + i.deductedQty - (i.returnedQty || 0),
+                      0
+                    ) || 1,
+                }}
+                fullWidth
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose}>Cancel</Button>
+            <Button variant="contained" onClick={handleApproveReturn}>
+              Approve
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert severity={snackbar.severity} variant="filled">
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Box>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity={snackbar.severity} variant="filled">
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Box>
     </div>
   );
 };
