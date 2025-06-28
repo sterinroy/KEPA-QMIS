@@ -345,6 +345,30 @@ router.post("/stock/direct-issue", async (req, res) => {
   }
 });
 
+router.post("/stock/add-direct-entry", async (req, res) => {
+  try {
+    const stockItem = new StockItem({
+      ...req.body,
+      dateOfVerification: req.body.dateOfVerification
+        ? new Date(req.body.dateOfVerification)
+        : new Date(),
+      dateOfPurchase: req.body.dateOfPurchase
+        ? new Date(req.body.dateOfPurchase)
+        : new Date(),
+      dateOfIssue: req.body.dateOfIssue
+        ? new Date(req.body.dateOfIssue)
+        : new Date(),
+    });
+
+    await stockItem.save();
+    res.status(201).json({ message: "Stock item added successfully", stockItem });
+  } catch (err) {
+    console.error("Error adding stock item:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // 🔹 6. Get Stock Items
 router.get("/stockitems", async (req, res) => {
   try {

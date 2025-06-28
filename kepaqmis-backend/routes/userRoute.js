@@ -90,22 +90,38 @@ router.post("/qm/verify-return/:id", async (req, res) => {
 
   try {
     const itemRequest = await ItemRequest.findById(id).populate("item");
-    if (!itemRequest || itemRequest.status !== "returned") {
+
+    if (!itemRequest || itemRequest.status !== "approved") {
       return res.status(400).json({ error: "Invalid return request" });
     }
+
     itemRequest.technicalReportRequired = technicalReportRequired;
+
     if (technicalReportRequired) {
+      if (!technicalWing || !technicalReportNo) {
+        return res.status(400).json({ error: "Missing technical report details" });
+      }
       itemRequest.technicalWing = technicalWing;
       itemRequest.technicalReportNo = technicalReportNo;
+    } else {
+      if (!returnCategory) {
+        return res.status(400).json({ error: "Missing return category" });
+      }
+      itemRequest.returnCategory = returnCategory;
     }
-    itemRequest.returnCategory = returnCategory;
+
+    itemRequest.status = "returned";
+    itemRequest.returnDate = new Date();
+
     await itemRequest.save();
+
     res.json({ message: "Item return processed successfully" });
   } catch (error) {
     console.error("Verification error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 

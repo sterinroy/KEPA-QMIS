@@ -37,6 +37,9 @@ import SAOffices from "./pages/SuperAdmin/SAOffices.js";
 import QMIReturn from "./pages/QuarterMasterIssue/QMIReturn.js";
 import QMIReturnP from "./pages/QuarterMasterIssue/QMIReturnP.js";
 import QMIReturnT from "./pages/QuarterMasterIssue/QMIReturnT.js";
+import QMIStockEntryForm from "./pages/QuarterMasterIssue/QMIStockEntryForm.js";
+import QMIPurchase from "./pages/QuarterMasterIssue/QMIPurchase.js";
+import QMStockEntry from "./pages/QuarterMasterIssue/QMStockEntry.js";
 
 function App() {
   return (
@@ -95,6 +98,9 @@ function App() {
           <Route path="QMIReturn" element={<QMIReturn />} />
           <Route path="QMIReturnP" element={<QMIReturnP />} />
           <Route path="QMIReturnT" element={<QMIReturnT />} />
+          <Route path="QMStockEntry" element={<QMStockEntry />} />
+          <Route path="QMIPurchase" element={<QMIPurchase />} />
+          <Route path="QMIStockEntryForm" element={<QMIStockEntryForm />} />
         </Route>
 
         <Route

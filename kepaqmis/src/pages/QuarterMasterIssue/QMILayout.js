@@ -5,14 +5,12 @@ import QMIDashboard from "./QMIDashboard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Main from "../../components/Main";
-import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
 import UserTemp from "../User/UserTemp";
 import { Send } from "@mui/icons-material";
 import QMIReturn from "./QMIReturn";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
-
-
+import QMStockEntry from "./QMStockEntry"
 
 
 function QMILayout() {
@@ -27,9 +25,9 @@ function QMILayout() {
     },
     {
       label: "Direct Issue",
-      path: "/QuarterMasterIssue/QMIDirectForm",
+      path: "/QuarterMasterIssue/QMStockEntry",
       icon: <DashboardIcon className="icon" />,
-      component: <QMIDirectForm />,
+      component: <QMStockEntry />,
     },
     {
       label: "Manage Requests",
