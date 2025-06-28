@@ -95,7 +95,7 @@ function App() {
           <Route path="QMIDashboard" element={<QMIDashboard />} />
           <Route path="QMIEntries" element={<QMIEntries />} />
           <Route path="QMIDirectForm" element={<QMIDirectForm />} />
-          <Route path="QMIManageRequest" element={<QMIManageRequest />} />
+          <Route path="QMIManageApproval" element={<QMIManageApproval />} />
           <Route path="UserTemp" element={<UserTemp />} />
           <Route path="QMIReturn" element={<QMIReturn />} />
           <Route path="QMIReturnP" element={<QMIReturnP />} />
