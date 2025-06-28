@@ -31,7 +31,7 @@ function QMILayout() {
     },
     {
       label: "Manage Requests",
-      path: "/QuarterMasterIssue/QMIManageRequest",
+      path: "/QuarterMasterIssue/QMIManageRequests",
       icon: <PendingActionsIcon className="icon" />,
       component: <QMIManageRequest />,
     },

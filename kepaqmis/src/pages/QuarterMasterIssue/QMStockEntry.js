@@ -18,14 +18,14 @@ const QMStockEntries = () => {
     },
     {
       title: "Purchase Entry",
-      description: "Verify and finalize purchased items into stock.",
+      description: "purchased items into stock.",
       icon: <Inventory sx={{ fontSize: 48, color: "#4DB6AC" }} />,
       buttonText: "Go to Purchase Entry",
       route: "/QuarterMasterIssue/QMIPurchase",
     },
     {
       title: "Stock Entry View",
-      description: "View and manage current stock items.",
+      description: "Add stock items.",
       icon: <AddBox sx={{ fontSize: 48, color: "#BA68C8" }} />,
       buttonText: "View Stock Entries",
       route: "/QuarterMasterIssue/QMIStockEntryForm",
