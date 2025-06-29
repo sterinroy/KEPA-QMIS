@@ -130,7 +130,6 @@ const QMIReturnP = () => {
   },
 ];
 
-
   return (
     <Box p={3}>
       <h2>Permanent Returns Pending Verification</h2>

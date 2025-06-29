@@ -16,7 +16,7 @@ const QMIManageRequest = () => {
   const dispatch = useDispatch();
   const { loading, entries } = useSelector((state) => state.qmissue);
   const { categories } = useSelector((state) => state.category);
-
+  const pen = localStorage.getItem("pen") || "";
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [formData, setFormData] = useState({});
   const [showForm, setShowForm] = useState(false);
@@ -97,9 +97,13 @@ const QMIManageRequest = () => {
               : {
                   creditStatus: entry.amountDetails?.creditStatus || "Pending",
                 };
-
             setSelectedEntry(entry);
-            setFormData({ ...entry, amountDetails, Qmno: formattedQmno });
+            setFormData({
+              ...entry,
+              amountDetails,
+              Qmno: formattedQmno,
+              verifiedBy: {pen},
+            });
             setShowForm(true);
           }}
         >
