@@ -58,7 +58,7 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
             quantity: Number(formData.quantity),
             invoiceDate: new Date(formData.invoiceDate),
             verifyDate: new Date(formData.verifyDate),
-            verifiedBy: { pen: formData.verifiedBy || "1" },
+            verifiedBy: { pen: formData.verifiedBy || "" },
           }),
         }
       );
@@ -279,20 +279,20 @@ const ApproveDialog = ({ open, onClose, entry, formData, setFormData }) => {
               onChange={handleInputChange}
               fullWidth
             />
-            <TextField
-              label="Verified By"
-              name="verifiedBy"
-              value={formData.verifiedBy}
-              onChange={handleInputChange}
-              fullWidth
-            />
-            <TextField
-              label="Unit"
+            <FormControl fullWidth>
+            <InputLabel>Unit</InputLabel>
+            <Select
               name="unit"
               value={formData.unit}
               onChange={handleInputChange}
-              fullWidth
-            />
+              label="Unit"
+            >
+              <MenuItem value="kg">kg</MenuItem>
+              <MenuItem value="m">m</MenuItem>
+              <MenuItem value="nos">nos</MenuItem>
+              <MenuItem value="l">l</MenuItem>
+            </Select>
+          </FormControl>
             <TextField
               label="Warranty (In Months)"
               name="warranty"

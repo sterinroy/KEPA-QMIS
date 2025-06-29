@@ -121,36 +121,42 @@ const QMIReturnP = () => {
   };
 
   const columns = [
-    {
-      field: "itemName",
-      headerName: "Item Name",
-      minWidth: 100,
-      valueGetter: (params) => params.row.item?.itemName,
+  {
+    field: "itemName",
+    headerName: "Item Name",
+    flex: 1,
+    renderCell: (params) => (
+      <span>{params.row?.item?.itemName || "N/A"}</span>
+    ),
+  },
+  {
+    field: "quantity",
+    headerName: "Quantity",
+    flex: 1,
+    renderCell: (params) => (
+      <span>{params.row?.quantity ?? "N/A"}</span>
+    ),
+  },
+  {
+    field: "returnedOn",
+    headerName: "Returned On",
+    flex: 1,
+    renderCell: (params) => {
+      const date = params.row?.returnDate;
+      return <span>{date ? new Date(date).toLocaleDateString() : "N/A"}</span>;
     },
-    {
-      field: "quantity",
-      headerName: "Quantity",
-      minWidth: 120,
-      valueGetter: (params) => params.row.quantity,
-    },
-    {
-      field: "returnedOn",
-      headerName: "Returned On",
-      minWidth: 180,
-      valueGetter: (params) =>
-        new Date(params.row.returnDate).toLocaleDateString(),
-    },
-    {
-      field: "verify",
-      headerName: "Verify",
-      minWidth: 140,
-      renderCell: (params) => (
-        <Button variant="outlined" onClick={() => handleOpenDialog(params.row)}>
-          Verify
-        </Button>
-      ),
-    },
-  ];
+  },
+  {
+    field: "verify",
+    headerName: "Verify",
+    flex: 1,
+    renderCell: (params) => (
+      <Button variant="outlined" onClick={() => handleOpenDialog(params.row)}>
+        Verify
+      </Button>
+    ),
+  },
+];
 
   return (
     <Box p={3}>
