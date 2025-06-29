@@ -33,7 +33,7 @@ router.post("/my-issued-items/:id/permanent-return", async (req, res) => {
       return res.status(400).json({ error: "Item not eligible for return" });
     }
 
-    itemRequest.status = "returned";
+    itemRequest.status = "returnpending";
     itemRequest.returnDate = dateOfReturn;
     itemRequest.remarks = reason;
 
@@ -50,7 +50,7 @@ router.post("/my-issued-items/:id/permanent-return", async (req, res) => {
 router.get("/returns/pending-verification", async (req, res) => {
   try {
     const pendingReturns = await ItemRequest.find({
-      status: "approved",
+      status: "returnpending",
       // returnCategory: { $exists: false }
     }).populate("item");
 

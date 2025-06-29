@@ -11,7 +11,7 @@ const itemRequestSchema = new mongoose.Schema({
   temporary: { type: Boolean, default: false },
   status: {
     type: String,
-    enum: ["pending", "approved", "rejected", "returned"],
+    enum: ["pending", "approved", "rejected", "returned","returnpending"],
     default: "pending"
   },
   remarks: { type: String },

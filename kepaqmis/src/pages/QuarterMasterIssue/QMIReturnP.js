@@ -32,13 +32,9 @@ const QMIReturnP = () => {
   const [technicalReportNo, setTechnicalReportNo] = useState("");
   const [returnCategory, setReturnCategory] = useState("");
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success",
-  });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth); 
 
   useEffect(() => {
     const fetchReturns = async () => {
@@ -46,6 +42,7 @@ const QMIReturnP = () => {
         const res = await fetch("/api/userRoute/returns/pending-verification");
         const data = await res.json();
         setReturns(data);
+        console.log(data);
       } catch (err) {
         console.error("Error fetching returns:", err);
       } finally {
@@ -66,57 +63,34 @@ const QMIReturnP = () => {
 
   const handleSubmitVerification = async () => {
     if (!technicalReportRequired && !returnCategory) {
-      return setSnackbar({
-        open: true,
-        message: "Select return category",
-        severity: "warning",
-      });
+      return setSnackbar({ open: true, message: "Select return category", severity: "warning" });
     }
 
     if (technicalReportRequired && (!technicalWing || !technicalReportNo)) {
-      return setSnackbar({
-        open: true,
-        message: "Enter technical report details",
-        severity: "warning",
-      });
+      return setSnackbar({ open: true, message: "Enter technical report details", severity: "warning" });
     }
 
     try {
-      const res = await fetch(
-        `/api/userRoute/qm/verify-return/${selected._id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            processedBy: { pen: user.pen, name: user.name },
-            technicalReportRequired,
-            technicalWing: technicalReportRequired ? technicalWing : undefined,
-            technicalReportNo: technicalReportRequired
-              ? technicalReportNo
-              : undefined,
-            returnCategory: technicalReportRequired
-              ? undefined
-              : returnCategory,
-          }),
-        }
-      );
+      const res = await fetch(`/api/userRoute/qm/verify-return/${selected._id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          processedBy: { pen: user.pen, name: user.name },
+          technicalReportRequired,
+          technicalWing: technicalReportRequired ? technicalWing : undefined,
+          technicalReportNo: technicalReportRequired ? technicalReportNo : undefined,
+          returnCategory: technicalReportRequired ? undefined : returnCategory,
+        }),
+      });
 
       if (!res.ok) throw new Error("Verification failed");
 
-      setSnackbar({
-        open: true,
-        message: "Return verified",
-        severity: "success",
-      });
+      setSnackbar({ open: true, message: "Return verified", severity: "success" });
       setOpenDialog(false);
       setReturns((prev) => prev.filter((r) => r._id !== selected._id));
     } catch (err) {
       console.error("Verification error:", err);
-      setSnackbar({
-        open: true,
-        message: "Verification failed",
-        severity: "error",
-      });
+      setSnackbar({ open: true, message: "Verification failed", severity: "error" });
     }
   };
 
@@ -167,42 +141,20 @@ const QMIReturnP = () => {
       <h2>Permanent Returns Pending Verification</h2>
 
       {loading ? (
-        <Box display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
+        <Box display="flex" justifyContent="center"><CircularProgress /></Box>
       ) : (
-        <Box mt={2}>
-          <div className="permanent-return-table">
-            <DataGrid
-              rows={returns}
-              columns={columns}
-              columnResizeMode="on"
-              pageSize={10}
-              rowsPerPageOptions={[10, 25, 50]}
-              disableRowSelectionOnClick
-              getRowId={(row) => row._id}
-              sx={{
-                "& .MuiDataGrid-cell": {
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "#1976d2",
-                  color: "white",
-                },
-              }}
-            />
-          </div>
+        <Box mt={2} style={{ height: 500 }}>
+          <DataGrid
+            rows={returns.map((r) => ({ ...r, id: r._id }))}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[5, 10]}
+            disableRowSelectionOnClick
+          />
         </Box>
       )}
 
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle>Verify Return</DialogTitle>
         <DialogContent>
           <FormControlLabel
