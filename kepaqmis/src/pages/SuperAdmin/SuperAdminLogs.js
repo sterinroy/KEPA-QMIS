@@ -41,7 +41,7 @@ const SuperAdminLogs = () => {
   return (
     <div style={{ width: "100%" }}>
       <div>
-        <h2>Login/Logout Logs</h2>
+        <h2>Login/Logout Details</h2>
       </div>
       <div style={{ height: 550 }}>
         {loading ? (

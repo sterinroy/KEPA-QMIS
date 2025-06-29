@@ -40,7 +40,7 @@ function Layout() {
       component: <SuperAdminUsers />,
     },
     {
-      label: "Logs",
+      label: "Log Details",
       path: "/SuperAdmin/SuperAdminLogs",
       icon: <HistoryIcon className="icon" />,
       component: <SuperAdminLogs />,

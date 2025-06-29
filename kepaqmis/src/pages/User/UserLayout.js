@@ -40,14 +40,14 @@ function UserLayout() {
     },
   
     {
-      label: "Temporary Stock",
+      label: "Temporary Stock Request Form",
       path: "/User/UserTemp",
       icon: <Send className="icon" />,
       component: <UserTemp />,
     },
 
     {
-      label: "Return",
+      label: "Stock Return Form",
       path: "/User/UserReturn",
       icon: <HistoryIcon className="icon" />,
       component: <UserReturn />,

@@ -28,7 +28,7 @@ function QMPLayout() {
       component: <QMPOrder />,
     },
     {
-      label: "Entries",
+      label: "Stock Entries",
       path: "/QuarterMasterPurchase/QMPEntries",
       icon: <AssignmentIcon className="icon" />,
       component: <QMPEntries />,

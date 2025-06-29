@@ -10,36 +10,6 @@
   overflow-y: auto;
 }
 
-/* Form container */
-
-.qouta-button {
-  background-color: #1976d2 !important; /* example: primary blue */
-  color: white !important;
-}
-.quota-button:hover {
-  background-color: #030d44 !important; /* darker blue on hover */
-}
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #9c27b0 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #6d1b7b !important; /* darker purple on hover */
-}
-
-/* Style for Direct Entry button */
-.direct-button {
-  background-color: #070085 !important; /* example: purple */
-  color: white !important;
-}
-
-.direct-button:hover {
-  background-color: #26235d !important; /* darker purple on hover */
-}
-
 .direct-issue-box {
   background-color: #111c44 !important;
   color: black;
@@ -124,31 +94,6 @@
   box-sizing: border-box;
 }
 
-.request-issue-box {
-  background-color: #111c44 !important;
-  color: black;
-  margin-top: 200px;
-  margin-left: 11px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 20px 40px;
-  min-height: 550px;
-}
-
-.request-issue-root {
-  min-height: 100vh;
-  background-color: #0c1227;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* aligns top */
-  overflow-y: auto; /* allow scroll if content overflows */
-  box-sizing: border-box;
-}
-
 .temp-issue-box {
   background-color: #111c44 !important;
   color: black;
@@ -172,8 +117,8 @@
   background-color: #0c1227;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* aligns top */
-  overflow-y: auto; /* allow scroll if content overflows */
+  align-items: flex-start;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 /* Title */
@@ -542,4 +487,95 @@
   min-height: 100vh;
   background: #111c44;
   padding: 40px 20px;
+}
+
+
+
+
+.manage-user-table {
+  background-color: #0c1227; /* Dark theme background */
+  min-height: 100vh;
+  border-radius: 8px;
+  width: 1200px;
+  margin-top: 30px;
+  margin-left: -50px;
+  margin-bottom: 60px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.manage-user-table .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.manage-user-table .MuiDataGrid-columnHeaders {
+  background-color: #1976d2;
+  color: black;
+}
+
+.manage-user-table .MuiDataGrid-cell {
+  color: white;
+}
+
+.manage-user-table .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.manage-user-table .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.manage-user-table .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.manage-user-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.manage-user-table .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-select {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-spacer {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-actions button {
+  color: white !important;
+}
+.manage-user-table .MuiTablePagination-actions {
+  color: white; 
+}
+.manage-user-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-select {
+  color: white !important;
+}
+
+.manage-user-table .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.manage-user-table .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
 }

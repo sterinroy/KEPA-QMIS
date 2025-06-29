@@ -16,7 +16,7 @@ import QMPLayout from "./pages/QuarterMasterPurchase/QMPLayout";
 import QMPOrder from "./pages/QuarterMasterPurchase/QMPOrder/QMPOrder.js";
 import QMILayout from "./pages/QuarterMasterIssue/QMILayout";
 import QMIEntries from "./pages/QuarterMasterIssue/QMIEntries";
-import QMIManageRequest from "./pages/QuarterMasterIssue/QMIManageRequest/QMIManageRequest";
+import QMIManageApproval from "./pages/QuarterMasterIssue/QMIManageRequest/QMIManageApproval.js";
 import QMIDashboard from "./pages/QuarterMasterIssue/QMIDashboard";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminLayout from "./pages/AdminDashboard/AdminLayout";
@@ -37,6 +37,11 @@ import SAOffices from "./pages/SuperAdmin/SAOffices.js";
 import QMIReturn from "./pages/QuarterMasterIssue/QMIReturn.js";
 import QMIReturnP from "./pages/QuarterMasterIssue/QMIReturnP.js";
 import QMIReturnT from "./pages/QuarterMasterIssue/QMIReturnT.js";
+import QMIStockEntryForm from "./pages/QuarterMasterIssue/QMIStockEntryForm.js";
+import QMIPurchase from "./pages/QuarterMasterIssue/QMIPurchase.js";
+import QMStockEntry from "./pages/QuarterMasterIssue/QMStockEntry.js";
+import QMIManageRequests from "./pages/QuarterMasterIssue/QMIManageRequest.js";
+import QMIManageUsers from "./pages/QuarterMasterIssue/QMIManageUsers.js";
 
 function App() {
   return (
@@ -90,11 +95,16 @@ function App() {
           <Route path="QMIDashboard" element={<QMIDashboard />} />
           <Route path="QMIEntries" element={<QMIEntries />} />
           <Route path="QMIDirectForm" element={<QMIDirectForm />} />
-          <Route path="QMIManageRequest" element={<QMIManageRequest />} />
+          <Route path="QMIManageApproval" element={<QMIManageApproval />} />
           <Route path="UserTemp" element={<UserTemp />} />
           <Route path="QMIReturn" element={<QMIReturn />} />
           <Route path="QMIReturnP" element={<QMIReturnP />} />
           <Route path="QMIReturnT" element={<QMIReturnT />} />
+          <Route path="QMStockEntry" element={<QMStockEntry />} />
+          <Route path="QMIPurchase" element={<QMIPurchase />} />
+          <Route path="QMIStockEntryForm" element={<QMIStockEntryForm />} />
+          <Route path="QMIManageRequests" element={<QMIManageRequests />} />
+          <Route path="QMIManageUsers" element={<QMIManageUsers />} />
         </Route>
 
         <Route

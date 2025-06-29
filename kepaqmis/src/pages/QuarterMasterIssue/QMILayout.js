@@ -5,15 +5,12 @@ import QMIDashboard from "./QMIDashboard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Main from "../../components/Main";
-import QMIDirectForm from "./QMIDirectForm";
 import QMIManageRequest from "./QMIManageRequest";
 import UserTemp from "../User/UserTemp";
 import { Send } from "@mui/icons-material";
 import QMIReturn from "./QMIReturn";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
-import AssignmentIcon from '@mui/icons-material/Assignment';
-
-
+import QMStockEntry from "./QMStockEntry"
 
 
 function QMILayout() {
@@ -27,19 +24,19 @@ function QMILayout() {
       component: <QMIDashboard />,
     },
     {
-      label: "Direct Issue Entry Form",
-      path: "/QuarterMasterIssue/QMIDirectForm",
-      icon: <AssignmentIcon className="icon" />,
-      component: <QMIDirectForm />,
+      label: "Stock Entry Forms",
+      path: "/QuarterMasterIssue/QMStockEntry",
+      icon: <DashboardIcon className="icon" />,
+      component: <QMStockEntry />,
     },
     {
       label: "Manage Requests",
-      path: "/QuarterMasterIssue/QMIManageRequest",
+      path: "/QuarterMasterIssue/QMIManageRequests",
       icon: <PendingActionsIcon className="icon" />,
       component: <QMIManageRequest />,
     },
     {
-      label: "Temporary Stock",
+      label: "Temporary Issue Form",
       path: "/QuarterMasterIssue/UserTemp",
       icon: <Send className="icon" />,
       component: <UserTemp />,

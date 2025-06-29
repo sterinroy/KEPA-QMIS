@@ -71,7 +71,7 @@ const QMIDirectForm = () => {
     },
     {
       name: "warranty",
-      label: "Warranty (in months)",
+      label: "Warranty (In Months)",
       type: "text",
       required: false,
     },
@@ -89,14 +89,14 @@ const QMIDirectForm = () => {
     {
       label: "Entered By",
       fields: [
-        { name: "enteredByPen", label: "Pen", type: "text", required: true },
-        { name: "enteredByName", label: "Name", type: "text", required: true },
+        { name: "enteredByPen", label: "Entered By (PEN No.)", type: "text", required: true },
+        { name: "enteredByName", label: "Entered By (Name)", type: "text", required: true },
       ],
     },
     {
       label: "Verified By",
       fields: [
-        { name: "verifiedByPen", label: "Pen", type: "text", required: true },
+        { name: "verifiedByPen", label: "Verified By (PEN No.)", type: "text", required: true },
       ],
     },
     {
