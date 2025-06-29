@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
-import "./TempIssue.css";
+import "./Issue.css";
 
 const QMIReturnP = () => {
   const [returns, setReturns] = useState([]);
@@ -121,42 +121,46 @@ const QMIReturnP = () => {
   };
 
   const columns = [
-  {
-    field: "itemName",
-    headerName: "Item Name",
-    flex: 1,
-    renderCell: (params) => (
-      <span>{params.row?.item?.itemName || "N/A"}</span>
-    ),
-  },
-  {
-    field: "quantity",
-    headerName: "Quantity",
-    flex: 1,
-    renderCell: (params) => (
-      <span>{params.row?.quantity ?? "N/A"}</span>
-    ),
-  },
-  {
-    field: "returnedOn",
-    headerName: "Returned On",
-    flex: 1,
-    renderCell: (params) => {
-      const date = params.row?.returnDate;
-      return <span>{date ? new Date(date).toLocaleDateString() : "N/A"}</span>;
+    {
+      field: "itemName",
+      headerName: "Item Name",
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.row?.item?.itemName || "N/A"}</span>
+      ),
     },
-  },
-  {
-    field: "verify",
-    headerName: "Verify",
-    flex: 1,
-    renderCell: (params) => (
-      <Button variant="outlined" onClick={() => handleOpenDialog(params.row)}>
-        Verify
-      </Button>
-    ),
-  },
-];
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 1,
+      renderCell: (params) => <span>{params.row?.quantity ?? "N/A"}</span>,
+    },
+    {
+      field: "returnedOn",
+      headerName: "Returned On",
+      flex: 1,
+      renderCell: (params) => {
+        const date = params.row?.returnDate;
+        return (
+          <span>{date ? new Date(date).toLocaleDateString() : "N/A"}</span>
+        );
+      },
+    },
+    {
+      field: "verify",
+      headerName: "Verify",
+      flex: 1,
+      renderCell: (params) => (
+        <Button
+          className="permanent-verify-button"
+          variant="outlined"
+          onClick={() => handleOpenDialog(params.row)}
+        >
+          Verify
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <Box p={3}>
