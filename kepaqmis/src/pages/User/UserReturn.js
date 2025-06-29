@@ -59,7 +59,7 @@ const UserReturn = () => {
       const data = await res.json();
       if (Array.isArray(data)) {
         const approvedItems = data.filter((item) => item.status === "approved");
-        // console.log("Approved Items:", approvedItems);
+        console.log("Approved Items:", approvedItems);
         setIssuedItems(approvedItems);
       } else {
         console.error("Unexpected response:", data);
