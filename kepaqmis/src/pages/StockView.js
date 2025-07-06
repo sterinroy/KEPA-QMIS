@@ -13,63 +13,64 @@ const StockItemView = () => {
   }, [dispatch]);
 
   const columns = [
+    { field: "sourceType", headerName: "Source Type", flex: 1 },
     { field: "itemName", headerName: "Item Name", flex: 1 },
     { field: "itemCategory", headerName: "Category", flex: 1 },
     { field: "itemSubCategory", headerName: "Subcategory", flex: 1 },
     { field: "quantity", headerName: "Qty", flex: 0.5 },
     { field: "unit", headerName: "Unit", flex: 0.5 },
     { field: "Qmno", headerName: "QM No", flex: 1 },
-    {
-      field: "modelInfo",
-      headerName: "Model",
-      flex: 1,
-      valueGetter: (params) =>
-        `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim(),
-    },
-    {
-      field: "invoiceDate",
-      headerName: "Invoice Date",
-      flex: 1,
-      renderCell: (params) =>
-        params.value ? new Date(params.value).toLocaleDateString() : "-",
-    },
-    {
-      field: "dateOfIssue",
-      headerName: "Issue Date",
-      flex: 1,
-      renderCell: (params) =>
-        params.value ? new Date(params.value).toLocaleDateString() : "-",
-    },
-    {
-      field: "issuedfrom",
-      headerName: "Issued From",
-      flex: 1,
-    },
-    {
-      field: "toWhom",
-      headerName: "To (Office/ Company)",
-      flex: 1,
-    },
-    {
-      field: "enteredBy",
-      headerName: "Entered By",
-      flex: 1,
-      valueGetter: (params) =>
-        params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
-          ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
-          : "-",
-    },
-    {
-      field: "barcodeImage",
-      headerName: "Barcode",
-      flex: 1,
-      renderCell: (params) =>
-        params.value ? (
-          <img src={params.value} alt="Barcode" style={{ width: 60 }} />
-        ) : (
-          "N/A"
-        ),
-    },
+    // {
+    //   field: "model",
+    //   headerName: "Model",
+    //   flex: 1,
+    //   valueGetter: (params) =>
+    //     `${params?.row?.model || ""} ${params?.row?.modelNo || ""}`.trim(),
+    // },
+    // {
+    //   field: "invoiceDate",
+    //   headerName: "Invoice Date",
+    //   flex: 1,
+    //   renderCell: (params) =>
+    //     params.value ? new Date(params.value).toLocaleDateString() : "-",
+    // },
+    // {
+    //   field: "dateOfIssue",
+    //   headerName: "Issue Date",
+    //   flex: 1,
+    //   renderCell: (params) =>
+    //     params.value ? new Date(params.value).toLocaleDateString() : "-",
+    // },
+    // {
+    //   field: "issuedfrom",
+    //   headerName: "Issued From",
+    //   flex: 1,
+    // },
+    // {
+    //   field: "toWhom",
+    //   headerName: "To (Office/ Company)",
+    //   flex: 1,
+    // },
+    // {
+    //   field: "enteredBy",
+    //   headerName: "Entered By",
+    //   flex: 1,
+    //   valueGetter: (params) =>
+    //     params?.row?.enteredBy?.name && params?.row?.enteredBy?.pen
+    //       ? `${params.row.enteredBy.name} (${params.row.enteredBy.pen})`
+    //       : "-",
+    // },
+    // {
+    //   field: "barcodeImage",
+    //   headerName: "Barcode",
+    //   flex: 1,
+    //   renderCell: (params) =>
+    //     params.value ? (
+    //       <img src={params.value} alt="Barcode" style={{ width: 60 }} />
+    //     ) : (
+    //       "N/A"
+    //     ),
+    // },
   ];
 
   const rows = stocks.map((item, index) => ({

@@ -91,7 +91,7 @@ router.post("/qm/verify-return/:id", async (req, res) => {
   try {
     const itemRequest = await ItemRequest.findById(id).populate("item");
 
-    if (!itemRequest || itemRequest.status !== "approved") {
+    if (!itemRequest || itemRequest.status !== "returnpending") {
       return res.status(400).json({ error: "Invalid return request" });
     }
 

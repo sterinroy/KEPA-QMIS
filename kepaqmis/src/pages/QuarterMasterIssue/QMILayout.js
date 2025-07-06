@@ -11,6 +11,8 @@ import { Send } from "@mui/icons-material";
 import QMIReturn from "./QMIReturn";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 import QMStockEntry from "./QMStockEntry"
+import DescriptionIcon from "@mui/icons-material/Description";
+import StockItemView from "../StockView";
 
 
 function QMILayout() {
@@ -26,12 +28,23 @@ function QMILayout() {
     {
       label: "Stock Entry Forms",
       path: "/QuarterMasterIssue/QMStockEntry",
+      matchPaths: [
+        "/QuarterMasterIssue/QMStockEntry",
+        "/QuarterMasterIssue/QMIDirectForm",
+        "/QuarterMasterIssue/QMIPurchase",
+        "/QuarterMasterIssue/QMIStockEntryForm"
+      ],
       icon: <DashboardIcon className="icon" />,
       component: <QMStockEntry />,
     },
     {
       label: "Manage Requests",
       path: "/QuarterMasterIssue/QMIManageRequests",
+      matchPaths: [
+        "/QuarterMasterIssue/QMIManageRequests",
+        "/QuarterMasterIssue/QMIManageApproval",
+        "/QuarterMasterIssue/QMIManageUsers"
+      ],
       icon: <PendingActionsIcon className="icon" />,
       component: <QMIManageRequest />,
     },
@@ -44,8 +57,19 @@ function QMILayout() {
     {
       label: "Stock Returns",
       path: "/QuarterMasterIssue/QMIReturn",
+      matchPaths: [
+        "/QuarterMasterIssue/QMIReturn",
+        "/QuarterMasterIssue/QMIReturnT",
+        "/QuarterMasterIssue/QMIReturnP"
+      ],
       icon: <AssignmentReturnIcon className="icon" />,
       component: <QMIReturn />,
+    },
+    {
+      label: "Stock Items",
+      path:"/QuarterMasterIssue/StockItemView",
+      icon: <DescriptionIcon className="icon" />,
+      component: <StockItemView />,
     },
   ];
   const handleNavItemClick = (component) => {

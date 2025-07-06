@@ -105,6 +105,7 @@ function App() {
           <Route path="QMIStockEntryForm" element={<QMIStockEntryForm />} />
           <Route path="QMIManageRequests" element={<QMIManageRequests />} />
           <Route path="QMIManageUsers" element={<QMIManageUsers />} />
+          <Route path="StockItemView" element={<StockItemView />} />
         </Route>
 
         <Route
