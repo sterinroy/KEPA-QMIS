@@ -12,8 +12,10 @@ import {
   Schedule,
   Reply,
   PlaylistAdd,
+  ShoppingCartCheckout
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import "./User.css"; // Uncomment if you have a specific CSS file for styling
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -46,6 +48,13 @@ const UserDashboard = () => {
       icon: <Reply sx={{ fontSize: 48, color: "#FFB74D" }} />,
       buttonText: "Return Item",
       route: "/User/UserReturn",
+    },
+    {
+      title: "My Allocated Stock",
+      description: "View all items allocated to you.",
+      icon: <ShoppingCartCheckout sx={{ fontSize: 48, color: "#9575CD" }} />,
+      buttonText: "View Stock",
+      route: "/User/UserStockView",
     },
   ];
 

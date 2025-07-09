@@ -12,6 +12,8 @@ import UserTemp from "./UserTemp";
 import UserReturn from "./UserReturn";
 import { Send } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
+import UserStockView from "./UserStockView";
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 
 function UserLayout() {
@@ -38,22 +40,24 @@ function UserLayout() {
       icon: <GroupIcon className="icon" />,
       component: <UserManageRequest />,
     },
-  
     {
       label: "Temporary Stock Request Form",
       path: "/User/UserTemp",
       icon: <Send className="icon" />,
       component: <UserTemp />,
     },
-
     {
       label: "Stock Return Form",
       path: "/User/UserReturn",
       icon: <HistoryIcon className="icon" />,
       component: <UserReturn />,
-    }
-
-
+    },
+    {
+      label: "My Allocated Stock",
+      path: "/User/UserStockView",
+      icon: <ShoppingCartCheckoutIcon className="icon" />,
+      component: <UserStockView />,
+    },
   ];
   const handleNavItemClick = (component) => {
     setActiveComponent(component);
