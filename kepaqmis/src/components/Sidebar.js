@@ -37,9 +37,14 @@ const Sidebar = ({ navItems }) => {
   }, [user]);
   if (!auth.isAuthenticated) return null;
 
-  const isActive = (path) => {
-    return location.pathname === path;
+  const isActive = (item) => {
+    if (item.matchPaths) {
+      return item.matchPaths.some((p) => location.pathname === p);
+    }
+    return location.pathname === item.path || location.pathname.startsWith(item.path + "/");
   };
+
+
 
   const handleLogout = () => {
     setOpenModal(true);
@@ -74,7 +79,7 @@ const Sidebar = ({ navItems }) => {
 
     return (
       <div
-        className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+        className={`nav-item ${isActive(item) ? "active" : ""}`}
         onClick={handleClick}
         tabIndex={0}
         onKeyDown={(e) => handleKeyDown(e, handleClick)}

@@ -3,6 +3,27 @@ const router = express.Router();
 
 const ItemRequest = require("../models/ItemRequest");
 
+
+router.get("/my-allocated-stock/:pen", async (req, res) => {
+  const { pen } = req.params;
+
+  try {
+    const allocatedItems = await ItemRequest.find({
+      "requestedBy.pen": pen,
+      status: { $in: ["approved", "returned", "returnpending"] }
+    })
+      .populate("item")
+      .sort({ approvedDate: -1 });
+
+    res.status(200).json(allocatedItems);
+  } catch (error) {
+    console.error("Error fetching allocated stock:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
 router.get('/my-issued-items/:pen', async (req, res) => {
   try {
     const userPen = req.params.pen;
@@ -91,7 +112,7 @@ router.post("/qm/verify-return/:id", async (req, res) => {
   try {
     const itemRequest = await ItemRequest.findById(id).populate("item");
 
-    if (!itemRequest || itemRequest.status !== "approved") {
+    if (!itemRequest || itemRequest.status !== "returnpending") {
       return res.status(400).json({ error: "Invalid return request" });
     }
 

@@ -143,7 +143,7 @@ const handleSnackbarClose = () => {
           width: "100%",
         }}
       >
-        © {new Date().getFullYear()} All rights reserved to "Albert the Keng"
+        © {new Date().getFullYear()} All rights reserved to Kerala Police Academy
       </footer>
       <Snackbar
         open={openSnackbar}

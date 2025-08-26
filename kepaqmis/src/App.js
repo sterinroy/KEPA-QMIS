@@ -42,6 +42,7 @@ import QMIPurchase from "./pages/QuarterMasterIssue/QMIPurchase.js";
 import QMStockEntry from "./pages/QuarterMasterIssue/QMStockEntry.js";
 import QMIManageRequests from "./pages/QuarterMasterIssue/QMIManageRequest.js";
 import QMIManageUsers from "./pages/QuarterMasterIssue/QMIManageUsers.js";
+import UserStockView from "./pages/User/UserStockView";
 
 function App() {
   return (
@@ -105,6 +106,7 @@ function App() {
           <Route path="QMIStockEntryForm" element={<QMIStockEntryForm />} />
           <Route path="QMIManageRequests" element={<QMIManageRequests />} />
           <Route path="QMIManageUsers" element={<QMIManageUsers />} />
+          <Route path="StockItemView" element={<StockItemView />} />
         </Route>
 
         <Route
@@ -130,6 +132,7 @@ function App() {
           <Route path="UserManageRequest" element={<UserManageRequest />} />
           <Route path="UserReturn" element={<UserReturn />} />
           <Route path="UserTemp" element={<UserTemp />} />
+          <Route path="UserStockView" element={<UserStockView />} />
         </Route>
 
         <Route

@@ -38,7 +38,10 @@ const QMIReturnP = () => {
     severity: "success",
   });
 
-  const { user } = useSelector((state) => state.auth);
+  const pen=localStorage.getItem("pen");
+  const name=localStorage.getItem("name");
+  console.log("pen", pen);
+  console.log("name", name);
 
   useEffect(() => {
     const fetchReturns = async () => {
@@ -89,7 +92,7 @@ const QMIReturnP = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            processedBy: { pen: user.pen, name: user.name },
+            processedBy: { pen: pen, name: name },
             technicalReportRequired,
             technicalWing: technicalReportRequired ? technicalWing : undefined,
             technicalReportNo: technicalReportRequired
@@ -208,7 +211,7 @@ const QMIReturnP = () => {
             label="Technical Report Required?"
           />
 
-          {technicalReportRequired ? (
+          {technicalReportRequired && (
             <>
               <TextField
                 label="Technical Wing"
@@ -225,20 +228,20 @@ const QMIReturnP = () => {
                 margin="dense"
               />
             </>
-          ) : (
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Return Category</InputLabel>
-              <Select
-                value={returnCategory}
-                onChange={(e) => setReturnCategory(e.target.value)}
-                label="Return Category"
-              >
-                <MenuItem value="Reusable">Reusable</MenuItem>
-                <MenuItem value="Repairable">Repairable</MenuItem>
-                <MenuItem value="Damaged">Damaged</MenuItem>
-              </Select>
-            </FormControl>
           )}
+
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Return Category</InputLabel>
+            <Select
+              value={returnCategory}
+              onChange={(e) => setReturnCategory(e.target.value)}
+              label="Return Category"
+            >
+              <MenuItem value="Reusable">Reusable</MenuItem>
+              <MenuItem value="Repairable">Repairable</MenuItem>
+              <MenuItem value="Damaged">Damaged</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
