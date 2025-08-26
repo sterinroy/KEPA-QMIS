@@ -95,6 +95,7 @@ const UserManageRequest = () => {
           ) : rows.length === 0 ? (
             <p style={{ color: "white" }}>No Requests available.</p>
           ) : (
+            <div className="manage-request-form">
             <DataGrid
               rows={rows}
               columns={columns}
@@ -103,6 +104,7 @@ const UserManageRequest = () => {
               disableRowSelectionOnClick
               showToolbar
             />
+            </div>
           )}
         </div>
       </div>

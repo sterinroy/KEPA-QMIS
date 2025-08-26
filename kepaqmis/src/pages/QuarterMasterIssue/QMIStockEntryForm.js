@@ -1,14 +1,18 @@
 // File: QMIStockEntryForm.js
 import React, { useState } from "react";
 import {
-  Box,
-  Grid,
   TextField,
   Button,
   Typography,
   FormControlLabel,
   Checkbox,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
+import "./addstock.css";
 
 const initialState = {
   sourceType: "direct-issue",
@@ -87,6 +91,10 @@ const formatKeyToLabel = (key) => {
 
 const QMIStockEntryForm = () => {
   const [formData, setFormData] = useState(initialState);
+  const [status, setStatus] = useState(""); // idle, loading, failed
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -115,7 +123,24 @@ const QMIStockEntryForm = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+
+    // Simple validation
+    if (!formData.Qmno || !formData.itemName || !formData.quantity || !formData.verifiedBy.pen) {
+      setError("Please fill all required fields.");
+      setStatus("failed");
+      return;
+    }
+
+    setConfirmOpen(true);
+  };
+
+  const submitConfirmed = async () => {
+    setConfirmOpen(false);
+    setStatus("loading");
     try {
       const res = await fetch("/api/stockRoutes/stock/add-direct-entry", {
         method: "POST",
@@ -124,87 +149,134 @@ const QMIStockEntryForm = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        alert("Stock entry successful");
+        setSuccessMessage("Stock entry successful.");
         setFormData(initialState);
       } else {
-        alert("Error: " + data.error);
+        setError(data.error || "Submission failed.");
+        setStatus("failed");
       }
     } catch (err) {
-      alert("Network error: " + err.message);
+      setError("Network error: " + err.message);
+      setStatus("failed");
     }
+    setStatus("idle");
+  };
+
+  // Render any field (primitive, nested, or boolean)
+  const renderField = (key, value, parentKey = null) => {
+    const name = parentKey ? `${parentKey}.${key}` : key;
+    const displayValue = parentKey ? formData[parentKey][key] : formData[key];
+
+    // Handle boolean (checkbox)
+    if (typeof value === "boolean") {
+      return (
+        <FormControlLabel
+          key={name}
+          control={
+            <Checkbox
+              name={name}
+              checked={displayValue}
+              onChange={handleChange}
+              sx={{
+                color: "white",
+                "&.Mui-checked": { color: "white" },
+              }}
+            />
+          }
+          label={formatKeyToLabel(key)}
+          sx={{ color: "white", marginTop: "8px" }}
+        />
+      );
+    }
+
+    // Handle nested objects (enteredBy, verifiedBy, amountDetails)
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      return Object.entries(value).map(([subKey, subVal]) =>
+        renderField(subKey, subVal, key)
+      );
+    }
+
+    // Handle primitive types
+    let inputType = "text";
+    if (key.includes("Date")) inputType = "date";
+    else if (["quantity", "warranty", "amount", "cashAmount"].includes(key))
+      inputType = "number";
+
+    return (
+      <TextField
+        key={name}
+        fullWidth
+        name={name}
+        label={formatKeyToLabel(key)}
+        value={displayValue || ""}
+        onChange={handleChange}
+        type={inputType}
+        required
+        margin="normal"
+        InputLabelProps={inputType === "date" ? { shrink: true } : {}}
+        sx={{
+          input: { color: "white" },
+          label: { color: "white" },
+          fieldset: { borderColor: "#4a5b76" },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#8e9fbf",
+          },
+        }}
+      />
+    );
   };
 
   return (
-    <Box className="direct-stock-entry-form" p={4}>
-      <Typography variant="h5">Direct Stock Entry Form</Typography>
-      <Grid container spacing={2} mt={2}>
-        {Object.entries(initialState).map(([key, value]) => {
-          if (typeof value === "boolean") {
-            return (
-              <Grid item xs={12} sm={6} key={key}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name={key}
-                      checked={formData[key]}
-                      onChange={handleChange}
-                    />
-                  }
-                  label={formatKeyToLabel(key)}
-                />
-              </Grid>
-            );
-          } else if (typeof value === "object" && !Array.isArray(value)) {
-            return Object.entries(value).map(([subKey, subVal]) => (
-              <Grid item xs={12} sm={6} key={`${key}.${subKey}`}>
-                <TextField
-                  fullWidth
-                  name={`${key}.${subKey}`}
-                  label={formatKeyToLabel(subKey)}
-                  value={formData[key][subKey] || ""}
-                  onChange={handleChange}
-                  type={
-                    subKey.includes("Date")
-                      ? "date"
-                      : ["cashAmount", "quantity", "warranty", "amount"].includes(
-                          subKey
-                        )
-                      ? "number"
-                      : "text"
-                  }
-                  InputLabelProps={subKey.includes("Date") ? { shrink: true } : {}}
-                />
-              </Grid>
-            ));
-          } else {
-            return (
-              <Grid item xs={12} sm={6} key={key}>
-                <TextField
-                  fullWidth
-                  name={key}
-                  label={formatKeyToLabel(key)}
-                  value={formData[key] || ""}
-                  onChange={handleChange}
-                  type={
-                    key.includes("Date")
-                      ? "date"
-                      : ["quantity", "warranty", "amount"].includes(key)
-                      ? "number"
-                      : "text"
-                  }
-                  InputLabelProps={key.includes("Date") ? { shrink: true } : {}}
-                />
-              </Grid>
-            );
-          }
-        })}
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
+    <div className="addstock-root">
+      <div className="addstock-box">
+        {/* Header */}
+        <Typography
+          variant="h5"
+          textAlign="center"
+          gutterBottom
+          style={{ color: "white", fontWeight: "bold" }}
+        >
+          Stock Entry Form
+        </Typography>
+
+        {/* Alerts */}
+        {status === "failed" && <Alert severity="error">{error}</Alert>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          {Object.entries(initialState).map(([key, value]) => {
+            // Skip top-level object containers (they’re rendered internally)
+            if (typeof value === "object" && !Array.isArray(value)) return null;
+            return renderField(key, value);
+          })}
+
+          <div style={{ marginTop: "16px", textAlign: "right" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
+
+          {/* Confirmation Dialog */}
+          <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+            <DialogTitle>Confirm Submission</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to submit this entry?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setConfirmOpen(false)}>No</Button>
+              <Button onClick={submitConfirmed} variant="contained">
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </form>
+      </div>
+    </div>
   );
 };
 

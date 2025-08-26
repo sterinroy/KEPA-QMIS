@@ -538,3 +538,137 @@ h2 {
   margin-left: -7px;
   margin-bottom: 10px;
 }
+
+
+
+.super-admin-approval {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -10px;
+  margin-right: 60px;
+  margin-bottom: 90px;
+}
+
+.super-admin-approval .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.super-admin-approval .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.super-admin-approval .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.super-admin-approval .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.super-admin-approval .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.super-admin-approval .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.super-admin-approval .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.super-admin-approval .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.super-admin-approval .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.super-admin-approval .MuiTablePagination-root {
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-select {
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-spacer {
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-actions button {
+  color: white !important;
+}
+.super-admin-approval .MuiTablePagination-actions {
+  color: white; 
+}
+.super-admin-approval .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-root {
+  color: white;
+}
+
+.super-admin-approval .MuiTablePagination-select {
+  color: white !important;
+}
+
+.super-admin-approval .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.super-admin-approval .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.super-admin-approval .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.super-admin-approval  .MuiButtonBase-root {
+ color: #ffffff;
+}
+
+/* Center align all column headers */
+.super-admin-approval .MuiDataGrid-columnHeader {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important;      /* Vertical center */
+}
+
+.super-admin-approval .MuiDataGrid-columnHeaderTitle {
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important;
+}

@@ -286,10 +286,11 @@
 }
 
 .manage-request-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: auto;
   background-color: #111C44;
   padding: 24px;
+  margin-left: 15px;
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -304,4 +305,110 @@
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
+}
+
+.manage-request-form {
+  border: 1px solid #ddd;
+  width: 1180px;
+  border-radius: 8px;
+  margin-left: -13px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 50px !important;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #0C1227;
+}
+
+/* Force table to expand horizontally */
+.manage-request-form .MuiDataGrid-root {
+  min-width: max-content;
+  background-color: #0C1227;
+  color: white;
+  border: none;
+}
+
+/* Toolbar styling */
+.manage-request-form .MuiDataGrid-toolbarContainer {
+  background-color: #000;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Toolbar icons (e.g., export, filter) */
+.manage-request-form .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important;
+}
+
+/* Row styling */
+.manage-request-form .MuiDataGrid-row {
+  background-color: #0C1227 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Center align all cell content inside the row */
+.manage-request-form .MuiDataGrid-cell {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important;      /* Vertical center */
+  text-align: center !important;
+}
+
+/* Row hover effect */
+.manage-request-form .MuiDataGrid-row:hover {
+  background-color: #001b5e !important;
+  color: white !important;
+}
+
+/* Footer / Pagination */
+.manage-request-form .MuiDataGrid-footerContainer {
+  background-color: #0C1227;
+  color: white;
+}
+
+/* Pagination controls */
+.manage-request-form .MuiTablePagination-root,
+.manage-request-form .MuiTablePagination-selectLabel,
+.manage-request-form .MuiTablePagination-select,
+.manage-request-form .MuiTablePagination-spacer {
+  color: white;
+}
+
+.manage-request-form .MuiTablePagination-actions button {
+  color: white !important;
+}
+
+.manage-request-form .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+/* Icons and buttons inside DataGrid */
+.manage-request-form .MuiSvgIcon-root,
+.manage-request-form .MuiButtonBase-root {
+  color: white !important;
+}
+
+/* Make sure this doesn't interfere */
+.MuiBox-root {
+  overflow-x: visible !important;
+}
+
+/* Center align all DataGrid column headers */
+.manage-request-form .MuiDataGrid-columnHeader {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  background-color: #0C1227 !important;
+  color: white !important;
+  font-size: 14px;
+  text-align: center !important;
+  padding: 12px 24px !important;
+}
+
+/* Ensure the title inside the header is also centered */
+.manage-request-form .MuiDataGrid-columnHeaderTitle {
+  width: 100%;
+  white-space: nowrap !important;
+  color: white !important;
+  font-weight: 600 !important;
+  margin-left: 25px;
 }

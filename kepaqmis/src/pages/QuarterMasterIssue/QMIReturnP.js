@@ -183,8 +183,8 @@ const QMIReturnP = () => {
             sx={{
               "& .MuiDataGrid-cell": {
                 display: "flex",
-                justifyContent: "center", // Horizontal center
-                alignItems: "center", // Vertical center
+                justifyContent: "center",
+                alignItems: "center",
               },
             }}
           />

@@ -8,6 +8,7 @@ import {
 } from "../../redux/actions/superAdminActions";
 import "./SuperAdmin.css";
 import { DataGrid } from "@mui/x-data-grid";
+import "./SuperAdmin.css";
 
 const SuperAdminApprovals = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,9 @@ const SuperAdminApprovals = () => {
               onChange={(e) => handleRoleChange(params.id, e.target.value)}
             >
               <option value="">Select Role</option>
-              <option value="QuarterMasterPurchase">QuarterMaster (Purchase)</option>
+              <option value="QuarterMasterPurchase">
+                QuarterMaster (Purchase)
+              </option>
               <option value="QuarterMasterIssue">QuarterMaster (Issue)</option>
               <option value="QuarterMasterACQM">ACQM</option>
             </select>
@@ -54,11 +57,32 @@ const SuperAdminApprovals = () => {
         <>
           <button
             onClick={() => handleApprove(params.id, params.row.role)}
-            style={{ marginRight: 10 }}
+            style={{
+              backgroundColor: "#4caf50", // Green
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              margin: "0 5px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
           >
             Approve
           </button>
-          <button onClick={() => handleReject(params.id)}>Reject</button>
+          <button
+            onClick={() => handleReject(params.id)}
+            style={{
+              backgroundColor: "#f44336", // Red
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              margin: "0 5px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Reject
+          </button>
         </>
       ),
     },
@@ -71,7 +95,6 @@ const SuperAdminApprovals = () => {
     phone: user.phone,
     role: user.role,
   }));
-
 
   const handleApprove = (id, role) => {
     if (role === "QuarterMaster") {
@@ -97,28 +120,55 @@ const SuperAdminApprovals = () => {
   };
 
   return (
-    <div style={{width: "100%" }}>
+    <div style={{ width: "100%" }}>
       <div>
         <h2>Pending Approvals</h2>
       </div>
-      <div style={{ height: 550}}>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : pendingUsers.length === 0 ? (
-        <p>No pending users.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          autoHeight
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-          />
-      )}
+      <div style={{ height: 550 }}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : pendingUsers.length === 0 ? (
+          <p>No pending users.</p>
+        ) : (
+          <div className="super-admin-approval">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              autoHeight
+              rowsPerPageOptions={[10, 25, 50]}
+              disableRowSelectionOnClick
+              showToolbar
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#f5f5f5",
+                  color: "#333",
+                },
+                "& .MuiDataGrid-columnHeaderTitleContainer": {
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  width: "100%",
+                  textAlign: "center",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "1px solid #ccc",
+                },
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
