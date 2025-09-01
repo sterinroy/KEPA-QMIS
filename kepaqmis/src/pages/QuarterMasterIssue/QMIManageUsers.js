@@ -37,7 +37,7 @@ const ManageUserRequests = () => {
     try {
       const res = await fetch("/api/itemRequestRoutes/item-requests/pending");
       const data = await res.json();
-      setItems(data);
+      setItems(data.data || []);
     } catch (err) {
       console.error("Error fetching user requests:", err);
     } finally {

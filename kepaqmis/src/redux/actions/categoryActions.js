@@ -11,7 +11,7 @@ export const fetchCategories = () => async (dispatch) => {
   try {
     const res = await fetch("/api/itemCategoryRoutes/categories");
     const data = await res.json();
-    dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: data });
+    dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: data.data });
   } catch (error) {
     dispatch({ type: FETCH_CATEGORIES_FAILURE, payload: error.message });
   }
@@ -24,7 +24,7 @@ export const addCategory = (name, subcategory = "") => async (dispatch) => {
       body: JSON.stringify({ name, subcategory }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "API error");
+    if (!res.ok) throw new Error(data.data.error || "API error");
 
     dispatch(fetchCategories());
   } catch (err) {
@@ -55,7 +55,7 @@ export const addSubcategory = (categoryName, subcategory) => async (dispatch) =>
       body: JSON.stringify({ name: categoryName, subcategory }),
     });
     const data = await res.json();
-    dispatch({ type: ADD_SUBCATEGORY_SUCCESS, payload: data.category });
+    dispatch({ type: ADD_SUBCATEGORY_SUCCESS, payload: data.data.category });
     dispatch(fetchCategories());
   } catch (error) {
     console.error("Add subcategory failed:", error.message);
@@ -73,7 +73,7 @@ export const updateCategory = (oldName, name, subcategory) => async (dispatch) =
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Update failed");
 
-    dispatch({ type: ADD_CATEGORY_SUCCESS, payload: data.category });
+    dispatch({ type: ADD_CATEGORY_SUCCESS, payload: data.data.category });
     dispatch(fetchCategories());
   } catch (error) {
     console.error("Update category failed:", error.message);
@@ -89,7 +89,7 @@ export const deleteCategory = (name) => async (dispatch) => {
     });
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Delete failed");
+    if (!res.ok) throw new Error(data.data.error || "Delete failed");
 
     dispatch(fetchCategories());
   } catch (error) {

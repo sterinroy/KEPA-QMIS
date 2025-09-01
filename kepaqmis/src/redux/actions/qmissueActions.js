@@ -15,17 +15,17 @@ export const fetchQMIssueEntries = () => {
       const response = await fetch("/api/stockRoutes/purchase/entries");
 
       const data = await response.json();
-      console.log("QMIssue entries API response:", data);
+      console.log("QMIssue entries API response:", data.data);
 
       if (!response.ok) {
         dispatch({
           type: FETCH_QM_ISSUE_ENTRIES_FAILURE,
-          payload: data.error || "Failed to fetch entries",
+          payload: data.data.error || "Failed to fetch entries",
         });
         return;
       }
 
-      dispatch({ type: FETCH_QM_ISSUE_ENTRIES_SUCCESS, payload: data });
+      dispatch({ type: FETCH_QM_ISSUE_ENTRIES_SUCCESS, payload: data.data || [] });
     } catch (error) {
       console.error("Error fetching QMIssue entries:", error.message);
       dispatch({
@@ -43,11 +43,11 @@ export const approveIssueEntry = (id, issueData) => {
       const response = await fetch(`/api/stockRoutes/issue/approve/${id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(issueData),
+        body: JSON.stringify(data.issueData),
       });
 
       const data = await response.json();
-      console.log("Approve issue entry API response:", data);
+      console.log("Approve issue entry API response:", data.data);
 
       if (!response.ok) {
         dispatch({
@@ -57,7 +57,7 @@ export const approveIssueEntry = (id, issueData) => {
         return;
       }
 
-      dispatch({ type: APPROVE_ISSUE_ENTRY_SUCCESS, payload: data });
+      dispatch({ type: APPROVE_ISSUE_ENTRY_SUCCESS, payload: data.data });
     } catch (error) {
       console.error("Error approving issue entry:", error.message);
       dispatch({

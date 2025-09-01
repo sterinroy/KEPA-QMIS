@@ -12,23 +12,27 @@ const SuperAdminLogs = () => {
     dispatch(fetchLogs());
   }, [dispatch]);
 
-  const columns = [
-    { field: "pen", headerName: "PEN", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
-    { field: "role", headerName: "Role", flex: 1 },
-    { field: "action", headerName: "Action", flex: 1 },
-    {
-      field: "timestamp",
-      headerName: "Timestamp",
-      flex: 1,
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        return date.toString() === "Invalid Date"
-          ? "N/A"
-          : date.toLocaleString();
-      },
+const columns = [
+  { field: "pen", headerName: "PEN", flex: 1 },
+  { field: "name", headerName: "Name", flex: 1 },
+  { field: "role", headerName: "Role", flex: 1 },
+  { field: "action", headerName: "Action", flex: 1 },
+  { field: "resourceType", headerName: "Resource Type", flex: 1 },
+  { field: "description", headerName: "Description", flex: 2 },
+  { field: "ipAddress", headerName: "IP Address", flex: 1 },
+  {
+    field: "timestamp",
+    headerName: "Timestamp",
+    flex: 1.5,
+    renderCell: (params) => {
+      const date = new Date(params.value);
+      return date.toString() === "Invalid Date"
+        ? "N/A"
+        : date.toLocaleString();
     },
-  ];
+  },
+];
+
 
   // Convert logs to rows with an `id` field
   const rows = logs

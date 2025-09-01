@@ -18,12 +18,12 @@ export const fetchOffices = () => {
         },
       });
       const data = await response.json();
-
+      console.log("data",data);
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch offices");
+        throw new Error(data.data.error || "Failed to fetch offices");
       }
 
-      dispatch({ type: FETCH_OFFICES_SUCCESS, payload: data });
+      dispatch({ type: FETCH_OFFICES_SUCCESS, payload: data.data });
     } catch (error) {
       dispatch({ type: FETCH_OFFICES_FAILURE, payload: error.message });
     }
@@ -44,7 +44,7 @@ export const addOffice = (officeName) => {
       if (!response.ok) {
         throw new Error(data.error || "Failed to add office");
       }
-        dispatch({ type: ADD_OFFICE_SUCCESS, payload: data[0] });
+        dispatch({ type: ADD_OFFICE_SUCCESS, payload: data.data[0] });
 
 
       dispatch(fetchOffices());
@@ -66,7 +66,7 @@ export const deleteOffice = (officeName) => {
       if (!response.ok) {
         throw new Error(data.error || "Failed to delete office");
       }
-        dispatch({ type: DELETE_OFFICE_SUCCESS, payload: officeName });
+        dispatch({ type: DELETE_OFFICE_SUCCESS, payload: data.officeName });
 
       dispatch(fetchOffices());
     } catch (error) {

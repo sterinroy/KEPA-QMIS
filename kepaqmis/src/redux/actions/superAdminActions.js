@@ -30,7 +30,7 @@ export const fetchPendingUsers = () => {
         "/api/superadmin/pending-registrations"
       );
       const data = await response.json();
-      dispatch({ type: FETCH_PENDING_USERS_SUCCESS, payload: data });
+      dispatch({ type: FETCH_PENDING_USERS_SUCCESS, payload: data.data || [] });
     } catch (error) {
       dispatch({ type: FETCH_PENDING_USERS_FAILURE, payload: error.message });
     }
@@ -87,7 +87,7 @@ export const fetchLogs = () => {
     try {
       const response = await fetch("/api/superadmin/logs");
       const data = await response.json();
-      dispatch({ type: FETCH_LOGS_SUCCESS, payload: data });
+      dispatch({ type: FETCH_LOGS_SUCCESS, payload: data.data.logs || [] });
     } catch (error) {
       dispatch({ type: FETCH_LOGS_FAILURE, payload: error.message });
     }
@@ -102,7 +102,7 @@ export const fetchUsers = () => {
         "/api/superadmin/all-users"
       );
       const data = await response.json();
-      dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
+      dispatch({ type: FETCH_USERS_SUCCESS, payload: data.data || [] });
     } catch (error) {
       dispatch({ type: FETCH_USERS_FAILURE, payload: error.message });
     }
@@ -145,7 +145,7 @@ export const createUser = (pen, name, phone, password, role) => {
         throw new Error(data.msg || "User creation failed");
       }
 
-      dispatch({ type: CREATE_USER_SUCCESS, payload: data });
+      dispatch({ type: CREATE_USER_SUCCESS, payload: data.data || [] });
       // Optionally, refresh users list:
       dispatch(fetchUsers());
       return data;

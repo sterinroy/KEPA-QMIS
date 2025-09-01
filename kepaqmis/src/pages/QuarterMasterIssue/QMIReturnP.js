@@ -40,15 +40,12 @@ const QMIReturnP = () => {
 
   const pen=localStorage.getItem("pen");
   const name=localStorage.getItem("name");
-  console.log("pen", pen);
-  console.log("name", name);
-
   useEffect(() => {
     const fetchReturns = async () => {
       try {
         const res = await fetch("/api/userRoute/returns/pending-verification");
         const data = await res.json();
-        setReturns(data);
+        setReturns(data.data);
         console.log(data);
       } catch (err) {
         console.error("Error fetching returns:", err);

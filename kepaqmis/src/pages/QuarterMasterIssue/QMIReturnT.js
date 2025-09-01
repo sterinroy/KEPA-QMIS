@@ -34,7 +34,7 @@ const fetchIssuedItems = async () => {
   try {
     const res = await fetch("/api/userRoute/returns/pending-verification"); 
     const data = await res.json();
-    setItems(data);
+    setItems(data.data);
   } catch (err) {
     console.error("Error fetching approved items:", err);
   } finally {
