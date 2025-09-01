@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import {
   Box,
-  Grid,
   TextField,
-  Button,
-  Typography,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  Checkbox,
-  FormControlLabel,
+  FormControl,
+  InputLabel,
+  Button,
+  Typography,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
+import "./purchase.css";
 
-// Helper function to get today's date in YYYY-MM-DD format
 const getTodayDate = () => {
   const today = new Date();
-  return today.toISOString().split("T")[0]; // Returns 'YYYY-MM-DD'
+  return today.toISOString().split("T")[0];
 };
 
 const defaultEntry = {
@@ -50,6 +52,10 @@ const defaultEntry = {
 
 const QMIPurchase = () => {
   const [formData, setFormData] = useState(defaultEntry);
+  const [status, setStatus] = useState(""); // idle, loading, failed
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -70,7 +76,22 @@ const QMIPurchase = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+    // Simple required check (minimal validation)
+    if (!formData.itemName || !formData.Qmno || !formData.quantity || !formData.verifiedBy) {
+      setError("Please fill all required fields.");
+      setStatus("failed");
+      return;
+    }
+    setConfirmOpen(true); // Show confirmation dialog
+  };
+
+  const submitConfirmed = async () => {
+    setConfirmOpen(false);
+    setStatus("loading");
     try {
       const res = await fetch("/api/stockRoutes/stock/requested-issue", {
         method: "POST",
@@ -80,187 +101,209 @@ const QMIPurchase = () => {
 
       const result = await res.json();
 
-      if (res.ok) {
-        alert("Successfully added to stock!");
-        setFormData({
-          ...defaultEntry,
-          invoiceDate: getTodayDate(),
-          verifyDate: getTodayDate(),
-          dateOfPurchase: getTodayDate(),
-          dateOfIssue: getTodayDate(),
-        });
-      } else {
-        alert("Error: " + result.error || result.message);
-      }
+      if (!res.ok) throw new Error(result.message || "Failed to submit");
+
+      setSuccessMessage("Stock entry successfully added.");
+      setFormData({
+        ...defaultEntry,
+        invoiceDate: getTodayDate(),
+        verifyDate: getTodayDate(),
+        dateOfPurchase: getTodayDate(),
+        dateOfIssue: getTodayDate(),
+      });
+      setStatus("idle");
     } catch (err) {
-      alert("Network error: " + err.message);
+      setError(err.message);
+      setStatus("failed");
+    }
+  };
+
+  const fieldConfig = [
+    { name: "Qmno", label: "QM No.", type: "text", required: true },
+    { name: "orderNo", label: "Order No.", type: "text", required: true },
+    { name: "supplyOrderNo", label: "Supply Order No.", type: "text", required: true },
+    { name: "invoiceDate", label: "Invoice Date", type: "date", required: true },
+    { name: "billInvoiceNo", label: "Bill Invoice No.", type: "text", required: true },
+    { name: "verifyDate", label: "Verify Date", type: "date", required: true },
+    { name: "itemName", label: "Item Name", type: "text", required: true },
+    { name: "itemCategory", label: "Item Category", type: "text", required: true },
+    { name: "itemSubCategory", label: "Item Subcategory", type: "text", required: true },
+    { name: "quantity", label: "Quantity", type: "number", required: true },
+    { name: "unit", label: "Unit", type: "text", required: true },
+    { name: "make", label: "Make / Brand", type: "text", required: true },
+    { name: "model", label: "Model", type: "text", required: true },
+    { name: "modelNo", label: "Model No.", type: "text", required: true },
+    { name: "serialNumber", label: "Serial No.", type: "text", required: true },
+    { name: "warranty", label: "Warranty (In Months)", type: "text", required: false },
+    { name: "typeofFund", label: "Type of Fund", type: "text", required: true },
+    { name: "fromWhomPurchased", label: "Supplier", type: "text", required: true },
+    { name: "toWhom", label: "To Whom (Office)", type: "text", required: true },
+    { name: "amount", label: "Total Amount", type: "number", required: true },
+    { name: "dateOfPurchase", label: "Date of Purchase", type: "date", required: true },
+    { name: "dateOfIssue", label: "Date of Issue", type: "date", required: true },
+    { name: "verifiedBy", label: "Verified By PEN No.", type: "text", required: true },
+    {
+      name: "amountType",
+      label: "Amount Type",
+      type: "select",
+      options: ["Cash", "Credit"],
+      required: true,
+    },
+    {
+      label: "Amount Details",
+      condition: (data) => data.amountType === "Cash",
+      fields: [
+        {
+          name: "amountDetails.cashAmount",
+          label: "Cash Amount",
+          type: "number",
+          required: true,
+        },
+      ],
+    },
+    {
+      label: "Credit Status",
+      condition: (data) => data.amountType === "Credit",
+      fields: [
+        {
+          name: "amountDetails.creditStatus",
+          label: "Credit Status",
+          type: "select",
+          options: ["Pending", "Approved"],
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "perishable",
+      label: "Perishable",
+      type: "select",
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+      ],
+      required: true,
+    },
+  ];
+
+  const renderField = (field) => {
+    const value = formData[field.name];
+    if (!field.name) return null;
+
+    if (["text", "number", "date"].includes(field.type)) {
+      return (
+        <TextField
+          key={field.name}
+          label={field.label}
+          name={field.name}
+          type={field.type}
+          value={value}
+          onChange={handleChange}
+          required={field.required}
+          fullWidth
+          margin="normal"
+          InputLabelProps={field.type === "date" ? { shrink: true } : {}}
+          sx={{
+            input: { color: "white" },
+            label: { color: "white" },
+            fieldset: { borderColor: "#4a5b76" },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#8e9fbf",
+            },
+          }}
+        />
+      );
+    }
+
+    if (field.type === "select") {
+      return (
+        <FormControl fullWidth margin="normal" key={field.name}>
+          <InputLabel sx={{ color: "white" }}>{field.label}</InputLabel>
+          <Select
+            name={field.name}
+            value={value ?? ""}
+            onChange={handleChange}
+            label={field.label}
+            sx={{
+              color: "white",
+              ".MuiOutlinedInput-notchedOutline": { borderColor: "#4a5b76" },
+              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#8e9fbf" },
+            }}
+          >
+            {(field.options || []).map((opt) =>
+              typeof opt === "object" ? (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </MenuItem>
+              ) : (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              )
+            )}
+          </Select>
+        </FormControl>
+      );
     }
   };
 
   return (
-    <Box className="requested-issue-container">
-      <Typography
-        variant="h5"
-        gutterBottom
-        color="white"
-        textAlign="center"
-        sx={{ width: "100%", marginBottom: 3 }}
-      >
-        Requested Issue - Stock Entry Form
-      </Typography>
+    <div className="purchase-root">
+      <div className="purchase-box">
+        <Typography
+          variant="h5"
+          textAlign="center"
+          gutterBottom
+          style={{ color: "white", fontWeight: "bold" }}
+        >
+          Purchase Entry Form
+        </Typography>
 
-      <Grid container spacing={2}>
-        {[
-          { name: "orderNo", label: "Order No." },
-          { name: "supplyOrderNo", label: "Supply Order No." },
-          { name: "invoiceDate", label: "Invoice Date", type: "date" },
-          { name: "billInvoiceNo", label: "Bill Invoice No." },
-          { name: "verifyDate", label: "Verify Date", type: "date" },
-          { name: "itemName", label: "Item Name" },
-          { name: "itemCategory", label: "Item Category" },
-          { name: "itemSubCategory", label: "Item Subcategory" },
-          { name: "quantity", label: "Quantity", type: "number" },
-          { name: "unit", label: "Unit" },
-          { name: "make", label: "Make/ Brand" },
-          { name: "model", label: "Model" },
-          { name: "modelNo", label: "Model No." },
-          { name: "warranty", label: "Warranty (months)" },
-          { name: "typeofFund", label: "Type of Fund" },
-          { name: "fromWhomPurchased", label: "Supplier" },
-          { name: "toWhom", label: "To Whom (Office)" },
-          { name: "amount", label: "Total Amount", type: "number" },
-          { name: "dateOfPurchase", label: "Date of Purchase", type: "date" },
-          { name: "dateOfIssue", label: "Date of Issue", type: "date" },
-          { name: "serialNumber", label: "Serial No." },
-          { name: "verifiedBy", label: "Verified By PEN No." },
-          { name: "Qmno", label: "QM No.", Width: 120},
-        ].map((field) => (
-          <Grid item xs={12} sm={6} key={field.name}>
-            <TextField
-              fullWidth
-              type={field.type || "text"}
-              name={field.name}
-              label={field.label}
-              value={formData[field.name]}
-              onChange={handleChange}
-              sx={{
-                input: { color: "white" },
-                label: { color: "white" },
-                fieldset: { borderColor: "#4a5b76" },
-              }}
-            />
-          </Grid>
-        ))}
+        {status === "failed" && <Alert severity="error">{error}</Alert>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
-        {/* Perishable Checkbox */}
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.perishable}
-                onChange={handleChange}
-                name="perishable"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": { color: "white" },
-                }}
-              />
+        <form onSubmit={handleSubmit}>
+          {fieldConfig.map((field) => {
+            if (field.condition && !field.condition(formData)) return null;
+            if (field.fields) {
+              return (
+                <div key={field.label}>
+                  <Typography variant="subtitle1" style={{ color: "white", marginTop: 16 }}>
+                    {field.label}
+                  </Typography>
+                  {field.fields.map((f) => renderField(f))}
+                </div>
+              );
             }
-            label="Perishable"
-            sx={{ color: "white" }}
-          />
-        </Grid>
+            return renderField(field);
+          })}
 
-        {/* Amount Type */}
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel sx={{ color: "white" }}>Amount Type</InputLabel>
-            <Select
-              name="amountType"
-              value={formData.amountType}
-              onChange={handleChange}
-              label="Amount Type"
-              sx={{
-                color: "white",
-                ".MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#4a5b76",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#8e9fbf",
-                },
-              }}
+          <div style={{ marginTop: "16px", textAlign: "right" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={status === "loading"}
             >
-              <MenuItem value="Cash">Cash</MenuItem>
-              <MenuItem value="Credit">Credit</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+              {status === "loading" ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
 
-        {formData.amountType === "Cash" && (
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              name="amountDetails.cashAmount"
-              label="Cash Amount"
-              type="number"
-              value={formData.amountDetails.cashAmount}
-              onChange={handleChange}
-              sx={{
-                input: { color: "white" },
-                label: { color: "white" },
-                fieldset: { borderColor: "#4a5b76" },
-              }}
-            />
-          </Grid>
-        )}
-
-        {formData.amountType === "Credit" && (
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel sx={{ color: "white" }}>Credit Status</InputLabel>
-              <Select
-                name="amountDetails.creditStatus"
-                value={formData.amountDetails.creditStatus}
-                onChange={handleChange}
-                label="Credit Status"
-                sx={{
-                  color: "white",
-                  ".MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#4a5b76",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8e9fbf",
-                  },
-                }}
-              >
-                <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Approved">Approved</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        )}
-
-        {/* Submit Button */}
-        <Grid item xs={12}>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            sx={{
-              backgroundColor: "#007bff",
-              "&:hover": { backgroundColor: "#0056b3" },
-              borderRadius: 2,
-              px: 4,
-              py: 1,
-              ml: 63,
-              mt: 3,
-              color: "white",
-            }}
-          >
-            Submit to Stock
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
+          {/* Confirmation Dialog */}
+          <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+            <DialogTitle>Confirm Submission</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to add this item to stock?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setConfirmOpen(false)}>No</Button>
+              <Button onClick={submitConfirmed} variant="contained">
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </form>
+      </div>
+    </div>
   );
 };
 

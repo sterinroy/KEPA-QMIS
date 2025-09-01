@@ -1,0 +1,83 @@
+.addstock-box {
+  background-color: #111c44 !important;
+  color: black;
+  margin-left: 11px;
+  margin-top: 1550px;
+  margin-right: 40px;
+  margin-bottom: 30px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1300px;
+  box-sizing: border-box;
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
+}
+
+
+/* Inputs */
+.addstock-box .MuiInputBase-root {
+  height: 50px;
+  background-color: #111c44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.addstock-box .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.addstock-box .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.addstock-box .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.addstock-box .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+.addstock-box .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+/* Input field spacing */
+.addstock-box .MuiTextField-root,
+.addstock-box .MuiFormControl-root {
+  width: 100%;
+}
+
+.addstock-box .MuiInputBase-input,
+.addstock-box .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.addstock-box .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.addstock-box .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
+.addstock-root {
+  min-height: 100vh;
+  margin-left: -20px;
+  background-color: #0c1227;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* aligns top */
+  padding: 10px 20px 40px 20px; /* top, right, bottom, left */
+  overflow-y: auto; /* allow scroll if content overflows */
+  box-sizing: border-box;
+}
