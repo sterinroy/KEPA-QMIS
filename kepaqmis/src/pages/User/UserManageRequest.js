@@ -61,7 +61,8 @@ const UserManageRequest = () => {
         }
 
         const data = await response.json();
-        const formattedRows = data.map((entry, index) => ({
+        console.log("Fetched issued items:", data.data);
+        const formattedRows = data.data.map((entry, index) => ({
           id: entry._id || index,
           date: entry.dateOfrequest,
           item: entry.item?.itemName || "N/A",
