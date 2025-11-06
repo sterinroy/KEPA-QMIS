@@ -1,11 +1,10 @@
 .purchase-order-box {
   background-color: #111c44 !important;
   color: black;
-  margin-left: 12px;
-  margin-top: 30px;
+  margin-top: 5px;
   margin-right: 50px;
-  margin-bottom: 60px;
-  padding: 30px 40px 20px 40px;
+  margin-bottom: 20px;
+  padding: 30px 30px 30px 40px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -14,7 +13,7 @@
 }
 
 .form {
-  background-color: #0c1227;
+  background-color: #ffffff;
   /* margin-top: 10px; */
   margin-right: 60px;
   height: 100vh; /* Full viewport height */

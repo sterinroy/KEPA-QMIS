@@ -112,9 +112,9 @@
 .temp-issue-root {
   min-height: 100vh;
   margin-top: -40px;
-  margin-left: -20px;
+  margin-left: -50px;
   margin-right: 50px;
-  background-color: #0c1227;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: flex-start;
