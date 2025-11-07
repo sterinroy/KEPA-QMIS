@@ -93,7 +93,7 @@ const StockItemView = () => {
         ) : (
           <div
             className="stock-items"
-            style={{ marginLeft: "-20px", marginRight: "70px" }}
+            style={{ marginLeft: "-20px", marginRight: "78px" }}
           >
             <DataGrid
               rows={rows}
