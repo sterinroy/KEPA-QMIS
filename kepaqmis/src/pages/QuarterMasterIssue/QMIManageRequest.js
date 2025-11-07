@@ -7,7 +7,7 @@ import {
   CardContent,
   Button,
 } from "@mui/material";
-import { Inventory, People } from "@mui/icons-material";
+import { Height, Inventory, People } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const QMIManageRequests = () => {
@@ -20,6 +20,8 @@ const QMIManageRequests = () => {
       icon: <Inventory sx={{ fontSize: 48, color: "#4DB6AC" }} />,
       buttonText: "Go to Purchase Requests",
       route: "/QuarterMasterIssue/QMIManageApproval",
+      width: 400,
+      height: 260,
     },
     {
       title: "Manage User Requests",
@@ -27,6 +29,8 @@ const QMIManageRequests = () => {
       icon: <People sx={{ fontSize: 48, color: "#FFD54F" }} />,
       buttonText: "Go to User Requests",
       route: "/QuarterMasterIssue/QMIManageUsers",
+      width: 400,
+      height: 260,
     },
   ];
 
@@ -36,30 +40,36 @@ const QMIManageRequests = () => {
         minHeight: "100vh",
         width: "100vw",
         ml: -20,
-        background: "linear-gradient(to right, #0c1227, #111c44)",
+        background: "white",
         p: 5,
       }}
     >
       <Typography
         variant="h4"
-        color="white"
+        color="#0c1227"
         fontWeight="bold"
         textAlign="center"
         mb={10}
-        mt={10}
+        mt={4.5}
       >
-        Request Management Panel
+        REQUEST MANAGEMENT PANEL
       </Typography>
       <Grid container spacing={6} justifyContent="center">
         {cardData.map((card, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Grid item key={index}>
             <Card
               sx={{
+                width: card.width, 
+                height: card.height,
                 backgroundColor: "#111c44",
                 color: "white",
                 borderRadius: 3,
                 boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
                 transition: "transform 0.3s ease",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
                 "&:hover": { transform: "scale(1.05)" },
               }}
             >
@@ -73,12 +83,7 @@ const QMIManageRequests = () => {
                 }}
               >
                 {card.icon}
-                <Typography
-                  variant="h6"
-                  mt={2}
-                  gutterBottom
-                  fontWeight="bold"
-                >
+                <Typography variant="h6" mt={2} gutterBottom fontWeight="bold">
                   {card.title}
                 </Typography>
                 <Typography variant="body2" mb={3}>

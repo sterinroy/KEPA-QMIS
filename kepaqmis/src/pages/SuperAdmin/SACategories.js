@@ -147,7 +147,7 @@ const SACategories = () => {
   }));
 
   return (
-    <div className="p-4" style={{ width: "100%", zIndex: 1 }}>
+    <div className="p-4" style={{ width: "100%",marginTop: "20px", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Item Categories</h2>
         <div className="add-category-button">

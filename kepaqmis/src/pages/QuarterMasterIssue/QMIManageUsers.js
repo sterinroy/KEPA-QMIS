@@ -163,14 +163,29 @@ const ManageUserRequests = () => {
               setApprovedQty(params.row.requestedQty);
               setOpenDialog(true);
             }}
+            sx={{
+              backgroundColor: "green",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#00e200ff",
+              },
+            }}
           >
             Approve
           </Button>
+
           <Button
-            variant="outlined"
-            color="error"
+            variant="contained"
             size="small"
             onClick={() => handleReject(params.row.fullItem._id)}
+            sx={{
+              backgroundColor: "red",
+              color: "white",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#b30000",
+              },
+            }}
           >
             Reject
           </Button>
@@ -181,8 +196,12 @@ const ManageUserRequests = () => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ ml:-5, mb: -2, mt: 15 }} component="h2">
-        Manage User Requests (QM)
+      <Typography
+        variant="h5"
+        sx={{ ml: -2, mb: -3, mt: 23.5, fontWeight: "bold" }}
+        component="h2"
+      >
+        MANAGE USER REQUESTS (QM)
       </Typography>
 
       {loading ? (

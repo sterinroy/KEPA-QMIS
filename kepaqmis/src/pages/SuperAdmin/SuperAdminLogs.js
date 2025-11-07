@@ -43,7 +43,7 @@ const columns = [
     }));
 
   return (
-    <div style={{ width: "100%" }}>
+   <div style={{ width: "100%", marginTop: "-70px" }}>
       <div>
         <h2>Login/Logout Details</h2>
       </div>

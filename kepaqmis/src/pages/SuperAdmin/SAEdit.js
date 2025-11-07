@@ -40,7 +40,7 @@ const SAEdit = () => {
       sx={{
         minHeight: "100vh",
         width:"1200px",
-        background: "#111c44",
+        background: "#ffffffff",
         ml: "-20px",
         mb:"-20px",
         p: 5,
@@ -48,7 +48,7 @@ const SAEdit = () => {
     >
       <Typography
         variant="h4"
-        color="white"
+        color="#111c44"
         fontWeight="bold"
         textAlign="center"
         mb={10}

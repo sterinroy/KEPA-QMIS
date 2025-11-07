@@ -79,7 +79,7 @@ const StockItemView = () => {
   }));
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", marginTop: "-15px" }}>
       <div>
         <h2>Stock Items</h2>
       </div>

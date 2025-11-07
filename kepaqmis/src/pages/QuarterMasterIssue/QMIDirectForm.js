@@ -14,6 +14,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import jsPDF from "jspdf";
+import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCategories,
@@ -301,7 +302,7 @@ const QMIDirectForm = () => {
           gutterBottom
           style={{ color: "white", fontWeight: "bold" }}
         >
-          Direct Issued Stock Entry Form
+          DIREC ISSUED STOCK ENTRY FORM
         </Typography>
 
         {status === "failed" && <Alert severity="error">{error}</Alert>}

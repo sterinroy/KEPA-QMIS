@@ -13,15 +13,15 @@
 .direct-issue-box {
   background-color: #111c44 !important;
   color: black;
-  margin-left: 11px;
+  margin-left: -10px;
+  margin-right: 120px; 
   margin-top: 1050px;
-  margin-right: 40px;
   margin-bottom: 30px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 1300px;
+  max-width: 1200px;
   box-sizing: border-box;
   padding: 30px 40px 20px 40px;
   min-height: 550px;
@@ -82,17 +82,17 @@
   margin-top: -8px;
 }
 
-.direct-issue-root {
+/* .direct-issue-root {
   min-height: 100vh;
   margin-left: -20px;
-  background-color: #0c1227;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* aligns top */
-  padding: 10px 20px 40px 20px; /* top, right, bottom, left */
-  overflow-y: auto; /* allow scroll if content overflows */
+  align-items: flex-start;
+  padding: 10px 20px 40px 20px;
+  overflow-y: auto; 
   box-sizing: border-box;
-}
+} */
 
 .temp-issue-box {
   background-color: #111c44 !important;
@@ -240,7 +240,7 @@
 }
 
 .qmi-manage-request-container {
-  background-color: #0c1227; /* Dark theme background */
+  background-color: #ffffff; /* Dark theme background */
   min-height: 100vh;
   margin-top: -25px;
   margin-left: -30px;
@@ -255,7 +255,7 @@
 }
 
 .qmi-manage-request-container .MuiDataGrid-columnHeaders {
-  background-color: #1976d2;
+  background-color: #111c44 !important;
   color: black;
 }
 
@@ -276,14 +276,23 @@
   color: white !important;
 }
 
-.qmi-manage-request-container .orange-button {
-  background-color: #FF9800; 
+.qmi-manage-request-container .approve-button {
+  background-color: green; 
   color: white;
   border: none;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
+}
+
+.outer-container {
+  margin-top: -10px;
+  margin-left: -50px;
+  margin-right: 40px;
+  width: 1190px;
+  padding: 24px;
+  padding-bottom: 30px;
 }
 
 .approve-request {
@@ -411,7 +420,7 @@
 }
 
 .qmi-issue-page-container .MuiDataGrid-columnHeaders {
-  background-color: #1976d2;
+  background-color: #111c44 !important;
   color: black;
 }
 
@@ -493,7 +502,7 @@
 
 
 .manage-user-table {
-  background-color: #0c1227; /* Dark theme background */
+  background-color: #ffffff; /* Dark theme background */
   min-height: 100vh;
   border-radius: 8px;
   width: 1200px;
@@ -502,6 +511,23 @@
   margin-bottom: 60px;
   padding: 30px;
   box-sizing: border-box;
+}
+
+.manage-user-table-inner {
+  background-color: #fff;
+  padding: 24px 32px;
+}
+
+.table-container {
+  margin-top: 24px;
+  height: 500px; /* gives DataGrid a fixed height */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 12px;
+}
+
+.table-container .MuiDataGrid-root {
+  border: none;
 }
 
 .manage-user-table .MuiDataGrid-root {

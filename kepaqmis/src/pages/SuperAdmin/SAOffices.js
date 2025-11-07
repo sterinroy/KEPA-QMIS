@@ -91,7 +91,7 @@ const SAOffices = () => {
   ];
 
   return (
-    <Box className="p-4" sx={{ width: "100%", zIndex: 1 }}>
+    <Box className="p-4" sx={{ width: "100%", marginTop: "30px", zIndex: 1 }}>
       <div className="flex justify-between items-center mb-4">
         <h2>Offices/Companies</h2>
         <div className="add-office-button">

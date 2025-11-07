@@ -236,7 +236,7 @@ const QMIStockEntryForm = () => {
           gutterBottom
           style={{ color: "white", fontWeight: "bold" }}
         >
-          Stock Entry Form
+          STOCK ENTRY FORM
         </Typography>
 
         {/* Alerts */}

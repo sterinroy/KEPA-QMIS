@@ -256,7 +256,7 @@ const QMIPurchase = () => {
           gutterBottom
           style={{ color: "white", fontWeight: "bold" }}
         >
-          Purchase Entry Form
+          PURCHASE ENTRY FORM
         </Typography>
 
         {status === "failed" && <Alert severity="error">{error}</Alert>}

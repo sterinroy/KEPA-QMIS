@@ -40,22 +40,23 @@ const QMStockEntries = () => {
 
   return (
     <div className="stock-entry-panel">
-      <Box sx={{ minHeight: "100vh", background: "#0c1227" }}>
+      <Box sx={{ minHeight: "100vh", background: "#ffffffff" }}>
         <Typography
           variant="h4"
-          color="white"
+          color="#0c1227"
           fontWeight="bold"
           textAlign="center"
           mb={10}
           mt={10}
         >
-          Stock Entry Management Panel
+          STOCK ENTRY MANAGEMENT PANEL
         </Typography>
         <Grid container spacing={6} justifyContent="center">
           {cardData.map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid item key={index}>
               <Card
                 sx={{
+                  width: 320, // 🔹 fixed equal width for all
                   backgroundColor: "#263859",
                   color: "white",
                   borderRadius: 3,

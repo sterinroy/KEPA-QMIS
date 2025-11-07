@@ -102,7 +102,7 @@ const SuperAdminUsers = () => {
       renderCell: (params) => (
         <button
           style={{
-            backgroundColor: "orange",
+            backgroundColor: "red",
             color: "white",
             border: "none",
             padding: "6px 12px",
@@ -123,7 +123,7 @@ const SuperAdminUsers = () => {
   }));
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", marginTop: "-70px" }}>
       <div>
         <h2>Manage Users</h2>
       </div>

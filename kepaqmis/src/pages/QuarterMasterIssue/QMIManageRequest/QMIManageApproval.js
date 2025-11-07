@@ -86,7 +86,7 @@ const QMIManageRequest = () => {
       sortable: false,
       renderCell: (params) => (
         <button
-          className="orange-button"
+          className="approve-button"
           onClick={async () => {
             const entry = params.row;
             const res = await fetch("/api/stockRoutes/stockitems");
@@ -107,7 +107,7 @@ const QMIManageRequest = () => {
               ...entry,
               amountDetails,
               Qmno: formattedQmno,
-              verifiedBy: {pen},
+              verifiedBy: { pen },
             });
             setShowForm(true);
           }}
@@ -138,10 +138,10 @@ const QMIManageRequest = () => {
         className="qmi-manage-request-container"
         sx={{ width: "100%", height: "100%", overflowY: "auto" }}
       >
-        <Typography variant="h5" fontWeight="bold" gutterBottom color="white">
-          Manage Requests
+        <Typography variant="h5" fontWeight="bold" gutterBottom color="#0c1227" mt={.9}>
+          MANAGE REQUESTS
         </Typography>
-        <Box sx={{ maxWidth: "100%", height: "550px" }}>
+        <Box className="outer-container">
           <DataGrid
             rows={rows}
             columns={columns.map((col) => ({
@@ -153,14 +153,44 @@ const QMIManageRequest = () => {
             rowsPerPageOptions={[10, 25, 50]}
             disableRowSelectionOnClick
             sx={{
+              borderRadius: 3, // makes overall box rounded
+              overflow: "hidden", // ensures corners are visible
+              backgroundColor: "#111c44", // sets base bg
+
+              // ✅ fixes header background
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#111c44 !important",
+                color: "#ffffff !important",
+              },
+              "& .MuiDataGrid-columnHeadersInner": {
+                backgroundColor: "#111c44 !important",
+              },
+              "& .MuiDataGrid-columnHeader": {
+                backgroundColor: "#111c44 !important",
+              },
+              "& .MuiDataGrid-columnHeaderTitle": {
+                color: "#ffffff !important",
+              },
+
+              // ✅ fixes rows and hover
+              "& .MuiDataGrid-row": {
+                backgroundColor: "#0a1535",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "#050b19 !important",
+              },
               "& .MuiDataGrid-cell": {
+                color: "#ffffff",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1976d2",
-                color: "black",
+
+              // ✅ bottom pagination bar
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "#111c44",
+                color: "white",
+                borderTop: "1px solid #1e2a47",
               },
             }}
           />

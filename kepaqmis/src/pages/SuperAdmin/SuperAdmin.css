@@ -40,8 +40,8 @@ h2 {
   background-color: #111c44;
   overflow-y: auto;
   margin-left: -15px;
-  margin-right: 40px;
-  margin-bottom: 90px;
+  margin-right: 69px;
+  padding-bottom: 30px;
 }
 
 .manage-user .MuiDataGrid-toolbarContainer {
@@ -177,8 +177,8 @@ h2 {
   background-color: #111c44;
   overflow-y: auto;
   margin-left: -15px;
-  margin-right: 40px;
-  margin-bottom: 90px;
+  margin-right: 70px;
+  padding-bottom: 30px;
 }
 
 .log-info .MuiDataGrid-toolbarContainer {
@@ -297,8 +297,8 @@ h2 {
   background-color: #111c44;
   overflow-y: auto;
   margin-left: -10px;
-  margin-right: 60px;
-  margin-bottom: 30px;
+  margin-right: 73px;
+  padding-bottom: 30px;
 }
 
 .add-category .MuiDataGrid-toolbarContainer {
@@ -422,8 +422,8 @@ h2 {
   background-color: #111c44;
   overflow-y: auto;
   margin-left: -10px;
-  margin-right: 60px;
-  margin-bottom: 30px;
+  margin-right: 73px;
+  padding-bottom: 30px;
 }
 
 .add-office .MuiDataGrid-toolbarContainer {
@@ -549,8 +549,8 @@ h2 {
   background-color: #111c44;
   overflow-y: auto;
   margin-left: -10px;
-  margin-right: 60px;
-  margin-bottom: 90px;
+  margin-right: 92px;
+  padding-bottom: 30px;
 }
 
 .super-admin-approval .MuiDataGrid-toolbarContainer {

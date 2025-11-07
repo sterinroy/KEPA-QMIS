@@ -120,7 +120,7 @@ const SuperAdminApprovals = () => {
   };
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", marginTop: "-65px" }}>
       <div>
         <h2>Pending Approvals</h2>
       </div>
