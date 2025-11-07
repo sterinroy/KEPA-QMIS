@@ -44,11 +44,11 @@ const QMPOrder = () => {
           textAlign="center"
           color="white"
         >
-          QM - Purchase Order Form
+          QM - PURCHASE ORDER FORM
         </Typography>
 
         <form className="mui-form">
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid item xs={12} sm={4}>
               <TextField
                 className="order-no-field"
@@ -68,7 +68,7 @@ const QMPOrder = () => {
                   input: { color: "white" },
                   label: { color: "white" },
                   fieldset: { borderColor: "#ccc" },
-                  mb: 2,
+                  mb: 0.5,
                 }}
               />
             </Grid>
@@ -137,9 +137,7 @@ const QMPOrder = () => {
         >
           <DialogTitle id="dialog-title">Message</DialogTitle>
           <DialogContent>
-            {controller.loading && (
-              <Alert severity="info">Submitting...</Alert>
-            )}
+            {controller.loading && <Alert severity="info">Submitting...</Alert>}
             {controller.successMessage && (
               <Alert severity="success">{controller.successMessage}</Alert>
             )}

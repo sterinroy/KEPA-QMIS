@@ -91,7 +91,10 @@ const StockItemView = () => {
         ) : rows.length === 0 ? (
           <p>No stock items available.</p>
         ) : (
-          <div className="stock-items">
+          <div
+            className="stock-items"
+            style={{ marginLeft: "-20px", marginRight: "70px" }}
+          >
             <DataGrid
               rows={rows}
               columns={columns.map((col) => ({

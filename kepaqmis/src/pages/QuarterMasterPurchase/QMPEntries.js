@@ -49,7 +49,7 @@ const QMPEntries = () => {
   return (
     <div className="qm-issue-entries-container" style={{ width: "100%" }}>
       <div>
-        <h2 style={{ color: "white" }}>QM Purchase Entries</h2>
+        <h2 style={{ color: "#0c1227" }}>QM PURCHASE ENTRIES</h2>
       </div>
       <div style={{ height: 600 }}>
         {loading ? (
@@ -59,7 +59,7 @@ const QMPEntries = () => {
         ) : entries.length === 0 ? (
           <p>No QMIssue entries.</p>
         ) : (
-          <div className="table-wrapper">
+          <div className="table-wrapper" style={{ marginLeft: "-25px" }}>
             <DataGrid
               rows={rows}
               columns={columns.map((col) => ({

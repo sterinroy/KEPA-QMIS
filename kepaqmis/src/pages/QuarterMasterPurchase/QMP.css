@@ -34,12 +34,14 @@
 .qmp-form-entry-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  gap: 24px; /* spacing between columns */
+  column-gap: 24px;  /* horizontal space between columns */
+  row-gap: -20px;    /* vertical space between rows */
   width: 100%;
-  margin-top: 5px;
-  margin-right: 50px;
-  margin-bottom: 30px;
-  padding: 16px;
+  margin-top: -5px;
+  margin-left: 30px;
+  margin-right: 43px;
+  margin-bottom: 20px;
+  padding: 10px;
   background-color: #111c44; /* optional dark background for each entry block */
   border-radius: 8px;
 }
@@ -142,13 +144,10 @@
 
 .qm-issue-entries-container {
   padding: 20px;
-  background-color: #0c1227;
+  background-color: #ffffff;
   margin-top: 10px;
   margin-right: 55px;
   margin-bottom: 55px;
-  /* margin-left: 0px; */
-  /* border-radius: 8px; */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .qm-issue-entries-container h2 {
