@@ -131,8 +131,9 @@ const UserReturn = () => {
         height: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#0C1227",
-        marginRight: "70px", // Set the background color for the entire page
+        backgroundColor: "#ffffffff",
+        marginRight: "70px",
+        marginLeft: "-10px",
       }}
     >
       <Box

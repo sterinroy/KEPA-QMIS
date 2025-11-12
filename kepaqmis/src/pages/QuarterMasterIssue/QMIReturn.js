@@ -35,19 +35,19 @@ const QMIReturn = () => {
       <Box
         sx={{
           minHeight: "100vh",
-          background: "linear-gradient(to right, #1A1A40, #1C2E4A)",
+          background: "white",
           p: 5,
         }}
       >
         <Typography
           variant="h4"
-          color="white"
+          color="#0c1227"
           fontWeight="bold"
           textAlign="center"
           mb={10}
-          mt={10}
+          mt={5.5}
         >
-          Return Management Panel
+          RETURN MANAGEMENT PANEL
         </Typography>
         <Grid container spacing={6} justifyContent="center">
           {cardData.map((card, index) => (

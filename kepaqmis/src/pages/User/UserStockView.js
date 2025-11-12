@@ -22,7 +22,9 @@ const UserStockView = () => {
           qty: entry.requestedQty,
           unit: entry.unit || entry.item?.unit || "N/A",
           status: entry.status,
-          approvedDate: entry.approvedDate ? new Date(entry.approvedDate).toLocaleDateString() : "N/A",
+          approvedDate: entry.approvedDate
+            ? new Date(entry.approvedDate).toLocaleDateString()
+            : "N/A",
           remarks: entry.remarks || "-",
         }));
 
@@ -40,25 +42,29 @@ const UserStockView = () => {
   }, [pen]);
 
   const columns = [
-    { field: "slNo", headerName: "SL No", width: 80 },
-    { field: "itemName", headerName: "Item Name", width: 200 },
-    { field: "category", headerName: "Category", width: 150 },
-    { field: "qty", headerName: "Quantity", width: 100 },
-    { field: "unit", headerName: "Unit", width: 100 },
-    { field: "status", headerName: "Status", width: 130 },
-    { field: "approvedDate", headerName: "Approved Date", width: 140 },
-    { field: "remarks", headerName: "Remarks", width: 200 },
-  ];
+  { field: "slNo", headerName: "SL No", width: 80, headerAlign: "center", align: "center" },
+  { field: "itemName", headerName: "Item Name", width: 200, headerAlign: "center", align: "center" },
+  { field: "category", headerName: "Category", width: 150, headerAlign: "center", align: "center" },
+  { field: "qty", headerName: "Quantity", width: 100, headerAlign: "center", align: "center" },
+  { field: "unit", headerName: "Unit", width: 100, headerAlign: "center", align: "center" },
+  { field: "status", headerName: "Status", width: 130, headerAlign: "center", align: "center" },
+  { field: "approvedDate", headerName: "Approved Date", width: 140, headerAlign: "center", align: "center" },
+  { field: "remarks", headerName: "Remarks", width: 200, headerAlign: "center", align: "center" },
+];
+
 
   return (
     <Box m={2}>
-      <Typography variant="h6" gutterBottom>
-        My Allocated Stock
+      <Typography fontSize={25} gutterBottom marginLeft={-10} marginBottom={2} marginTop={-7} fontWeight="bold">
+        MY ALLOCATED STOCKS
       </Typography>
+
       {loading ? (
         <CircularProgress />
       ) : (
-        <Box height={500}>
+        <div className="user-allocated-table">
+          {" "}
+          {/* ✅ custom wrapper for CSS */}
           <DataGrid
             rows={rows}
             columns={columns}
@@ -66,7 +72,7 @@ const UserStockView = () => {
             rowsPerPageOptions={[5, 10, 20]}
             disableSelectionOnClick
           />
-        </Box>
+        </div>
       )}
     </Box>
   );

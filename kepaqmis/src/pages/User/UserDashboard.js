@@ -12,10 +12,11 @@ import {
   Schedule,
   Reply,
   PlaylistAdd,
-  ShoppingCartCheckout
+  ShoppingCartCheckout,
+  MyLocation,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import "./User.css"; // Uncomment if you have a specific CSS file for styling
+import "./User.css"; 
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const UserDashboard = () => {
       title: "Temporary Request",
       description: "Submit a new temporary item request.",
       icon: <Schedule sx={{ fontSize: 48, color: "#81C784" }} />,
-      buttonText: "New Temp Request",
+      buttonText: "New Temporary Request",
       route: "/User/UserTemp",
     },
     {
@@ -62,24 +63,26 @@ const UserDashboard = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(to right, #1A1A40, #1C2E4A)",
+        background: "#ffffffff",
         p: 5,
       }}
     >
       <Typography
         variant="h4"
-        color="white"
+        color="#0C1227"
         fontWeight="bold"
         textAlign="center"
-        mb={10}
-        mt={10}
+        mb={6}
+        mt={4.2}
       >
-        Welcome to User Dashboard
+        WELCOME TO USER DASHBOARD
       </Typography>
 
-      <Grid container spacing={6} justifyContent="center">
+      <Grid container spacing={6} justifyContent="center" alignItems="stretch" sx={{ml:-10.4}}>
         {cardData.map((card, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={6}  key={index}>
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            {" "}
+            {/* ✅ equal width cards */}
             <Card
               sx={{
                 backgroundColor: "#212B55",
@@ -90,6 +93,8 @@ const UserDashboard = () => {
                 "&:hover": {
                   transform: "scale(1.05)",
                 },
+                height: 250, // (optional, for uniform height)
+                width: 350, // ✅ ensures card fills full grid width
               }}
             >
               <CardContent

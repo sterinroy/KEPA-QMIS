@@ -379,7 +379,7 @@ const UserIndent = () => {
               size="small"
               
             >
-              Submit Indent Request
+              Submit Request
             </Button>
           </Box>
         </form>

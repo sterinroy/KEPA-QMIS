@@ -164,8 +164,8 @@ const QMIReturnP = () => {
   ];
 
   return (
-    <Box p={3}>
-      <h2>Permanent Returns Pending Verification</h2>
+    <Box p={3} mt={-9}>
+      <h2>PERMANENT RETURNS PENDING VERIFICATION</h2>
       {loading ? (
         <Box display="flex" justifyContent="center">
           <CircularProgress />

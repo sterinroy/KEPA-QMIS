@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 import "./User.css";
 
 const columns = [
@@ -28,14 +29,25 @@ const columns = [
     renderCell: (params) => {
       if (params.row.istemporary)
         return <span style={{ color: "gray" }}>N/A</span>;
+
       return params.row.indentBillId ? (
-        <a
+        <Button
+          variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#1976d2", // blue
+            color: "white",
+            textTransform: "none", // keeps normal casing
+            "&:hover": {
+              backgroundColor: "#115293", // darker blue on hover
+            },
+          }}
           href={`/Indent?id=${params.row.indentBillId}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           View Bill
-        </a>
+        </Button>
       ) : (
         <span style={{ color: "gray" }}>N/A</span>
       );
@@ -97,14 +109,14 @@ const UserManageRequest = () => {
             <p style={{ color: "white" }}>No Requests available.</p>
           ) : (
             <div className="manage-request-form">
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={10}
-              rowsPerPageOptions={[10, 25, 50]}
-              disableRowSelectionOnClick
-              showToolbar
-            />
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={10}
+                rowsPerPageOptions={[10, 25, 50]}
+                disableRowSelectionOnClick
+                showToolbar
+              />
             </div>
           )}
         </div>
