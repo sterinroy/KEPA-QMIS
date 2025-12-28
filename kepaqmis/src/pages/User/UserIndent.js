@@ -61,11 +61,11 @@ const UserIndent = () => {
       prev.map((item, i) =>
         i === index
           ? {
-              ...item,
-              [name]: value,
-              ...(name === "category" && { subcategory: "", itemId: "" }),
-              ...(name === "subcategory" && { itemId: "" }),
-            }
+            ...item,
+            [name]: value,
+            ...(name === "category" && { subcategory: "", itemId: "" }),
+            ...(name === "subcategory" && { itemId: "" }),
+          }
           : item
       )
     );
@@ -113,7 +113,7 @@ const UserIndent = () => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to submit");
 
-        requestIds.push(data._id); 
+        requestIds.push(data._id);
       }
 
       const indentData = {
@@ -127,8 +127,8 @@ const UserIndent = () => {
             `${row.qty} ${stocks.find((s) => s._id === row.itemId)?.unit || ""}`
         ),
         date: formData.dateOfrequest,
-        item: items.map((row) =>{
-          const match=stocks.find((s)=>s._id===row.itemId);
+        item: items.map((row) => {
+          const match = stocks.find((s) => s._id === row.itemId);
           return match?.itemName || "N/A";
         }),
         nameAndDesignation: formData.name,
@@ -200,7 +200,7 @@ const UserIndent = () => {
       ),
       date: formData.dateOfrequest,
       item: JSON.stringify(
-        items.map((row)=>`${row.itemName}`)
+        items.map((row) => `${row.itemName}`)
       ),
       nameAndDesignation: formData.name,
       createdBy: {
@@ -226,7 +226,7 @@ const UserIndent = () => {
           Indent Request
         </Typography>
 
-        <form onSubmit={handleSubmit} className="mui-form">
+        <form onSubmit={handleSubmit} className="user-indent-form">
           <FormControl fullWidth required sx={{ mb: 2 }}>
             <InputLabel>Office / Company</InputLabel>
             <Select
@@ -269,115 +269,115 @@ const UserIndent = () => {
             }}
           >
             <Grid container spacing={2}>
-            {items.map((item, index) => {
-              const selected = stocks.find((i) => i._id === item.itemId);
-              return (
-                <Box
-                  key={index}
-                  border="1px solid #ccc"
-                  borderRadius={2}
-                  p={2}
-                  mb={2}
-                  sx={{ width:"100%",gridColumn: '1 / -1'}}
-                >
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required sx={{minWidth:200}}>
-                        <InputLabel>Category</InputLabel>
-                        <Select
-                          name="category"
-                          value={item.category}
+              {items.map((item, index) => {
+                const selected = stocks.find((i) => i._id === item.itemId);
+                return (
+                  <Box
+                    key={index}
+                    border="1px solid #ccc"
+                    borderRadius={2}
+                    p={2}
+                    mb={2}
+                    sx={{ width: "100%", gridColumn: '1 / -1' }}
+                  >
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={4}>
+                        <FormControl fullWidth required sx={{ minWidth: 200 }}>
+                          <InputLabel>Category</InputLabel>
+                          <Select
+                            name="category"
+                            value={item.category}
+                            onChange={(e) => handleItemChange(index, e)}
+                          >
+                            {categories.map((cat) => (
+                              <MenuItem key={cat} value={cat}>
+                                {cat}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={12} md={4}>
+                        <FormControl fullWidth required sx={{ minWidth: 200 }}>
+                          <InputLabel>Subcategory</InputLabel>
+                          <Select
+                            name="subcategory"
+                            value={item.subcategory}
+                            onChange={(e) => handleItemChange(index, e)}
+                            disabled={!item.category}
+                          >
+                            {getSubcategories(item.category).map((sub) => (
+                              <MenuItem key={sub} value={sub}>
+                                {sub}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={12} md={4}>
+                        <FormControl fullWidth required sx={{ minWidth: 200 }}>
+                          <InputLabel>Select Item</InputLabel>
+                          <Select
+                            name="itemId"
+                            value={item.itemId}
+                            onChange={(e) => handleItemChange(index, e)}
+                            disabled={!item.subcategory}
+                          >
+                            {getFilteredItems(
+                              item.category,
+                              item.subcategory
+                            ).map((stockItem) => (
+                              <MenuItem key={stockItem._id} value={stockItem._id}>
+                                {stockItem.itemName} ({stockItem.serialNumber})
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={12} md={2}>
+                        <TextField
+                          label="Qty"
+                          name="qty"
+                          type="number"
+                          inputProps={{ min: 1 }}
+                          value={item.qty}
                           onChange={(e) => handleItemChange(index, e)}
-                        >
-                          {categories.map((cat) => (
-                            <MenuItem key={cat} value={cat}>
-                              {cat}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
+                          required
+                          fullWidth
+                        />
+                      </Grid>
 
-                    <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required sx={{minWidth:200}}>
-                        <InputLabel>Subcategory</InputLabel>
-                        <Select
-                          name="subcategory"
-                          value={item.subcategory}
-                          onChange={(e) => handleItemChange(index, e)}
-                          disabled={!item.category}
-                        >
-                          {getSubcategories(item.category).map((sub) => (
-                            <MenuItem key={sub} value={sub}>
-                              {sub}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                      <Grid item xs={12} md={2}>
+                        {items.length > 1 && (
+                          <Button color="error" onClick={() => removeItem(index)}>
+                            Remove
+                          </Button>
+                        )}
+                      </Grid>
                     </Grid>
-
-                    <Grid item xs={12} md={4}>
-                      <FormControl fullWidth required sx={{minWidth:200}}>
-                        <InputLabel>Select Item</InputLabel>
-                        <Select
-                          name="itemId"
-                          value={item.itemId}
-                          onChange={(e) => handleItemChange(index, e)}
-                          disabled={!item.subcategory}
-                        >
-                          {getFilteredItems(
-                            item.category,
-                            item.subcategory
-                          ).map((stockItem) => (
-                            <MenuItem key={stockItem._id} value={stockItem._id}>
-                              {stockItem.itemName} ({stockItem.serialNumber})
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                      <TextField
-                        label="Qty"
-                        name="qty"
-                        type="number"
-                        inputProps={{ min: 1 }}
-                        value={item.qty}
-                        onChange={(e) => handleItemChange(index, e)}
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                      {items.length > 1 && (
-                        <Button color="error" onClick={() => removeItem(index)}>
-                          Remove
-                        </Button>
-                      )}
-                    </Grid>
-                  </Grid>
-                  {selected && (
-                    <Typography variant="body2" color="white" mt={1}>
-                      Unit: {selected.unit}
-                    </Typography>
-                  )}
-                </Box>
-              );
-            })}
+                    {selected && (
+                      <Typography variant="body2" color="white" mt={1}>
+                        Unit: {selected.unit}
+                      </Typography>
+                    )}
+                  </Box>
+                );
+              })}
             </Grid>
 
             <Button variant="outlined" onClick={addItem} sx={{ mb: 1 }}>
               + Add Another Item
             </Button>
           </Box>
-          <Box display="flex" justifyContent="flex-end" mt={4} sx={{ minWidth: "120",maxWidth:"120", height:40,gridColumn: '1 / -1'}}>
+          <Box display="flex" justifyContent="flex-end" mt={4} sx={{ minWidth: "120", maxWidth: "120", height: 40, gridColumn: '1 / -1' }}>
             <Button
               variant="contained"
               type="submit"
               size="small"
-              
+
             >
               Submit Request
             </Button>

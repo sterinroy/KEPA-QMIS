@@ -11,14 +11,14 @@ import {
   Alert,
 } from "@mui/material";
 import jsPDF from "jspdf";
-import "./Issue.css";
+import "../../StandardForm.css";
 
 const QMIReturnRequestForm = ({ prefillData, onClose, onSubmit }) => {
   // === Field Configuration ===
   const fieldConfig = [
     { name: "name", label: "Name", type: "text", required: true },
     { name: "pen", label: "PEN No.", type: "number", required: true },
-        {
+    {
       name: "dateOfReturn",
       label: "Date Of Return",
       type: "date",
@@ -48,7 +48,7 @@ const QMIReturnRequestForm = ({ prefillData, onClose, onSubmit }) => {
       type: "text",
       required: true,
     },
-    
+
     {
       name: "quantity",
       label: "Quantity",
@@ -380,14 +380,11 @@ const QMIReturnRequestForm = ({ prefillData, onClose, onSubmit }) => {
   };
 
   return (
-    <>
-      <Box className="return-request-box">
+    <div className="standard-form-root">
+      <div className="standard-form-box">
         <Typography
           variant="h5"
-          mb={2}
-          fontWeight="bold"
-          textAlign="center"
-          color="white"
+          className="standard-form-title"
         >
           Return Items Form
         </Typography>
@@ -404,7 +401,7 @@ const QMIReturnRequestForm = ({ prefillData, onClose, onSubmit }) => {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} className="mui-form">
+        <form onSubmit={handleSubmit}>
           {/* Render All Fields Dynamically */}
 
           {fieldConfig.map((field, index) => {
@@ -539,69 +536,70 @@ const QMIReturnRequestForm = ({ prefillData, onClose, onSubmit }) => {
             </Button>
           </Box>
         </form>
-      </Box>
 
-      {/* Preview Modal */}
-      {showPreviewModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
+
+        {/* Preview Modal */}
+        {showPreviewModal && (
           <Box
-            bgcolor="#fff"
-            p={4}
-            borderRadius={2}
-            boxShadow={3}
-            maxWidth="500px"
+            position="fixed"
+            top="0"
+            left="0"
             width="100%"
-            textAlign="center"
+            height="100%"
+            bgcolor="rgba(0,0,0,0.6)"
+            zIndex={9999}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
           >
-            <Typography variant="h6" gutterBottom>
-              Confirm Submission
-            </Typography>
-            <Box mb={2}>
-              {Object.entries(formData).map(([key, value]) => {
-                if (!value) return null;
-                const label = key
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (char) => char.toUpperCase());
-                return (
-                  <Box
-                    key={key}
-                    display="flex"
-                    justifyContent="space-between"
-                    mb={1}
-                  >
-                    <Typography fontWeight="bold">{label}:</Typography>
-                    <Typography>{value}</Typography>
-                  </Box>
-                );
-              })}
-            </Box>
-            <Box display="flex" justifyContent="flex-end">
-              <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleFinalSubmit}
-              >
-                Confirm Submit
-              </Button>
+            <Box
+              bgcolor="#fff"
+              p={4}
+              borderRadius={2}
+              boxShadow={3}
+              maxWidth="500px"
+              width="100%"
+              textAlign="center"
+            >
+              <Typography variant="h6" gutterBottom>
+                Confirm Submission
+              </Typography>
+              <Box mb={2}>
+                {Object.entries(formData).map(([key, value]) => {
+                  if (!value) return null;
+                  const label = key
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (char) => char.toUpperCase());
+                  return (
+                    <Box
+                      key={key}
+                      display="flex"
+                      justifyContent="space-between"
+                      mb={1}
+                    >
+                      <Typography fontWeight="bold">{label}:</Typography>
+                      <Typography>{value}</Typography>
+                    </Box>
+                  );
+                })}
+              </Box>
+              <Box display="flex" justifyContent="flex-end">
+                <Button onClick={() => setShowPreviewModal(false)} sx={{ mr: 2 }}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleFinalSubmit}
+                >
+                  Confirm Submit
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      )}
-    </>
+        )}
+      </div>
+    </div >
   );
 };
 

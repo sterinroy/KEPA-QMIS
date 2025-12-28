@@ -29,7 +29,7 @@ const SplashScreen = () => {
   }, [navigate]);
 
   return (
-    <div className="container">
+    <div className="splash-container">
       {/* Circle */}
       <div className={`black-circle ${explode ? "explode-grow" : "bounce"}`} />
 

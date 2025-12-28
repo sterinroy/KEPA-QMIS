@@ -126,33 +126,33 @@ const ManageUserRequests = () => {
   }));
 
   const columns = [
-    { field: "pen", headerName: "PEN No.", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1.2 },
-    { field: "office", headerName: "Office/ Company", flex: 1.2 },
-    { field: "category", headerName: "Category", flex: 1 },
-    { field: "subcategory", headerName: "Subcategory", flex: 1 },
-    { field: "itemName", headerName: "Item", flex: 1 },
-    { field: "requestedQty", headerName: "Requested Qty", flex: 1 },
-    { field: "unit", headerName: "Unit", flex: 0.8 },
+    { field: "pen", headerName: "PEN No.", minWidth: 120 },
+    { field: "name", headerName: "Name", minWidth: 180 },
+    { field: "office", headerName: "Office/ Company", minWidth: 180 },
+    { field: "category", headerName: "Category", minWidth: 150 },
+    { field: "subcategory", headerName: "Subcategory", minWidth: 150 },
+    { field: "itemName", headerName: "Item", minWidth: 150 },
+    { field: "requestedQty", headerName: "Requested Qty", minWidth: 120 },
+    { field: "unit", headerName: "Unit", minWidth: 80 },
     {
       field: "dateOfrequest",
       headerName: "Date Of Request",
-      flex: 1,
+      minWidth: 150,
       renderCell: (params) => {
         const date = new Date(params.value);
         return isNaN(date)
           ? "N/A"
           : `${date.getDate().toString().padStart(2, "0")}-${(
-              date.getMonth() + 1
-            )
-              .toString()
-              .padStart(2, "0")}-${date.getFullYear()}`;
+            date.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}-${date.getFullYear()}`;
       },
     },
     {
       field: "action",
       headerName: "Action",
-      flex: 1.5,
+      minWidth: 200,
       renderCell: (params) => (
         <Box display="flex" gap={1}>
           <Button
@@ -164,10 +164,11 @@ const ManageUserRequests = () => {
               setOpenDialog(true);
             }}
             sx={{
-              backgroundColor: "green",
+              backgroundColor: "#2e7d32",
               textTransform: "none",
+              fontWeight: 600,
               "&:hover": {
-                backgroundColor: "#00e200ff",
+                backgroundColor: "#1b5e20",
               },
             }}
           >
@@ -179,11 +180,12 @@ const ManageUserRequests = () => {
             size="small"
             onClick={() => handleReject(params.row.fullItem._id)}
             sx={{
-              backgroundColor: "red",
+              backgroundColor: "#d32f2f",
               color: "white",
               textTransform: "none",
+              fontWeight: 600,
               "&:hover": {
-                backgroundColor: "#b30000",
+                backgroundColor: "#b71c1c",
               },
             }}
           >
@@ -195,45 +197,106 @@ const ManageUserRequests = () => {
   ];
 
   return (
-    <Box>
-      <Typography
-        variant="h5"
-        sx={{ ml: -2, mb: -3, mt: 23.5, fontWeight: "bold" }}
-        component="h2"
+    <Box
+      sx={{
+        width: "100%",
+        height: "calc(100vh - 64px)",
+        p: { xs: 2, md: 4, lg: 4 }, // Standard symmetric padding
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        overflowY: "auto",
+        backgroundColor: "#0c1227",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+      }}
+    >
+      <Box
+        className="manage-user-requests-outer"
+        sx={{
+          width: "100%",
+          maxWidth: "1600px",
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
-        MANAGE USER REQUESTS (QM)
-      </Typography>
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          gutterBottom
+          color="#ffffff"
+          mt={0.9}
+          sx={{ textAlign: "center", width: "100%" }}
+        >
+          MANAGE USER REQUESTS (QM)
+        </Typography>
 
-      {loading ? (
-        <Box display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box className="manage-user-table">
-          <DataGrid
-            rows={rows}
-            columns={columns.map((col) => ({
-              ...col,
-              align: "center",
-              headerAlign: "center",
-            }))}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            disableRowSelectionOnClick
-            sx={{
-              "& .MuiDataGrid-cell": {
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1976d2",
-                color: "black",
-              },
-            }}
-          />
-        </Box>
-      )}
+        {loading ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box className="manage-user-table">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              disableRowSelectionOnClick
+              autoHeight
+              sx={{
+                borderRadius: 3,
+                overflow: "hidden",
+                backgroundColor: "#111c44",
+                width: "100%",
+
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#111c44 !important",
+                  color: "#ffffff !important",
+                },
+                "& .MuiDataGrid-columnHeadersInner": {
+                  backgroundColor: "#111c44 !important",
+                },
+                "& .MuiDataGrid-columnHeader": {
+                  backgroundColor: "#111c44 !important",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  color: "#ffffff !important",
+                  fontWeight: "bold",
+                  whiteSpace: "nowrap",
+                  overflow: "visible",
+                },
+                "& .MuiDataGrid-row": {
+                  backgroundColor: "#0a1535",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "#050b19 !important",
+                },
+                "& .MuiDataGrid-cell": {
+                  color: "#ffffff",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: "#111c44",
+                  color: "white",
+                  borderTop: "1px solid #1e2a47",
+                },
+              }}
+            />
+          </Box>
+        )}
+      </Box>
 
       {/* Dialog for Approve */}
       <Dialog
@@ -241,8 +304,17 @@ const ManageUserRequests = () => {
         onClose={handleDialogClose}
         fullWidth
         maxWidth="xs"
+        PaperProps={{
+          sx: {
+            backgroundColor: "#111c44",
+            color: "white",
+            borderRadius: 3,
+          },
+        }}
       >
-        <DialogTitle>Approve Request</DialogTitle>
+        <DialogTitle sx={{ color: "white", fontWeight: "bold" }}>
+          Approve Request
+        </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} mt={1}>
             <TextField
@@ -255,12 +327,30 @@ const ManageUserRequests = () => {
                 min: 1,
                 max: selectedItem?.requestedQty || 1,
               }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#555" },
+                  "&:hover fieldset": { borderColor: "#8888ff" },
+                  "&.Mui-focused fieldset": { borderColor: "#1e90ff" },
+                },
+                "& .MuiInputLabel-root": { color: "#bbbbff" },
+              }}
             />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleApprove}>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleDialogClose} sx={{ color: "white" }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleApprove}
+            sx={{
+              backgroundColor: "#2e7d32",
+              "&:hover": { backgroundColor: "#1b5e20" },
+            }}
+          >
             Approve
           </Button>
         </DialogActions>

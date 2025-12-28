@@ -6,6 +6,9 @@ import {
   APPROVE_ISSUE_ENTRY_REQUEST,
   APPROVE_ISSUE_ENTRY_SUCCESS,
   APPROVE_ISSUE_ENTRY_FAILURE,
+  DELETE_ISSUE_ENTRY_REQUEST,
+  DELETE_ISSUE_ENTRY_SUCCESS,
+  DELETE_ISSUE_ENTRY_FAILURE,
 } from "../actions/actionTypes";
 
 export const fetchQMIssueEntries = () => {
@@ -62,6 +65,35 @@ export const approveIssueEntry = (id, issueData) => {
       console.error("Error approving issue entry:", error.message);
       dispatch({
         type: APPROVE_ISSUE_ENTRY_FAILURE,
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const deleteIssueEntry = (id) => {
+  return async (dispatch) => {
+    dispatch({ type: DELETE_ISSUE_ENTRY_REQUEST });
+    try {
+      const response = await fetch(`/api/stockRoutes/purchase/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        dispatch({
+          type: DELETE_ISSUE_ENTRY_FAILURE,
+          payload: data.message || "Failed to delete entry",
+        });
+        return;
+      }
+
+      dispatch({ type: DELETE_ISSUE_ENTRY_SUCCESS, payload: id });
+    } catch (error) {
+      console.error("Error deleting issue entry:", error.message);
+      dispatch({
+        type: DELETE_ISSUE_ENTRY_FAILURE,
         payload: error.message,
       });
     }

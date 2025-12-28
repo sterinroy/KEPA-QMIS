@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SplashScreen from "./pages/SplashScreen";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import QuarterMasterACQM from "./pages/QuarterMaster/QuarterMasterACQM";
+
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminApprovals from "./pages/SuperAdmin/SuperAdminApprovals";
 import SuperAdminUsers from "./pages/SuperAdmin/SuperAdminUsers";
@@ -109,14 +109,7 @@ function App() {
           <Route path="StockItemView" element={<StockItemView />} />
         </Route>
 
-        <Route
-          path="/QuarterMasterACQM"
-          element={
-            <ProtectedRoute allowedRoles={["QuarterMasterACQM"]}>
-              <QuarterMasterACQM />
-            </ProtectedRoute>
-          }
-        />
+
 
         <Route
           path="/User"

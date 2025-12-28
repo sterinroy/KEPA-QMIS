@@ -5,6 +5,9 @@ import {
   APPROVE_ISSUE_ENTRY_REQUEST,
   APPROVE_ISSUE_ENTRY_SUCCESS,
   APPROVE_ISSUE_ENTRY_FAILURE,
+  DELETE_ISSUE_ENTRY_REQUEST,
+  DELETE_ISSUE_ENTRY_SUCCESS,
+  DELETE_ISSUE_ENTRY_FAILURE,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -13,6 +16,8 @@ const initialState = {
   error: null,
   approveLoading: false,
   approveError: null,
+  deleteLoading: false,
+  deleteError: null,
 };
 
 function qmissueReducer(state = initialState, action) {
@@ -41,6 +46,21 @@ function qmissueReducer(state = initialState, action) {
         ...state,
         approveLoading: false,
         approveError: action.payload,
+      };
+    case DELETE_ISSUE_ENTRY_REQUEST:
+      return { ...state, deleteLoading: true, deleteError: null };
+    case DELETE_ISSUE_ENTRY_SUCCESS:
+      return {
+        ...state,
+        deleteLoading: false,
+        entries: state.entries.filter((entry) => entry._id !== action.payload),
+        deleteError: null,
+      };
+    case DELETE_ISSUE_ENTRY_FAILURE:
+      return {
+        ...state,
+        deleteLoading: false,
+        deleteError: action.payload,
       };
     default:
       return state;

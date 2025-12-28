@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { LocalShipping, Inventory, AddBox } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import "./StockEntry.css";
+import "../../StandardForm.css";
 
 const QMStockEntries = () => {
   const navigate = useNavigate();
@@ -39,15 +39,15 @@ const QMStockEntries = () => {
   ];
 
   return (
-    <div className="stock-entry-panel">
-      <Box sx={{ minHeight: "100vh", background: "#ffffffff" }}>
+    <div className="standard-form-root">
+      <Box sx={{ width: "100%", maxWidth: "1200px" }}>
         <Typography
           variant="h4"
-          color="#0c1227"
+          color="white"
           fontWeight="bold"
           textAlign="center"
-          mb={10}
-          mt={10}
+          mb={6}
+          mt={2}
         >
           STOCK ENTRY MANAGEMENT PANEL
         </Typography>
@@ -56,12 +56,16 @@ const QMStockEntries = () => {
             <Grid item key={index}>
               <Card
                 sx={{
-                  width: 320, // 🔹 fixed equal width for all
-                  backgroundColor: "#263859",
+                  width: 320,
+                  height: 280, // 🔹 fixed equal height for all
+                  backgroundColor: "#111c44",
                   color: "white",
                   borderRadius: 3,
                   boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
                   transition: "transform 0.3s ease",
+                  display: "flex", // center vertically
+                  flexDirection: "column",
+                  justifyContent: "center",
                   "&:hover": { transform: "scale(1.05)" },
                 }}
               >
@@ -83,7 +87,7 @@ const QMStockEntries = () => {
                   >
                     {card.title}
                   </Typography>
-                  <Typography variant="body2" mb={3}>
+                  <Typography variant="body2" mb={3} color="rgba(255,255,255,0.7)">
                     {card.description}
                   </Typography>
                   <Button

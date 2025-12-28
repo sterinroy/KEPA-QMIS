@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-import "./purchase.css";
+import "../../StandardForm.css";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -201,34 +201,20 @@ const QMIPurchase = () => {
           onChange={handleChange}
           required={field.required}
           fullWidth
-          margin="normal"
           InputLabelProps={field.type === "date" ? { shrink: true } : {}}
-          sx={{
-            input: { color: "white" },
-            label: { color: "white" },
-            fieldset: { borderColor: "#4a5b76" },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#8e9fbf",
-            },
-          }}
         />
       );
     }
 
     if (field.type === "select") {
       return (
-        <FormControl fullWidth margin="normal" key={field.name}>
-          <InputLabel sx={{ color: "white" }}>{field.label}</InputLabel>
+        <FormControl fullWidth key={field.name}>
+          <InputLabel>{field.label}</InputLabel>
           <Select
             name={field.name}
             value={value ?? ""}
             onChange={handleChange}
             label={field.label}
-            sx={{
-              color: "white",
-              ".MuiOutlinedInput-notchedOutline": { borderColor: "#4a5b76" },
-              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#8e9fbf" },
-            }}
           >
             {(field.options || []).map((opt) =>
               typeof opt === "object" ? (
@@ -248,13 +234,11 @@ const QMIPurchase = () => {
   };
 
   return (
-    <div className="purchase-root">
-      <div className="purchase-box">
+    <div className="standard-form-root">
+      <div className="standard-form-box">
         <Typography
           variant="h5"
-          textAlign="center"
-          gutterBottom
-          style={{ color: "white", fontWeight: "bold" }}
+          className="standard-form-title"
         >
           PURCHASE ENTRY FORM
         </Typography>
@@ -263,30 +247,41 @@ const QMIPurchase = () => {
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
         <form onSubmit={handleSubmit}>
-          {fieldConfig.map((field) => {
-            if (field.condition && !field.condition(formData)) return null;
-            if (field.fields) {
-              return (
-                <div key={field.label}>
-                  <Typography variant="subtitle1" style={{ color: "white", marginTop: 16 }}>
-                    {field.label}
-                  </Typography>
-                  {field.fields.map((f) => renderField(f))}
-                </div>
-              );
-            }
-            return renderField(field);
-          })}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              rowGap: 2.5,
+              columnGap: 8,
+              width: "100%",
+            }}
+          >
+            {fieldConfig.map((field) => {
+              if (field.condition && !field.condition(formData)) return null;
+              if (field.fields) {
+                return field.fields.map((f) => renderField(f));
+              }
+              return renderField(field);
+            })}
 
-          <div style={{ marginTop: "16px", textAlign: "right" }}>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={status === "loading"}
+            <Box
+              sx={{
+                gridColumn: { sm: "1 / -1" },
+                mt: 3,
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              {status === "loading" ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+              <Button
+                className="submit-btn"
+                variant="contained"
+                type="submit"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? "Submitting..." : "Submit"}
+              </Button>
+            </Box>
+          </Box>
 
           {/* Confirmation Dialog */}
           <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>

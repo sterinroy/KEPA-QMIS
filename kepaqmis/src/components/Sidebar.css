@@ -7,7 +7,8 @@ aside.sidebar {
   left: 0;
   width: 260px;
   height: 100vh;
-  background-color: #060118; /* solid background, no gradient */
+  background-color: #060118;
+  /* solid background, no gradient */
   padding: 1rem;
   box-sizing: border-box;
   z-index: 0;
@@ -34,15 +35,20 @@ aside.sidebar {
 }
 
 .sidebar-title .qmis {
-  font-weight: 400; /* normal */
+  font-weight: 400;
+  /* normal */
   margin-left: 4px;
 }
 
 div.pen-display {
-  font-size: 0.8em; /* Smaller font size for PEN display */
-  font-family: "Pacifico", cursive; /* Specific cursive font */
-  color: #555; /* Slightly darker color for contrast */
-  margin-top: 5px; /* Add some space above the PEN display */
+  font-size: 0.8em;
+  /* Smaller font size for PEN display */
+  font-family: "Pacifico", cursive;
+  /* Specific cursive font */
+  color: #555;
+  /* Slightly darker color for contrast */
+  margin-top: 5px;
+  /* Add some space above the PEN display */
 }
 
 div.nav-item {
@@ -71,7 +77,8 @@ div.nav-item {
 
 /* Hide scrollbar for WebKit browsers */
 div.nav-item::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for WebKit browsers */
+  display: none;
+  /* Hide scrollbar for WebKit browsers */
 }
 
 .nav-item {
@@ -105,6 +112,7 @@ div.nav-item::-webkit-scrollbar {
   background-color: white;
   color: #000000;
 }
+
 /* The vertical gradient strip on the left on hover and active */
 div.nav-item:hover::before,
 div.nav-item.active::before {
@@ -141,7 +149,8 @@ div.nav-item .icon {
 
 div.nav-item:hover .icon,
 div.nav-item.active .icon {
-  color: white; /* keep icon white on hover and active */
+  color: white;
+  /* keep icon white on hover and active */
 }
 
 div.nav-item:focus-visible {
@@ -150,7 +159,8 @@ div.nav-item:focus-visible {
 }
 
 div.logo {
-  width: 80px; /* Set the width of the container to match the image */
+  width: 80px;
+  /* Set the width of the container to match the image */
   height: 80px;
   border-radius: 12px;
   box-shadow:
@@ -161,10 +171,11 @@ div.logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Ensure the image doesn't overflow the container */
+  overflow: hidden;
+  /* Ensure the image doesn't overflow the container */
 }
 
-.logo > img {
+.logo>img {
   width: 80px;
   height: 80px;
   object-fit: contain;
@@ -175,8 +186,10 @@ div.logo {
 nav.nav-menu {
   display: flex;
   flex-direction: column;
-  margin-top: 30px; /* smaller gap between items */
+  margin-top: 30px;
+  /* smaller gap between items */
 }
+
 main.main {
   position: relative;
   padding: 20px;
@@ -187,14 +200,20 @@ main.main {
   width: calc(100vw - 260px);
   height: 100vh;
   border-radius: 0;
+  margin-left: 260px;
+  /* Push content to the right of the fixed sidebar */
 }
 
 div.logout-button {
-  position: absolute;     /* Fix it relative to the sidebar */
-  bottom: 20px;           /* Distance from bottom */
-  left: 50%;              /* Center horizontally */
-  transform: translateX(-50%); /* Perfect centering */
-  
+  position: absolute;
+  /* Fix it relative to the sidebar */
+  bottom: 20px;
+  /* Distance from bottom */
+  left: 50%;
+  /* Center horizontally */
+  transform: translateX(-50%);
+  /* Perfect centering */
+
   cursor: pointer;
   color: rgb(255, 255, 255);
   width: 80%;

@@ -6,15 +6,17 @@ import {
   FormControl,
   InputLabel,
   Button,
+  Box,
   Typography,
   Alert,
   Dialog,
   DialogActions,
   DialogTitle,
   DialogContent,
+  Grid,
 } from "@mui/material";
 import jsPDF from "jspdf";
-import { Grid } from "@mui/material";
+import "../../StandardForm.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCategories,
@@ -256,7 +258,6 @@ const QMIDirectForm = () => {
           onChange={handleChange}
           required={field.required}
           fullWidth
-          margin="normal"
           InputLabelProps={field.type === "date" ? { shrink: true } : {}}
         />
       );
@@ -266,7 +267,6 @@ const QMIDirectForm = () => {
         <FormControl
           fullWidth
           required={field.required}
-          margin="normal"
           key={field.name}
         >
           <InputLabel>{field.label}</InputLabel>
@@ -294,77 +294,100 @@ const QMIDirectForm = () => {
   };
 
   return (
-    <div className="direct-issue-root">
-      <div className="direct-issue-box">
+    <div className="standard-form-root">
+      <div className="standard-form-box">
         <Typography
           variant="h5"
-          textAlign="center"
-          gutterBottom
-          style={{ color: "white", fontWeight: "bold" }}
+          className="standard-form-title"
         >
-          DIREC ISSUED STOCK ENTRY FORM
+          DIRECT ISSUED STOCK ENTRY FORM
         </Typography>
 
         {status === "failed" && <Alert severity="error">{error}</Alert>}
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
         <form onSubmit={handleSubmit}>
-          {fieldConfig.map((field) => {
-            if (field.condition && !field.condition(formData)) return null;
-            if (field.fields) return field.fields.map((f) => renderField(f));
-            if (field.name === "itemCategory") {
-              return (
-                <FormControl fullWidth margin="normal" key="itemCategory">
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    value={formData.itemCategory || ""}
-                    onChange={handleCategoryChange}
-                    name="itemCategory"
-                    label="Category"
-                  >
-                    {categories.map((cat) => (
-                      <MenuItem key={cat.name} value={cat.name}>
-                        {cat.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              );
-            }
-            if (field.name === "itemSubCategory") {
-              const selectedCategory = categories.find(
-                (cat) => cat.name === formData.itemCategory
-              );
-              return (
-                <FormControl fullWidth margin="normal" key="itemSubCategory">
-                  <InputLabel>Sub Category</InputLabel>
-                  <Select
-                    value={formData.itemSubCategory || ""}
-                    onChange={handleChange}
-                    name="itemSubCategory"
-                    label="Sub Category"
-                  >
-                    {selectedCategory?.subcategories?.map((sub) => (
-                      <MenuItem key={sub} value={sub}>
-                        {sub}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              );
-            }
-            return renderField(field);
-          })}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              rowGap: 2.5,
+              columnGap: 8,
+              width: "100%",
+            }}
+          >
+            {fieldConfig.map((field) => {
+              if (field.condition && !field.condition(formData)) return null;
 
-          <div style={{ marginTop: "16px", textAlign: "right" }}>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={status === "loading"}
+              // Handle grouped fields (like Entered By / Verified By)
+              if (field.fields) {
+                return field.fields.map((f) => renderField(f));
+              }
+
+              // Special handling for Category and Subcategory selects
+              if (field.name === "itemCategory") {
+                return (
+                  <FormControl fullWidth key="itemCategory">
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                      value={formData.itemCategory || ""}
+                      onChange={handleCategoryChange}
+                      name="itemCategory"
+                      label="Category"
+                    >
+                      {categories.map((cat) => (
+                        <MenuItem key={cat.name} value={cat.name}>
+                          {cat.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                );
+              }
+              if (field.name === "itemSubCategory") {
+                const selectedCategory = categories.find(
+                  (cat) => cat.name === formData.itemCategory
+                );
+                return (
+                  <FormControl fullWidth key="itemSubCategory">
+                    <InputLabel>Sub Category</InputLabel>
+                    <Select
+                      value={formData.itemSubCategory || ""}
+                      onChange={handleChange}
+                      name="itemSubCategory"
+                      label="Sub Category"
+                    >
+                      {selectedCategory?.subcategories?.map((sub) => (
+                        <MenuItem key={sub} value={sub}>
+                          {sub}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                );
+              }
+
+              return renderField(field);
+            })}
+
+            <Box
+              sx={{
+                gridColumn: { sm: "1 / -1" },
+                mt: 3,
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              {status === "loading" ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+              <Button
+                className="submit-btn"
+                variant="contained"
+                type="submit"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? "Submitting..." : "Submit"}
+              </Button>
+            </Box>
+          </Box>
 
           <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
             <DialogTitle>Confirm Submission</DialogTitle>

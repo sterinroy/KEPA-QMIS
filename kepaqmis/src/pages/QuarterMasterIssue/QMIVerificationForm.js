@@ -10,7 +10,7 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import jsPDF from "jspdf";
+import "../../StandardForm.css";
 
 // ✅ Added 'onVerified' as a prop
 const QMIVerificationForm = ({
@@ -293,14 +293,11 @@ const QMIVerificationForm = ({
   }, [showCheckModal, showPdfModal]);
 
   return (
-    <>
-      <Box className="verify-issue-box">
+    <div className="standard-form-root">
+      <div className="standard-form-box">
         <Typography
           variant="h5"
-          mb={2}
-          fontWeight="bold"
-          textAlign="center"
-          color="white"
+          className="standard-form-title"
         >
           Stock Verification Form
         </Typography>
@@ -318,7 +315,7 @@ const QMIVerificationForm = ({
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mui-form">
+        <form onSubmit={handleSubmit}>
           {fieldConfig.map((field) => {
             if (
               (field.name === "warrantyPeriod" ||
@@ -360,106 +357,107 @@ const QMIVerificationForm = ({
             </Button>
           </Box>
         )}
-      </Box>
 
-      {/* Check Entered Values Modal */}
-      {showCheckModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+
+        {/* Check Entered Values Modal */}
+        {showCheckModal && (
           <Box
-            bgcolor="white"
-            p={3}
-            borderRadius={2}
-            boxShadow={3}
-            sx={{ width: "400px" }}
+            position="fixed"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            bgcolor="rgba(0,0,0,0.6)"
+            zIndex={9999}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           >
-            <Typography variant="h6" gutterBottom>
-              Please check the entered values before proceeding!!
-            </Typography>
-            <Box mt={2} display="flex" justifyContent="flex-end">
-              <Button variant="contained" onClick={handleCheck}>
-                Check
-              </Button>
+            <Box
+              bgcolor="white"
+              p={3}
+              borderRadius={2}
+              boxShadow={3}
+              sx={{ width: "400px" }}
+            >
+              <Typography variant="h6" gutterBottom>
+                Please check the entered values before proceeding!!
+              </Typography>
+              <Box mt={2} display="flex" justifyContent="flex-end">
+                <Button variant="contained" onClick={handleCheck}>
+                  Check
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      )}
+        )}
 
-      {/* PDF Download Modal */}
-      {showPdfModal && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          bgcolor="rgba(0,0,0,0.6)"
-          zIndex={9999}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        {/* PDF Download Modal */}
+        {showPdfModal && (
           <Box
-            bgcolor="white"
-            p={3}
-            borderRadius={2}
-            boxShadow={3}
-            sx={{ width: "60%" }}
+            position="fixed"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            bgcolor="rgba(0,0,0,0.6)"
+            zIndex={9999}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           >
-            <Typography variant="h6" gutterBottom>
-              Would you like to download a PDF of this entry?
-            </Typography>
-            <Box mt={2} display="flex" justifyContent="flex-end">
-              <Button
-                variant="contained"
-                onClick={() => {
-                  generateAndDownloadPDF();
-                  if (typeof onVerified === "function") {
-                    const updatedData = {
-                      ...prefillData,
-                      status: "Approved",
-                    };
-                    onVerified(updatedData); // Pass full updated data
-                  }
-                }}
-                sx={{ mr: 2 }}
-              >
-                Yes, Download PDF
-              </Button>
+            <Box
+              bgcolor="white"
+              p={3}
+              borderRadius={2}
+              boxShadow={3}
+              sx={{ width: "60%" }}
+            >
+              <Typography variant="h6" gutterBottom>
+                Would you like to download a PDF of this entry?
+              </Typography>
+              <Box mt={2} display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    generateAndDownloadPDF();
+                    if (typeof onVerified === "function") {
+                      const updatedData = {
+                        ...prefillData,
+                        status: "Approved",
+                      };
+                      onVerified(updatedData); // Pass full updated data
+                    }
+                  }}
+                  sx={{ mr: 2 }}
+                >
+                  Yes, Download PDF
+                </Button>
 
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setShowPdfModal(false);
-                  resetForm();
-                  onClose();
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    setShowPdfModal(false);
+                    resetForm();
+                    onClose();
 
-                  if (typeof onVerified === "function") {
-                    const updatedData = {
-                      ...prefillData,
-                      status: "Approved",
-                    };
-                    onVerified(updatedData); // Also update status even if skipped
-                  }
-                }}
-              >
-                No, Skip
-              </Button>
+                    if (typeof onVerified === "function") {
+                      const updatedData = {
+                        ...prefillData,
+                        status: "Approved",
+                      };
+                      onVerified(updatedData); // Also update status even if skipped
+                    }
+                  }}
+                >
+                  No, Skip
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      )}
-    </>
+        )}
+      </div>
+    </div >
   );
 };
 

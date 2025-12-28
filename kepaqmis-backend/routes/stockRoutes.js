@@ -35,9 +35,9 @@ router.post("/purchase/submit", loggingMiddleware.purchaseEntryCreate(), async (
       );
     }
 
-    res.status(201).json({ 
-      message: "Purchase entries submitted.", 
-      entries: savedEntries 
+    res.status(201).json({
+      message: "Purchase entries submitted.",
+      entries: savedEntries
     });
   } catch (err) {
     // Log failed submission
@@ -55,7 +55,7 @@ router.post("/purchase/submit", loggingMiddleware.purchaseEntryCreate(), async (
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -70,15 +70,69 @@ router.get("/purchase/entries", async (req, res) => {
   }
 });
 
+// 2.1 Purchase Wing: Delete Pending Purchase Entry - WITH LOGGING
+router.delete("/purchase/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pendingPurchase = await PurchaseEntry.findById(id);
+
+    if (!pendingPurchase) {
+      return res.status(404).json({ message: "Entry not found." });
+    }
+
+    // Store original data for logging
+    const deletedData = pendingPurchase.toObject();
+
+    await PurchaseEntry.findByIdAndDelete(id);
+
+    // Log purchase entry deletion
+    await logManualOperation(
+      req.user || { pen: 'system', name: 'System', role: 'system' },
+      'purchase_entry_delete',
+      'purchase_entry',
+      id,
+      {
+        before: deletedData,
+        after: null
+      },
+      {
+        description: `Purchase entry deleted: ${deletedData.itemName}`,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      }
+    );
+
+    res.status(200).json({ message: "Purchase entry deleted successfully." });
+  } catch (err) {
+    // Log failed deletion
+    await logManualOperation(
+      req.user || { pen: 'system', name: 'System', role: 'system' },
+      'purchase_entry_delete',
+      'purchase_entry',
+      req.params.id,
+      {},
+      {
+        description: `Failed to delete purchase entry ${req.params.id}`,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent'),
+        success: false,
+        errorMessage: err.message
+      }
+    );
+
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 3. Verification QM: Approve & Add to Stock - WITH ENHANCED LOGGING
 router.post("/purchase/approve/:id", async (req, res) => {
   const totalStockItems = await StockItem.countDocuments();
   const nextStockItemNo = totalStockItems + 1;
-  
+
   try {
     const { id } = req.params;
     const pendingPurchase = await PurchaseEntry.findById(id);
-    
+
     if (!pendingPurchase || pendingPurchase.status !== "Pending") {
       return res.status(404).json({ message: "Invalid or already verified entry." });
     }
@@ -182,7 +236,7 @@ router.post("/purchase/approve/:id", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -234,7 +288,7 @@ router.post("/stock/requested-issue", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -286,7 +340,7 @@ router.post("/stock/direct-issue", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -337,7 +391,7 @@ router.post("/stock/add-direct-entry", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -362,7 +416,7 @@ router.put("/stockitems/:id", async (req, res) => {
 
     // Store original data for logging
     const originalData = stockItem.toObject();
-    
+
     // Update the stock item
     const updatedStockItem = await StockItem.findByIdAndUpdate(
       req.params.id,
@@ -404,7 +458,7 @@ router.put("/stockitems/:id", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -419,7 +473,7 @@ router.delete("/stockitems/:id", async (req, res) => {
 
     // Store data before deletion for logging
     const deletedData = stockItem.toObject();
-    
+
     await StockItem.findByIdAndDelete(req.params.id);
 
     // Log stock item deletion
@@ -456,7 +510,7 @@ router.delete("/stockitems/:id", async (req, res) => {
         errorMessage: err.message
       }
     );
-    
+
     res.status(500).json({ error: err.message });
   }
 });

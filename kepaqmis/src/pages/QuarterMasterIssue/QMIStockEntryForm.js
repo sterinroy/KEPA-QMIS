@@ -11,8 +11,9 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
+  Box,
 } from "@mui/material";
-import "./addstock.css";
+import "../../StandardForm.css";
 
 const initialState = {
   sourceType: "direct-issue",
@@ -212,7 +213,6 @@ const QMIStockEntryForm = () => {
         onChange={handleChange}
         type={inputType}
         required
-        margin="normal"
         InputLabelProps={inputType === "date" ? { shrink: true } : {}}
         sx={{
           input: { color: "white" },
@@ -227,14 +227,12 @@ const QMIStockEntryForm = () => {
   };
 
   return (
-    <div className="addstock-root">
-      <div className="addstock-box">
+    <div className="standard-form-root">
+      <div className="standard-form-box">
         {/* Header */}
         <Typography
           variant="h5"
-          textAlign="center"
-          gutterBottom
-          style={{ color: "white", fontWeight: "bold" }}
+          className="standard-form-title"
         >
           STOCK ENTRY FORM
         </Typography>
@@ -245,21 +243,39 @@ const QMIStockEntryForm = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          {Object.entries(initialState).map(([key, value]) => {
-            // Skip top-level object containers (they’re rendered internally)
-            if (typeof value === "object" && !Array.isArray(value)) return null;
-            return renderField(key, value);
-          })}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              rowGap: 2.5,
+              columnGap: 8,
+              width: "100%",
+            }}
+          >
+            {Object.entries(initialState).map(([key, value]) => {
+              // Skip top-level object containers (they’re rendered internally)
+              if (typeof value === "object" && !Array.isArray(value)) return null;
+              return renderField(key, value);
+            })}
 
-          <div style={{ marginTop: "16px", textAlign: "right" }}>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={status === "loading"}
+            <Box
+              sx={{
+                gridColumn: { sm: "1 / -1" },
+                mt: 3,
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              {status === "loading" ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+              <Button
+                className="submit-btn"
+                variant="contained"
+                type="submit"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? "Submitting..." : "Submit"}
+              </Button>
+            </Box>
+          </Box>
 
           {/* Confirmation Dialog */}
           <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>

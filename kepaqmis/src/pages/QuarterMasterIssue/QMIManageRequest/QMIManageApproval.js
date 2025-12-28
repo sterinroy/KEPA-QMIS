@@ -1,7 +1,7 @@
 // File: QMIManageRequest.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchQMIssueEntries } from "../../../redux/actions/qmissueActions";
+import { fetchQMIssueEntries, deleteIssueEntry } from "../../../redux/actions/qmissueActions";
 import {
   fetchCategories,
   addCategory,
@@ -39,8 +39,8 @@ const QMIManageRequest = () => {
         type === "checkbox"
           ? e.target.checked
           : name === "quantity"
-          ? parseInt(value, 10) || 0
-          : value,
+            ? parseInt(value, 10) || 0
+            : value,
     }));
   };
 
@@ -59,18 +59,18 @@ const QMIManageRequest = () => {
   };
 
   const columns = [
-    { field: "orderNo", headerName: "Order No", flex: 1 },
-    { field: "supplyOrderNo", headerName: "Supply Order No", flex: 1 },
-    { field: "invoiceDate", headerName: "Invoice Date", flex: 1 },
-    { field: "itemCategory", headerName: "Item Category", flex: 1 },
-    { field: "itemSubCategory", headerName: "Sub Category", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-    { field: "verifyDate", headerName: "Verify Date", flex: 1 },
-    { field: "amountType", headerName: "Amount-Type", flex: 1 },
+    { field: "orderNo", headerName: "Order No", minWidth: 120 },
+    { field: "supplyOrderNo", headerName: "Supply Order No", minWidth: 180 },
+    { field: "invoiceDate", headerName: "Invoice Date", minWidth: 130 },
+    { field: "itemCategory", headerName: "Item Category", minWidth: 150 },
+    { field: "itemSubCategory", headerName: "Sub Category", minWidth: 150 },
+    { field: "status", headerName: "Status", minWidth: 100 },
+    { field: "verifyDate", headerName: "Verify Date", minWidth: 130 },
+    { field: "amountType", headerName: "Amount-Type", minWidth: 130 },
     {
       field: "amountDetails",
       headerName: "Amount Details",
-      flex: 1,
+      minWidth: 150,
       renderCell: (params) => {
         const entry = params.row;
         if (!entry.amountDetails) return "N/A";
@@ -82,38 +82,50 @@ const QMIManageRequest = () => {
     {
       field: "actions",
       headerName: "Action",
-      width: 90,
+      width: 200, // Increased width for action buttons
       sortable: false,
       renderCell: (params) => (
-        <button
-          className="approve-button"
-          onClick={async () => {
-            const entry = params.row;
-            const res = await fetch("/api/stockRoutes/stockitems");
-            const items = await res.json();
-            const nextNumber = (items.length || 0) + 1;
-            const formattedQmno = `KEPA/${String(nextNumber).padStart(
-              2,
-              "0"
-            )}/${new Date().getFullYear()}`;
-            const isCash = entry.amountType === "Cash";
-            const amountDetails = isCash
-              ? { cashAmount: entry.amountDetails?.cashAmount || "" }
-              : {
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <button
+            className="approve-button"
+            onClick={async () => {
+              const entry = params.row;
+              const res = await fetch("/api/stockRoutes/stockitems");
+              const items = await res.json();
+              const nextNumber = (items.length || 0) + 1;
+              const formattedQmno = `KEPA/${String(nextNumber).padStart(
+                2,
+                "0"
+              )}/${new Date().getFullYear()}`;
+              const isCash = entry.amountType === "Cash";
+              const amountDetails = isCash
+                ? { cashAmount: entry.amountDetails?.cashAmount || "" }
+                : {
                   creditStatus: entry.amountDetails?.creditStatus || "Pending",
                 };
-            setSelectedEntry(entry);
-            setFormData({
-              ...entry,
-              amountDetails,
-              Qmno: formattedQmno,
-              verifiedBy: { pen },
-            });
-            setShowForm(true);
-          }}
-        >
-          Approve
-        </button>
+              setSelectedEntry(entry);
+              setFormData({
+                ...entry,
+                amountDetails,
+                Qmno: formattedQmno,
+                verifiedBy: { pen },
+              });
+              setShowForm(true);
+            }}
+          >
+            Approve
+          </button>
+          <button
+            className="delete-button"
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this request?")) {
+                dispatch(deleteIssueEntry(params.row._id));
+              }
+            }}
+          >
+            Delete
+          </button>
+        </Box>
       ),
     },
   ];
@@ -130,18 +142,40 @@ const QMIManageRequest = () => {
       sx={{
         width: "100%",
         height: "calc(100vh - 64px)",
-        p: 3,
+        p: { xs: 2, md: 4, lg: 4 }, // Standard symmetric padding
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
       }}
     >
       <Box
         className="qmi-manage-request-container"
-        sx={{ width: "100%", height: "100%", overflowY: "auto" }}
+        sx={{
+          width: "100%",
+          maxWidth: "1600px",
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
-        <Typography variant="h5" fontWeight="bold" gutterBottom color="#0c1227" mt={.9}>
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          gutterBottom
+          color="#ffffff"
+          mt={0.9}
+          sx={{ textAlign: "center", width: "100%" }}
+        >
           MANAGE REQUESTS
         </Typography>
-        <Box className="outer-container">
+        <Box className="outer-container" sx={{ width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns.map((col) => ({
@@ -152,12 +186,13 @@ const QMIManageRequest = () => {
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             disableRowSelectionOnClick
+            autoHeight // Allow grid to adjust height based on rows
             sx={{
-              borderRadius: 3, // makes overall box rounded
-              overflow: "hidden", // ensures corners are visible
-              backgroundColor: "#111c44", // sets base bg
+              borderRadius: 3,
+              overflow: "hidden",
+              backgroundColor: "#111c44",
+              width: "100%",
 
-              // ✅ fixes header background
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "#111c44 !important",
                 color: "#ffffff !important",
@@ -170,9 +205,11 @@ const QMIManageRequest = () => {
               },
               "& .MuiDataGrid-columnHeaderTitle": {
                 color: "#ffffff !important",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                overflow: "visible",
               },
 
-              // ✅ fixes rows and hover
               "& .MuiDataGrid-row": {
                 backgroundColor: "#0a1535",
               },
@@ -186,7 +223,6 @@ const QMIManageRequest = () => {
                 alignItems: "center",
               },
 
-              // ✅ bottom pagination bar
               "& .MuiDataGrid-footerContainer": {
                 backgroundColor: "#111c44",
                 color: "white",

@@ -1,6 +1,4 @@
-.main.main{
-  margin-left: 320px;
-}
+/* .main.main rule removed to fix layout alignment */
 /* .containerhhh {
   background-color: #111c44 !important;
   margin: 0;
@@ -14,7 +12,7 @@
   background-color: #111c44 !important;
   color: black;
   margin-left: -10px;
-  margin-right: 120px; 
+  margin-right: 120px;
   margin-top: 1050px;
   margin-bottom: 30px;
   padding: 2rem;
@@ -121,6 +119,7 @@
   overflow-y: auto;
   box-sizing: border-box;
 }
+
 /* Title */
 .form-title {
   color: #000000;
@@ -137,7 +136,7 @@
   gap: 24px 48px;
 }
 
-.mui-form > * {
+.mui-form>* {
   min-height: 60px;
 }
 
@@ -240,12 +239,10 @@
 }
 
 .qmi-manage-request-container {
-  background-color: #ffffff; /* Dark theme background */
+  background-color: #0c1227;
+  /* Match dark theme */
   min-height: 100vh;
-  margin-top: -25px;
-  margin-left: -30px;
-  margin-bottom: 5px;
-  padding: 30px;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -256,7 +253,7 @@
 
 .qmi-manage-request-container .MuiDataGrid-columnHeaders {
   background-color: #111c44 !important;
-  color: black;
+  color: white !important;
 }
 
 .qmi-manage-request-container .MuiDataGrid-cell {
@@ -264,8 +261,8 @@
 }
 
 .qmi-manage-request-container .MuiDataGrid-row:hover {
-  background-color: #1e2a47; 
-  color: black; 
+  background-color: #1e2a47;
+  color: black;
 }
 
 .qmi-manage-request-container .MuiDataGrid-row:hover {
@@ -277,22 +274,67 @@
 }
 
 .qmi-manage-request-container .approve-button {
-  background-color: green; 
+  background-color: #2e7d32;
+  /* Richer green */
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 6px 16px;
+  border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.qmi-manage-request-container .approve-button:hover {
+  opacity: 0.9;
+}
+
+.qmi-manage-request-container .delete-button {
+  background-color: #d32f2f;
+  /* Red */
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.qmi-manage-request-container .delete-button:hover {
+  opacity: 0.9;
 }
 
 .outer-container {
-  margin-top: -10px;
-  margin-left: -50px;
-  margin-right: 40px;
-  width: 1190px;
+  width: 100%;
+  max-width: 1200px;
   padding: 24px;
   padding-bottom: 30px;
+  box-sizing: border-box;
+  overflow-x: auto !important;
+  /* Enable horizontal scroll */
+
+  /* Force scrollbar visibility for this container specifically */
+  &::-webkit-scrollbar {
+    display: block !important;
+    height: 8px !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #0a1535 !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #1e90ff !important;
+    border-radius: 4px !important;
+  }
+
+  scrollbar-width: auto !important;
+  /* Firefox override */
+  -ms-overflow-style: auto !important;
+  /* IE override */
 }
 
 .approve-request {
@@ -373,9 +415,11 @@
 .qmi-manage-request-container .MuiTablePagination-actions button {
   color: white !important;
 }
+
 .qmi-manage-request-container .MuiTablePagination-actions {
-  color: white; 
+  color: white;
 }
+
 .qmi-manage-request-container .MuiDataGrid-footerContainer {
   background-color: #111c44;
   color: white;
@@ -406,7 +450,8 @@
 }
 
 .qmi-issue-page-container {
-  background-color: #0c1227; /* Dark theme background */
+  background-color: #0c1227;
+  /* Dark theme background */
   min-height: 100vh;
   margin-left: -30px;
   margin-bottom: 5px;
@@ -429,8 +474,8 @@
 }
 
 .qmi-issue-page-container .MuiDataGrid-row:hover {
-  background-color: #1e2a47; 
-  color: black; 
+  background-color: #1e2a47;
+  color: black;
 }
 
 .qmi-issue-page-container .MuiDataGrid-row:hover {
@@ -466,9 +511,11 @@
 .qmi-issue-page-container .MuiTablePagination-actions button {
   color: white !important;
 }
+
 .qmi-issue-page-container .MuiTablePagination-actions {
-  color: white; 
+  color: white;
 }
+
 .qmi-issue-page-container .MuiDataGrid-footerContainer {
   background-color: #111c44;
   color: white;
@@ -502,25 +549,40 @@
 
 
 .manage-user-table {
-  background-color: #ffffff; /* Dark theme background */
-  min-height: 100vh;
-  border-radius: 8px;
-  width: 1200px;
-  margin-top: 30px;
-  margin-left: -50px;
-  margin-bottom: 60px;
-  padding: 30px;
+  background-color: #0c1227;
+  width: 100%;
   box-sizing: border-box;
+  overflow-x: auto !important;
+  /* Enable horizontal scroll */
+
+  /* Force scrollbar visibility */
+  &::-webkit-scrollbar {
+    display: block !important;
+    height: 8px !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #0a1535 !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #1e90ff !important;
+    border-radius: 4px !important;
+  }
+
+  scrollbar-width: auto !important;
+  -ms-overflow-style: auto !important;
 }
 
 .manage-user-table-inner {
-  background-color: #fff;
+  background-color: #0c1227;
   padding: 24px 32px;
 }
 
 .table-container {
   margin-top: 24px;
-  height: 500px; /* gives DataGrid a fixed height */
+  height: 500px;
+  /* gives DataGrid a fixed height */
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 12px;
@@ -536,8 +598,8 @@
 }
 
 .manage-user-table .MuiDataGrid-columnHeaders {
-  background-color: #1976d2;
-  color: black;
+  background-color: #111c44 !important;
+  color: white !important;
 }
 
 .manage-user-table .MuiDataGrid-cell {
@@ -545,8 +607,8 @@
 }
 
 .manage-user-table .MuiDataGrid-row:hover {
-  background-color: #1e2a47; 
-  color: black; 
+  background-color: #1e2a47;
+  color: black;
 }
 
 .manage-user-table .MuiDataGrid-row:hover {
@@ -582,9 +644,11 @@
 .manage-user-table .MuiTablePagination-actions button {
   color: white !important;
 }
+
 .manage-user-table .MuiTablePagination-actions {
-  color: white; 
+  color: white;
 }
+
 .manage-user-table .MuiDataGrid-footerContainer {
   background-color: #111c44;
   color: white;
@@ -699,11 +763,14 @@
 .MuiBox-root {
   overflow-x: visible !important;
 }
+
 /* Center align column headers */
 .permanent-return-table .MuiDataGrid-columnHeader {
   display: flex !important;
-  justify-content: center !important; /* Horizontal center */
-  align-items: center !important;      /* Vertical center */
+  justify-content: center !important;
+  /* Horizontal center */
+  align-items: center !important;
+  /* Vertical center */
   background-color: #111c44 !important;
   color: white !important;
   font-size: 14px;

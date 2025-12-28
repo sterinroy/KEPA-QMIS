@@ -1,0 +1,146 @@
+/* Standard Form Styles */
+.standard-form-root {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px 60px 20px !important;
+  background-color: #0c1227;
+  box-sizing: border-box;
+}
+
+/* Ensure parent .main handles the scrollbar */
+main.main {
+  padding: 0 !important;
+  display: block !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.standard-form-box {
+  background-color: #111c44;
+  /* Standard card color */
+  color: white;
+  width: 100%;
+  max-width: 900px;
+  /* Standard max width */
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  margin: auto !important;
+  /* Center if short, maintains gaps if long */
+}
+
+/* Typography */
+.standard-form-box h2,
+.standard-form-box h5,
+.standard-form-title {
+  color: white;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Material UI Input Overrides */
+.standard-form-box form {
+  display: block !important;
+  width: 100% !important;
+}
+
+.standard-form-box .MuiGrid-container {
+  width: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  flex-direction: row !important;
+}
+
+.standard-form-box .MuiGrid-item {
+  box-sizing: border-box !important;
+}
+
+.standard-form-box .MuiTextField-root,
+.standard-form-box .MuiFormControl-root {
+  width: 100% !important;
+  margin-bottom: 0px !important;
+  /* Spacing is now handled by the grid gap */
+}
+
+.standard-form-box .MuiInputBase-root {
+  background-color: transparent !important;
+  /* Let card bg show or use slightly lighter */
+  color: white !important;
+  border-radius: 8px;
+}
+
+.standard-form-box .MuiFormLabel-root {
+  color: #a0aec0 !important;
+  /* Lighter grey for placeholder labels */
+}
+
+.standard-form-box .MuiFormLabel-root.Mui-focused {
+  color: #63b3ed !important;
+  /* Light blue on focus */
+}
+
+.standard-form-box .MuiOutlinedInput-notchedOutline {
+  border-color: #4a5b76 !important;
+}
+
+.standard-form-box .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #a0aec0 !important;
+}
+
+.standard-form-box .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #63b3ed !important;
+}
+
+.standard-form-box .MuiSelect-icon {
+  color: white !important;
+}
+
+/* Buttons */
+.standard-form-box button[type="submit"],
+.standard-form-box .submit-btn {
+  background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.standard-form-box button[type="submit"]:hover,
+.standard-form-box .submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.standard-form-box button:disabled {
+  background: #4a5b76;
+  color: #a0aec0;
+}
+
+/* Alerts */
+.standard-form-box .MuiAlert-root {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}

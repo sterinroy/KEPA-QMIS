@@ -31,34 +31,33 @@ const QMIReturn = () => {
   ];
 
   return (
-    <div className="return-management-container">
-      <Box
-        sx={{
-          minHeight: "100vh",
-          background: "white",
-          p: 5,
-        }}
-      >
+    <div className="standard-form-root">
+      <Box sx={{ width: "100%", maxWidth: "1200px" }}>
         <Typography
           variant="h4"
-          color="#0c1227"
+          color="white"
           fontWeight="bold"
           textAlign="center"
-          mb={10}
-          mt={5.5}
+          mb={6}
+          mt={2}
         >
           RETURN MANAGEMENT PANEL
         </Typography>
         <Grid container spacing={6} justifyContent="center">
           {cardData.map((card, index) => (
-            <Grid item xs={12} sm={6} md={5} key={index}>
+            <Grid item key={index}>
               <Card
                 sx={{
-                  backgroundColor: "#212B55",
+                  width: 320,
+                  height: 280,
+                  backgroundColor: "#111c44",
                   color: "white",
                   borderRadius: 3,
                   boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
                   transition: "transform 0.3s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                   "&:hover": { transform: "scale(1.05)" },
                 }}
               >
@@ -72,27 +71,17 @@ const QMIReturn = () => {
                   }}
                 >
                   {card.icon}
-                  <Typography
-                    variant="h6"
-                    mt={2}
-                    gutterBottom
-                    fontWeight="bold"
-                  >
+                  <Typography variant="h6" mt={2} gutterBottom fontWeight="bold">
                     {card.title}
                   </Typography>
-                  <Typography variant="body2" mb={3}>
+                  <Typography variant="body2" mb={3} color="rgba(255,255,255,0.7)">
                     {card.description}
                   </Typography>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => navigate(card.route)}
-                    sx={{
-                      fontWeight: "bold",
-                      borderRadius: 2,
-                      px: 4,
-                      py: 1,
-                    }}
+                    sx={{ fontWeight: "bold", borderRadius: 2, px: 4, py: 1 }}
                   >
                     {card.buttonText}
                   </Button>
