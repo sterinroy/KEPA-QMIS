@@ -27,7 +27,7 @@ export const submitQMPurchase = (purchaseData) => {
           payload: data.error || "Submission failed",
         });
         return;
-      }
+      } 
       console.log("QMPurchase submission successful:", data);
       dispatch({ type: QMPURCHASE_SUBMIT_SUCCESS, payload: data });
     } catch (error) {

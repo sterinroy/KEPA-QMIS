@@ -38,7 +38,7 @@ function authReducer(state = initialState, action) {
     case REGISTER_FAILURE:
       return { ...state, error: action.payload, loading: false };
     case LOGOUT:
-      return initialState;
+      return { ...initialState };
     case REGISTER_SUCCESS:
       return {
         ...state,

@@ -16,41 +16,73 @@ const QMIEntries = () => {
 
   const columns = [
     { field: "orderNo", headerName: "Order No", flex: 1 },
-    { field: "itemName", headerName: "Item Name", flex: 1 },
-    { field: "quantity", headerName: "Quantity", flex: 1 },
+    { field: "supplyOrderNo", headerName: "Supply Order No", flex: 1 },
+    { field: "itemCategory", headerName: "Item Category", flex: 1 },
+    { field: "itemSubCategory", headerName: "Item Sub Category", flex: 1 },
     { field: "status", headerName: "Status", flex: 1 },
+    { field: "amountType", headerName: "Amount-Type", flex: 1 },
+    {
+      field: "amountDetails",
+      headerName: "Amount Details",
+      flex: 1,
+      renderCell: (params) => {
+        const entry = params.row;
+        if (!entry.amountDetails) return "N/A"; // Check if amountDetails is undefined
+
+        return entry.amountType === "Cash"
+          ? entry.amountDetails.cashAmount
+          : entry.amountDetails.creditStatus;
+      },
+    },
   ];
 
   const rows = entries.map((entry, index) => ({
     id: entry._id || index, // Use _id if available, otherwise use index
     orderNo: entry.orderNo,
-    itemName: entry.itemName,
-    quantity: entry.quantity,
+    supplyOrderNo: entry.supplyOrderNo,
+    itemCategory: entry.itemCategory,
+    itemSubCategory: entry.itemSubCategory,
     status: entry.status,
+    amountType: entry.amountType,
+    amountDetails: entry.amountDetails || {},
   }));
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="qmi-issue-page-container">
       <div>
-        <h2>QMIssue Entries</h2>
+        <h2 style={{ color: "white" }}>QMIssue Entries</h2>
       </div>
-      <div style={{ height: 600 }}>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : entries.length === 0 ? (
-        <p>No QMIssue entries.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-        />
-      )}
+      <div className="qmi-issue-table-section">
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : entries.length === 0 ? (
+          <p>No QMIssue entries.</p>
+        ) : (
+          <DataGrid
+            rows={rows}
+            columns={columns.map((col) => ({
+              ...col,
+              align: "center",
+              headerAlign: "center",
+            }))}
+            pageSize={10}
+            rowsPerPageOptions={[10, 25, 50]}
+            disableRowSelectionOnClick
+            sx={{
+              "& .MuiDataGrid-cell": {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1976d2",
+                color: "black",
+              },
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ import {
   Button,
 } from "@mui/material";
 
-const Sidebar = ({ navItems, onNavItemClick }) => {
+const Sidebar = ({ navItems }) => {
   const location = useLocation();
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
   const [pen, setPen] = useState("");
 
   const user = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   const handleKeyDown = (e, callback) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -34,24 +35,33 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
       setPen(user.pen);
     }
   }, [user]);
+  if (!auth.isAuthenticated) return null;
 
-  const isActive = (path, item) => {
-    // Use manual highlight if defined
-    if (item && item.isActive !== undefined) {
-      return item.isActive;
+  const isActive = (item) => {
+    if (item.matchPaths) {
+      return item.matchPaths.some((p) => location.pathname === p);
     }
-    // Otherwise check current path
-    return location.pathname === path;
+    return location.pathname === item.path || location.pathname.startsWith(item.path + "/");
   };
+
+
 
   const handleLogout = () => {
     setOpenModal(true);
   };
-
   const confirmLogout = () => {
-    dispatch(logout());
-    navigate("/login");
-    setOpenModal(false);
+    try {
+      dispatch(logout()); // assume this sets isAuthenticated to false
+      localStorage.clear();
+
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 50); // short delay to allow state update
+
+      setOpenModal(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const cancelLogout = () => {
@@ -62,16 +72,14 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
     const handleClick = () => {
       if (item.modal) {
         setOpenModal(true);
-      } else if (onNavItemClick) {
-        onNavItemClick(item); // Custom handler from layout
       } else {
-        navigate(item.path); // Default behavior
+        navigate(item.path);
       }
     };
 
     return (
       <div
-        className={`nav-item ${isActive(item.path, item) ? "active" : ""}`}
+        className={`nav-item ${isActive(item) ? "active" : ""}`}
         onClick={handleClick}
         tabIndex={0}
         onKeyDown={(e) => handleKeyDown(e, handleClick)}
@@ -100,25 +108,32 @@ const Sidebar = ({ navItems, onNavItemClick }) => {
           Logout
         </div>
       </aside>
-
-      {/* Logout Confirmation Modal */}
       <Dialog
         open={openModal}
         onClose={cancelLogout}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        classes={{
+          container: "dialog-container",
+          paper: "dialog-paper",
+        }}
       >
-        <DialogTitle id="alert-dialog-title">Confirm Logout</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title" className="dialog-title">
+          Confirm Logout
+        </DialogTitle>
+        <DialogContent className="dialog-content">
+          <DialogContentText
+            id="alert-dialog-description"
+            className="dialog-content-text"
+          >
             Are you sure you want to log out?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelLogout} color="primary">
+        <DialogActions className="dialog-actions">
+          <Button onClick={cancelLogout} className="dialog-button-no">
             No
           </Button>
-          <Button onClick={confirmLogout} color="primary" autoFocus>
+          <Button onClick={confirmLogout} className="dialog-button-yes">
             Yes
           </Button>
         </DialogActions>

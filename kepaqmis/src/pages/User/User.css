@@ -1,0 +1,511 @@
+.user-indent-root {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  margin-right: 50px;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+}
+
+.user-indent-box {
+  background-color: #111C44;
+  padding: 2rem;
+  margin-top: -60px !important;
+  margin-left: -35px !important;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1000px;
+  min-height: 550px;
+  /* margin: 0 auto; */
+}
+
+.temp-issue-root {
+  background-color: #0C1227;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin-right: 70px;
+  width: 120%;
+  padding: 20px;
+}
+
+.temp-issue-box {
+  background-color: #111C44;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1000px;
+  min-height: 550px;
+  margin: 0 auto;
+}
+/* Title */
+.form-title {
+  color: #000000;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Grid layout for form */
+.mui-form {
+  display: grid;
+  background-color: #111C44;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px 48px;
+}
+.mui-form > * {
+  min-height: 60px;
+}
+
+.mui-form .MuiInputBase-root {
+  height: 50px;
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 6px;
+  /* margin-left: -30px !important; */
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+
+.mui-form .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.mui-form .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.mui-form .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.mui-form .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+
+.mui-form .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+
+/* Input field spacing */
+.mui-form .MuiTextField-root,
+.mui-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.mui-form .MuiInputBase-input,
+.mui-form .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.mui-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.mui-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
+.return-request-container h2,
+.return-request-container p {
+  color: white;
+  margin-left: 18px;
+}
+
+.stock-widget {
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease-in-out;
+  margin-top: 100px;
+  justify-content: space-between;
+  width: 300px;
+}
+
+.stock-widget:hover {
+  transform: translateY(-5px);
+  transition: 0.1s ease-in-out;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon--success {
+  stroke: #4caf50;
+}
+
+.icon--error {
+  stroke: #f44336;
+}
+
+.stock-widget .MuiTypography-root {
+  color: white;
+}
+
+.stock-widget .MuiTypography-colorTextSecondary {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.MuiCardContent-root.css-1lt5qva-MuiCardContent-root {
+  padding: 16px !important;
+  margin-left: 50px;
+}
+
+.MuiBox-root.css-trbuzd {
+  margin-top: -150px;
+  margin-right: 100px;
+}
+
+.MuiCardContent-root.css-1lt5qva-MuiCardContent-root{
+  right: -100px;
+}
+
+.send-box {
+  padding: 20px;
+}
+.send-form{
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+.send-box .MuiTextField-root {
+  margin-bottom: 16px;
+}
+
+
+.intend-form{
+  display:grid;
+  
+
+}
+.intend-form > * {
+  min-height: 60px;
+}
+
+.submit-button{
+  color: #f44336;
+
+}
+
+.intend-form .MuiInputBase-root {
+  height: 50px;
+  background-color: #111C44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.intend-form .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.intend-form .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.intend-form .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.intend-form .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+
+.intend-form .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+
+/* Input field spacing */
+.intend-form .MuiTextField-root,
+.intend-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.intend-form .MuiInputBase-input,
+.mui-form .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.intend-form .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.intend-form .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+.cat{
+  width: 115px;
+}
+
+.sub-cat{
+  width: 150px;
+}
+.unit-cat{
+  width: 100px;
+  
+}
+
+
+.manage-form {
+  margin-top:-300px;
+  width:101%;
+  max-width: 101%;
+
+}
+
+.manage-request-root {
+  width: 100%;
+  min-height: 100vh;
+  margin-right: 70px;
+  background-color: #ffffff; /* Light gray background */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.manage-request-container {
+  width: 1150px;
+  margin: auto;
+  background-color: #111C44;
+  padding: 33px;
+  padding-bottom: 30px;
+  margin-left: -20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.manage-request-container h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.MuiDataGrid-root {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.manage-request-form {
+  border: 1px solid #ddd;
+  width: 1180px;
+  border-radius: 8px;
+  margin-left: -13px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 50px !important;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #0C1227;
+}
+
+/* Force table to expand horizontally */
+.manage-request-form .MuiDataGrid-root {
+  min-width: max-content;
+  background-color: #0C1227;
+  color: white;
+  border: none;
+}
+
+/* Toolbar styling */
+.manage-request-form .MuiDataGrid-toolbarContainer {
+  background-color: #000;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Toolbar icons (e.g., export, filter) */
+.manage-request-form .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important;
+}
+
+/* Row styling */
+.manage-request-form .MuiDataGrid-row {
+  background-color: #0C1227 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Center align all cell content inside the row */
+.manage-request-form .MuiDataGrid-cell {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important;      /* Vertical center */
+  text-align: center !important;
+}
+
+/* Row hover effect */
+.manage-request-form .MuiDataGrid-row:hover {
+  background-color: #001b5e !important;
+  color: white !important;
+}
+
+/* Footer / Pagination */
+.manage-request-form .MuiDataGrid-footerContainer {
+  background-color: #0C1227;
+  color: white;
+}
+
+/* Pagination controls */
+.manage-request-form .MuiTablePagination-root,
+.manage-request-form .MuiTablePagination-selectLabel,
+.manage-request-form .MuiTablePagination-select,
+.manage-request-form .MuiTablePagination-spacer {
+  color: white;
+}
+
+.manage-request-form .MuiTablePagination-actions button {
+  color: white !important;
+}
+
+.manage-request-form .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+/* Icons and buttons inside DataGrid */
+.manage-request-form .MuiSvgIcon-root,
+.manage-request-form .MuiButtonBase-root {
+  color: white !important;
+}
+
+/* Make sure this doesn't interfere */
+.MuiBox-root {
+  overflow-x: visible !important;
+}
+
+/* Center align all DataGrid column headers */
+.manage-request-form .MuiDataGrid-columnHeader {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  background-color: #0C1227 !important;
+  color: white !important;
+  font-size: 14px;
+  text-align: center !important;
+  padding: 12px 24px !important;
+}
+
+/* Ensure the title inside the header is also centered */
+.manage-request-form .MuiDataGrid-columnHeaderTitle {
+  width: 100%;
+  white-space: nowrap !important;
+  color: white !important;
+  font-weight: 600 !important;
+  margin-left: 25px;
+}
+
+
+.user-allocated-table {
+  height: 500px;
+  background-color: #111C44;
+  border-radius: 10px;
+  margin-left: -95px;
+  margin-bottom: 20px;
+  padding: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  color: white;
+  overflow: hidden;
+}
+
+/* Match DataGrid styling from .table-wrapper */
+.user-allocated-table .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+  border: none;
+}
+
+/* Column headers */
+.user-allocated-table .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important;
+  color: white !important;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+.user-allocated-table .MuiDataGrid-columnHeaderTitle {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Header row background */
+.user-allocated-table .MuiDataGrid-columnHeaders {
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+}
+
+/* Center all cells */
+.user-allocated-table .MuiDataGrid-cell {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+/* Row styling */
+.user-allocated-table .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.user-allocated-table .MuiDataGrid-row:hover {
+  background-color: #060b18 !important;
+  color: white !important;
+}
+
+/* Pagination footer */
+.user-allocated-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+/* Pagination controls */
+.user-allocated-table .MuiTablePagination-root,
+.user-allocated-table .MuiTablePagination-selectLabel,
+.user-allocated-table .MuiTablePagination-select,
+.user-allocated-table .MuiTablePagination-spacer,
+.user-allocated-table .MuiTablePagination-actions,
+.user-allocated-table .MuiButtonBase-root {
+  color: white !important;
+}
+
+/* Hover effects for select dropdowns */
+.user-allocated-table .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+/* Fix icon colors */
+.user-allocated-table .MuiSvgIcon-root path {
+  fill: #ffffff !important;
+}
+
+/* Toolbar (if you enable it later) */
+.user-allocated-table .MuiDataGrid-toolbarContainer {
+  background-color: #000;
+  border-bottom: 1px solid #ddd;
+}
+

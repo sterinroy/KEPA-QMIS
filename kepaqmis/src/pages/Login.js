@@ -33,7 +33,7 @@ const Login = () => {
           navigate("/QuarterMasterACQM");
           break;
         case "User":
-          navigate("/UserDashboard");
+          navigate("/User/UserDashboard");
           break;
         case "SuperAdmin":
           navigate("/SuperAdmin/SuperAdminDashboard");
@@ -42,7 +42,7 @@ const Login = () => {
           alert("Unknown role.");
       }
     }
-  }, [auth, navigate]);
+  }, [auth.isAuthenticated,auth.role, navigate]);
 
   const handleLogin = () => {
     dispatch(login(pen, password));
@@ -143,7 +143,7 @@ const handleSnackbarClose = () => {
           width: "100%",
         }}
       >
-        © {new Date().getFullYear()} All rights reserved to "Albert the Keng"
+        © {new Date().getFullYear()} All rights reserved to Kerala Police Academy
       </footer>
       <Snackbar
         open={openSnackbar}

@@ -10,7 +10,7 @@ export const fetchStockItems = () => async (dispatch) => {
   try {
     const response = await fetch("/api/stockRoutes/stockitems"); 
     const data = await response.json();
-    dispatch({ type: FETCH_STOCK_SUCCESS, payload: data });
+    dispatch({ type: FETCH_STOCK_SUCCESS, payload: data.data || [] });
   } catch (error) {
     dispatch({ type: FETCH_STOCK_FAILURE, payload: error.message });
   }

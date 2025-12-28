@@ -42,14 +42,14 @@ function superAdminReducer(state = initialState, action) {
     case CREATE_USER_REQUEST:
       return { ...state, loading: true, error: null };
     case FETCH_PENDING_USERS_SUCCESS:
-      return { ...state, loading: false, pendingUsers: action.payload };
+      return { ...state, loading: false, pendingUsers: Array.isArray(action.payload) ? action.payload : [] };
     case CREATE_USER_SUCCESS:
       return { ...state, loading: false, error: null };
     case FETCH_LOGS_SUCCESS:
-      return { ...state, loading: false, logs: action.payload };
+      return { ...state, loading: false, logs: Array.isArray(action.payload) ? action.payload : [] };
 
     case FETCH_USERS_SUCCESS:
-      return { ...state, loading: false, users: action.payload };
+      return { ...state, loading: false, users: Array.isArray(action.payload) ? action.payload : [] };
 
     case FETCH_PENDING_USERS_FAILURE:
     case FETCH_LOGS_FAILURE:

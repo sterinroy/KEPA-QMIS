@@ -1,6 +1,8 @@
-/* Root container and page background */
-/* body, html, .container {
-  background-color: greenyellow !important;
+.main.main{
+  margin-left: 320px;
+}
+/* .containerhhh {
+  background-color: #111c44 !important;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -8,73 +10,115 @@
   overflow-y: auto;
 } */
 
-/* Form container */
-
-
 .direct-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
-  margin-left: 7px;
-  margin-top: 280px;
-  margin-bottom: 40px;
+  margin-left: -10px;
+  margin-right: 120px; 
+  margin-top: 1050px;
+  margin-bottom: 30px;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 1300px;
+  max-width: 1200px;
   box-sizing: border-box;
-  padding: 30px 40px 28px 40px;
+  padding: 30px 40px 20px 40px;
   min-height: 550px;
 }
 
-.direct-issue-root {
+
+/* Inputs */
+.direct-issue-box .MuiInputBase-root {
+  height: 50px;
+  background-color: #111c44 !important;
+  color: white !important;
+  border-radius: 6px;
+  font-weight: normal;
+}
+
+.direct-issue-box .MuiFormLabel-root {
+  color: #bbbbff !important;
+  font-weight: 500 !important;
+}
+
+.direct-issue-box .MuiOutlinedInput-root fieldset {
+  border-color: #555 !important;
+  border-radius: 6px;
+}
+
+.direct-issue-box .MuiOutlinedInput-root:hover fieldset {
+  border-color: #8888ff !important;
+}
+
+.direct-issue-box .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #1e90ff !important;
+  border-width: 2px;
+}
+
+.direct-issue-box .MuiSelect-root {
+  height: 50px;
+  border-radius: 6px;
+}
+
+/* Input field spacing */
+.direct-issue-box .MuiTextField-root,
+.direct-issue-box .MuiFormControl-root {
+  width: 100%;
+}
+
+.direct-issue-box .MuiInputBase-input,
+.direct-issue-box .MuiSelect-select {
+  font-weight: normal !important;
+}
+
+/* Reduce space specifically below Quantity field */
+.direct-issue-box .MuiTextField-root[name="qty"] {
+  margin-bottom: 8px;
+}
+
+/* Or reduce top margin above Item Description */
+.direct-issue-box .MuiTextField-root[name="itemDescription"] {
+  margin-top: -8px;
+}
+
+/* .direct-issue-root {
   min-height: 100vh;
-  background-color: #0C1227;
+  margin-left: -20px;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* aligns top */
-  padding: 10px 20px 40px 20px; /* top, right, bottom, left */
-  overflow-y: auto; /* allow scroll if content overflows */
+  align-items: flex-start;
+  padding: 10px 20px 40px 20px;
+  overflow-y: auto; 
   box-sizing: border-box;
-}
-
-.purchase-issue-box {
-  background-color: #111C44 !important;
-  color: black;
-  margin-top: 260px;
-  margin-left: 7px;
-  margin-bottom: 30px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 25px 40px;
-  min-height: 550px;
-}
+} */
 
 .temp-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
-  margin-top: 130px;
-  margin-left: 7px;
-  margin-bottom: 40px;
+  margin-top: 30px;
+  margin-left: 11px;
+  margin-bottom: 20px;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 1300px;
   box-sizing: border-box;
-  padding: 30px 40px 30px 40px;
+  padding: 30px 40px 20px 40px;
   min-height: 550px;
 }
 
 .temp-issue-root {
   min-height: 100vh;
-  background-color: #0C1227;
+  margin-top: -40px;
+  margin-left: -50px;
+  margin-right: 50px;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* aligns top */
-  overflow-y: auto; /* allow scroll if content overflows */
+  align-items: flex-start;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 /* Title */
@@ -86,46 +130,11 @@
   font-size: 1.5rem;
 }
 
-/* Modal Button Styling */
-.modal-button {
-  font-weight: bold;
-  font-size: 1rem;
-  padding: 10px 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  margin-bottom: 16px;
-}
-
-.modal-button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.purchased-button {
-  background-color: #1976d2; /* Custom primary blue */
-}
-
-.purchased-button:hover {
-  background-color: #1565c0;
-}
-
-.direct-button {
-  background-color: #dc004e; /* Custom secondary red */
-}
-
-.direct-button:hover {
-  background-color: #c2185b;
-}
-
-
 /* Grid layout for form */
 .mui-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 24px 48px;
-  /* margin-left: 10px;
-  margin-right: 10px; */
 }
 
 .mui-form > * {
@@ -135,7 +144,7 @@
 /* Inputs */
 .mui-form .MuiInputBase-root {
   height: 50px;
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: white !important;
   border-radius: 6px;
   font-weight: normal;
@@ -160,12 +169,10 @@
   border-width: 2px;
 }
 
-
 .mui-form .MuiSelect-root {
   height: 50px;
   border-radius: 6px;
 }
-
 
 /* Input field spacing */
 .mui-form .MuiTextField-root,
@@ -179,7 +186,7 @@
 }
 
 /* Reduce space specifically below Quantity field */
-.mui-form .MuiTextField-root[name="quantity"] {
+.mui-form .MuiTextField-root[name="qty"] {
   margin-bottom: 8px;
 }
 
@@ -195,11 +202,10 @@
   margin-left: 18px;
 }
 
-
 .MuiToggleButton-root {
-  background-color: #0C1227 !important;
+  background-color: #0c1227 !important;
   color: white !important;
-    border: 1px solid white !important;
+  border: 1px solid white !important;
 
   box-shadow: white !important;
 }
@@ -217,12 +223,11 @@
   background-color: #1565c0 !important;
 }
 
-
 /* Verify Form */
 .verify-issue-box {
-  background-color: #111C44 !important;
+  background-color: #111c44 !important;
   color: black;
-  margin-top: 565px;
+  margin-top: 170px;
   margin-left: 9px;
   margin-bottom: 20px;
   border-radius: 20px;
@@ -230,92 +235,504 @@
   width: 98%;
   max-width: 1300px;
   box-sizing: border-box;
-  padding-top: 35px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding: 30px 40px 20px 40px;
+  min-height: 550px;
+}
+
+.qmi-manage-request-container {
+  background-color: #ffffff; /* Dark theme background */
+  min-height: 100vh;
+  margin-top: -25px;
+  margin-left: -30px;
+  margin-bottom: 5px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.qmi-manage-request-container .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-manage-request-container .MuiDataGrid-columnHeaders {
+  background-color: #111c44 !important;
+  color: black;
+}
+
+.qmi-manage-request-container .MuiDataGrid-cell {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.qmi-manage-request-container .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.qmi-manage-request-container .approve-button {
+  background-color: green; 
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.outer-container {
+  margin-top: -10px;
+  margin-left: -50px;
+  margin-right: 40px;
+  width: 1190px;
+  padding: 24px;
   padding-bottom: 30px;
-  /* padding: 45px 50px 35px 40px; */
-  min-height: 550px;
 }
 
-.scrollable-modal {
-  max-height: 80vh;
-  overflow-y: auto;
+.approve-request {
+  background-color: #111c44;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.scrollable-modal::-webkit-scrollbar {
-  width: 6px;
+.approve-request .MuiTextField-root,
+.approve-request .MuiFormControl-root {
+  background-color: #0c1227;
+  border-radius: 6px;
 }
 
-.scrollable-modal::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.approve-request .MuiOutlinedInput-root {
+  color: white;
+  background-color: #0c1227;
 }
 
-.scrollable-modal::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
+.approve-request .MuiInputLabel-root {
+  color: #bbbbff;
 }
 
-/* Stock Issue Form */
-.stock-issue-box {
-  background-color: #111C44 !important;
+.approve-request .MuiOutlinedInput-notchedOutline {
+  border-color: #555;
+}
+
+.approve-request .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #8888ff;
+}
+
+.approve-request .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1e90ff;
+}
+
+.approve-request .MuiSelect-select {
+  background-color: #0c1227;
+  color: white;
+}
+
+.approve-request .MuiMenuItem-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.approve-request .MuiMenuItem-root:hover {
+  background-color: #1e2a47;
+}
+
+.approve-request .MuiTypography-root {
+  color: white;
+}
+
+/* Style the pagination footer */
+.qmi-manage-request-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.qmi-manage-request-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-spacer {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-actions button {
+  color: white !important;
+}
+.qmi-manage-request-container .MuiTablePagination-actions {
+  color: white; 
+}
+.qmi-manage-request-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select {
+  color: white !important;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.qmi-manage-request-container .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+
+.qmi-issue-table-section {
+  height: 600px;
+  width: 1200px;
+  margin-right: 10px;
+  margin-top: -20px;
+}
+
+.qmi-issue-page-container {
+  background-color: #0c1227; /* Dark theme background */
+  min-height: 100vh;
+  margin-left: -30px;
+  margin-bottom: 5px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.qmi-issue-page-container .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-issue-page-container .MuiDataGrid-columnHeaders {
+  background-color: #111c44 !important;
   color: black;
+}
+
+.qmi-issue-page-container .MuiDataGrid-cell {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.qmi-issue-page-container .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.qmi-issue-page-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-spacer {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-actions button {
+  color: white !important;
+}
+.qmi-issue-page-container .MuiTablePagination-actions {
+  color: white; 
+}
+.qmi-issue-page-container .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-root {
+  color: white;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.qmi-issue-page-container .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.return-management-container {
+  width: 100%;
+  margin-left: -20px;
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 40px 20px;
+}
+
+
+
+
+.manage-user-table {
+  background-color: #ffffff; /* Dark theme background */
+  min-height: 100vh;
+  border-radius: 8px;
+  width: 1200px;
   margin-top: 30px;
-  margin-left: 7px;
-  margin-bottom: 10px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1300px;
+  margin-left: -50px;
+  margin-bottom: 60px;
+  padding: 30px;
   box-sizing: border-box;
-  padding: 30px 40px 30px 40px;
-  min-height: 550px;
 }
 
-/* Temp Return */
-.temp-return-box {
-  background-color: #111C44 !important;
-  color: black;
-  margin-top: 60px;
-  margin-left: 7px;
-  margin-bottom: 30px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 30px 40px;
-  min-height: 550px;
+.manage-user-table-inner {
+  background-color: #fff;
+  padding: 24px 32px;
 }
 
-.manage-request-box {
-  background-color: #111C44 !important;
+.table-container {
+  margin-top: 24px;
+  height: 500px; /* gives DataGrid a fixed height */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 12px;
+}
+
+.table-container .MuiDataGrid-root {
+  border: none;
+}
+
+.manage-user-table .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white;
+}
+
+.manage-user-table .MuiDataGrid-columnHeaders {
+  background-color: #1976d2;
   color: black;
-  margin-top: 100px;
-  margin-left: 7px;
-  margin-right: 10px;
+}
+
+.manage-user-table .MuiDataGrid-cell {
+  color: white;
+}
+
+.manage-user-table .MuiDataGrid-row:hover {
+  background-color: #1e2a47; 
+  color: black; 
+}
+
+.manage-user-table .MuiDataGrid-row:hover {
+  background-color: #050b19 !important;
+}
+
+.manage-user-table .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  color: white !important;
+}
+
+.manage-user-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.manage-user-table .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-select {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-spacer {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-actions button {
+  color: white !important;
+}
+.manage-user-table .MuiTablePagination-actions {
+  color: white; 
+}
+.manage-user-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-root {
+  color: white;
+}
+
+.manage-user-table .MuiTablePagination-select {
+  color: white !important;
+}
+
+.manage-user-table .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.manage-user-table .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.permanent-return-table {
+  border: 1px solid #ddd;
+  width: 1200px;
+  border-radius: 8px;
+  margin-left: -15px;
+  margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 30px 40px;
-  min-height: 550px;
+  margin-right: 85px;
+  padding-bottom: 30px;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
 }
 
-.return-request-box {
-  background-color: #111C44 !important;
-  color: black;
-  /* margin-top: 10px;
-  margin-left: 7px;
-  margin-right: 10px;
-  margin-bottom: 20px; */
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+/* Force table to expand horizontally */
+.permanent-return-table .MuiDataGrid-root {
+  min-width: max-content;
+  background-color: #111c44;
+  color: white;
+  border: none;
+}
+
+/* Column headers */
+.permanent-return-table .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important;
+  color: white !important;
+  font-size: 14px;
+  padding: 12px 24px !important;
+}
+
+/* Prevent header text from wrapping */
+.permanent-return-table .MuiDataGrid-columnHeaderTitle {
+  white-space: nowrap !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Toolbar styling */
+.permanent-return-table .MuiDataGrid-toolbarContainer {
+  background-color: #000;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Toolbar icons (e.g., export, filter) */
+.permanent-return-table .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important;
+}
+
+/* Row styling */
+.permanent-return-table .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Row hover effect */
+.permanent-return-table .MuiDataGrid-row:hover {
+  background-color: #060b18 !important;
+  color: white !important;
+}
+
+/* Footer / Pagination */
+.permanent-return-table .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+/* Pagination controls */
+.permanent-return-table .MuiTablePagination-root,
+.permanent-return-table .MuiTablePagination-selectLabel,
+.permanent-return-table .MuiTablePagination-select,
+.permanent-return-table .MuiTablePagination-spacer {
+  color: white;
+}
+
+.permanent-return-table .MuiTablePagination-actions button {
+  color: white !important;
+}
+
+.permanent-return-table .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+/* Icons and buttons inside DataGrid */
+.permanent-return-table .MuiSvgIcon-root,
+.permanent-return-table .MuiButtonBase-root {
+  color: white !important;
+}
+
+/* Make sure this doesn't interfere */
+.MuiBox-root {
+  overflow-x: visible !important;
+}
+/* Center align column headers */
+.permanent-return-table .MuiDataGrid-columnHeader {
+  display: flex !important;
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important;      /* Vertical center */
+  background-color: #111c44 !important;
+  color: white !important;
+  font-size: 14px;
+  padding: 0 24px !important;
+}
+
+/* Ensure the title inside the header is also centered */
+.permanent-return-table .MuiDataGrid-columnHeaderTitle {
   width: 100%;
-  max-width: 1300px;
-  box-sizing: border-box;
-  padding: 30px 40px 30px 40px;
-  min-height: 550px;
+  margin-left: 90px;
+  text-align: center !important;
+  white-space: nowrap !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.permanent-verify-button.MuiButton-outlined {
+  border-color: #001d2d;
+  background-color: green;
+  color: #4caf50;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 600;
+  text-transform: none;
+  font-size: 13px;
+}
+
+.permanent-verify-button.MuiButton-outlined:hover {
+  border-color: #003503;
+  color: #388e3c;
+  background-color: #00b30f;
 }

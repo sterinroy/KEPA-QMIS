@@ -19,17 +19,19 @@ export const login = (pen, password) => {
       });
 
       const data = await response.json();
-      console.log("Login response data:", data);
+      // console.log("Login response data:", data);
 
       if (!response.ok) {
         dispatch({ type: LOGIN_FAILURE, payload: data.msg || "Login failed" });
         return;
       }
 
-      dispatch({ type: LOGIN_SUCCESS, payload: data });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("pen", data.pen);
+      dispatch({ type: LOGIN_SUCCESS, payload: data.data });
+      localStorage.setItem("token", data.data.token);
+      localStorage.setItem("role", data.data.role);
+      localStorage.setItem("pen", data.data.pen);
+      localStorage.setItem("name", data.data.name);
+      localStorage.setItem("userId", data.data.userId);
     } catch (error) {
       dispatch({ type: LOGIN_FAILURE, payload: error.message });
     }
@@ -59,6 +61,7 @@ export const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("pen");
+    localStorage.removeItem("name");
 
     dispatch({ type:  LOGOUT });
   };

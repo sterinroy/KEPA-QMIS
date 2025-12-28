@@ -11,6 +11,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import HistoryIcon from "@mui/icons-material/History";
 import Main from "../../components/Main";
 import StockItemView from "../StockView";
+import EditDocumentIcon from "@mui/icons-material/EditDocument";
+import SAEdit from "./SAEdit.js";
 
 
 function Layout() {
@@ -38,7 +40,7 @@ function Layout() {
       component: <SuperAdminUsers />,
     },
     {
-      label: "Logs",
+      label: "Log Details",
       path: "/SuperAdmin/SuperAdminLogs",
       icon: <HistoryIcon className="icon" />,
       component: <SuperAdminLogs />,
@@ -48,6 +50,12 @@ function Layout() {
       path:"/SuperAdmin/StockItemView",
       icon: <DescriptionIcon className="icon" />,
       component: <StockItemView />,
+    },
+    {
+      label: "Edit/Add",
+      path:"/SuperAdmin/SAEdit",
+      icon: <EditDocumentIcon className="icon" />,
+      component: <SAEdit />,
     },
   ];
   const handleNavItemClick = (component) => {

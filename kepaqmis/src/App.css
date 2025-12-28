@@ -36,3 +36,124 @@
     transform: rotate(360deg);
   }
 }
+
+
+.stock-items {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #111c44;
+  overflow-y: auto;
+  margin-left: -15px;
+  margin-right: 55px;
+  margin-bottom: 30px;
+}
+
+.stock-items .MuiDataGrid-toolbarContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Individual column header cells */
+.stock-items .MuiDataGrid-columnHeader {
+  background-color: #111c44 !important; /* Dark blue background */
+  color: white !important; /* White text */
+  font-size: 14px;
+  padding: 12px 16px; /* Adjust padding as needed */
+}
+
+/* Ensure all icons in the toolbar are white */
+.stock-items .MuiDataGrid-toolbarContainer .MuiSvgIcon-root path {
+  fill: #f5f5f5 !important; /* Force the color of the SVG paths */
+}
+
+/* Optional: Style the entire toolbar container */
+.stock-items .MuiDataGrid-toolbarContainer {
+  background-color: #000; /* Dark background for contrast */
+  border-bottom: 1px solid #ddd;
+}
+
+/* Column header title (text inside the cell) */
+.stock-items .MuiDataGrid-columnHeaderTitle {
+  color: white !important; /* Ensure text is white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+.stock-items .MuiDataGrid-root {
+  background-color: #111c44;
+  color: white; /* Optional: make text visible on dark background */
+  border: none;
+}
+
+
+/* Row styling */
+.stock-items .MuiDataGrid-row {
+  background-color: #111c44 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for rows */
+.stock-items .MuiDataGrid-row:hover {
+  background-color: #060b18 !important; /* Darker blue shade */
+  color: white !important;
+}
+
+/* Style the pagination footer */
+.stock-items .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+
+.stock-items .MuiTablePagination-root {
+  color: white;
+}
+
+.stock-items .MuiTablePagination-selectLabel {
+  color: white;
+}
+
+.stock-items .MuiTablePagination-select {
+  color: white;
+}
+
+.stock-items .MuiTablePagination-spacer {
+  color: white;
+}
+
+.stock-items .MuiTablePagination-actions button {
+  color: white !important;
+}
+.stock-items .MuiTablePagination-actions {
+  color: white; 
+}
+.stock-items .MuiDataGrid-footerContainer {
+  background-color: #111c44;
+  color: white;
+}
+
+.stock-items .MuiTablePagination-root {
+  color: white;
+}
+
+.stock-items .MuiTablePagination-select {
+  color: white !important;
+}
+
+.stock-items .MuiTablePagination-select .MuiSvgIcon-root {
+  color: white !important;
+}
+
+.stock-items .MuiTablePagination-select:hover {
+  background-color: #1e2a47;
+}
+
+.stock-items .MuiSvgIcon-root {
+  background-color: #ffffff;
+}
+.stock-items  .MuiButtonBase-root {
+ color: #ffffff;
+}

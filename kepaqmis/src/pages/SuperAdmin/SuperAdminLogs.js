@@ -12,54 +12,71 @@ const SuperAdminLogs = () => {
     dispatch(fetchLogs());
   }, [dispatch]);
 
-  const columns = [
-    { field: "pen", headerName: "PEN", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
-    { field: "role", headerName: "Role", flex: 1 },
-    { field: "action", headerName: "Action", flex: 1 },
-    {
-      field: "timestamp",
-      headerName: "Timestamp",
-      flex: 1,
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        return date.toString() === "Invalid Date"
-          ? "N/A"
-          : date.toLocaleString();
-      },
-    }
-  ];
+const columns = [
+  { field: "pen", headerName: "PEN", flex: 1 },
+  { field: "name", headerName: "Name", flex: 1 },
+  { field: "role", headerName: "Role", flex: 1 },
+  { field: "action", headerName: "Action", flex: 1 },
+  { field: "resourceType", headerName: "Resource Type", flex: 1 },
+  { field: "description", headerName: "Description", flex: 2 },
+  { field: "ipAddress", headerName: "IP Address", flex: 1 },
+  {
+    field: "timestamp",
+    headerName: "Timestamp",
+    flex: 1.5,
+    renderCell: (params) => {
+      const date = new Date(params.value);
+      return date.toString() === "Invalid Date"
+        ? "N/A"
+        : date.toLocaleString();
+    },
+  },
+];
+
 
   // Convert logs to rows with an `id` field
   const rows = logs
-  .filter((log) => log && log.timestamp) // skip broken entries
-  .map((log, index) => ({
-    id: log._id || index,
-    ...log,
-  }));
+    .filter((log) => log && log.timestamp) // skip broken entries
+    .map((log, index) => ({
+      id: log._id || index,
+      ...log,
+    }));
 
   return (
-    <div style={{ width: "100%" }}>
+   <div style={{ width: "100%", marginTop: "-70px" }}>
       <div>
-        <h2>Login/Logout Logs</h2>
+        <h2>Login/Logout Details</h2>
       </div>
       <div style={{ height: 550 }}>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : rows.length === 0 ? (
-        <p>No logs available.</p>
-      ) : (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableRowSelectionOnClick
-          showToolbar
-        />
-      )}
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : rows.length === 0 ? (
+          <p>No logs available.</p>
+        ) : (
+          <div className="log-info">
+            <DataGrid
+              rows={rows}
+              columns={columns.map((col) => ({
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              }))}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              showToolbar
+              disableRowSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

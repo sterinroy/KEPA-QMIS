@@ -1,0 +1,123 @@
+.lars-print-wrapper {
+  background-color: white;
+  padding: 20px;
+  font-family: 'Times New Roman', serif;
+}
+
+.download-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.download-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #145a9e;
+}
+
+.kpf81-layout {
+  width: 100%;
+  border: 1px solid black;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.three-columns {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.column {
+  border: 1px solid black;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.col1 {
+  width: 27%;
+}
+
+.col2 {
+  width: 46%;
+}
+
+.col3 {
+  width: 27%;
+}
+
+.top-box {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.inner-table th,
+.inner-table td {
+  border: 1px solid black;
+  padding: 4px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.instruction-note {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 6px;
+  padding: 4px;
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+.footer-right {
+  text-align: right;
+  margin-top: 50px;
+  font-size: 14px;
+}
+
+.col3-blank-space {
+  min-height: 535px;
+  border: 1px dashed gray;
+  margin-top: 10px;
+}
+.inner-table td {
+  vertical-align: top;
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.2;
+  height:485px;
+  overflow: hidden;
+  padding-top: 4px;
+}
+.col2 .inner-table tbody tr {
+  height: 483px;
+  vertical-align: top;
+}
