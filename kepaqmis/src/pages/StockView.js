@@ -152,21 +152,27 @@ const StockItemView = () => {
                 "& .MuiDataGrid-columnHeaders": {
                   backgroundColor: "#111c44 !important",
                   color: "#ffffff !important",
-                },
-                "& .MuiDataGrid-columnHeadersInner": {
-                  backgroundColor: "#111c44 !important",
+                  borderBottom: "1px solid rgba(255,255,255,0.1)",
                 },
                 "& .MuiDataGrid-columnHeader": {
                   backgroundColor: "#111c44 !important",
-                },
-                "& .MuiDataGrid-filler": {
-                  backgroundColor: "#111c44 !important",
+                  position: "relative",
+                  "&:not(:last-child)::after": {
+                    content: '""',
+                    position: "absolute",
+                    right: 0,
+                    top: "25%",
+                    height: "50%",
+                    width: "1px",
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                  },
                 },
                 "& .MuiDataGrid-columnHeaderTitle": {
                   color: "#ffffff !important",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                  overflow: "visible",
+                  fontWeight: "900",
+                  textTransform: "uppercase",
+                  fontSize: "0.85rem",
+                  letterSpacing: "0.5px",
                 },
 
                 "& .MuiDataGrid-virtualScroller": {
@@ -186,38 +192,32 @@ const StockItemView = () => {
 
                 "& .MuiDataGrid-row": {
                   backgroundColor: "#0a1535",
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
                 },
                 "& .MuiDataGrid-row:hover": {
                   backgroundColor: "#050b19 !important",
                 },
                 "& .MuiDataGrid-cell": {
-                  color: "#ffffff",
+                  color: "rgba(255,255,255,0.8)",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderBottom: "1px solid #1e2a47 !important",
                 },
 
                 "& .MuiDataGrid-footerContainer": {
                   backgroundColor: "#111c44",
                   color: "white",
-                  borderTop: "1px solid #1e2a47",
-                },
-                "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
-                  color: "white !important",
-                },
-                "& .MuiDataGrid-sortIcon": {
-                  color: "white !important",
-                },
-                "& .MuiSvgIcon-root": {
-                  color: "white !important",
+                  borderTop: "1px solid rgba(255,255,255,0.1)",
+                  "& .MuiTablePagination-root": { color: "white" },
+                  "& .MuiSvgIcon-root": { color: "white" },
                 },
                 "& .MuiDataGrid-toolbarContainer": {
                   backgroundColor: "#111c44",
-                  padding: "10px",
-                  borderBottom: "1px solid #1e2a47",
+                  padding: "12px",
+                  borderBottom: "1px solid rgba(255,255,255,0.1)",
                   "& .MuiButton-root": {
-                    color: "white !important",
+                    color: "#1e90ff !important",
+                    fontWeight: "bold",
                   },
                 },
               }}

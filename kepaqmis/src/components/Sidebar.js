@@ -11,7 +11,11 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Box,
+  Typography,
+  Avatar,
 } from "@mui/material";
+import { Logout as LogoutIcon, QuestionMark as QuestionIcon } from "@mui/icons-material";
 
 const Sidebar = ({ navItems }) => {
   const location = useLocation();
@@ -113,28 +117,103 @@ const Sidebar = ({ navItems }) => {
         onClose={cancelLogout}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        classes={{
-          container: "dialog-container",
-          paper: "dialog-paper",
+        PaperProps={{
+          className: "premium-dialog-paper",
+          sx: {
+            bgcolor: "rgba(11, 16, 42, 0.9)",
+            borderRadius: "28px",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(20px)",
+            padding: "24px",
+            maxWidth: "400px",
+            width: "100%",
+          }
         }}
       >
-        <DialogTitle id="alert-dialog-title" className="dialog-title">
-          Confirm Logout
-        </DialogTitle>
-        <DialogContent className="dialog-content">
-          <DialogContentText
-            id="alert-dialog-description"
-            className="dialog-content-text"
+        <DialogTitle id="alert-dialog-title" sx={{ textAlign: 'center', pb: 1 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2
+            }}
           >
-            Are you sure you want to log out?
-          </DialogContentText>
+            <Avatar
+              sx={{
+                width: 64,
+                height: 64,
+                bgcolor: "rgba(244, 67, 54, 0.1)",
+                color: "#f44336",
+                border: "2px solid rgba(244, 67, 54, 0.2)"
+              }}
+            >
+              <LogoutIcon sx={{ fontSize: 32 }} />
+            </Avatar>
+            <Typography variant="h5" color="white" fontWeight="800">
+              Confirm Logout
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center', px: 4 }}>
+          <Typography
+            id="alert-dialog-description"
+            sx={{
+              color: "rgba(255, 255, 255, 0.6)",
+              fontSize: "1rem",
+              fontWeight: "500"
+            }}
+          >
+            Are you sure you want to exit the Quarter Master system?
+          </Typography>
         </DialogContent>
-        <DialogActions className="dialog-actions">
-          <Button onClick={cancelLogout} className="dialog-button-no">
-            No
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            gap: 2,
+            pt: 3,
+            pb: 1
+          }}
+        >
+          <Button
+            onClick={cancelLogout}
+            sx={{
+              color: "white",
+              textTransform: "none",
+              fontWeight: "700",
+              fontSize: "1rem",
+              px: 4,
+              py: 1.2,
+              borderRadius: "14px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              "&:hover": {
+                bgcolor: "rgba(255, 255, 255, 0.05)",
+                borderColor: "rgba(255, 255, 255, 0.2)"
+              }
+            }}
+          >
+            Cancel
           </Button>
-          <Button onClick={confirmLogout} className="dialog-button-yes">
-            Yes
+          <Button
+            onClick={confirmLogout}
+            variant="contained"
+            sx={{
+              bgcolor: "#f44336",
+              color: "white",
+              textTransform: "none",
+              fontWeight: "700",
+              fontSize: "1rem",
+              px: 4,
+              py: 1.2,
+              borderRadius: "14px",
+              boxShadow: "0 8px 20px rgba(244, 67, 54, 0.3)",
+              "&:hover": {
+                bgcolor: "#d32f2f",
+                boxShadow: "0 10px 25px rgba(244, 67, 54, 0.4)"
+              }
+            }}
+          >
+            Logout
           </Button>
         </DialogActions>
       </Dialog>

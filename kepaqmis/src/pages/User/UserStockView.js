@@ -42,38 +42,129 @@ const UserStockView = () => {
   }, [pen]);
 
   const columns = [
-  { field: "slNo", headerName: "SL No", width: 80, headerAlign: "center", align: "center" },
-  { field: "itemName", headerName: "Item Name", width: 200, headerAlign: "center", align: "center" },
-  { field: "category", headerName: "Category", width: 150, headerAlign: "center", align: "center" },
-  { field: "qty", headerName: "Quantity", width: 100, headerAlign: "center", align: "center" },
-  { field: "unit", headerName: "Unit", width: 100, headerAlign: "center", align: "center" },
-  { field: "status", headerName: "Status", width: 130, headerAlign: "center", align: "center" },
-  { field: "approvedDate", headerName: "Approved Date", width: 140, headerAlign: "center", align: "center" },
-  { field: "remarks", headerName: "Remarks", width: 200, headerAlign: "center", align: "center" },
-];
+    { field: "slNo", headerName: "SL No", width: 80, headerAlign: "center", align: "center" },
+    { field: "itemName", headerName: "Item Name", width: 200, headerAlign: "center", align: "center" },
+    { field: "category", headerName: "Category", width: 150, headerAlign: "center", align: "center" },
+    { field: "qty", headerName: "Quantity", width: 100, headerAlign: "center", align: "center" },
+    { field: "unit", headerName: "Unit", width: 100, headerAlign: "center", align: "center" },
+    { field: "status", headerName: "Status", width: 130, headerAlign: "center", align: "center" },
+    { field: "approvedDate", headerName: "Approved Date", width: 140, headerAlign: "center", align: "center" },
+    { field: "remarks", headerName: "Remarks", width: 200, headerAlign: "center", align: "center" },
+  ];
 
 
   return (
-    <Box m={2}>
-      <Typography fontSize={25} gutterBottom marginLeft={-10} marginBottom={2} marginTop={-7} fontWeight="bold">
-        MY ALLOCATED STOCKS
-      </Typography>
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "#0c1227",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        pt: 4,
+        pl: { xs: 2, md: 5 },
+        pr: { xs: 2, md: 4 },
+        boxSizing: "border-box",
+      }}
+    >
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}>
+        <Box sx={{ width: "100%", maxWidth: "1200px" }}>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="white"
+            textAlign="center"
+          >
+            ITEM ALLOCATIONS & ASSIGNMENTS
+          </Typography>
+        </Box>
+      </Box>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <div className="user-allocated-table">
-          {" "}
-          {/* ✅ custom wrapper for CSS */}
+      <Box
+        className="outer-container"
+        sx={{
+          width: "100%",
+          maxWidth: "1200px !important",
+          height: "650px",
+          overflow: "hidden",
+          backgroundColor: "#111c44",
+          borderRadius: 3,
+        }}
+      >
+        {loading ? (
+          <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <CircularProgress color="primary" />
+          </Box>
+        ) : (
           <DataGrid
             rows={rows}
-            columns={columns}
+            columns={columns.map((col) => ({
+              ...col,
+              headerAlign: "center",
+              align: "center",
+            }))}
             pageSize={10}
-            rowsPerPageOptions={[5, 10, 20]}
-            disableSelectionOnClick
+            rowsPerPageOptions={[10]}
+            disableRowSelectionOnClick
+            sx={{
+              border: "none",
+              backgroundColor: "#111c44",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#111c44 !important",
+                borderBottom: "1px solid rgba(255,255,255,0.1)",
+              },
+              "& .MuiDataGrid-columnHeader": {
+                backgroundColor: "#111c44 !important",
+                position: "relative",
+                "&:not(:last-child)::after": {
+                  content: '""',
+                  position: "absolute",
+                  right: 0,
+                  top: "25%",
+                  height: "50%",
+                  width: "1px",
+                  backgroundColor: "rgba(255,255,255,0.3)",
+                },
+              },
+              "& .MuiDataGrid-columnHeaderTitle": {
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "0.95rem",
+                textTransform: "uppercase",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: "#0a1535",
+                "&::-webkit-scrollbar": {
+                  display: "block",
+                  width: "8px",
+                  height: "8px",
+                },
+                "&::-webkit-scrollbar-track": { background: "#0a1535" },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#1e90ff",
+                  borderRadius: "4px",
+                },
+              },
+              "& .MuiDataGrid-row": {
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                "&:hover": { backgroundColor: "#050b19 !important" },
+              },
+              "& .MuiDataGrid-cell": {
+                color: "rgba(255,255,255,0.8)",
+                fontSize: "0.9rem",
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "#111c44",
+                color: "white",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                "& .MuiTablePagination-root": { color: "white" },
+                "& .MuiSvgIcon-root": { color: "white" },
+              },
+            }}
           />
-        </div>
-      )}
+        )}
+      </Box>
     </Box>
   );
 };

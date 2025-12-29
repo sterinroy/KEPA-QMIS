@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./SuperAdmin.css";
-import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import {
   Button,
   Dialog,
@@ -11,6 +10,8 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
+  Box,
+  Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,6 +23,7 @@ import {
   deleteCategory,
 } from "../../redux/actions/categoryActions";
 import "./SuperAdmin.css";
+import "../QuarterMasterIssue/Issue.css";
 
 const SACategories = () => {
   const dispatch = useDispatch();
@@ -124,15 +126,18 @@ const SACategories = () => {
     {
       field: "actions",
       type: "actions",
-      width: 100,
+      headerName: "Actions",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<EditIcon />}
+          icon={<EditIcon sx={{ color: "#4DB6AC" }} />}
           label="Edit"
           onClick={() => handleEditClick(params.row)}
         />,
         <GridActionsCellItem
-          icon={<DeleteIcon />}
+          icon={<DeleteIcon sx={{ color: "#ff5252" }} />}
           label="Delete"
           onClick={() => handleDeleteClick(params.row)}
         />,
@@ -147,47 +152,125 @@ const SACategories = () => {
   }));
 
   return (
-    <div className="p-4" style={{ width: "100%",marginTop: "20px", zIndex: 1 }}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Item Categories</h2>
-        <div className="add-category-button">
-          <Button variant="contained" onClick={() => setOpenDialog(true)}>
-            Add Category
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "#0c1227",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        pt: 4,
+        pl: { xs: 2, md: 5 },
+        pr: { xs: 2, md: 4 },
+        boxSizing: "border-box",
+      }}
+    >
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}>
+        <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h5" fontWeight="bold" color="white">
+            ITEM CATEGORIES MANAGEMENT
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => setOpenDialog(true)}
+            sx={{
+              bgcolor: "#4DB6AC",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              px: 3,
+              "&:hover": { bgcolor: "#388e3c" }
+            }}
+          >
+            Add New Category
           </Button>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div style={{ height: 600, width: "100%" }}>
+      <Box
+        className="outer-container"
+        sx={{
+          width: "100%",
+          maxWidth: "1200px !important",
+          height: "650px",
+          overflow: "hidden",
+          backgroundColor: "#111c44",
+          borderRadius: 3,
+        }}
+      >
         {loading ? (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <CircularProgress />
-          </div>
-        ) : error ? (
-          <p>Error: {error}</p>
+          <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <CircularProgress color="primary" />
+          </Box>
         ) : (
-          <div className="add-category">
-            <DataGrid
-              rows={rows}
-              columns={columns.map((col) => ({
-                ...col,
-                align: "center",
-                headerAlign: "center",
-              }))}
-              pageSize={10}
-              rowsPerPageOptions={[10, 25, 50]}
-              showToolbar
-              disableRowSelectionOnClick
-              sx={{
-                "& .MuiDataGrid-cell": {
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+          <DataGrid
+            rows={rows}
+            columns={columns.map((col) => ({
+              ...col,
+              headerAlign: "center",
+              align: "center",
+            }))}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            disableRowSelectionOnClick
+            sx={{
+              border: "none",
+              backgroundColor: "#111c44",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#111c44 !important",
+                borderBottom: "1px solid rgba(255,255,255,0.1)",
+              },
+              "& .MuiDataGrid-columnHeader": {
+                backgroundColor: "#111c44 !important",
+                position: "relative",
+                "&:not(:last-child)::after": {
+                  content: '""',
+                  position: "absolute",
+                  right: 0,
+                  top: "25%",
+                  height: "50%",
+                  width: "1px",
+                  backgroundColor: "rgba(255,255,255,0.3)",
                 },
-              }}
-            />
-          </div>
+              },
+              "& .MuiDataGrid-columnHeaderTitle": {
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "0.95rem",
+                textTransform: "uppercase",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: "#0a1535",
+                "&::-webkit-scrollbar": {
+                  display: "block",
+                  width: "8px",
+                  height: "8px",
+                },
+                "&::-webkit-scrollbar-track": { background: "#0a1535" },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#1e90ff",
+                  borderRadius: "4px",
+                },
+              },
+              "& .MuiDataGrid-row": {
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                "&:hover": { backgroundColor: "#050b19 !important" },
+              },
+              "& .MuiDataGrid-cell": {
+                color: "rgba(255,255,255,0.8)",
+                fontSize: "0.9rem",
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "#111c44",
+                color: "white",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                "& .MuiTablePagination-root": { color: "white" },
+                "& .MuiSvgIcon-root": { color: "white" },
+              },
+            }}
+          />
         )}
-      </div>
+      </Box>
 
       <Dialog
         open={openDialog}
@@ -195,40 +278,80 @@ const SACategories = () => {
           setOpenDialog(false);
           resetForm();
         }}
-        fullWidth
-        maxWidth="sm"
+        PaperProps={{
+          sx: {
+            bgcolor: "rgba(11, 16, 42, 0.95)",
+            borderRadius: "24px",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(20px)",
+            color: "white",
+            minWidth: "400px",
+            p: 2,
+          }
+        }}
       >
-        <DialogTitle>
-          {editMode ? "Edit Category" : "Add New Category"}
+        <DialogTitle sx={{ fontWeight: "bold", textAlign: "center", fontSize: "1.5rem" }}>
+          {editMode ? "Modify Category" : "Define Category"}
         </DialogTitle>
         <DialogContent>
-          <TextField
-            label="Category Name"
-            value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
-            fullWidth
-            required
-            margin="dense"
-          />
-          <TextField
-            label="Subcategory (Optional)"
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            fullWidth
-            margin="dense"
-          />
+          <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Major Category"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              fullWidth
+              required
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                  "&:hover fieldset": { borderColor: "white" },
+                  "&.Mui-focused fieldset": { borderColor: "#4DB6AC" },
+                },
+                "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.6)" },
+              }}
+            />
+            <TextField
+              label="Associated Subcategory"
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+              fullWidth
+              helperText="Optional entry for new sub-classification"
+              FormHelperTextProps={{ sx: { color: "rgba(255,255,255,0.4)" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                  "&:hover fieldset": { borderColor: "white" },
+                  "&.Mui-focused fieldset": { borderColor: "#4DB6AC" },
+                },
+                "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.6)" },
+              }}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button
             onClick={() => {
               setOpenDialog(false);
               resetForm();
             }}
+            sx={{ color: "rgba(255,255,255,0.6)", fontWeight: "bold" }}
           >
-            Cancel
+            Discard
           </Button>
-          <Button variant="contained" onClick={handleAddOrUpdate}>
-            {editMode ? "Update" : "Add"}
+          <Button
+            variant="contained"
+            onClick={handleAddOrUpdate}
+            sx={{
+              bgcolor: "#4DB6AC",
+              fontWeight: "bold",
+              px: 4,
+              borderRadius: "10px",
+              "&:hover": { bgcolor: "#388e3c" }
+            }}
+          >
+            {editMode ? "Confirm Update" : "Save Category"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -243,7 +366,7 @@ const SACategories = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 };
 
