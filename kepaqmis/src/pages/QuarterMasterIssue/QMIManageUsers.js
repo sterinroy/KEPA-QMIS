@@ -126,18 +126,18 @@ const ManageUserRequests = () => {
   }));
 
   const columns = [
-    { field: "pen", headerName: "PEN No.", minWidth: 120 },
-    { field: "name", headerName: "Name", minWidth: 180 },
-    { field: "office", headerName: "Office/ Company", minWidth: 180 },
-    { field: "category", headerName: "Category", minWidth: 150 },
-    { field: "subcategory", headerName: "Subcategory", minWidth: 150 },
-    { field: "itemName", headerName: "Item", minWidth: 150 },
-    { field: "requestedQty", headerName: "Requested Qty", minWidth: 120 },
-    { field: "unit", headerName: "Unit", minWidth: 80 },
+    { field: "pen", headerName: "PEN No.", minWidth: 110 },
+    { field: "name", headerName: "Name", minWidth: 140 },
+    { field: "office", headerName: "Office/ Company", minWidth: 140 },
+    { field: "category", headerName: "Category", minWidth: 110 },
+    { field: "subcategory", headerName: "Subcategory", minWidth: 110 },
+    { field: "itemName", headerName: "Item", minWidth: 120 },
+    { field: "requestedQty", headerName: "Requested Qty", minWidth: 100 },
+    { field: "unit", headerName: "Unit", minWidth: 70 },
     {
       field: "dateOfrequest",
       headerName: "Date Of Request",
-      minWidth: 150,
+      minWidth: 120,
       renderCell: (params) => {
         const date = new Date(params.value);
         return isNaN(date)
@@ -152,7 +152,7 @@ const ManageUserRequests = () => {
     {
       field: "action",
       headerName: "Action",
-      minWidth: 200,
+      minWidth: 180,
       renderCell: (params) => (
         <Box display="flex" gap={1}>
           <Button
@@ -166,7 +166,7 @@ const ManageUserRequests = () => {
             sx={{
               backgroundColor: "#2e7d32",
               textTransform: "none",
-              fontWeight: 600,
+              fontWeight: "bold",
               "&:hover": {
                 backgroundColor: "#1b5e20",
               },
@@ -183,7 +183,7 @@ const ManageUserRequests = () => {
               backgroundColor: "#d32f2f",
               color: "white",
               textTransform: "none",
-              fontWeight: 600,
+              fontWeight: "bold",
               "&:hover": {
                 backgroundColor: "#b71c1c",
               },
@@ -201,63 +201,98 @@ const ManageUserRequests = () => {
       sx={{
         width: "100%",
         height: "calc(100vh - 64px)",
-        p: { xs: 2, md: 4, lg: 4 }, // Standard symmetric padding
+        pl: { xs: 2, md: 5, lg: 5 },
+        pr: { xs: 2, md: 5, lg: 5 },
+        pt: { xs: 2, md: 4, lg: 4 },
+        pb: { xs: 2, md: 4, lg: 4 },
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        overflowY: "auto",
+        alignItems: "flex-start",
+        overflow: "hidden", // Disable page-level scrolling
         backgroundColor: "#0c1227",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-        msOverflowStyle: "none",
-        scrollbarWidth: "none",
       }}
     >
       <Box
-        className="manage-user-requests-outer"
+        className="qmi-manage-request-container"
         sx={{
           width: "100%",
-          maxWidth: "1600px",
-          margin: "0 auto",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
+          height: "100%",
+          overflow: "hidden",
         }}
       >
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          gutterBottom
-          color="#ffffff"
-          mt={0.9}
-          sx={{ textAlign: "center", width: "100%" }}
-        >
-          MANAGE USER REQUESTS (QM)
-        </Typography>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "center" }}>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              gutterBottom
+              color="#ffffff"
+              mt={0.9}
+              sx={{ textAlign: "center" }}
+            >
+              MANAGE USERS
+            </Typography>
+          </Box>
+        </Box>
 
         {loading ? (
-          <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" width="100%" mt={4}>
             <CircularProgress />
           </Box>
         ) : (
-          <Box className="manage-user-table">
+          <Box className="outer-container" sx={{ width: "100%", maxWidth: "1200px !important", height: "650px", overflow: "hidden" }}>
             <DataGrid
               rows={rows}
-              columns={columns.map((col) => ({
-                ...col,
-                align: "center",
-                headerAlign: "center",
-              }))}
-              pageSize={10}
-              rowsPerPageOptions={[10, 25, 50]}
+              columns={columns.map((col) => {
+                if (col.field === "action") {
+                  return {
+                    ...col,
+                    align: "center",
+                    headerAlign: "center",
+                    renderCell: (params) => (
+                      <Box display="flex" gap={1}>
+                        <button
+                          className="approve-button"
+                          onClick={() => {
+                            setSelectedItem(params.row.fullItem);
+                            setApprovedQty(params.row.requestedQty);
+                            setOpenDialog(true);
+                          }}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="delete-button"
+                          onClick={() => handleReject(params.row.id)}
+                        >
+                          Reject
+                        </button>
+                      </Box>
+                    ),
+                  };
+                }
+                return {
+                  ...col,
+                  align: "center",
+                  headerAlign: "center",
+                };
+              })}
+              slots={{
+                columnSeparator: undefined, // Explicitly ensure it's not hidden
+              }}
+              paginationModel={{ pageSize: 10, page: 0 }}
+              pageSizeOptions={[10]}
               disableRowSelectionOnClick
-              autoHeight
               sx={{
                 borderRadius: 3,
                 overflow: "hidden",
+                overflowX: "hidden",
                 backgroundColor: "#111c44",
                 width: "100%",
+                height: "100%",
 
                 "& .MuiDataGrid-columnHeaders": {
                   backgroundColor: "#111c44 !important",
@@ -269,11 +304,28 @@ const ManageUserRequests = () => {
                 "& .MuiDataGrid-columnHeader": {
                   backgroundColor: "#111c44 !important",
                 },
+                "& .MuiDataGrid-filler": {
+                  backgroundColor: "#111c44 !important",
+                },
                 "& .MuiDataGrid-columnHeaderTitle": {
                   color: "#ffffff !important",
                   fontWeight: "bold",
                   whiteSpace: "nowrap",
                   overflow: "visible",
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  "&::-webkit-scrollbar": {
+                    display: "block !important",
+                    width: "8px !important",
+                    height: "8px !important",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: "#0a1535 !important",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "#1e90ff !important",
+                    borderRadius: "4px !important",
+                  },
                 },
                 "& .MuiDataGrid-row": {
                   backgroundColor: "#0a1535",
@@ -286,11 +338,21 @@ const ManageUserRequests = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderBottom: "1px solid #1e2a47 !important",
                 },
                 "& .MuiDataGrid-footerContainer": {
                   backgroundColor: "#111c44",
                   color: "white",
                   borderTop: "1px solid #1e2a47",
+                },
+                "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
+                  color: "white !important",
+                },
+                "& .MuiDataGrid-sortIcon": {
+                  color: "white !important",
+                },
+                "& .MuiSvgIcon-root": {
+                  color: "white !important",
                 },
               }}
             />

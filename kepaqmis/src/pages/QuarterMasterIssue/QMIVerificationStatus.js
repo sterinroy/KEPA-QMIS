@@ -202,8 +202,8 @@ const QMIVerificationStatus = () => {
               params.row.status === "Approved"
                 ? "green"
                 : params.row.status === "Pending"
-                ? "orange"
-                : "black",
+                  ? "orange"
+                  : "black",
           }}
         >
           {params.row.status}
@@ -221,6 +221,7 @@ const QMIVerificationStatus = () => {
             variant="contained"
             color="warning"
             size="small"
+            sx={{ fontWeight: "bold", textTransform: "none" }}
             onClick={() => handlePendingClick(params.row)}
           >
             Pending
@@ -232,36 +233,152 @@ const QMIVerificationStatus = () => {
   ];
 
   return (
-    <Box sx={{ width: "100%", padding: 3 }}>
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        gutterBottom
-        color="white"
+    <Box
+      sx={{
+        width: "100%",
+        height: "calc(100vh - 64px)",
+        pl: { xs: 2, md: 5, lg: 5 },
+        pr: { xs: 2, md: 5, lg: 5 },
+        pt: { xs: 2, md: 4, lg: 4 },
+        pb: { xs: 2, md: 4, lg: 4 },
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        overflow: "hidden", // Disable page-level scrolling
+        backgroundColor: "#0c1227",
+      }}
+    >
+      <Box
+        className="qmi-manage-request-container"
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          height: "100%",
+          overflow: "hidden",
+        }}
       >
-        Verification Status
-      </Typography>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "center" }}>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              gutterBottom
+              color="#ffffff"
+              mt={0.9}
+              sx={{ textAlign: "center" }}
+            >
+              VERIFICATION STATUS
+            </Typography>
+          </Box>
+        </Box>
 
-      <Box sx={{ mb: 2 }}>
-        <Box sx={{ maxWidth: "100%" }}>
+        <Box className="outer-container" sx={{ width: "100%", maxWidth: "1200px !important", height: "650px", overflow: "hidden" }}>
           <DataGrid
             rows={pendingItems}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10]}
+            columns={columns.map((col) => {
+              if (col.field === "actions") {
+                return {
+                  ...col,
+                  align: "center",
+                  headerAlign: "center",
+                  renderCell: (params) => (
+                    <button
+                      className="approve-button"
+                      onClick={() => handlePendingClick(params.row)}
+                      style={{ backgroundColor: "orange" }}
+                    >
+                      Pending
+                    </button>
+                  ),
+                };
+              }
+              return {
+                ...col,
+                align: "center",
+                headerAlign: "center",
+              };
+            })}
+            paginationModel={{ pageSize: 10, page: 0 }}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
-            autoHeight
             getRowId={(row) => row.id}
             initialState={{
               sorting: [{ field: "invoiceDate", sort: "desc" }],
             }}
             sx={{
-              "& .MuiDataGrid-cell": {
-                whiteSpace: "normal",
-                wordWrap: "break-word",
+              borderRadius: 3,
+              overflow: "hidden",
+              backgroundColor: "#111c44",
+              width: "100%",
+              height: "100%",
+
+              "& .MuiDataGrid-columnHeaderSeparator": {
+                display: "none",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#111c44 !important",
+                color: "#ffffff !important",
+              },
+              "& .MuiDataGrid-columnHeadersInner": {
+                backgroundColor: "#111c44 !important",
+              },
+              "& .MuiDataGrid-columnHeader": {
+                backgroundColor: "#111c44 !important",
+              },
+              "& .MuiDataGrid-filler": {
+                backgroundColor: "#111c44 !important",
               },
               "& .MuiDataGrid-columnHeaderTitle": {
-                whiteSpace: "normal",
+                color: "#ffffff !important",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                overflow: "visible",
+              },
+
+              "& .MuiDataGrid-virtualScroller": {
+                "&::-webkit-scrollbar": {
+                  display: "block !important",
+                  width: "8px !important",
+                  height: "8px !important",
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "#0a1535 !important",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#1e90ff !important",
+                  borderRadius: "4px !important",
+                },
+              },
+
+              "& .MuiDataGrid-row": {
+                backgroundColor: "#0a1535",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "#050b19 !important",
+              },
+              "& .MuiDataGrid-cell": {
+                color: "#ffffff",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderBottom: "1px solid #1e2a47 !important",
+              },
+
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "#111c44",
+                color: "white",
+                borderTop: "1px solid #1e2a47",
+              },
+              "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
+                color: "white !important",
+              },
+              "& .MuiDataGrid-sortIcon": {
+                color: "white !important",
+              },
+              "& .MuiSvgIcon-root": {
+                color: "white !important",
               },
             }}
           />

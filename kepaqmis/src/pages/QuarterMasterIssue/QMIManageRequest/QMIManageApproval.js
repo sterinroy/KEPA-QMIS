@@ -142,40 +142,42 @@ const QMIManageRequest = () => {
       sx={{
         width: "100%",
         height: "calc(100vh - 64px)",
-        p: { xs: 2, md: 4, lg: 4 }, // Standard symmetric padding
+        pl: { xs: 2, md: 5, lg: 5 },
+        pr: { xs: 2, md: 4, lg: 4 },
+        pt: { xs: 2, md: 4, lg: 4 },
+        pb: { xs: 2, md: 4, lg: 4 },
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        overflowY: "auto",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-        msOverflowStyle: "none",
-        scrollbarWidth: "none",
+        alignItems: "flex-start",
+        overflow: "hidden", // Disable page-level scrolling
       }}
     >
       <Box
         className="qmi-manage-request-container"
         sx={{
           width: "100%",
-          maxWidth: "1600px",
-          margin: "0 auto",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
+          height: "100%", // Take full height
+          overflow: "hidden",
         }}
       >
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          gutterBottom
-          color="#ffffff"
-          mt={0.9}
-          sx={{ textAlign: "center", width: "100%" }}
-        >
-          MANAGE REQUESTS
-        </Typography>
-        <Box className="outer-container" sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "center" }}>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              gutterBottom
+              color="#ffffff"
+              mt={0.9}
+              sx={{ textAlign: "center" }}
+            >
+              MANAGE REQUESTS
+            </Typography>
+          </Box>
+        </Box>
+        <Box className="outer-container" sx={{ width: "100%", maxWidth: "1200px !important", height: "650px", overflow: "hidden" }}>
           <DataGrid
             rows={rows}
             columns={columns.map((col) => ({
@@ -184,14 +186,14 @@ const QMIManageRequest = () => {
               headerAlign: "center",
             }))}
             pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
+            rowsPerPageOptions={[10]}
             disableRowSelectionOnClick
-            autoHeight // Allow grid to adjust height based on rows
             sx={{
               borderRadius: 3,
               overflow: "hidden",
               backgroundColor: "#111c44",
               width: "100%",
+              height: "100%",
 
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "#111c44 !important",
@@ -208,6 +210,21 @@ const QMIManageRequest = () => {
                 fontWeight: "bold",
                 whiteSpace: "nowrap",
                 overflow: "visible",
+              },
+
+              "& .MuiDataGrid-virtualScroller": {
+                "&::-webkit-scrollbar": {
+                  display: "block !important",
+                  width: "8px !important",
+                  height: "8px !important", // Support horizontal scrolling too
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "#0a1535 !important",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#1e90ff !important",
+                  borderRadius: "4px !important",
+                },
               },
 
               "& .MuiDataGrid-row": {
@@ -227,6 +244,15 @@ const QMIManageRequest = () => {
                 backgroundColor: "#111c44",
                 color: "white",
                 borderTop: "1px solid #1e2a47",
+              },
+              "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
+                color: "white !important",
+              },
+              "& .MuiDataGrid-sortIcon": {
+                color: "white !important",
+              },
+              "& .MuiSvgIcon-root": {
+                color: "white !important",
               },
             }}
           />
