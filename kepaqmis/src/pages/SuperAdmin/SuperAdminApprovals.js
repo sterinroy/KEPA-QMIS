@@ -144,6 +144,43 @@ const SuperAdminApprovals = () => {
         backgroundColor: "#0c1227",
       }}
     >
+      <style>
+        {`
+          /* Aggressive Scrollbar Hiding (Vertical) but Showing Horizontal */
+          .outer-container ::-webkit-scrollbar,
+          .qmi-manage-request-container ::-webkit-scrollbar,
+          .MuiDataGrid-root ::-webkit-scrollbar,
+          ::-webkit-scrollbar {
+            display: block !important;
+            width: 0 !important;
+            height: 8px !important;
+            background: transparent !important;
+          }
+          ::-webkit-scrollbar-track {
+            background: #0a1535 !important;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: #1e90ff !important;
+            border-radius: 4px !important;
+          }
+          * {
+            scrollbar-width: auto !important; /* Allow scrollbars in Firefox */
+            -ms-overflow-style: auto !important;
+          }
+
+          /* Remove White Bar/Filler in Header */
+          .MuiDataGrid-columnHeader--filler,
+          .MuiDataGrid-scrollbarFiller,
+          .MuiDataGrid-filler,
+          [class*="MuiDataGrid-columnHeader--filler"],
+          [class*="MuiDataGrid-scrollbarFiller"] {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            min-width: 0 !important;
+          }
+        `}
+      </style>
       <Box
         className="qmi-manage-request-container"
         sx={{
@@ -155,18 +192,23 @@ const SuperAdminApprovals = () => {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "center" }}>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
             <Typography
               variant="h5"
               fontWeight="bold"
               gutterBottom
-              color="#ffffff"
-              mt={0.9}
-              sx={{ textAlign: "center" }}
+              sx={{
+                color: "#ffffff",
+                mt: 0.9,
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
             >
               PENDING REGISTRATION APPROVALS
             </Typography>
+            <Box sx={{ height: 40 }} />
           </Box>
         </Box>
 
@@ -175,8 +217,13 @@ const SuperAdminApprovals = () => {
           sx={{
             width: "100%",
             maxWidth: "1200px !important",
-            height: "650px",
-            overflow: "hidden",
+            padding: "24px",
+            paddingBottom: "24px",
+            boxSizing: "border-box",
+            height: "600px",
+            overflowX: "auto",
+            scrollbarWidth: "auto",
+            msOverflowStyle: "auto",
           }}
         >
           <DataGrid
@@ -187,8 +234,9 @@ const SuperAdminApprovals = () => {
               align: "center",
             }))}
             loading={loading}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            pageSize={8}
+            rowsPerPageOptions={[8]}
+            autoHeight={false}
             disableRowSelectionOnClick
             sx={{
               borderRadius: 3,
@@ -206,18 +254,29 @@ const SuperAdminApprovals = () => {
               },
               "& .MuiDataGrid-columnHeader": {
                 backgroundColor: "#111c44 !important",
+                position: "relative",
+                "&:not(:last-child)::after": {
+                  content: '""',
+                  position: "absolute",
+                  right: 0,
+                  top: "25%",
+                  height: "50%",
+                  width: "1px",
+                  backgroundColor: "rgba(255,255,255,0.3)",
+                },
               },
               "& .MuiDataGrid-columnHeaderTitle": {
                 color: "#ffffff !important",
                 fontWeight: "bold",
                 whiteSpace: "nowrap",
                 overflow: "visible",
+                textTransform: "uppercase",
               },
 
               "& .MuiDataGrid-virtualScroller": {
+                overflowX: "auto !important",
                 "&::-webkit-scrollbar": {
                   display: "block !important",
-                  width: "8px !important",
                   height: "8px !important",
                 },
                 "&::-webkit-scrollbar-track": {
@@ -244,8 +303,20 @@ const SuperAdminApprovals = () => {
 
               "& .MuiDataGrid-footerContainer": {
                 backgroundColor: "#111c44",
-                color: "white",
+                color: "#ffffff !important",
                 borderTop: "1px solid #1e2a47",
+                "& .MuiTablePagination-root": {
+                  color: "#ffffff !important",
+                },
+                "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
+                  color: "#ffffff !important",
+                },
+              },
+              "& .MuiDataGrid-columnHeader--filler": {
+                display: "none !important",
+              },
+              "& .MuiDataGrid-scrollbarFiller": {
+                display: "none !important",
               },
               "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
                 color: "white !important",

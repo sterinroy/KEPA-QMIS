@@ -31,14 +31,29 @@ const SuperAdminUsers = () => {
     password: "",
     role: "User",
   });
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteUser(id));
-    dispatch(fetchUsers());
+  const handleDeleteClick = (id) => {
+    setUserToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
+    try {
+      await dispatch(deleteUser(userToDelete));
+      await dispatch(fetchUsers());
+    } catch (err) {
+      console.error("Delete failed", err);
+    } finally {
+      setDeleteConfirmOpen(false);
+      setUserToDelete(null);
+    }
   };
 
   const handleChange = (e) => {
@@ -107,11 +122,7 @@ const SuperAdminUsers = () => {
       renderCell: (params) => (
         <button
           className="delete-button"
-          onClick={() => {
-            if (window.confirm("Are you sure you want to delete this user?")) {
-              handleDelete(params.row._id);
-            }
-          }}
+          onClick={() => handleDeleteClick(params.row.id)}
         >
           Delete
         </button>
@@ -132,7 +143,7 @@ const SuperAdminUsers = () => {
         pl: { xs: 2, md: 5, lg: 5 },
         pr: { xs: 2, md: 4, lg: 4 },
         pt: { xs: 2, md: 4, lg: 4 },
-        pb: { xs: 2, md: 4, lg: 4 },
+        pb: { xs: 2, md: 4, lg: 4 }, // Reduced for static layout
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
@@ -140,6 +151,43 @@ const SuperAdminUsers = () => {
         backgroundColor: "#0c1227",
       }}
     >
+      <style>
+        {`
+          /* Aggressive Scrollbar Hiding (Vertical) but Showing Horizontal */
+          .outer-container ::-webkit-scrollbar,
+          .qmi-manage-request-container ::-webkit-scrollbar,
+          .MuiDataGrid-root ::-webkit-scrollbar,
+          ::-webkit-scrollbar {
+            display: block !important;
+            width: 0 !important;
+            height: 8px !important;
+            background: transparent !important;
+          }
+          ::-webkit-scrollbar-track {
+            background: #0a1535 !important;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: #1e90ff !important;
+            border-radius: 4px !important;
+          }
+          * {
+            scrollbar-width: auto !important; /* Allow scrollbars in Firefox */
+            -ms-overflow-style: auto !important;
+          }
+
+          /* Remove White Bar/Filler in Header */
+          .MuiDataGrid-columnHeader--filler,
+          .MuiDataGrid-scrollbarFiller,
+          .MuiDataGrid-filler,
+          [class*="MuiDataGrid-columnHeader--filler"],
+          [class*="MuiDataGrid-scrollbarFiller"] {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            min-width: 0 !important;
+          }
+        `}
+      </style>
       <Box
         className="qmi-manage-request-container"
         sx={{
@@ -151,14 +199,19 @@ const SuperAdminUsers = () => {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Box sx={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", px: 3, display: "flex", justifyContent: "flex-end", alignItems: "center", position: "relative" }}>
             <Typography
               variant="h5"
               fontWeight="bold"
               gutterBottom
-              color="#ffffff"
-              mt={0.9}
+              sx={{
+                color: "#ffffff",
+                mt: 0.9,
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
             >
               MANAGE SYSTEM USERS
             </Typography>
@@ -170,6 +223,7 @@ const SuperAdminUsers = () => {
                 fontWeight: "bold",
                 borderRadius: "10px",
                 px: 3,
+                mr: 7.8,
                 "&:hover": { bgcolor: "#5d3fd3" }
               }}
             >
@@ -183,8 +237,13 @@ const SuperAdminUsers = () => {
           sx={{
             width: "100%",
             maxWidth: "1200px !important",
-            height: "650px",
-            overflow: "hidden",
+            padding: "24px",
+            paddingBottom: "24px",
+            boxSizing: "border-box",
+            height: "600px", // Fixed height for 8 rows + header + footer
+            overflowX: "auto",
+            scrollbarWidth: "auto",
+            msOverflowStyle: "auto",
           }}
         >
           <DataGrid
@@ -195,8 +254,9 @@ const SuperAdminUsers = () => {
               align: "center",
             }))}
             loading={loading}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            pageSize={8}
+            rowsPerPageOptions={[8]}
+            autoHeight={false}
             disableRowSelectionOnClick
             sx={{
               borderRadius: 3,
@@ -214,18 +274,29 @@ const SuperAdminUsers = () => {
               },
               "& .MuiDataGrid-columnHeader": {
                 backgroundColor: "#111c44 !important",
+                position: "relative",
+                "&:not(:last-child)::after": {
+                  content: '""',
+                  position: "absolute",
+                  right: 0,
+                  top: "25%",
+                  height: "50%",
+                  width: "1px",
+                  backgroundColor: "rgba(255,255,255,0.3)",
+                },
               },
               "& .MuiDataGrid-columnHeaderTitle": {
                 color: "#ffffff !important",
                 fontWeight: "bold",
                 whiteSpace: "nowrap",
                 overflow: "visible",
+                textTransform: "uppercase",
               },
 
               "& .MuiDataGrid-virtualScroller": {
+                overflowX: "auto !important",
                 "&::-webkit-scrollbar": {
                   display: "block !important",
-                  width: "8px !important",
                   height: "8px !important",
                 },
                 "&::-webkit-scrollbar-track": {
@@ -252,8 +323,20 @@ const SuperAdminUsers = () => {
 
               "& .MuiDataGrid-footerContainer": {
                 backgroundColor: "#111c44",
-                color: "white",
+                color: "#ffffff !important",
                 borderTop: "1px solid #1e2a47",
+                "& .MuiTablePagination-root": {
+                  color: "#ffffff !important",
+                },
+                "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
+                  color: "#ffffff !important",
+                },
+              },
+              "& .MuiDataGrid-columnHeader--filler": {
+                display: "none !important",
+              },
+              "& .MuiDataGrid-scrollbarFiller": {
+                display: "none !important",
               },
               "& .MuiDataGrid-menuIcon, & .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-columnHeader .MuiIconButton-root": {
                 color: "white !important",
@@ -284,7 +367,7 @@ const SuperAdminUsers = () => {
           }
         }}
       >
-        <DialogTitle sx={{ fontWeight: "bold", textAlign: "center", fontSize: "1.5rem" }}>
+        <DialogTitle sx={{ fontWeight: "bold", textAlign: "center", fontSize: "1.5rem", color: "white" }}>
           Registration Portal
         </DialogTitle>
         <DialogContent>
@@ -407,6 +490,58 @@ const SuperAdminUsers = () => {
             }}
           >
             Authorize User
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        PaperProps={{
+          sx: {
+            bgcolor: "rgba(11, 16, 42, 0.95)",
+            borderRadius: "24px",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(20px)",
+            color: "white",
+            minWidth: "350px",
+            p: 2,
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: "bold", textAlign: "center", color: "white" }}>
+          Confirm Deletion
+        </DialogTitle>
+        <DialogContent>
+          <Typography textAlign="center" sx={{ color: "rgba(255,255,255,0.7)" }}>
+            Are you sure you want to delete this user? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, justifyContent: "center", gap: 2 }}>
+          <Button
+            onClick={() => setDeleteConfirmOpen(false)}
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              px: 3,
+              borderRadius: "10px",
+              border: "1px solid rgba(255,255,255,0.2)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.1)" }
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={confirmDelete}
+            sx={{
+              bgcolor: "#ff5252",
+              fontWeight: "bold",
+              px: 3,
+              borderRadius: "10px",
+              "&:hover": { bgcolor: "#d32f2f" }
+            }}
+          >
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

@@ -39,47 +39,84 @@ const SAEdit = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "#0c1227",
+        width: "100%",
+        height: "calc(100vh - 64px)",
+        pl: { xs: 2, md: 5, lg: 5 },
+        pr: { xs: 2, md: 4, lg: 4 },
+        pt: { xs: 2, md: 4, lg: 4 },
+        pb: { xs: 2, md: 4, lg: 4 },
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        pt: 10,
-        px: 4,
-        boxSizing: "border-box",
-        width: "100%",
+        alignItems: "flex-start",
+        overflow: "hidden",
+        backgroundColor: "#0c1227",
       }}
     >
-      <Box sx={{ maxWidth: "1200px", width: "100%" }}>
-        <Typography
-          variant="h3"
-          color="white"
-          fontWeight="900"
-          textAlign="center"
-          sx={{
-            letterSpacing: "0.1rem",
-            textTransform: "uppercase",
-            mb: 1,
-            textShadow: "0 0 20px rgba(255,255,255,0.1)",
-          }}
-        >
-          System configuration
-        </Typography>
-        <Typography
-          variant="h6"
-          color="rgba(255,255,255,0.6)"
-          textAlign="center"
-          mb={10}
-          fontWeight="500"
-        >
-          Administrative control panel for master data management
-        </Typography>
+      <style>
+        {`
+          /* Aggressive Scrollbar Hiding */
+          .SAEdit-root ::-webkit-scrollbar,
+          ::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+          }
+          * {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+          }
+        `}
+      </style>
 
-        <Grid container spacing={6} justifyContent="center">
-          {cardData.map((card, index) => (
-            <Grid item xs={12} md={6} key={index}>
-              <Card
+      <Box
+        className="SAEdit-root"
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          height: "100%",
+          overflowY: "auto", // Allow scrolling for cards if needed in fixed viewport
+        }}
+      >
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 4 }}>
+          <Box sx={{ width: "100%", maxWidth: "1200px", px: 3, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
                 sx={{
+                  color: "#ffffff",
+                  mt: 0.9,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1rem",
+                }}
+              >
+                System configuration
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "rgba(255,255,255,0.6)",
+                  mt: 0.5,
+                  fontWeight: "500"
+                }}
+              >
+                Administrative control panel for master data management
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "100%", maxWidth: "1100px", px: 3, display: "flex", gap: 4, justifyContent: "center" }}>
+            {cardData.map((card, index) => (
+              <Card
+                key={index}
+                sx={{
+                  flex: 1,
+                  maxWidth: "500px",
                   background: "rgba(17, 28, 68, 0.6)",
                   backdropFilter: "blur(20px)",
                   color: "white",
@@ -88,6 +125,9 @@ const SAEdit = () => {
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   overflow: "hidden",
                   position: "relative",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
                   "&::before": {
                     content: '""',
                     position: "absolute",
@@ -116,50 +156,54 @@ const SAEdit = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     textAlign: "center",
-                    p: 6,
+                    p: 4,
+                    flexGrow: 1,
                   }}
                 >
                   <Box
                     className="icon-container"
                     sx={{
-                      mb: 3,
+                      mb: 2.5,
                       transition: "transform 0.3s ease",
-                      p: 2,
-                      borderRadius: "20px",
+                      p: 1.5,
+                      borderRadius: "16px",
                       bgcolor: "rgba(255,255,255,0.05)"
                     }}
                   >
-                    {card.icon}
+                    {React.cloneElement(card.icon, { sx: { fontSize: 48, color: card.icon.props.sx.color } })}
                   </Box>
-                  <Typography variant="h5" mb={2} fontWeight="800">
+                  <Typography variant="h6" mb={1.5} fontWeight="800">
                     {card.title}
                   </Typography>
-                  <Typography variant="body1" mb={4} sx={{ color: "rgba(255,255,255,0.6)", minHeight: "3em" }}>
+                  <Typography variant="body2" mb={3} sx={{ color: "rgba(255,255,255,0.6)", minHeight: "3em" }}>
                     {card.description}
                   </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate(card.route)}
-                    sx={{
-                      fontWeight: "bold",
-                      borderRadius: "12px",
-                      px: 6,
-                      py: 1.5,
-                      bgcolor: "white",
-                      color: "#0c1227",
-                      "&:hover": {
-                        bgcolor: "rgba(255,255,255,0.9)",
-                        transform: "scale(1.05)"
-                      }
-                    }}
-                  >
-                    {card.buttonText}
-                  </Button>
+                  <Box sx={{ mt: "auto" }}>
+                    <Button
+                      variant="contained"
+                      onClick={() => navigate(card.route)}
+                      sx={{
+                        fontWeight: "bold",
+                        borderRadius: "10px",
+                        px: 4,
+                        py: 1,
+                        bgcolor: "white",
+                        color: "#0c1227",
+                        textTransform: "none",
+                        "&:hover": {
+                          bgcolor: "rgba(255,255,255,0.9)",
+                          transform: "scale(1.05)"
+                        }
+                      }}
+                    >
+                      {card.buttonText}
+                    </Button>
+                  </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          ))}
-        </Grid>
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
